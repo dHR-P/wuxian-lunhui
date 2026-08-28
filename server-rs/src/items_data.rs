@@ -171,13 +171,19 @@ pub fn treasure_def(id: &str) -> Option<&'static TreasureDef> {
 
 // ---------- inventory 计数（方案 A：同 id 多枚拆 `id_k`，零侵入 Vec<String>） ----------
 
+/// 是否为某 base 的拆 id 计数组件：`base` 本身 或 `base_<数字>`（方案 A 拆 id）。
+/// 仅需数字后缀，避免与「真名含 _ 前缀的独立 id」相撞（如 it_enhance_stone vs it_enhance_stone_hi）。
+fn matches_base(entry: &str, base: &str) -> bool {
+    if entry == base {
+        return true;
+    }
+    let Some(rest) = entry.strip_prefix(&format!("{base}_")) else { return false; };
+    !rest.is_empty() && rest.chars().all(|c| c.is_ascii_digit())
+}
+
 /// 统计 base id 持有量（命中 base 本身或 base_N 前缀）
 pub fn count_item(st: &GameState, base: &str) -> usize {
-    let prefix = format!("{}_", base);
-    st.inventory
-        .iter()
-        .filter(|i| **i == base || i.starts_with(&prefix))
-        .count()
+    st.inventory.iter().filter(|i| matches_base(i, base)).count()
 }
 
 /// 计数别名（保持可读性）
@@ -207,8 +213,7 @@ pub fn add_item_counted(st: &mut GameState, item: &str) {
 
 /// 消耗一份 base 道具（尾部移除一个 base 或 base_N 组件）；返回是否成功
 pub fn consume_item(st: &mut GameState, base: &str) -> bool {
-    let prefix = format!("{}_", base);
-    let pos = st.inventory.iter().rposition(|i| *i == base || i.starts_with(&prefix));
+    let pos = st.inventory.iter().rposition(|i| matches_base(i, base));
     match pos {
         Some(p) => {
             st.inventory.remove(p);
