@@ -51,10 +51,20 @@
 <div id="worldView" style="display:none">
   <div id="worldTop">
     <span id="worldLoc">蜂巢 · B 区</span>
-    <span id="worldHint">WASD/方向键移动 · E 交互 · ESC 返回</span>
+    <span id="worldHint">WASD/方向键移动 · E 交互 · M 大地图 · ESC 返回</span>
   </div>
   <div id="worldCanvasWrap"><canvas id="worldCanvas"></canvas></div>
+  <!-- 右上角小地图（轮回迷雾黑幕；独立 2D canvas，俯视切片） -->
+  <canvas id="minimap" width="184" height="184"></canvas>
   <div id="worldMsg"></div>
+</div>
+
+<!-- 大地图（M 键展开） -->
+<div class="overlay" id="bigmapOverlay">
+  <div class="bigmapCard">
+    <canvas id="bigmap" width="720" height="720"></canvas>
+    <div class="bigmapHint">再按 M 或 Esc 关闭</div>
+  </div>
 </div>
 
 <!-- 开放世界 · 3D 副本 -->
@@ -85,13 +95,8 @@
   <div class="menuBtns">
     <button class="mbtn" id="btnNew">进 入 轮 回</button>
     <button class="mbtn" id="btnContinue" disabled>继 续 上 次</button>
+    <button class="mbtn" id="btnSettings">设 置</button>
     <button class="mbtn" id="btnDeaths">死 亡 档 案</button>
-  </div>
-  <div class="resSel" title="渲染分辨率档位（物理像素 = 档位 × DPR）">
-    <span class="resLabel">画质</span>
-    <button class="resBtn" data-res="720">720p</button>
-    <button class="resBtn" data-res="1080">1080p</button>
-    <button class="resBtn" data-res="1440">1440p</button>
   </div>
   <div id="titleFoot">
     剧情主线取材自 zhttty《无限恐怖》第一部「生化危机」篇 · 二次创作致敬<br>
@@ -102,7 +107,55 @@
 <!-- 结局覆盖层 -->
 <div class="overlay" id="endOverlay"><div class="ovCard" id="ovCard"></div></div>
 
+<!-- 设置面板（分辨率 + 帧率） -->
+<div class="overlay" id="settingsOverlay">
+  <div class="ovCard settingsCard">
+    <h2>设 置</h2>
+    <div class="setGroup">
+      <div class="setLabel">分辨率画质（渲染档位 × DPR）</div>
+      <div class="setRow">
+        <button class="resBtn" data-res="720">720p</button>
+        <button class="resBtn" data-res="1080">1080p</button>
+        <button class="resBtn" data-res="1440">1440p</button>
+      </div>
+    </div>
+    <div class="setGroup">
+      <div class="setLabel">帧率上限（渲染帧率 · 0 = 不限）</div>
+      <div class="setRow">
+        <button class="fpsBtn" data-fps="30">30</button>
+        <button class="fpsBtn" data-fps="60">60</button>
+        <button class="fpsBtn" data-fps="120">120</button>
+        <button class="fpsBtn" data-fps="0">不限</button>
+      </div>
+    </div>
+    <div class="setFooter">
+      <button class="mbtn" id="btnSettingsClose">返 回</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新手指引（基础操作） -->
+<div class="overlay" id="tutorialOverlay">
+  <div class="ovCard tutorialCard">
+    <h2 class="good">新 手 指 引</h2>
+    <p class="tutIntro">欢迎加入主神空间，轮回者。以下是基础操作：</p>
+    <ul class="tutList">
+      <li><b>W A S D / 方向键</b><span>移动</span></li>
+      <li><b>J / Enter</b><span>攻击</span></li>
+      <li><b>K / Shift</b><span>闪避</span></li>
+      <li><b>E</b><span>调查 / 交互</span></li>
+      <li><b>Esc</b><span>返回 / 退出</span></li>
+    </ul>
+    <label class="tutDont"><input type="checkbox" id="tutDontAgain">本次会话不再提示</label>
+    <div class="tutBtns">
+      <button class="mbtn" id="btnTutSkip">跳 过</button>
+      <button class="mbtn" id="btnTutStart">开 始 游 戏</button>
+    </div>
+  </div>
+</div>
+
 <script src="vendor/three.min.js"></script>
+<script src="js/postfx.js"></script>
 <script src="js/world2d.js"></script>
 <script src="js/zone3d.js"></script>
 <script src="js/client.js"></script>

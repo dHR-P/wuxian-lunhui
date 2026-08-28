@@ -65,19 +65,23 @@ function itemIconFor(rec) {
 const ResolutionSys = (() => {
   let level = 1080;                            // 当前档位（默认自适应/1080p）
   const TARGET = { 720: [1280, 720], 1080: [1920, 1080], 1440: [2560, 1440] };
+  const SCALE = { 720: 0.75, 1080: 1.0, 1440: 1.5 }; // 渲染缩放系数：720 最糊/性能最好 → 1080 标准 → 1440 最清晰/性能最吃
   const dpr = () => (window.devicePixelRatio || 1);
+  // 当前档位渲染像素比（设备 DPR × 档位缩放系数），下发给 World2D/Zone3D
+  function pixelRatio() { return dpr() * (SCALE[level] || 1.0); }
   // 当前逻辑分辨率（CSS 像素）
   function logical() { return TARGET[level] || [innerWidth, innerHeight]; }
-  // 当前物理渲染分辨率（逻辑 × DPR，向上取整避免 0）
+  // 当前物理渲染分辨率（逻辑 × 档位渲染像素比，向上取整避免 0）
   function physical() {
     const [w, h] = logical();
-    return [Math.max(1, Math.round(w * dpr())), Math.max(1, Math.round(h * dpr()))];
+    const pr = pixelRatio();
+    return [Math.max(1, Math.round(w * pr)), Math.max(1, Math.round(h * pr))];
   }
   function apply() {
     // 1) 噪点层：改回窗口全分辨率 × DPR（去掉原 1/3 降采样），由 grainResize 承接
     if (typeof grainResize === "function") grainResize();
-    // 2) 2D 地图：把 DPR 交给 World2D，让其 HiDPI 清晰显示
-    if (window.World2D && typeof window.World2D.setDpr === "function") window.World2D.setDpr(dpr());
+    // 2) 2D 地图：把「档位渲染像素比」交给 World2D，使其 dprScale 随档位单调变化并作用到 canvas 内部分辨率
+    if (window.World2D && typeof window.World2D.setDpr === "function") window.World2D.setDpr(pixelRatio());
     // 3) 3D 副本：把档位+物理尺寸交给 Zone3D（setPixelRatio + 渲染尺寸）
     if (window.Zone3D && typeof window.Zone3D.setResolution === "function") window.Zone3D.setResolution(level);
     // 4) 更新标题屏分辨率选择高亮（若 UI 存在）
@@ -89,11 +93,38 @@ const ResolutionSys = (() => {
     return level;
   }
   return {
-    set, get: () => level, dpr, logical, physical, apply,
+    set, get: () => level, dpr, logical, physical, pixelRatio, scale: () => (SCALE[level] || 1.0), apply,
   };
 })();
 window.setResolution = l => ResolutionSys.set(l);
 window.getResolution = () => ResolutionSys.get();
+
+/* ---------------- 帧率上限 / FpsLimit ----------------
+ * 渲染帧率上限：0=不限（跟随显示器），否则 30/60/120 为渲染帧率上限。
+ * 实际帧率限制由 zone3d.js / world2d.js 的 loop 读取本接口实现；
+ * 这里只负责暴露全局接口 + 设置面板 UI + localStorage 持久化。
+ * 对外契约: window.setFpsLimit(n) / window.getFpsLimit()。
+ */
+const FpsSys = (() => {
+  const KEY = "fpsLimit";
+  const ALLOWED = { 0: true, 30: true, 60: true, 120: true };
+  let limit = 0; // 默认 0=不限
+  function parse(v) {
+    const n = Number(v);
+    return ALLOWED[n] ? n : 0;
+  }
+  try { limit = parse(localStorage.getItem(KEY)); } catch (e) { limit = 0; }
+  function set(n) {
+    limit = parse(n);
+    try { localStorage.setItem(KEY, String(limit)); } catch (e) {}
+    if (window.__fpsUI) window.__fpsUI(limit); // 通知设置面板更新高亮
+    return limit;
+  }
+  function get() { return limit; }
+  return { set, get, KEY, parse };
+})();
+window.setFpsLimit = n => FpsSys.set(n);
+window.getFpsLimit = () => FpsSys.get();
 
 /* ---------------- Tauri IPC ---------------- */
 function TAURI_INVOKE() {
@@ -368,6 +399,9 @@ function setMode(mode) {
   $("titleScreen").style.display = mode === "title" ? "flex" : "none";
   if (mode !== "world") { World2D.stop(); World2D.clearKeys(); } // Bug-04:切出世界时清键位,防残留键自动移动
   if (mode !== "zone") { if (window.Zone3D) Zone3D.stop(); }
+  // 切出世界时强制关闭大地图
+  const bm = $("bigmapOverlay");
+  if (bm && bm.classList.contains("on")) bm.classList.remove("on");
 }
 
 function worldMsg(text) {
@@ -387,6 +421,8 @@ async function enterWorld() {
     }
     $("worldLoc").textContent = "蜂巢 · B 区";
     worldMsg("你在主神空间苏醒。探索蜂巢，关闭红后，活着回来。");
+    // 新游戏进入世界后显示一次新手指引（继续上次不显示）。“开始游戏/跳过”旁勾选“不再提示”后本会话不再弹。
+    maybeShowTutorial();
   } catch (e) { worldMsg("世界加载失败: " + String(e)); }
 }
 
@@ -770,10 +806,25 @@ World2D.init($("worldCanvas"), {
 ResolutionSys.apply();
 // 键盘：世界模式分发（zone 模式由 Zone3D 自行监听）
 window.addEventListener("keydown", (e) => {
-  if (worldActive) World2D.keydown(e);
+  // 大地图开关（M）——仅世界模式生效
+  if (worldActive && (e.key === "m" || e.key === "M")) {
+    const bm = $("bigmapOverlay");
+    if (bm) {
+      const open = bm.classList.toggle("on");
+      // 打开时暂停世界移动（清键位 + 不再把键转发给 World2D），关闭恢复
+      World2D.clearKeys();
+      if (open && window.World2D.drawBigmap) window.World2D.drawBigmap();
+    }
+    return;
+  }
+  // 大地图打开时不再向 World2D 转发方向键，避免背后移动
+  const bmOpen = !!(worldActive && $("bigmapOverlay") && $("bigmapOverlay").classList.contains("on"));
+  if (worldActive && !bmOpen) World2D.keydown(e);
   if (e.key === "Escape" && !zoneActive) {
     // Bug-01:zone 模式的 Escape 退出由 zone3d.js keydown 单点负责(onExit→leaveZone),
     // 此处排除 zone,避免与 zone3d 双触发 leaveZone
+    // 大地图打开时 Esc 优先关大地图,不返回标题
+    if (bmOpen) { $("bigmapOverlay").classList.remove("on"); World2D.clearKeys(); return; }
     if (worldActive) { backToTitle(); }
   }
 });
@@ -790,7 +841,7 @@ window.addEventListener("keyup", (e) => {
   }
 })();
 
-/* ---------------- 分辨率选择 UI（标题屏）---------------- */
+/* ---------------- 分辨率选择 UI（设置面板）---------------- */
 (function resUI() {
   const set = (l) => { try { window.setResolution(l); } catch (e) {} };
   // 高亮当前档位（ResolutionSys.apply 回调此函数）
@@ -804,4 +855,50 @@ window.addEventListener("keyup", (e) => {
     b.addEventListener("click", () => { AudioSys.ensure(); AudioSys.sfx("click"); set(Number(b.dataset.res)); });
   });
   window.__resUI(ResolutionSys.get());
+})();
+
+/* ---------------- 设置面板（打开/关闭 + 帧率档位）---------------- */
+(function settingsUI() {
+  const overlay = $("settingsOverlay");
+  if (!overlay) return;
+  const openBtn = $("btnSettings");
+  const closeBtn = $("btnSettingsClose");
+  function close() { overlay.classList.remove("on"); }
+  if (openBtn) openBtn.onclick = () => { AudioSys.ensure(); AudioSys.sfx("click"); overlay.classList.add("on"); };
+  if (closeBtn) closeBtn.onclick = () => { AudioSys.ensure(); AudioSys.sfx("click"); close(); };
+  // 点击遮罩空白处关闭
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+  // 帧率档位按钮高亮（FpsSys.set 回调此函数）
+  window.__fpsUI = (n) => {
+    document.querySelectorAll(".fpsBtn").forEach(b => {
+      b.classList.toggle("on", Number(b.dataset.fps) === Number(n));
+    });
+  };
+  document.querySelectorAll(".fpsBtn").forEach(b => {
+    b.addEventListener("click", () => { AudioSys.ensure(); AudioSys.sfx("click"); window.setFpsLimit(Number(b.dataset.fps)); });
+  });
+  window.__fpsUI(window.getFpsLimit());
+  window.__closeSettings = close;
+})();
+
+/* ---------------- 新手指引（每次新游戏皆可看到，本会话“不再提示”则跳过）---------------- */
+let tutorialSkippedThisSession = false;
+function maybeShowTutorial() {
+  if (tutorialSkippedThisSession) return;
+  if (window.__showTutorial) window.__showTutorial();
+}
+(function tutorialUI() {
+  const overlay = $("tutorialOverlay");
+  if (!overlay) return;
+  const startBtn = $("btnTutStart");
+  const skipBtn = $("btnTutSkip");
+  const dontAgain = $("tutDontAgain");
+  function markSkipped() { if (dontAgain && dontAgain.checked) tutorialSkippedThisSession = true; }
+  function close() { overlay.classList.remove("on"); }
+  if (startBtn) startBtn.onclick = () => { AudioSys.ensure(); AudioSys.sfx("click"); markSkipped(); close(); };
+  if (skipBtn) skipBtn.onclick = () => { AudioSys.ensure(); AudioSys.sfx("click"); markSkipped(); close(); };
+  // 点击卡片外关闭
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+  window.__showTutorial = () => { AudioSys.ensure(); overlay.classList.add("on"); };
+  window.__closeTutorial = close;
 })();

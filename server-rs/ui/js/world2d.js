@@ -1,581 +1,406 @@
-/* 开放世界 · 2D 俯视地图引擎（Canvas）—— MC 体素方块强化版
- * 负责: 体素方块地板 / 立体体素墙柱 / 玩家移动(WASD) / 敌人精灵立绘巡逻 / 调查点高亮 / 交互
- * 通过 window.DSH_WORLD.onMove(dx,dy) / onInteract(objId) 与 IPC 通信
+/* 开放世界 · 3D 体素地图引擎（Three.js）—— MC/zone3d 体素风一致
+ * 负责: 体素方块地板 / 立体体素墙柱 / 体素方块人玩家(WASD 格子移动) / 敌人/NPC/道具 立体呈现 /
+ *       第三人称跟随相机 / 轮回迷雾(explored) / 交互(E)
+ * 通过 window.World2D.init 的回调 opts.onMove(dx,dy) / onInteract(objId) 与 IPC 通信。
  *
- * 体素升级要点（MC/Minecraft 方块感，不改任何交互契约与地图数据读取）:
- *  - 每格地板 = 一块「方块顶面」立方体（顶面亮 + 前/右两个侧面可见，呈现体素方块厚度）
- *  - 墙 = 堆叠的「体素方块柱」，比地板高出一大截（方块顶面 + 前/右/左侧面），形成 MC 墙
- *  - 六面明暗模拟 MC 光照: 顶面最亮（受左上光）、前(南)面中亮、右(东)面偏暗、底/背更暗
- *  - 墙柱侧面向右/下延伸覆盖邻格地板，产生真实前后遮挡纵深（体素感便于读图）
- *  - 实体（玩家/敌人/NPC/道具/传送门）仍站在格子方块顶上，交互/碰撞契约完全不变
+ * 编码铁律：本文件含中文注释，改动必须走 read/edit/write（UTF-8），严禁 PowerShell 文本往返。
+ *
+ * 视角说明（与 zone3d 战斗场景观感一致）：
+ *  - 每格地面 = 一块受贴图地板块（蜂巢 tex_floor_hive.png 平铺）
+ *  - 墙格 `#` = 体素方块柱（BoxGeometry，比地板高出，呈 MC 墙）
+ *  - 实体（玩家/敌人/NPC/道具/传送门/门禁/副本入口）→ 体素方块人或 billboard 精灵，站在格子地平面上
+ *  - 第三人称相机跟拍玩家（绕 x 轴俯视，透视 60°，带立体纵深）
+ *  - WASD 移动仍走格子级 api_world_move（opts.onMove(dx,dy)），遇敌由 Rust 端 encounter 触进入战斗，
+ *    本引擎绝不自行改成连续坐标。
+ *
+ * 契约保留：对外接口与旧 2D 版完全一致 —— init / setData / setPlayer / keydown / keyup /
+ *          start / stop / nearbyList / moveIntent / clearKeys / setDpr。client.js 无需改动。
  */
 "use strict";
 
 const World2D = (() => {
-  let cv, ctx, raf = null;
+  let cv, container = null;
+  let raf = null;
   let data = null;          // api_world 返回
   let explored = null;      // 已探索格集合 "x:y" -> true（轮回记忆迷雾）
-  let px = 0, py = 0;       // 玩家插值坐标（像素）
+  let px = 0, py = 0;       // 玩家插值坐标（格子坐标，可为小数用于平滑插值）
   let targetPx = 0, targetPy = 0;
   let keys = {};
-  let enemiesAnim = {};     // id -> {baseX, baseY, phase, alive}
   let hudCb = null, interCb = null, moveCb = null, msgCb = null;
-  const TILE = 30;
-  // 敌人 id → 精灵立绘（世界地图小头像/小立绘）；未知 id 回退色块
-  const ENEMY_ICONS = {
-    e_f1_z1: "assets/img/enemy_zombie.png",
-    e_h1: "assets/img/enemy_horde.png",
-    e_licker: "assets/img/enemy_licker.png",
-    e_f3_z2: "assets/img/enemy_guard.png",
-    e_f4_elite: "assets/img/enemy_hunter.png",
-  };
-  const ENEMY_FALLBACK = ["#7a1f1f", "#5d9c5d", "#6b4b3a", "#8a3a6b"];
-  const IMGS = {};          // 预加载精灵图
-  let tileCache = null;     // 地板顶面方块离屏画布
-  let dprScale = 1;         // HiDPI 显示缩放：CSS 尺寸 = 内部像素 / dpr，让高清屏每个地图像素对一物理像素（由 ResolutionSys 下发）
-  let worldSeed = 7;        // 世界种子：由 worldData.world/floor 派生，供地板材质分桶与装饰确定性随机使用
-  // 氛围尘埃粒子（轻量、帧率友好的固定小集合）：{x,y,r,phase,speed} 屏幕空间缓慢飘浮
-  let motes = null;         // 惰性初始化的尘埃粒子数组
 
-  /* ---------- MC 风格体素渲染参数（默认开启，改观感不碰碰撞） ----------
-   * 将平铺地图升级为「体素方块」：
-   *  - 地板 = 一块(半)立方体：顶面亮，前(南,+y)面与右(东,+x)面露出薄侧面 → 方块体积感
-   *  - 墙   = 体素方块柱：主立面墙砖全格填充（明显高于地板低块），右暗侧 + 顶沿高光 → MC 墙
-   *  - 光照统一来自左上（Minecraft 顶面向阳）：顶最亮、前中亮、右偏暗、底/后更暗
-   * 仅改绘制观感，tile 的 cells / walkable / 碰撞判定一概不动（碰撞在 Rust 侧）。
-   */
-  const P3D = {
-    light: { dx: -1, dy: -1 },   // 光照方向（左上→右下），顶面受光
-    blockH: 5,                   // 地板方块厚度（顶面向上挤出的侧面像素 = 方块高度）
-    // 侧面明暗（模拟 MC 六面：前亮/右暗/底更暗），从上到下渐变
-    frontHi: "rgba(255,255,255,.10)", // 前(南)面受光上端
-    frontLo: "rgba(0,0,0,.30)",       // 前(南)面底端
-    rightHi: "rgba(0,0,0,.22)",       // 右(东)面偏暗上端
-    rightLo: "rgba(0,0,0,.48)",       // 右(东)面底端（更暗）
-    shadowDX: 2, shadowDY: 5,    // 投影偏移（右下）
-    shadowAlpha: 0.28,           // 竖立物投影不透明度
-    glowHi: "rgba(150,200,255,.55)", // 传送门/建筑受光高光
-  };
-  // 底部投影（竖立物通用：向右下偏移的半透明黑）
-  function dropShadow(sx, sy, w, h) {
-    const a = P3D.shadowAlpha;
-    ctx.save();
-    ctx.fillStyle = `rgba(0,0,0,${a})`;
-    ctx.fillRect(sx + P3D.shadowDX + 1, sy + P3D.shadowDY + 1, w, h);
-    ctx.fillStyle = `rgba(0,0,0,${a * 0.55})`;
-    ctx.fillRect(sx + P3D.shadowDX, sy + P3D.shadowDY, w, h);
-    ctx.restore();
-  }
-  // 受光顶面（左上高光）
-  function topHighlight(sx, sy, w, h) {
-    const g = ctx.createLinearGradient(sx, sy, sx + w, sy + h);
-    g.addColorStop(0, P3D.glowHi); g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.save(); ctx.fillStyle = g; ctx.fillRect(sx, sy, w, h); ctx.restore();
-  }
+  let scene = null, camera = null, renderer = null;
+  let player = null;        // 玩家体素方块人 Group
+  let playerRig = null;     // { legL,legR,armL,armR } 供行走摆动
+  let enemiesObj = {};      // id -> { group, rig } 敌人体素人
+  let npcObj = {};
+  let itemObj = {};         // points 调查点 -> 道具网格/billboard
+  let buildObjs = [];       // 场景里由 setData 重建时需清理的所有对象（墙/地板/装饰等）
+  let propObjs = [];        // 由 setData 重建的实体对象列表
 
-  /* ---------- MC 体素方块六面绘制辅助 ----------
-   * 以「顶面亮 / 前(南,+y)面中亮 / 右(东,+x)面暗」三面可视为 MC 方块向阳面，
-   * 底/背面更暗。所有面均在各自矩形范围内渐变，贴合 TILE 网格。
-   */
-  // 前(南)侧面：垂直渐变，上端受光、底端落暗
-  function sideFront(x, y, w, h) {
-    const g = ctx.createLinearGradient(0, y, 0, y + h);
-    g.addColorStop(0, P3D.frontHi); g.addColorStop(1, P3D.frontLo);
-    ctx.save(); ctx.fillStyle = g; ctx.fillRect(x, y, w, h); ctx.restore();
-  }
-  // 右(东)侧面：更暗的一侧，垂直(或水平)渐变
-  function sideRight(x, y, w, h) {
-    const g = ctx.createLinearGradient(0, y, 0, y + h);
-    g.addColorStop(0, P3D.rightHi); g.addColorStop(1, P3D.rightLo);
-    ctx.save(); ctx.fillStyle = g; ctx.fillRect(x, y, w, h); ctx.restore();
-  }
-  // 侧向棱线（顶/左受光），强化方块边缘
-  function edgeTop(x, y, w, h, a) {
-    ctx.save();
-    ctx.fillStyle = `rgba(175,210,245,${a})`;
-    ctx.fillRect(x, y, w, h);
-    ctx.restore();
-  }
+  const TILE = 2.0;         // 每格世界尺寸（米）
+  const WALL_H = 2.2;       // 墙柱高度
+  const FLOOR_H = 0.12;     // 地板块厚度
+  const CAM_DIST = 9.0;     // 相机距离玩家水平距离
+  const CAM_PITCH = 0.55;   // 相机俯角（弧度）
+
+  // 敌人 id → 颜色（体素人配色，沿用旧版 ENEMY_ICONS 语义区分每类敌人）
+  const ENEMY_COLORS = {
+    e_f1_z1:   { shirt: 0x6a5a3a, pants: 0x3a3430, skin: 0x7d8a6a },
+    e_h1:      { shirt: 0x8a2a2a, pants: 0x2a1818, skin: 0x6a1f1f },
+    e_licker:  { shirt: 0x5d9c5d, pants: 0x2a3a2a, skin: 0x6f9a6f },
+    e_f3_z2:   { shirt: 0x6b4b3a, pants: 0x3a2c24, skin: 0x9a7a6a },
+    e_f4_elite:{ shirt: 0x4a4a52, pants: 0x2a2a30, skin: 0x5f5f6a },
+  };
+  const ENEMY_FALLBACK = [0x7a1f1f, 0x5d9c5d, 0x6b4b3a, 0x8a3a6b];
+  const PLAYER_COLORS = { shirt: 0x3a5ba0, pants: 0x2a3450, skin: 0xd8a878, hair: 0x2a1f16, shoe: 0x1c1a1a };
+  const NPC_COLORS = { shirt: 0x2a6a7a, pants: 0x22323a, skin: 0xd8a878, hair: 0x22323a, shoe: 0x1c1a1a };
+
+  let dpr = 1;              // HiDPI 显示缩放（由 ResolutionSys.setDpr 下发）
+  let floorTex = null;      // 蜂巢地板贴图
+  let worldSeed = 7;
 
   const isExplored = (x, y) => !explored || explored.has(x + ":" + y);
 
-  function init(canvas, opts = {}) {
-    cv = canvas;
-    ctx = cv.getContext("2d");
-    hudCb = opts.onHud || null;
-    interCb = opts.onInteract || null;
-    moveCb = opts.onMove || null;
-    msgCb = opts.onMsg || null;
-    // 预加载立绘（失败静默，绘制时回退）
-    ["enemy_zombie", "enemy_horde", "enemy_licker", "enemy_guard", "enemy_hunter",
-     "pc_zhengzha", "img_zhangjie"].forEach(k => {
-      IMGS[k] = new Image();
-      IMGS[k].src = "assets/img/" + k + ".png";
-    });
-    buildTileCache();
-  }
-
-  /* ---------- 程序化地砖缓存（六类地板材质 + 环境装饰精灵 + 道具图标 + 立体墙） ----------
-   * 离屏烘焙，逐帧零成本。所有变体都带确定性噪点（用 rnd(seed)）+ 接缝 + 磨损划痕。
-   * 布局（TILE×TILE 一格）：
-   *   第 0 行（地板材质 6 种 + 墙 + 设备）：
-   *     [0]金属板 [1]石板 [2]木地板 [3]沙地 [4]水面 [5]苔藓地 [6]墙 [7]设备I
-   *   第 1 行（环境装饰精灵 6 种，绘制时叠到地板格上）：
-   *     [0]血渍 [1]裂痕 [2]碎石 [3]植被 [4]水渍 [5]光斑 [6]灰尘/油污
-   *   第 2 行（道具图标精灵 6 种，地图道具/调查点用）：
-   *     [0]血瓶 [1]钥匙 [2]石碑 [3]火把 [4]卷轴 [5]草药 [6]水晶
-   * 仅改观感，地格 `.`/`#`/`I`/`P` 语义与碰撞判定一概不动。
+  /* ================= 体素方块人（自包含，MC/zone3d 风格 · 高分辨率细分版） =================
+   * 用 BoxGeometry 拼装：双腿(髋枢轴)+躯干(腰/腹/胸/肩)+双臂(肩枢轴+肘+腕+拳)+头(头骨/颧/下颚/脸/发)。
+   * 每个部件再细分为更密的小方块，呈现 MC 高分辨率质感，与战斗场景视觉一致。
+   * 材质升级 MeshStandardMasterial（分部位 roughness/metalness）。
+   * 枢轴层级保留：legL/legR（髋，摆腿）、armL/armR（肩，摆臂），新增 knee/ankle/elbow/wrist 枢轴
+   * 均保持 identity 不参与现有行走摆动，绝不破坏 world2d 对 legL/legR/armL/armR rotation 的引用。
    */
-  function buildTileCache() {
-    const bt = document.createElement("canvas");
-    bt.width = TILE * 8; bt.height = TILE * 4;
-    const c = bt.getContext("2d");
+  function buildVoxelBody(g, c) {
+    const L = c.shirt, P = c.pants, K = c.skin, Hh = c.hair, S = c.shoe;
+    // 分部位材质参数（与战斗一致）：皮肤 0.6/0、衣物 0.82/0.05、头发 0.9/0、金属/鞋底 0.35/0.6
+    const mat = (col, rough, metal, opts) => new THREE.MeshStandardMaterial(Object.assign({ color: col, roughness: rough, metalness: metal }, opts || {}));
+    const skinM  = () => mat(K, 0.6, 0);
+    const clothM = () => mat(L, 0.82, 0.05);
+    const pantsM = () => mat(P, 0.82, 0.05);
+    const hairM  = () => mat(Hh, 0.9, 0);
+    const shoeM  = () => mat(S, 0.35, 0.6);
+    const box = (w, h, d, m, parent, x, y, z) => {
+      const msh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+      msh.position.set(x, y, z);
+      msh.castShadow = true; msh.receiveShadow = true;
+      parent.add(msh);
+      return msh;
+    };
+    // ============ 程序化体素生成（体素网格 + 三重循环，MC 高分辨率质感） ============
+    // 单位体素：单块立方形，挂到指定枢轴并随枢轴旋转；统一开阴影。
+    const vox = (parent, x, y, z, s, m) => {
+      const msh = new THREE.Mesh(new THREE.BoxGeometry(s, s, s), m);
+      msh.position.set(x, y, z);
+      msh.castShadow = true; msh.receiveShadow = true;
+      parent.add(msh);
+      return msh;
+    };
+    // 环形一圈（angle 相位偏移让相邻段错峰，更显体素拼缝）
+    const ring = (parent, y, n, r, s, m, phase) => {
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2 + (phase || 0);
+        vox(parent, Math.cos(a) * r * s, y, Math.sin(a) * r * s, s, m);
+      }
+    };
+    // 实心圆柱体（每层环形 n 块 + 中心轴 1 块，柱形体素）
+    const cyl = (parent, layers, n, r, cell, m, startY, phase) => {
+      for (let layer = 0; layer < layers; layer++) {
+        const y = startY - cell * (layer + 0.5);
+        ring(parent, y, n, r, cell, m, phase + layer * 0.35);
+        vox(parent, 0, y, 0, cell, m);
+      }
+    };
+    // 偏心圆环（鞋头前凸等）：绕 (ox,oz) 的 x 平面小圆
+    const ringX = (parent, x, y, n, r, s, m, phase) => {
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2 + (phase || 0);
+        vox(parent, x + Math.cos(a) * r * s, y, Math.sin(a) * r * s, s, m);
+      }
+    };
 
-    const rnd = (a, b, s) => { const v = Math.sin(s * 127.1 + 311.7) * 43758.5453; return a + (v - Math.floor(v)) * (b - a); };
+    // ---- 双腿：髋枢轴（摆腿动画，legL/legR 必须保留）+ 膝/踝 细分枢轴 ----
+    const legSpan = 0.30, thighH = 0.5, shinH = 0.45, shoeH = 0.14;
+    const hipY = thighH + shinH + shoeH * 0.5;
+    const legCell = 0.085;
+    const legL = new THREE.Group(); legL.position.set(-legSpan, hipY, 0); g.add(legL);
+    const legR = new THREE.Group(); legR.position.set(legSpan, hipY, 0); g.add(legR);
+    // 膝枢轴：挂在髋下 thighH 处；踝枢轴：再下 shinH 处（identity，保真挂在相应枢轴下）
+    const buildLeg = (hip, ph) => {
+      const knee = new THREE.Group(); knee.position.set(0, -thighH, 0); hip.add(knee);
+      const ankle = new THREE.Group(); ankle.position.set(0, -shinH, 0); knee.add(ankle);
+      // 大腿：实心柱，3 层 环形7+中心（衣物/裤）
+      cyl(hip, 3, 7, 1.2, legCell, pantsM(), 0.12, ph);
+      // 小腿：实心柱，3 层 环形7+中心（裤）
+      cyl(knee, 3, 7, 1.0, legCell, pantsM(), 0.12, ph);
+      // 鞋：简化 1 层（环形7+中心，金属感鞋底）+ 前凸鞋头
+      cyl(ankle, 1, 7, 1.6, legCell, shoeM(), 0.10, ph);
+      ringX(ankle, 0.09, -legCell * 0.5, 3, 0.9, legCell, shoeM(), ph + 0.4);
+      return { knee, ankle };
+    };
+    const lk = buildLeg(legL, 0), rk = buildLeg(legR, Math.PI / 9);
 
-    // ---------- 通用：给任一地板材质叠加统一「左上受光 + AO 角遮 + 底部内侧投影」立体层 ----------
-    function shadeFloor(ox, oy, matDens) {
-      const topG = c.createLinearGradient(ox, oy, ox + TILE, oy + TILE);
-      topG.addColorStop(0, "rgba(150,185,220,.15)");
-      topG.addColorStop(1, "rgba(0,0,0,.11)");
-      c.fillStyle = topG; c.fillRect(ox, oy, TILE, TILE);
-      c.fillStyle = "rgba(0,0,0,.15)";
-      c.beginPath(); c.moveTo(ox + TILE, oy); c.lineTo(ox + TILE, oy + TILE); c.lineTo(ox, oy + TILE); c.fill();
-      c.fillStyle = "rgba(0,0,0,.22)";
-      c.fillRect(ox, oy + TILE - 3, TILE, 3);
-      c.fillRect(ox + TILE - 3, oy, 3, TILE);
-      c.fillStyle = "rgba(168,208,240,.18)";
-      c.fillRect(ox, oy, TILE, 1); c.fillRect(ox, oy, 1, TILE);
-      // 细划痕簇（随机方向短线），密度随 matDens
-      c.strokeStyle = "rgba(0,0,0,.22)"; c.lineWidth = 1;
-      for (let ci = 0; ci < matDens; ci++) {
-        const cx0 = ox + rnd(2, TILE - 4, 9001 + ci * 7);
-        const cy0 = oy + rnd(2, TILE - 4, 9101 + ci * 11);
-        const ca = rnd(0, 3.14, 9201 + ci * 13);
-        const clen = rnd(2, 5, 9301 + ci * 17);
-        for (let sc = 0; sc < 3; sc++) {
-          c.beginPath();
-          c.moveTo(cx0 + rnd(-1, 1, 9401 + sc * 3), cy0 + rnd(-1, 1, 9501 + sc * 5));
-          c.lineTo(cx0 + Math.cos(ca) * clen * sc * 0.9 + rnd(-1, 2, 9601 + sc * 7),
-                   cy0 + Math.sin(ca) * clen * sc * 0.9 + rnd(-1, 2, 9701 + sc * 9));
-          c.stroke();
+    // ---- 躯干（腰 → 胸 → 肩）与双臂（肩枢轴 + 肘/腕/拳 细分） ----
+    // 椭圆柱形躯干：自腰向上 12 层，每层 12 块环形（表面体素空心），半径腰窄胸宽
+    const waistH = 0.34, chestH = 0.5;
+    const upperY = hipY + waistH * 0.5 + 0.06;
+    const upper = new THREE.Group(); upper.position.set(0, upperY, 0); g.add(upper);
+    const torsoCell = 0.085;
+    const torsoLayers = 9;
+    for (let i = 0; i < torsoLayers; i++) {
+      const t = i / (torsoLayers - 1);                    // 0 腰 → 1 胸
+      const y = -0.50 + t * 0.92;                          // 腰 -0.50 → 肩 +0.42
+      const r = 3.2 + t * 1.3;                             // 截面半径渐宽（细胞数）
+      ring(upper, y, 9, r, torsoCell, clothM(), i * 0.28);
+    }
+    // 肩（pauldron 护肩块，两侧各一，衣物）
+    const armSpan = 0.55, armPos = 0.42;
+    box(0.20, 0.12, 0.24, clothM(), upper, -armSpan, 0.38, 0);
+    box(0.20, 0.12, 0.24, clothM(), upper,  armSpan, 0.38, 0);
+
+    const upArmH = 0.5, foreH = 0.42;
+    const armL = new THREE.Group(); armL.position.set(-armSpan, armPos, 0); upper.add(armL);
+    const armR = new THREE.Group(); armR.position.set(armSpan, armPos, 0); upper.add(armR);
+    const armCell = 0.085;
+    const buildArm = (shld, ph) => {
+      const elbow = new THREE.Group(); elbow.position.set(0, -upArmH, 0); shld.add(elbow);
+      const wrist = new THREE.Group(); wrist.position.set(0, -upArmH - foreH, 0); elbow.add(wrist);
+      const fist = new THREE.Group(); fist.position.set(0, -0.0, 0.0); wrist.add(fist);
+      // 上臂：实心柱 2 层 环形4+中心（衣物）
+      cyl(shld, 2, 4, 1.2, armCell, clothM(), 0.12, ph);
+      // 前臂：实心柱 2 层 环形4+中心（皮肤露出）
+      cyl(elbow, 2, 4, 1.0, armCell, skinM(), 0.12, ph);
+      // 拳头：实心柱 1 层 环形6+中心（皮肤）
+      cyl(fist, 1, 6, 1.2, armCell, skinM(), 0.12, ph + 0.5);
+      return { elbow, wrist, fist };
+    };
+    const elL = buildArm(armL, 0), elR = buildArm(armR, Math.PI / 9);
+
+    // ---- 头：7×7×7 体素网格，球形轮廓筛选（Math.hypot < R），顶/后发 + 正面纯色脸 ----
+    const headY = chestH * 0.5 + waistH * 0.5 + 0.5;
+    const head = new THREE.Group(); head.position.set(0, headY, 0); upper.add(head);
+    const headCell = 0.09, hc = 2, headR = 2.4;   // 网格 -2..2（球形筛选）
+    for (let ix = -hc; ix <= hc; ix++) {
+      for (let iy = -hc; iy <= hc; iy++) {
+        for (let iz = -hc; iz <= hc; iz++) {
+          if (Math.hypot(ix, iy, iz) < headR) {
+            const m = iy >= 1.5 ? hairM() : skinM();   // 颅顶两层为发，余为皮肤
+            vox(head, ix * headCell, iy * headCell, iz * headCell, headCell, m);
+          }
         }
       }
     }
-    // 通用：一格 `oxy` 内的随机裂缝/碎石感折线
-    function crackLine(ox, oy, seed) {
-      c.strokeStyle = "rgba(5,8,14,.28)"; c.lineWidth = 1;
-      const kx0 = ox + rnd(3, TILE - 3, 9901 + seed), ky0 = oy + rnd(3, TILE - 3, 10001 + seed);
-      const kdir = rnd(0, 6.28, 10101 + seed);
-      let kx = kx0, ky = ky0;
-      c.beginPath(); c.moveTo(kx, ky);
-      for (let kg = 0; kg < 4; kg++) {
-        kx += Math.cos(kdir + rnd(-0.8, 0.8, 10201 + kg * 5)) * rnd(3, 6, 10301 + kg * 7);
-        ky += Math.sin(kdir + rnd(-0.8, 0.8, 10401 + kg * 11)) * rnd(3, 6, 10501 + kg * 13);
-        c.lineTo(kx, ky);
-      }
-      c.stroke();
-    }
 
-    /* ================= 第 0 行 · 六种地板材质 ================= */
-    /** [0] 金属板地板：暗青灰钢板 + 拼缝 + 锈迹 + 铆钉 */
-    { const o = 0; c.fillStyle = "#141a22"; c.fillRect(o, 0, TILE, TILE);
-      for (let i = 0; i < 46; i++) {
-        const g = rnd(10, 46, i + 1);
-        c.fillStyle = `rgba(${90 + g | 0},${100 + g | 0},${118 + g | 0},${rnd(0.05, 0.16, i + 7)})`;
-        c.fillRect(o + rnd(1, TILE - 3, i + 13), rnd(1, TILE - 3, i + 17), 1.6 + rnd(0, 2, i + 19), 1.1);
-      }
-      c.fillStyle = "rgba(0,0,0,.5)"; c.fillRect(o, 0, TILE, 1); c.fillRect(o, 0, 1, TILE);
-      c.fillStyle = "rgba(120,150,180,.25)"; c.fillRect(o, TILE - 1, TILE, 1); c.fillRect(o + TILE - 1, 0, 1, TILE);
-      c.fillStyle = "rgba(140,90,40,.14)";
-      for (let i = 0; i < 4; i++) { c.beginPath();
-        c.arc(o + rnd(2, TILE - 2, i + 31), rnd(2, TILE - 2, i + 37), rnd(1, 3.4, i + 41), 0, 6.28); c.fill(); }
-      // 铆钉点（金属格均匀小凸点）
-      c.fillStyle = "rgba(200,215,235,.30)";
-      for (let i = 0; i < 5; i++) c.fillRect(o + 3 + i * 6, 2, 1.4, 1.4);
-      shadeFloor(o, 0, 6); crackLine(o, 0, 3);
-    }
-    /** [1] 石板地板：灰色岩板 + 规则石板缝 + 苔点 */
-    { const o = TILE; c.fillStyle = "#1c232c"; c.fillRect(o, 0, TILE, TILE);
-      for (let i = 0; i < 40; i++) {
-        const g = rnd(6, 40, i + 201);
-        c.fillStyle = `rgba(${100 + g | 0},${108 + g | 0},${124 + g | 0},${rnd(0.05, 0.14, i + 207)})`;
-        c.fillRect(o + rnd(1, TILE - 3, i + 213), rnd(1, TILE - 3, i + 217), rnd(1.5, 4, i + 219), 1.2);
-      }
-      // 石板拼缝（横纵交错）
-      c.fillStyle = "rgba(8,10,16,.6)";
-      c.fillRect(o, TILE * 0.5, TILE, 1.6); c.fillRect(o, TILE * 0.9, TILE, 1.6);
-      c.fillRect(o + TILE * 0.32, 0, 1.6, TILE * 0.5); c.fillRect(o + TILE * 0.68, TILE * 0.5, 1.6, TILE * 0.5);
-      c.fillStyle = "rgba(110,120,140,.15)"; c.fillRect(o, TILE * 0.5 - 1, TILE, 1); c.fillRect(o + TILE * 0.32 - 1, 0, 1, TILE * 0.5);
-      // 苔点
-      c.fillStyle = "rgba(70,110,70,.22)";
-      for (let i = 0; i < 5; i++) c.fillRect(o + rnd(2, TILE - 4, i + 231), rnd(2, TILE - 4, i + 237), 1.4, 1.4);
-      shadeFloor(o, 0, 4);
-    }
-    /** [2] 木地板：深棕木板 + 木纹 + 钉眼 + 磨痕 */
-    { const o = TILE * 2; c.fillStyle = "#241a12"; c.fillRect(o, 0, TILE, TILE);
-      for (let i = 0; i < 34; i++) {
-        const g = rnd(5, 34, i + 301);
-        c.fillStyle = `rgba(${118 + g | 0},${86 + g | 0},${52 + g | 0},${rnd(0.06, 0.16, i + 307)})`;
-        c.fillRect(o + rnd(1, TILE - 3, i + 313), rnd(1, TILE - 3, i + 317), rnd(1.5, 4, i + 319), 1.1);
-      }
-      // 纵向木纹条
-      c.fillStyle = "rgba(0,0,0,.22)";
-      for (let i = 0; i < 3; i++) c.fillRect(o + 5 + i * (TILE / 3), 1, 1, TILE - 2);
-      // 木板横拼缝
-      c.fillStyle = "rgba(0,0,0,.4)";
-      c.fillRect(o, TILE * 0.62, TILE, 1.6);
-      // 钉眼
-      c.fillStyle = "rgba(20,14,8,.75)";
-      for (let i = 0; i < 4; i++) { c.beginPath(); c.arc(o + rnd(3, TILE - 3, i + 331), rnd(3, TILE - 3, i + 337), 1.1, 0, 6.28); c.fill(); }
-      shadeFloor(o, 0, 3);
-    }
-    /** [3] 沙地地板：土黄细沙 + 砂粒 + 波纹 */
-    { const o = TILE * 3; c.fillStyle = "#2a2115"; c.fillRect(o, 0, TILE, TILE);
-      for (let i = 0; i < 70; i++) {
-        const g = rnd(4, 30, i + 401);
-        c.fillStyle = `rgba(${150 + g | 0},${128 + g | 0},${76 + g | 0},${rnd(0.06, 0.2, i + 407)})`;
-        c.fillRect(o + rnd(1, TILE - 2, i + 413), rnd(1, TILE - 2, i + 417), 1.1, 1.1);
-      }
-      // 风速波纹（横向细弧）
-      c.strokeStyle = "rgba(120,100,60,.25)"; c.lineWidth = 1;
-      for (let i = 0; i < 3; i++) {
-        const yy = rnd(5, TILE - 6, i + 431);
-        c.beginPath(); c.moveTo(o + 3, yy);
-        c.quadraticCurveTo(o + TILE * 0.5, yy + rnd(-2, 2, i + 437), o + TILE - 3, yy);
-        c.stroke();
-      }
-      shadeFloor(o, 0, 2);
-    }
-    /** [4] 水面地板：深蓝水面 + 波纹高光 + 湿润反光 */
-    { const o = TILE * 4; c.fillStyle = "#0d1722"; c.fillRect(o, 0, TILE, TILE);
-      for (let i = 0; i < 30; i++) {
-        c.fillStyle = `rgba(${46 + rnd(0,22,i+501)|0},${84 + rnd(0,26,i+507)|0},${130 + rnd(0,22,i+513)|0},${rnd(0.1,0.28,i+517)})`;
-        c.fillRect(o + rnd(1, TILE - 3, i + 523), rnd(1, TILE - 3, i + 527), rnd(2, 6, i + 531), 1.2);
-      }
-      // 波纹曲线（横向，有波峰高光）
-      c.strokeStyle = "rgba(150,200,255,.25)"; c.lineWidth = 1;
-      for (let i = 0; i < 4; i++) {
-        const yy = rnd(4, TILE - 6, i + 541);
-        c.beginPath(); c.moveTo(o + 2, yy);
-        c.quadraticCurveTo(o + TILE * 0.5, yy + rnd(-3, 3, i + 547), o + TILE - 2, yy);
-        c.stroke();
-      }
-      // 波峰小高光点
-      c.fillStyle = "rgba(190,225,255,.35)";
-      for (let i = 0; i < 6; i++) c.fillRect(o + rnd(2, TILE - 3, i + 551), rnd(2, TILE - 4, i + 557), 1.4, 1);
-      shadeFloor(o, 0, 1);
-    }
-    /** [5] 苔藓地：暗绿湿苔 + 苔斑 + 草叶 */
-    { const o = TILE * 5; c.fillStyle = "#16201a"; c.fillRect(o, 0, TILE, TILE);
-      for (let i = 0; i < 60; i++) {
-        const g = rnd(4, 26, i + 601);
-        c.fillStyle = `rgba(${56 + g | 0},${104 + g | 0},${62 + g | 0},${rnd(0.08, 0.2, i + 607)})`;
-        c.fillRect(o + rnd(1, TILE - 3, i + 613), rnd(1, TILE - 3, i + 617), rnd(1.5, 4, i + 631), 1.3);
-      }
-      // 苔斑团
-      c.fillStyle = "rgba(70,120,74,.25)";
-      for (let i = 0; i < 3; i++) { c.beginPath();
-        c.arc(o + rnd(4, TILE - 4, i + 641), rnd(4, TILE - 4, i + 647), rnd(3, 7, i + 651), 0, 6.28); c.fill(); }
-      // 细草叶（竖短线）
-      c.strokeStyle = "rgba(120,170,110,.5)"; c.lineWidth = 1;
-      for (let i = 0; i < 8; i++) {
-        const gx = o + rnd(2, TILE - 2, i + 661), gy = rnd(2, TILE - 4, i + 667);
-        c.beginPath(); c.moveTo(gx, gy); c.lineTo(gx + rnd(-1,1,i+671), gy - rnd(2,4,i+677)); c.stroke();
-      }
-      shadeFloor(o, 0, 1);
-    }
-
-    /** [6] 立体墙：墙基 + 砖缝 + 斑驳 + 苔藓 + 底部阴影 + 顶部高光（伪 3D） */
-    { const o = TILE * 6; c.fillStyle = "#2a3340"; c.fillRect(o, 0, TILE, TILE);
-      // 砖块 2 横 + 交错竖缝（墙顶两排砖，中下部密缝）
-      c.fillStyle = "rgba(8,11,16,.85)";
-      c.fillRect(o, TILE * 0.30, TILE, 2);   // 排缝
-      c.fillRect(o, TILE * 0.62, TILE, 2);
-      c.fillRect(o, TILE * 0.92, TILE, 1.5);
-      c.fillRect(o + TILE * 0.24, 0, 2, TILE * 0.30);
-      c.fillRect(o + TILE * 0.56, 0, 2, TILE * 0.30);
-      c.fillRect(o + TILE * 0.12, TILE * 0.30, 2, TILE * 0.32);
-      c.fillRect(o + TILE * 0.44, TILE * 0.30, 2, TILE * 0.32);
-      c.fillRect(o + TILE * 0.72, TILE * 0.30, 2, TILE * 0.32);
-      c.fillRect(o + TILE * 0.30, TILE * 0.62, 2, TILE * 0.30);
-      c.fillRect(o + TILE * 0.62, TILE * 0.62, 2, TILE * 0.30);
-      // 砖面噪点/斑驳
-      for (let i = 0; i < 34; i++) {
-        c.fillStyle = `rgba(${90 + rnd(0,50,i+701)|0},${108 + rnd(0,50,i+707)|0},${146 + rnd(0,40,i+713)|0},${rnd(0.05,0.16,i+717)})`;
-        c.fillRect(o + rnd(1, TILE - 2, i + 723), rnd(1, TILE - 2, i + 727), rnd(1.5, 4, i + 731), 1.2);
-      }
-      // 苔藓/污渍斑（墙体也长青苔，呼应苔藓地）
-      c.fillStyle = "rgba(76,110,74,.22)";
-      for (let i = 0; i < 4; i++) { c.beginPath();
-        c.arc(o + rnd(3, TILE - 3, i + 741), rnd(TILE * 0.3, TILE * 0.9, i + 747), rnd(1.5, 4, i + 751), 0, 6.28); c.fill(); }
-      // 底部阴影渐变（墙脚压暗，与地板衔接更立体）
-      const footG = c.createLinearGradient(o, TILE * 0.6, o, TILE);
-      footG.addColorStop(0, "rgba(0,0,0,0)");
-      footG.addColorStop(1, "rgba(0,0,0,.42)");
-      c.fillStyle = footG; c.fillRect(o, TILE * 0.6, TILE, TILE * 0.4);
-      // 顶部受光边（斜光感）+ 顶沿高光
-      c.fillStyle = "rgba(150,180,215,.38)";
-      c.fillRect(o, 0, TILE, 2); c.fillRect(o, 0, 2, TILE);
-      c.fillStyle = "rgba(200,225,250,.5)";
-      c.fillRect(o, 0, TILE, 1);
-    }
-    /** [7] 设备 I（不透明底，绘制时再叠设备图形） */
-    { const o = TILE * 7; c.fillStyle = "#0e1116"; c.fillRect(o, 0, TILE, TILE); }
-
-    /* ================= 第 1 行 · 环境装饰精灵（叠到地板格上） ================= */
-    { const oy = TILE;
-      // [0] 血渍
-      c.save(); c.translate(0, oy);
-      c.fillStyle = "rgba(110,12,12,.55)";
-      for (let i = 0; i < 8; i++) { c.beginPath();
-        c.arc(rnd(3, TILE - 3, i + 805), rnd(3, TILE - 3, i + 807), rnd(2, 6, i + 811), 0, 6.28); c.fill(); }
-      c.fillStyle = "rgba(150,30,20,.35)";
-      for (let i = 0; i < 4; i++) { c.beginPath();
-        c.arc(rnd(6, TILE - 6, i + 825), rnd(6, TILE - 6, i + 827), rnd(1, 3, i + 831), 0, 6.28); c.fill(); }
-      c.restore();
-      // [1] 裂痕（大折线，碎石感）
-      c.save(); c.translate(TILE, oy);
-      c.strokeStyle = "rgba(5,8,14,.5)"; c.lineWidth = 1.6;
-      c.beginPath(); c.moveTo(3, TILE - 3); c.lineTo(TILE * 0.35, TILE * 0.55);
-      c.lineTo(TILE * 0.5, TILE * 0.62); c.lineTo(TILE * 0.68, TILE * 0.3); c.lineTo(TILE - 4, TILE * 0.18); c.stroke();
-      c.strokeStyle = "rgba(160,170,190,.28)"; c.lineWidth = 1;
-      c.beginPath(); c.moveTo(4, TILE - 2); c.lineTo(TILE * 0.36, TILE * 0.57); c.stroke();
-      c.restore();
-      // [2] 碎石（几粒小石块）
-      c.save(); c.translate(TILE * 2, oy);
-      c.fillStyle = "rgba(96,102,118,.5)";
-      for (let i = 0; i < 6; i++) c.fillRect(rnd(2, TILE - 5, i + 841), rnd(2, TILE - 5, i + 847), rnd(2, 4.5, i + 851), rnd(1.5, 3, i + 855));
-      c.fillStyle = "rgba(160,172,190,.4)";
-      for (let i = 0; i < 4; i++) c.fillRect(rnd(3, TILE - 5, i + 861), rnd(3, TILE - 5, i + 865), 1.4, 1);
-      c.restore();
-      // [3] 植被/杂草（草丛一簇）
-      c.save(); c.translate(TILE * 3, oy);
-      c.strokeStyle = "rgba(120,170,110,.6)"; c.lineWidth = 1.2;
-      for (let i = 0; i < 9; i++) {
-        const bx = rnd(4, TILE - 4, i + 871), by = rnd(TILE - 10, TILE - 3, i + 877);
-        c.beginPath(); c.moveTo(bx, by); c.lineTo(bx + rnd(-2, 2, i + 881), by - rnd(4, 8, i + 885)); c.stroke();
-      }
-      c.fillStyle = "rgba(110,160,110,.35)";
-      c.beginPath(); c.arc(TILE * 0.5 , TILE - rnd(4, 6, 891), rnd(4, 6, 895), 0, 6.28); c.fill();
-      c.restore();
-      // [4] 水渍/小水洼
-      c.save(); c.translate(TILE * 4, oy);
-      c.fillStyle = "rgba(40,80,130,.35)";
-      c.beginPath(); c.ellipse(TILE * 0.5, TILE * 0.5, rnd(6, 10, 901), rnd(4, 7, 907), 0, 0, 6.28); c.fill();
-      c.fillStyle = "rgba(150,200,255,.25)";
-      c.beginPath(); c.ellipse(TILE * 0.42, TILE * 0.42, rnd(2, 4, 911), rnd(1, 2, 917), 0, 0, 6.28); c.fill();
-      c.restore();
-      // [5] 光斑（柔和亮斑，多用于氛围）
-      c.save(); c.translate(TILE * 5, oy);
-      const gg = c.createRadialGradient(TILE * 0.5, TILE * 0.5, 1, TILE * 0.5, TILE * 0.5, TILE * 0.55);
-      gg.addColorStop(0, "rgba(220,240,255,.26)"); gg.addColorStop(1, "rgba(220,240,255,0)");
-      c.fillStyle = gg; c.beginPath(); c.arc(TILE * 0.5, TILE * 0.5, TILE * 0.55, 0, 6.28); c.fill();
-      c.restore();
-      // [6] 灰尘/油污（暗色油环 + 微尘点）
-      c.save(); c.translate(TILE * 6, oy);
-      c.strokeStyle = "rgba(30,26,18,.4)"; c.lineWidth = 2;
-      c.beginPath(); c.arc(TILE * 0.5, TILE * 0.5, rnd(4, 8, 921), 0, 6.28); c.stroke();
-      c.fillStyle = "rgba(40,34,22,.3)";
-      for (let i = 0; i < 5; i++) c.fillRect(rnd(2, TILE - 3, i + 931), rnd(2, TILE - 3, i + 937), 1.2, 1.2);
-      c.restore();
-    }
-
-    /* ================= 第 2 行 · 道具图标精灵 ================= */
-    { const oy = TILE * 2;
-      // [0] 血瓶（小红瓶 + 高光）
-      c.save(); c.translate(0, oy);
-      c.fillStyle = "rgba(180,40,30,.9)"; c.fillRect(TILE * 0.4, TILE * 0.32, TILE * 0.2, TILE * 0.36);
-      c.fillStyle = "rgba(120,20,16,.9)"; c.fillRect(TILE * 0.46, TILE * 0.2, TILE * 0.08, TILE * 0.14);
-      c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(TILE * 0.42, TILE * 0.36, TILE * 0.04, TILE * 0.22);
-      c.restore();
-      // [1] 钥匙（金黄钥匙 + 齿）
-      c.save(); c.translate(TILE, oy);
-      c.strokeStyle = "#e8c24a"; c.lineWidth = 1.6;
-      c.beginPath(); c.arc(TILE * 0.62, TILE * 0.36, TILE * 0.1, 0, 6.28); c.stroke();
-      c.beginPath(); c.moveTo(TILE * 0.62, TILE * 0.46); c.lineTo(TILE * 0.5, TILE * 0.74); c.stroke();
-      c.beginPath(); c.moveTo(TILE * 0.53, TILE * 0.68); c.lineTo(TILE * 0.47, TILE * 0.78); c.stroke();
-      c.beginPath(); c.moveTo(TILE * 0.57, TILE * 0.72); c.lineTo(TILE * 0.52, TILE * 0.82); c.stroke();
-      c.restore();
-      // [2] 石碑（灰色带裂痕的石碑）
-      c.save(); c.translate(TILE * 2, oy);
-      c.fillStyle = "#8a94a6"; c.fillRect(TILE * 0.44, TILE * 0.18, TILE * 0.14, TILE * 0.44);
-      c.fillRect(TILE * 0.4, TILE * 0.6, TILE * 0.22, TILE * 0.08);
-      c.fillStyle = "rgba(240,245,255,.4)"; c.fillRect(TILE * 0.46, TILE * 0.2, TILE * 0.04, TILE * 0.4);
-      c.fillStyle = "rgba(60,64,80,.6)"; c.fillRect(TILE * 0.5, TILE * 0.3, 1, TILE * 0.12);
-      c.restore();
-      // [3] 火把（木杆 + 火焰）
-      c.save(); c.translate(TILE * 3, oy);
-      c.fillStyle = "#6b4b2a"; c.fillRect(TILE * 0.49, TILE * 0.45, TILE * 0.05, TILE * 0.34);
-      const fg = c.createRadialGradient(TILE * 0.5, TILE * 0.34, 1, TILE * 0.5, TILE * 0.34, TILE * 0.16);
-      fg.addColorStop(0, "#ffd76a"); fg.addColorStop(0.6, "#f0943a"); fg.addColorStop(1, "rgba(240,120,40,0)");
-      c.fillStyle = fg; c.beginPath(); c.arc(TILE * 0.5, TILE * 0.34, TILE * 0.16, 0, 6.28); c.fill();
-      c.restore();
-      // [4] 卷轴（皮革卷轴）
-      c.save(); c.translate(TILE * 4, oy);
-      c.fillStyle = "#b8a47a"; c.fillRect(TILE * 0.3, TILE * 0.38, TILE * 0.42, TILE * 0.16);
-      c.fillStyle = "#8a7a58"; c.fillRect(TILE * 0.3, TILE * 0.3, TILE * 0.05, TILE * 0.32);
-      c.fillRect(TILE * 0.67, TILE * 0.3, TILE * 0.05, TILE * 0.32);
-      c.fillStyle = "rgba(60,50,30,.6)"; c.fillRect(TILE * 0.4, TILE * 0.4, TILE * 0.22, TILE * 0.05);
-      c.restore();
-      // [5] 草药（茎叶草束）
-      c.save(); c.translate(TILE * 5, oy);
-      c.fillStyle = "#3f6b3a"; c.fillRect(TILE * 0.46, TILE * 0.3, TILE * 0.05, TILE * 0.35);
-      c.fillStyle = "#4f8a42";
-      c.beginPath(); c.ellipse(TILE * 0.36, TILE * 0.32, TILE * 0.12, TILE * 0.04, -0.6, 0, 6.28); c.fill();
-      c.beginPath(); c.ellipse(TILE * 0.6, TILE * 0.3, TILE * 0.1, TILE * 0.04, 0.4, 0, 6.28); c.fill();
-      c.restore();
-      // [6] 水晶（发光紫晶）
-      c.save(); c.translate(TILE * 6, oy);
-      const cg = c.createRadialGradient(TILE * 0.5, TILE * 0.45, 1, TILE * 0.5, TILE * 0.45, TILE * 0.3);
-      cg.addColorStop(0, "rgba(190,140,255,.4)"); cg.addColorStop(1, "rgba(190,140,255,0)");
-      c.fillStyle = cg; c.beginPath(); c.arc(TILE * 0.5, TILE * 0.45, TILE * 0.3, 0, 6.28); c.fill();
-      c.fillStyle = "#b78ae8"; c.fillRect(TILE * 0.45, TILE * 0.22, TILE * 0.1, TILE * 0.4);
-      c.fillRect(TILE * 0.32, TILE * 0.4, TILE * 0.28, TILE * 0.1);
-      c.restore();
-    }
-
-    tileCache = bt;
+    g.userData.rig = {
+      legL, legR, armL, armR,           // 行走摆动仍只引用这四个（不动）
+      kneeL: lk.knee, kneeR: rk.knee,   // 新增细分枢轴（identity，供未来细化摆腿）
+      ankleL: lk.ankle, ankleR: rk.ankle,
+      elbowL: elL.elbow, elbowR: elR.elbow,
+      wristL: elL.wrist, wristR: elR.wrist,
+      fistL: elL.fist, fistR: elR.fist,
+      upper, head,
+    };
+    g.castShadow = true;
+    return g;
   }
 
-  // 地板 体素方块顶面 材质选择：确定性 hash 在 6 种材质间分桶（带世界种子轻微偏移）。
-  // [0]金属板 [1]石板 [2]木地板 [3]沙地 [4]水面 [5]苔藓地 —— 分布权重近似：
-  // 金属/石板最常见（走廊感），木/苔藓（室内丛林），沙/水（边缘/水洼）稀疏点缀。
-  function floorTexSrc(x, y) {
-    const seed = worldSeed;
-    const h = (x * 73856093 + seed * 1000003) ^ (y * 19349663);
-    const v = ((h % 100) + 100) % 100;
-    if (v < 30) return 0;              // 金属板
-    if (v < 52) return TILE;           // 石板
-    if (v < 66) return TILE * 2;       // 木地板
-    if (v < 78) return TILE * 5;       // 苔藓地
-    if (v < 90) return TILE * 4;       // 水面（湿境）
-    return TILE * 3;                   // 沙地
+  function buildPlayerGroup() {
+    const g = new THREE.Group();
+    buildVoxelBody(g, PLAYER_COLORS);
+    g.scale.setScalar(0.85);   // 地图里玩家体素人略小于墙高，比例协调
+    g.userData.sprite = null;
+    return g;
   }
 
-  // 环境装饰确定性选择：给 `.`地板格 低概率点缀 7 类细节精灵（第 1 行缓存：[0]血渍 [1]裂痕
-  // [2]碎石 [3]植被 [4]水渍 [5]光斑 [6]灰尘）。返回精灵格 x 索引，或 -1（无装饰）。
-  // 概率受世界种子＋坐标 hash，稳定无逐帧抖动；零逐帧计算（结果只 drawImage）。
-  function floorDeco(x, y) {
-    const h = (x * 2654435761 + worldSeed) ^ (y * 40503);
-    const v = ((h % 1000) + 1000) % 1000;
-    // 总装饰密度 ~22%：90% 空置，其余落在 7 类上（光斑偏稀疏、碎石/灰尘偏密）
-    if (v < 780) return -1;
-    const type = (h % 100) >>> 0;
-    if (type < 16) return 5;            // 光斑
-    if (type < 32) return 4;            // 水渍/小水洼
-    if (type < 50) return 3;            // 植被/杂草
-    if (type < 68) return 1;            // 裂痕
-    if (type < 82) return 0;            // 血渍
-    if (type < 92) return 6;            // 灰尘/油污
-    return 2;                           // 碎石
+  function buildEnemyGroup(e) {
+    const col = ENEMY_COLORS[e.id] || ENEMY_FALLBACK[(e.id.charCodeAt(e.id.length - 1) || 0) % ENEMY_FALLBACK.length];
+    const g = new THREE.Group();
+    buildVoxelBody(g, { shirt: col.shirt || col, pants: col.pants || 0x2a2a30, skin: col.skin || 0x6a5a3a, hair: 0x3a3f2c, shoe: 0x1c1a1a });
+    g.scale.setScalar(0.85);
+    // 红色指示光圈（敌人站位标记）
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.7, 0.85, 32),
+      new THREE.MeshBasicMaterial({ color: 0xff5050, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.03;
+    g.add(ring);
+    return g;
   }
 
-  // 道具/调查点 → 图标精灵索引（第 2 行缓存：[0]血瓶 [1]钥匙 [2]石碑 [3]火把 [4]卷轴 [5]草药 [6]水晶）
-  // 按名称关键字归一到图标；未命中则按名称 hash 稳定映射到一个图标（不再只靠文字标记）。
-  const ICON_KEYWORDS = [
-    ["vial", "blood", "血瓶", "血药", "血", "pot", "药剂", "药水"],                 // 0 血瓶
-    ["key", "钥匙", "钥匙卡", "门卡", "id卡", "card", "通行", "签证"],             // 1 钥匙
-    ["stele", "石碑", "碑", "铭文", "石刻", "tablet", "monument", "宿命", "命轨"], // 2 石碑
-    ["torch", "火把", "火炬", "火柄", "lamp", "灯", "烛", "candle"],               // 3 火把/灯
-    ["scroll", "卷轴", "笔记", "日记", "书函", "信", "paper", "text", "纸"],       // 4 卷轴
-    ["herb", "草", "药草", "植物", "花", "seed", "种子", "herb"],                  // 5 草药
-    ["crystal", "水晶", "晶", "宝石", "gem", "灵石", "晶石"],                      // 6 水晶
-  ];
-  function itemIconIdx(name) {
-    const n = String(name || "");
-    for (let i = 0; i < ICON_KEYWORDS.length; i++) {
-      for (let k = 0; k < ICON_KEYWORDS[i].length; k++) {
-        if (n.indexOf(ICON_KEYWORDS[i][k]) >= 0) return i;
+  function buildNpcGroup() {
+    const g = new THREE.Group();
+    buildVoxelBody(g, NPC_COLORS);
+    g.scale.setScalar(0.85);
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.7, 0.85, 32),
+      new THREE.MeshBasicMaterial({ color: 0x8ab6ff, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.03;
+    g.add(ring);
+    return g;
+  }
+
+  // 地面小精灵/门禁/传送门发光，用 billboard 精灵（始终面向镜头）。退化时回退色块。
+  function makeGloRing(color, outer) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 64;
+    const ctx = c.getContext("2d");
+    const g = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
+    g.addColorStop(0, color);
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 64, 64);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+    sp.scale.setScalar(outer || 1.4);
+    sp.position.y = 0.2;
+    return sp;
+  }
+
+  /* ================= 地图建筑（地板 + 墙体） =================
+   * 只在 setData 时重建一次；墙格 `#` → BoxGeometry 柱，空格 `.`/`I` → 地板块。
+   * 3D 场景不加迷雾遮掩：所有格子（无论已探索/未探索）都正常渲染实心墙和地板，
+   * 只靠「墙挡视线」提供拐角盲区。轮回迷雾仅保留在小地图黑幕（未探索处不显示）。
+   */
+  function buildMap(build, scene) {
+    if (!data) return;
+    for (let y = 0; y < data.h; y++) {
+      const row = data.tiles[y] || "";
+      for (let x = 0; x < data.w; x++) {
+        const c = row[x] || "#";
+        const wX = (x + 0.5) * TILE, wZ = (y + 0.5) * TILE; // world y 向上（buildMap 不需要 wY）
+        if (c === "#") {
+          // 墙：体素方块柱（实心，无半透明）
+          const mat = new THREE.MeshLambertMaterial({ color: 0x5a6573 });
+          const m = new THREE.Mesh(new THREE.BoxGeometry(TILE, WALL_H, TILE), mat);
+          m.position.set(wX, WALL_H * 0.5, wZ);
+          m.castShadow = true; m.receiveShadow = true;
+          build.add(m);
+        } else {
+          // 地板：受贴图地板块
+          const m = new THREE.Mesh(
+            new THREE.BoxGeometry(TILE, FLOOR_H, TILE),
+            new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.95, metalness: 0.05 })
+          );
+          m.position.set(wX, -0.0, wZ);
+          m.receiveShadow = true;
+          build.add(m);
+        }
       }
     }
-    // 兜底：按名称 hash 稳定指定一个图标
-    let h = 0;
-    for (let i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) >>> 0;
-    return (h % 7);
-  }
-  // 在 (cx, cy) 处绘制道具图标精灵（第 2 行缓存 i 号，单色调暗底圆片承载）
-  function drawItemIcon(cx, cy, idx, overlayT) {
-    ctx.save();
-    // 半透明暗底圆片（让图标在任意地板上都清楚）
-    ctx.fillStyle = "rgba(8,10,16,.55)";
-    ctx.beginPath(); ctx.arc(cx, cy + 1, 11, 0, 6.28); ctx.fill();
-    ctx.strokeStyle = `rgba(255,220,120,${overlayT != null ? overlayT : 0.5})`;
-    ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy + 1, 11, 0, 6.28); ctx.stroke(); ctx.lineWidth = 1;
-    // 从缓存第 2 行裁出图标精灵
-    const sw = 18, sy0 = TILE * 2 + (TILE - sw) / 2;
-    ctx.drawImage(tileCache, idx * TILE + (TILE - sw) / 2, sy0, sw, sw, cx - sw / 2, cy - sw / 2, sw, sw);
-    ctx.restore();
-  }
-
-  // 地板方块：MC 风格半立方体（顶面 + 前/右两个可见侧面，营造方块体积感）
-  // sx,sy 为格子左上角；顶面在 sy-bh 高度受左上光，前(南)边与右(东)边向下拉出 bh 形成块体。
-  function drawFloor(x, y, srcX) {
-    const sx = x * TILE, sy = y * TILE;
-    const bh = P3D.blockH;
-    const topBase = sy - bh;                 // 顶面上沿
-    // 底部投影（块体朝右下微投影，接地）
-    ctx.fillStyle = `rgba(0,0,0,${P3D.shadowAlpha * 0.5})`;
-    ctx.fillRect(sx + P3D.shadowDX, topBase + TILE - 2 + P3D.shadowDY, TILE, bh);
-    // 前(南,+y)侧面：沿顶面下沿向下拉 bh 的竖向面（中亮）
-    sideFront(sx, topBase + TILE, TILE, bh);
-    // 右(东,+x)侧面：沿顶面右沿向下拉 bh 的竖向面（更暗）
-    sideRight(sx + TILE, topBase, bh, TILE + bh);
-    // 顶面（方块受光顶，最亮）
-    ctx.drawImage(tileCache, srcX, 0, TILE, TILE, sx, topBase, TILE, TILE);
-    // 顶面受光棱线（左上高光边）
-    edgeTop(sx, topBase, TILE, 2, 0.28);
-    edgeTop(sx, topBase, 2, TILE, 0.28);
-  }
-
-  // 墙柱：体素方块柱（主立面为墙砖面 + 右暗侧 + 顶沿高光），全格填充，明显高于地板低块
-  // 地板仅是 bh(5px) 的低块，墙却在格子高度内整面填充 → 竖立方块柱，形成 MC 墙体高度差。
-  function drawWall(x, y) {
-    const sx = x * TILE, sy = y * TILE;
-    const t = TILE;
-    const rw = P3D.blockH + 3;              // 右(东)侧暗面厚度
-    // 底部投影（先画，落向下/右邻格，传达竖立物）
-    ctx.fillStyle = `rgba(0,0,0,${P3D.shadowAlpha * 0.75})`;
-    ctx.fillRect(sx + P3D.shadowDX, sy + t - 2 + P3D.shadowDY, t * 0.9, P3D.shadowDY);
-    ctx.fillRect(sx + t - rw + P3D.shadowDX, sy + P3D.shadowDY, rw, t);
-    // 右(东)侧暗面：墙柱右侧竖棱（MC 右侧暗影）
-    sideRight(sx + t - rw, sy, rw, t);
-    // 主立面（南/前）：墙砖纹理全格填充，营造竖立方块柱
-    ctx.drawImage(tileCache, TILE * 6, 0, t, t, sx, sy, t, t);
-    // 受左上光：前脸上端略微提亮，下端落暗（MC 顶向阳）
-    sideFront(sx, sy, t, t);
-    // 顶沿受光棱线（左上高光，强调方块顶 rim）
-    edgeTop(sx, sy, t, 3, 0.32);
-    edgeTop(sx, sy, 3, t, 0.32);
-    // 底部墙脚暗影（与地板相交处）
-    ctx.fillStyle = "rgba(0,0,0,.34)";
-    ctx.fillRect(sx, sy + t - 3, t, 3);
   }
 
   /* ---------- 游戏状态 ---------- */
   function setData(worldData) {
     data = worldData;
+    handleResize();   // 世界数据加载/重载时同步渲染尺寸（进入世界 / 窗口尺寸恢复后确保正确）
+
     explored = new Set((data.explored || []).map(s => String(s)));
-    // 世界种子（确定性随机种子，供地板材质/环境装饰分布）：用 world.name + floor_name 派生稳定 hash
+    // 世界种子（地板装饰确定性）；沿用旧版派生
     const seedStr = ((data.world && data.world.name) || "") + "|" + (data.floor_name || "") + (data.id || data.map_id || "");
     let sh = 2166136261;
     for (let i = 0; i < seedStr.length; i++) { sh ^= seedStr.charCodeAt(i); sh = Math.imul(sh, 16777619); }
     worldSeed = (sh >>> 0) % 100000;
-    px = data.px * TILE + TILE / 2;
-    py = data.py * TILE + TILE / 2;
-    targetPx = px; targetPy = py;
-    enemiesAnim = {};
+
+    // 玩家格子位置
+    px = data.px; py = data.py;
+    targetPx = data.px; targetPy = data.py;
+
+    // 清理旧场景实体（墙体/地板/装饰 + 实体对象）
+    buildObjs.forEach(o => scene.remove(o));
+    buildObjs = [];
+    propObjs.forEach(o => scene.remove(o));
+    propObjs = [];
+
+    // 重建地图（地板 + 墙体 + 迷雾）——只在此处重建一次
+    const bk = new THREE.Group();
+    buildMap(bk, scene);
+    scene.add(bk);
+    buildObjs.push(bk);
+
+    // 重建玩家体素人（如已存在则复用位置更新，避免重复建）
+    if (!player) { player = buildPlayerGroup(); scene.add(player); }
+    player.position.set((data.px + 0.5) * TILE, 1.0, (data.py + 0.5) * TILE);
+    playerRig = player.userData.rig;
+
+    // 敌人
+    enemiesObj = {};
     (data.enemies || []).forEach(e => {
-      enemiesAnim[e.id] = { baseX: e.x * TILE + TILE / 2, baseY: e.y * TILE + TILE / 2, phase: Math.random() * 6.28, alive: e.alive };
+      const grp = buildEnemyGroup(e);
+      grp.position.set((e.x + 0.5) * TILE, 0.92, (e.y + 0.5) * TILE);
+      grp.userData.enemy = e;
+      scene.add(grp);
+      propObjs.push(grp);
+      enemiesObj[e.id] = { group: grp, rig: grp.userData.rig };
     });
+
+    // NPC
+    npcObj = {};
+    (data.npcs || []).forEach(n => {
+      const grp = buildNpcGroup();
+      grp.position.set((n.x + 0.5) * TILE, 0.92, (n.y + 0.5) * TILE);
+      scene.add(grp);
+      propObjs.push(grp);
+      npcObj[n.id || n.name] = { group: grp, rig: grp.userData.rig };
+    });
+
+    // 调查点（发光小精灵，探到即点亮）
+    itemObj = {};
+    (data.points || []).forEach(p => {
+      const sp = makeGloRing(p.done ? "rgba(80,200,120,.6)" : "rgba(255,215,106,.8)", 0.8);
+      sp.position.set((p.x + 0.5) * TILE, 0.3, (p.y + 0.5) * TILE);
+      // 未探索隐藏
+      sp.visible = isExplored(p.x, p.y);
+      scene.add(sp);
+      propObjs.push(sp);
+      itemObj[p.x + ":" + p.y] = sp;
+    });
+
+    // 传送门（能量旋转环）
+    (data.portals || []).forEach(p => {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.6, 0.08, 8, 24),
+        new THREE.MeshBasicMaterial({ color: 0x6ac8ff, transparent: true, opacity: 0.9 })
+      );
+      ring.position.set((p.x + 0.5) * TILE, 0.8, (p.y + 0.5) * TILE);
+      ring.visible = isExplored(p.x, p.y);
+      scene.add(ring);
+      propObjs.push(ring);
+    });
+
+    // 门禁（锁定金 / 解锁绿）
+    (data.gates || []).forEach(g => {
+      const col = g.locked ? 0xffc040 : 0x4ac47a;
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.7, 1.2, 0.2),
+        new THREE.MeshLambertMaterial({ color: col })
+      );
+      m.position.set((g.x + 0.5) * TILE, 0.7, (g.y + 0.5) * TILE);
+      m.visible = isExplored(g.x, g.y);
+      scene.add(m);
+      propObjs.push(m);
+    });
+
+    // 副本入口（战斗红 / 解密蓝 漩涡）
+    (data.zones || []).forEach(z => {
+      const col = z.kind === "fight" ? 0xff4646 : 0x6a6aff;
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.7, 0.1, 8, 24),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9 })
+      );
+      ring.position.set((z.x + 0.5) * TILE, 0.9, (z.y + 0.5) * TILE);
+      ring.visible = isExplored(z.x, z.y);
+      scene.add(ring);
+      propObjs.push(ring);
+    });
+
     const topEl = document.querySelector("#worldTop #worldLoc");
     if (topEl) topEl.textContent = ((data.world && data.world.name) ? data.world.name + " · " : "") + (data.floor_name || "蜂巢");
+    drawMinimap();   // 全量重建后刷新小地图
     start();
   }
 
   function setPlayer(x, y) {
-    targetPx = x * TILE + TILE / 2;
-    targetPy = y * TILE + TILE / 2;
+    targetPx = x; targetPy = y;
+    drawMinimap();   // 玩家移动后刷新小地图（视图随玩家居中）
   }
 
   function keydown(e) {
@@ -606,6 +431,7 @@ const World2D = (() => {
   }
 
   let lastMoveMs = 0;
+  let lastRenderMs = 0;   // 帧率上限渲染闸门时间戳
   function start() {
     if (raf) return;
     raf = requestAnimationFrame(loop);
@@ -620,424 +446,287 @@ const World2D = (() => {
       const [dx, dy] = moveIntent();
       if ((dx || dy) && moveCb) { moveCb(dx, dy); lastMoveMs = now; }
     }
-    px += (targetPx - px) * 0.28;
-    py += (targetPy - py) * 0.28;
-    draw(now);
+    // 玩家平滑插值（格子坐标内做线性插值，仍是格子级移动，仅视觉过渡）
+    px += (targetPx - px) * 0.25;
+    py += (targetPy - py) * 0.25;
+    const moving = (Math.abs(targetPx - px) > 0.01) || (Math.abs(targetPy - py) > 0.01)
+      || keys["w"] || keys["a"] || keys["s"] || keys["d"];
+    const swing = moving ? Math.sin(now / 140) : 0;
+    if (player) {
+      player.position.x = (px + 0.5) * TILE;
+      player.position.z = (py + 0.5) * TILE;
+      player.position.y = 1.0 + (moving ? Math.sin(now / 120) * 0.03 : 0);
+      // 行走摆动：四肢前后摆
+      if (playerRig) {
+        if (playerRig.legL) playerRig.legL.rotation.x = swing * 0.7;
+        if (playerRig.legR) playerRig.legR.rotation.x = -swing * 0.7;
+        if (playerRig.armL) playerRig.armL.rotation.x = -swing * 0.6;
+        if (playerRig.armR) playerRig.armR.rotation.x = swing * 0.6;
+      }
+    }
+    // 敌人徘徊摆动 + 红环旋转
+    Object.keys(enemiesObj).forEach(id => {
+      const en = enemiesObj[id].group;
+      if (!en || !en.userData.enemy || !en.userData.enemy.alive) return;
+      const ph = Math.sin(now / 500 + en.userData.enemy.x) * 0.04;
+      en.position.x = (en.userData.enemy.x + 0.5) * TILE + ph;
+      const ring = en.children.find(c => c.geometry && c.geometry.type === "RingGeometry");
+      if (ring) ring.rotation.z = now / 400;
+    });
+    // 道具小精灵脉动
+    Object.keys(itemObj).forEach(k => {
+      const sp = itemObj[k];
+      if (sp) { const s = 0.8 + (0.5 + 0.5 * Math.sin(now / 400 + k.length)) * 0.3; sp.scale.setScalar(s); }
+    });
+
+    // 第三人称相机跟随玩家（固定俯角 + 水平距离，绕玩家点）
+    if (camera && player) {
+      const pxp = player.position.x, pyp = player.position.y, pzp = player.position.z;
+      camera.position.set(
+        pxp + Math.sin(CAM_PITCH) * 0,           // x 与玩家对齐
+        pyp + CAM_DIST * Math.sin(CAM_PITCH),
+        pzp + CAM_DIST * Math.cos(CAM_PITCH)
+      );
+      camera.lookAt(pxp, pyp * 0.7 + 0.8, pzp);
+    }
+    // 帧率上限渲染闸门（window.getFpsLimit 全局接口；接口不存在时按 0=不限每帧渲染）
+    const fpsCap = (typeof window.getFpsLimit === "function") ? window.getFpsLimit() : 0;
+    if (fpsCap <= 0 || (now - lastRenderMs) >= (1000 / fpsCap)) {
+      render();
+      lastRenderMs = now;
+    }
   }
 
-  /* ---------- 主绘制 ---------- */
-  function draw(now) {
-    if (!data) return;
-    // 地板方块顶面向左上挤出 blockH 像素——顶部留出 margin 避免首行方块顶被裁剪
-    const viewTop = P3D.blockH;
-    const W = cv.width = data.w * TILE;
-    const H = cv.height = data.h * TILE + viewTop;
-    // HiDPI：CSS 显示尺寸 = 内部像素 / dpr，1 个地图像素 = dpr 物理像素 → 高清屏清晰不糊。
-    // (`image-rendering:pixelated` 下此映射 = 每体素一物理像素的锐利放大)
-    cv.style.width = (W / dprScale) + "px";
-    cv.style.height = (H / dprScale) + "px";
+  function render() {
+    if (!renderer || !scene || !camera) return;
+    // 后处理：PostFX 就绪走后处理渲染，未就绪回退普通渲染
+    if (window.PostFX && window.PostFX.ready) {
+      try { window.PostFX.render(); return; } catch (e) { /* 后处理失败回退 */ }
+    }
+    renderer.render(scene, camera);
+  }
 
-    // 背景
-    ctx.fillStyle = "#07090d";
-    ctx.fillRect(0, 0, W, H);
+  /* ---------- 初始化 ---------- */
+  function init(canvas, opts = {}) {
+    cv = canvas;
+    hudCb = opts.onHud || null;
+    interCb = opts.onInteract || null;
+    moveCb = opts.onMove || null;
+    msgCb = opts.onMsg || null;
+    container = canvas.parentNode || canvas;
 
-    // —— 第一遍：全部地板体素方块（含装饰地板格），后者可被墙柱覆盖 ——
-    // 体素顶面上沿（drawFloor 内部用 topBase = y*TILE - blockH；装饰需对齐顶面 → sy - blockH）
-    const floorTopY = (y) => y * TILE - P3D.blockH;
-    for (let y = 0; y < data.h; y++) {
-      const row = data.tiles[y] || "";
-      for (let x = 0; x < data.w; x++) {
-        const c = row[x] || "#";
-        if (c === "#") continue;          // 墙留给第二遍
-        const srcX = c === "I" ? TILE * 7 : floorTexSrc(x, y);
-        drawFloor(x, y, srcX);
-        // 环境装饰：`. `地板格（非设备 I）确定性点缀 7 类细节（血渍/裂痕/碎石/植被/水渍/光斑/灰尘）
-        // —— 烘焙好的精灵 drawImage 叠加，零逐帧计算成本，仅观感 ——
-        if (c !== "I" && isExplored(x, y)) {
-          const dv = floorDeco(x, y);
-          if (dv >= 0) {
-            ctx.drawImage(tileCache, dv * TILE, TILE, TILE, TILE, x * TILE, floorTopY(y), TILE, TILE);
-          }
-        }
-      }
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0d13);
+    scene.fog = new THREE.Fog(0x0a0d13, 20, 55);   // 迷雾密度微调：纵深更明显
+
+    camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setSize(Math.max(1, container.clientWidth), Math.max(1, container.clientHeight));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if ("toneMapping" in renderer) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1; }
+
+    // 将 renderer 画布放到 worldCanvasWrap；保留原 canvas 为隐藏占位（不显示，avoid 2D 冲突）
+    cv.style.display = "none";
+    container.appendChild(renderer.domElement);
+
+    // 灯光（与 zone3d 一致的冷主光 + 暖补光 + 半球环境）
+    const amb = new THREE.AmbientLight(0x5a6a82, 0.5);
+    scene.add(amb);
+    const hemi = new THREE.HemisphereLight(0xbfd6ff, 0x241d28, 0.6);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xe8f2ff, 1.15);   // 主光略增，方块人更立体
+    dir.position.set(8, 16, 6);
+    dir.castShadow = true;
+    dir.shadow.mapSize.set(2048, 2048);
+    dir.shadow.camera.near = 1; dir.shadow.camera.far = 60;
+    dir.shadow.camera.left = -30; dir.shadow.camera.right = 30;
+    dir.shadow.camera.top = 30; dir.shadow.camera.bottom = -30;
+    dir.shadow.bias = -0.0004; dir.shadow.normalBias = 0.04;
+    scene.add(dir);
+    const warm = new THREE.PointLight(0xffb066, 0.7, 40);
+    warm.position.set(-10, 6, -8); scene.add(warm);
+    const cool = new THREE.PointLight(0x66aaff, 0.5, 34);
+    cool.position.set(8, 8, 10); scene.add(cool);
+    // 轮廓光/背光（Rim）：从玩家背后偏上方，勾出方块人轮廓边缘
+    const rim = new THREE.DirectionalLight(0xbfe0ff, 0.55);
+    rim.position.set(6, 10, -12);
+    scene.add(rim);
+    // 脚下微光（弱填充，提升站立立体感）
+    const underGlow = new THREE.PointLight(0x3a4a6a, 0.35, 16);
+    underGlow.position.set(0, 0.4, 0); scene.add(underGlow);
+
+    // 地板贴图（蜂巢）
+    floorTex = new THREE.TextureLoader().load("assets/img/tex_floor_hive.png", t => {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(Math.max(1, Math.ceil((data ? data.w : 10) / 3)), 3);
+    });
+
+    // 后处理接口（与并行子代理协作）：js/postfx.js 提供 window.PostFX；有则挂接，无则安全跳过
+    if (window.PostFX && window.PostFX.attach) {
+      try { window.PostFX.attach(renderer, scene, camera); } catch (e) { /* 后处理插件异常不影响主渲染 */ }
     }
 
-    // —— 第二遍：全部墙体素方块柱（按 y 升序 = 前后序，覆盖下方地板/邻格地板）——
-    for (let y = 0; y < data.h; y++) {
-      const row = data.tiles[y] || "";
-      for (let x = 0; x < data.w; x++) {
-        if ((row[x] || "#") === "#") drawWall(x, y);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+  }
+
+  function handleResize() {
+    if (!renderer || !camera || !container) return;
+    const w = Math.max(1, container.clientWidth), h = Math.max(1, container.clientHeight);
+    renderer.setPixelRatio(dpr || window.devicePixelRatio || 1);
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+
+  /* ================= 小地图 / 大地图（2D canvas，俯视） =================
+   * 轮回迷雾已迁移至此：已探索格亮描（墙深 / 可走浅），未探索格纯黑（黑幕）。
+   * 独立于 Three.js 场景，轻量；只在 setData（全量重建）与 setPlayer（移动）
+   * 后重绘小地图。大地图由 client.js 的 M 键触发 drawBigmap() 重绘。
+   */
+  const MINIMAP_RANGE = 19;   // 小地图范围（奇数，玩家居中）
+  // 数据坐标 -> 小地图切片像素（以玩家格为中心，范围 range）
+  function sliceOrigin(cx, cy, range) {
+    const half = Math.floor(range / 2);
+    return { ox: cx - half, oy: cy - half };
+  }
+
+  // 通用：把范围内已探索格画到 ctx 里（黑幕为未探索）。返回网格原点供画标记复用。
+  function drawSliceCtx(ctx, cw, ch, cpx, cpy, range) {
+    if (!data) return null;
+    const { ox, oy } = sliceOrigin(cpx, cpy, range);
+    const cell = Math.min(cw, ch) / range;
+    const shiftX = (cw - cell * range) / 2, shiftY = (ch - cell * range) / 2;
+    // 背景（未到达/未探索区默认纯黑）
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, cw, ch);
+    for (let dy = 0; dy < range; dy++) {
+      const ty = oy + dy;
+      if (ty < 0 || ty >= data.h) continue;
+      const row = data.tiles[ty] || "";
+      for (let dx = 0; dx < range; dx++) {
+        const tx = ox + dx;
+        if (tx < 0 || tx >= data.w) continue;
+        if (!isExplored(tx, ty)) continue;           // 保持纯黑（黑幕）
+        ctx.fillStyle = (row[tx] === "#") ? "#10161c" : "#27323c"; // 墙深 / 可走浅
+        ctx.fillRect(shiftX + dx * cell, shiftY + dy * cell, Math.max(1, cell + 0.5), Math.max(1, cell + 0.5));
       }
     }
+    return { ox, oy, range, cell, shiftX, shiftY, cw, ch };
+  }
 
-    // 设备装饰 I：机柜/储物箱
-    for (let y = 0; y < data.h; y++) {
-      const row = data.tiles[y] || "";
-      for (let x = 0; x < data.w; x++) {
-        if ((row[x] || "#") !== "I") continue;
-        const X = x * TILE, Y = y * TILE;
-        // 箱体（先投右下影，营造悬浮/立体感）
-        dropShadow(X + 4, Y + 6, TILE - 8, TILE - 12);
-        ctx.fillStyle = "#3a4654";
-        ctx.fillRect(X + 4, Y + 6, TILE - 8, TILE - 12);
-        ctx.fillStyle = "rgba(160,190,220,.5)";
-        ctx.fillRect(X + 4, Y + 6, TILE - 8, 2);
-        // 受光：顶/左棱线高光
-        ctx.fillStyle = "rgba(175,210,245,.22)";
-        ctx.fillRect(X + 4, Y + 6, TILE - 8, 1); ctx.fillRect(X + 4, Y + 6, 1, TILE - 12);
-        // 右侧/底侧暗边（厚度感）
-        ctx.fillStyle = "rgba(6,10,16,.55)";
-        ctx.fillRect(X + 4, Y + 6 + TILE - 14, TILE - 8, 2);
-        ctx.fillRect(X + 4 + TILE - 10, Y + 6, 2, TILE - 12);
-        // 门缝/屏幕
-        ctx.fillStyle = "#0f141b";
-        ctx.fillRect(X + 9, Y + 12, TILE - 18, TILE - 22);
-        ctx.fillStyle = "rgba(90,220,200,.55)";
-        ctx.fillRect(X + 10, Y + 13, 3, 3);
-        ctx.fillRect(X + 15, Y + 13, 3, 3);
-      }
-    }
-
-    // 轮回迷雾：未探索区域暗化（底下 tile 结构隐约可见）
-    if (explored) {
-      for (let y = 0; y < data.h; y++) {
-        for (let x = 0; x < data.w; x++) {
-          if (isExplored(x, y)) continue;
-          ctx.fillStyle = "rgba(2,2,6,.72)";
-          ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
-          ctx.strokeStyle = "rgba(90,100,140,.09)";
-          ctx.strokeRect(x * TILE + .5, y * TILE + .5, TILE - 1, TILE - 1);
-          ctx.fillStyle = "rgba(20,20,30,.45)";
-          ctx.fillRect(x * TILE, y * TILE, TILE, 1);
-          ctx.fillRect(x * TILE, y * TILE, 1, TILE);
-        }
-      }
-    }
-
-    // 传送门（能量漩涡，仅已探索）
-    (data.portals || []).forEach(p => {
-      if (!isExplored(p.x, p.y)) return;
-      const X = p.x * TILE + TILE / 2, Y = p.y * TILE + TILE / 2;
-      const rot = now / 300 + p.x;
-      // 发光门框（伪 3D 竖立：投影 + 顶面高光 + 外发光环），标示这是一道能量门洞
-      dropShadow(X - 13, Y - 13, 26, 26);
-      const pulse = 2 + Math.sin(now / 380 + p.x * 3) * 1;
-      ctx.save();
-      ctx.shadowColor = "rgba(100,200,255,.9)";
-      ctx.shadowBlur = 9 + pulse;
-      ctx.strokeStyle = "rgba(120,200,255,.85)";
-      ctx.lineWidth = 2.2;
+  // 在小地图切片上叠加标记（只在已探索格可见处画）
+  function drawSliceMarkers(ctx, geo, cpx, cpy) {
+    if (!data || !geo) return;
+    const cell = geo.cell;
+    const locX = (tx) => geo.shiftX + (tx - geo.ox) * cell + cell / 2;
+    const locY = (ty) => geo.shiftY + (ty - geo.oy) * cell + cell / 2;
+    const inRange = (tx, ty) => tx >= geo.ox && tx < geo.ox + geo.range && ty >= geo.oy && ty < geo.oy + geo.range;
+    const visible = (tx, ty) => isExplored(tx, ty) && inRange(tx, ty);
+    const dot = (tx, ty, fill, s) => {
+      if (!visible(tx, ty)) return;
+      ctx.fillStyle = fill;
       ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(X - 13, Y - 13, 26, 26, 6); else ctx.rect(X - 13, Y - 13, 26, 26);
-      ctx.stroke();
-      ctx.restore();
-      // 门框受光（左上顶棱亮）
-      ctx.strokeStyle = "rgba(210,240,255,.85)"; ctx.lineWidth = 1.4;
-      const fx = X - 13, fy = Y - 13;
-      ctx.beginPath(); ctx.moveTo(fx, fy + 2); ctx.lineTo(fx, fy); ctx.lineTo(fx + 25, fy); ctx.stroke();
-      // 地面光环
-      const g = ctx.createRadialGradient(X, Y, 2, X, Y, 16);
-      g.addColorStop(0, "rgba(80,180,255,.5)");
-      g.addColorStop(1, "rgba(80,180,255,0)");
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(X, Y, 16, 0, 6.28); ctx.fill();
-      // 旋转三叶漩涡
-      for (let i = 0; i < 3; i++) {
-        const a = rot * 0.02 + i * 2.09;
-        ctx.strokeStyle = i === 0 ? "rgba(130,215,255,.9)" : "rgba(80,170,255,.5)";
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.arc(X, Y, 7 + i * 1.4, a, a + 2.2);
-        ctx.stroke();
-        ctx.lineWidth = 1;
-      }
-      ctx.fillStyle = "#bfe8ff";
-      ctx.font = "bold 10px sans-serif"; ctx.textAlign = "center";
-      ctx.fillText("传送", X, Y + 26);
-    });
-
-    // 门禁（锁定铁门 / 已解锁绿灯，仅已探索）
-    (data.gates || []).forEach(g => {
-      if (!isExplored(g.x, g.y)) return;
-      const X = g.x * TILE + TILE / 2, Y = g.y * TILE + TILE / 2;
-      if (g.locked) {
-        const pulse = 8 + Math.sin(now / 400 + g.x + g.y) * 2;
-        const gr = ctx.createRadialGradient(X, Y, 1, X, Y, pulse + 6);
-        gr.addColorStop(0, "rgba(255,200,60,.35)");
-        gr.addColorStop(1, "rgba(255,200,60,0)");
-        ctx.fillStyle = gr;
-        ctx.beginPath(); ctx.arc(X, Y, pulse + 6, 0, 6.28); ctx.fill();
-        // 铁门（竖立物：先投影增强 3D 厚度感）
-        ctx.fillStyle = "rgba(0,0,0,.25)";
-        ctx.fillRect(X - 11 + P3D.shadowDX, Y - 7 + P3D.shadowDY, 22, 14);
-        ctx.strokeStyle = "#d8a040"; ctx.lineWidth = 2;
-        ctx.strokeRect(X - 11, Y - 7, 22, 14); ctx.lineWidth = 1;
-        ctx.strokeStyle = "rgba(216,160,64,.5)";
-        ctx.beginPath(); ctx.moveTo(X - 11, Y - 1); ctx.lineTo(X + 11, Y - 1); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(X - 11, Y + 3); ctx.lineTo(X + 11, Y + 3); ctx.stroke();
-        // 锁
-        ctx.fillStyle = "#f4c542";
-        ctx.beginPath(); ctx.arc(X, Y - 6, 2.6, 0, 6.28); ctx.fill();
-        ctx.fillRect(X - 3, Y - 6, 6, 6);
-        ctx.fillStyle = "#0a0a0a"; ctx.fillRect(X - 1.5, Y - 3.4, 3, 3.4);
-        // 名称
-        ctx.font = "10px sans-serif"; ctx.fillStyle = "#ffe9a8";
-        ctx.textAlign = "center"; ctx.fillText(g.name || "门禁", X, Y + 24);
-      } else {
-        const gr = ctx.createRadialGradient(X, Y, 1, X, Y, 9);
-        gr.addColorStop(0, "rgba(80,200,120,.4)");
-        gr.addColorStop(1, "rgba(80,200,120,0)");
-        ctx.fillStyle = gr;
-        ctx.beginPath(); ctx.arc(X, Y, 9, 0, 6.28); ctx.fill();
-        ctx.strokeStyle = "#4ac47a"; ctx.beginPath(); ctx.arc(X, Y, 5.5, 0, 6.28); ctx.stroke();
-        ctx.fillStyle = "#4ac47a";
-        ctx.font = "bold 9px sans-serif"; ctx.textAlign = "center";
-        ctx.fillText("✓", X, Y + 4);
-      }
-    });
-
-    // 调查点（发光问号/放大镜，仅已探索）
-    (data.points || []).forEach(p => {
-      if (!isExplored(p.x, p.y)) return;
-      const X = p.x * TILE + TILE / 2, Y = p.y * TILE + TILE / 2;
-      if (p.done) {
-        ctx.fillStyle = "rgba(100,180,120,.18)";
-        ctx.beginPath(); ctx.arc(X, Y, 8, 0, 6.28); ctx.fill();
-        ctx.strokeStyle = "#4a8a5a"; ctx.beginPath(); ctx.arc(X, Y, 6, 0, 6.28); ctx.stroke();
-        ctx.fillStyle = "#4a8a5a";
-        ctx.font = "bold 9px sans-serif"; ctx.textAlign = "center"; ctx.fillText("✓", X, Y + 4);
-      } else {
-        const pulse = 7 + Math.sin(now / 400 + p.x * 2) * 2;
-        const gr = ctx.createRadialGradient(X, Y, 1, X, Y, pulse + 5);
-        gr.addColorStop(0, "rgba(255,215,106,.4)");
-        gr.addColorStop(1, "rgba(255,215,106,0)");
-        ctx.fillStyle = gr;
-        ctx.beginPath(); ctx.arc(X, Y, pulse + 5, 0, 6.28); ctx.fill();
-        // 问号徽章
-        ctx.fillStyle = "rgba(30,26,14,.92)";
-        ctx.beginPath(); ctx.arc(X, Y, 7, 0, 6.28); ctx.fill();
-        ctx.strokeStyle = "#ffd76a"; ctx.lineWidth = 1.4;
-        ctx.beginPath(); ctx.arc(X, Y, 7, 0, 6.28); ctx.stroke(); ctx.lineWidth = 1;
-        // 道具图标精灵（顶替问号徽章——把「那是什么」直接画成对应图标：血瓶/钥匙/石碑/火把等）
-        drawItemIcon(X, Y, itemIconIdx(p.name), 0.65);
-        // 名称小字（图标下方保可读性）
-        ctx.fillStyle = "rgba(255,215,106,.92)";
-        ctx.font = "9px sans-serif"; ctx.textAlign = "center"; ctx.fillText(p.name || "", X, Y + 22);
-      }
-    });
-
-    // NPC（张杰立绘 + 名牌，仅已探索）
-    (data.npcs || []).forEach(n => {
-      if (!isExplored(n.x, n.y)) return;
-      const X = n.x * TILE + TILE / 2, Y = n.y * TILE + TILE / 2;
-      // 底座光环
-      const gr = ctx.createRadialGradient(X, Y, 3, X, Y, 20);
-      gr.addColorStop(0, "rgba(90,150,255,.4)");
-      gr.addColorStop(1, "rgba(90,150,255,0)");
-      ctx.fillStyle = gr;
-      ctx.beginPath(); ctx.arc(X, Y, 20, 0, 6.28); ctx.fill();
-      // 友好指示圈（蓝白同心弧，与敌人红环区分：友方/可交互目标定位）
-      const nRing = 7 + Math.sin(now / 400 + n.x + n.y) * 1.2;
-      const nra = now / 900 + n.x;
-      ctx.strokeStyle = "rgba(140,190,255,.6)";
-      ctx.lineWidth = 1.6;
-      ctx.beginPath(); ctx.arc(X, Y, nRing, nra, nra + 2.2); ctx.stroke();
-      ctx.strokeStyle = "rgba(200,230,255,.35)";
-      ctx.beginPath(); ctx.arc(X, Y, nRing + 3, nra + 3, nra + 5.4); ctx.stroke(); ctx.lineWidth = 1;
-      const h = TILE * 2.6, w = h * 0.75;
-      dropShadow(X - w / 2, Y - h * 0.9 + 2, w, h * 0.9);
-      const img = IMGS["img_zhangjie"];
-      if (img && img.width > 0) {
-        ctx.drawImage(img, X - w / 2, Y - h * 0.9, w, h);
-      } else {
-        // fallback：同样尺寸的立绘底框（勿退回小圆点）
-        ctx.fillStyle = "#2a4a7a";
-        ctx.fillRect(X - w / 2, Y - h * 0.9, w, h);
-      }
-      // 名牌
-      ctx.fillStyle = "rgba(0,0,0,.5)";
-      ctx.fillRect(X - w / 2, Y + 2, w, 13);
-      ctx.fillStyle = "#a8d4ff";
-      ctx.font = "11px sans-serif"; ctx.textAlign = "center";
-      ctx.fillText(n.name, X, Y + 11);
-    });
-
-    // 3D 副本入口（战斗红 / 解密蓝 漩涡，仅已探索）
-    (data.zones || []).forEach(z => {
-      if (!isExplored(z.x, z.y)) return;
-      const X = z.x * TILE + TILE / 2, Y = z.y * TILE + TILE / 2;
-      const col = z.kind === "fight" ? [235, 70, 70] : [110, 110, 255];
-      const rot = now / 260 + z.x;
-      // 竖立投影 + 受光（副本入口悬浮能量门）
-      dropShadow(X - 18, Y - 18, 36, 36);
-      topHighlight(X - 18, Y - 18, 36, 36);
-      const gr = ctx.createRadialGradient(X, Y, 2, X, Y, 18);
-      gr.addColorStop(0, `rgba(${col[0]},${col[1]},${col[2]},.55)`);
-      gr.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
-      ctx.fillStyle = gr;
-      ctx.beginPath(); ctx.arc(X, Y, 18, 0, 6.28); ctx.fill();
-      for (let i = 0; i < 3; i++) {
-        const a = rot * 0.025 + i * 2.09;
-        ctx.strokeStyle = i === 0 ? `rgba(${col[0] + 40},${col[1] + 40},${col[2] + 40},.95)` : `rgba(${col[0]},${col[1]},${col[2]},.55)`;
-        ctx.lineWidth = 2.4;
-        ctx.beginPath(); ctx.arc(X, Y, 8 + i * 1.6, a, a + 2.0);
-        ctx.stroke(); ctx.lineWidth = 1;
-      }
-      // 中心图标
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
-      ctx.fillText(z.kind === "fight" ? "⚔" : "◈", X, Y + 4);
-      ctx.fillStyle = `rgba(255,220,220,.95)`;
-      ctx.font = "9px sans-serif";
-      ctx.fillText(z.name || (z.kind === "fight" ? "战斗" : "解密"), X, Y + 26);
-    });
-
-    // 敌人（精灵立绘 + 巡逻摆动 + 轻微浮动，仅已探索）
-    (data.enemies || []).forEach(e => {
-      if (!isExplored(e.x, e.y)) return;
-      const a = enemiesAnim[e.id];
-      if (!a || !a.alive) return;
-      const wobble = Math.sin(now / 500 + a.phase) * 4;
-      const floaty = Math.sin(now / 420 + a.phase * 1.3) * 2;
-      const X = a.baseX + wobble, Y = a.baseY;
-      // 地面指示圈 + 红光（敌人站位标记，强化「有怪在场」的氛围；红色同心圈随时间缓慢旋转）
-      const ringPulse = 8 + Math.sin(now / 260 + a.phase) * 2;
-      const rgr = ctx.createRadialGradient(X, Y, 1, X, Y, ringPulse + 4);
-      rgr.addColorStop(0, "rgba(255,60,40,.28)");
-      rgr.addColorStop(1, "rgba(255,60,40,0)");
-      ctx.fillStyle = rgr;
-      ctx.beginPath(); ctx.arc(X, Y, ringPulse + 4, 0, 6.28); ctx.fill();
-      const ringA = now / 800 + a.phase;
-      ctx.strokeStyle = "rgba(255,90,70,.55)";
-      ctx.lineWidth = 1.6;
-      ctx.beginPath(); ctx.arc(X, Y, ringPulse, ringA, ringA + 2.4); ctx.stroke();
-      ctx.strokeStyle = "rgba(255,150,120,.35)";
-      ctx.beginPath(); ctx.arc(X, Y, ringPulse + 2.5, ringA + 3.14, ringA + 5.6); ctx.stroke(); ctx.lineWidth = 1;
-      const icon = ENEMY_ICONS[e.id];
-      const img = icon ? IMGS[icon.split("/").pop().replace(".png", "")] : null;
-      if (img && img.width > 0) {
-        // 立绘小像（底部对齐站立点，先投右下影增强立体/辨识）
-        const h = TILE * 2.8, w = h * 0.75;
-        const topY = Y - h * 0.9 + floaty;
-        dropShadow(X - w / 2, Y - h * 0.9 + 2, w, h * 0.9);
-        ctx.drawImage(img, X - w / 2, topY, w, h);
-        // 名字牌
-        ctx.fillStyle = "rgba(0,0,0,.5)";
-        ctx.fillRect(X - w / 2, Y + 2, w, 13);
-        ctx.fillStyle = "#ff8080";
-        ctx.font = "11px sans-serif"; ctx.textAlign = "center";
-        ctx.fillText(e.name || "敌人", X, Y + 11);
-      } else {
-        // 兜底：红色半透明投影 + 本体高光
-        ctx.fillStyle = "rgba(255,40,40,.22)";
-        ctx.beginPath(); ctx.arc(X + P3D.shadowDX, Y + P3D.shadowDY, 9, 0, 6.28); ctx.fill();
-        ctx.fillStyle = ENEMY_FALLBACK[(e.id.charCodeAt(e.id.length - 1) || 0) % ENEMY_FALLBACK.length];
-        ctx.beginPath(); ctx.arc(X, Y, 9, 0, 6.28); ctx.fill();
-        ctx.strokeStyle = "#ff5050"; ctx.lineWidth = 2; ctx.stroke(); ctx.lineWidth = 1;
-        ctx.fillStyle = "#ff8080"; ctx.font = "10px sans-serif"; ctx.textAlign = "center";
-        ctx.fillText("!", X, Y - 11);
-      }
-      // 巡逻半径
-      ctx.strokeStyle = "rgba(255,80,80,.13)";
-      ctx.beginPath(); ctx.arc(X, Y, e.radius * TILE, 0, 6.28); ctx.stroke();
-    });
-
-    // 玩家（主角立绘 + 朝向光圈，放大 · 镜像 · 上下浮动）
-    const plImg = IMGS["pc_zhengzha"];
-    if (plImg && plImg.width > 0) {
-      const h = TILE * 3.6, w = h * 0.75;
-      // 选中光环（脉动半径随时间正弦微变）
-      const haloR = 30 + Math.sin(now / 350) * 3;
-      const gr = ctx.createRadialGradient(px, py, 3, px, py, haloR);
-      gr.addColorStop(0, "rgba(90,220,160,.5)");
-      gr.addColorStop(1, "rgba(90,220,160,0)");
-      ctx.fillStyle = gr;
-      ctx.beginPath(); ctx.arc(px, py, haloR, 0, 6.28); ctx.fill();
-      // 强调投影（主导角色突出感，向右下，随立绘放大同步放大）
-      dropShadow(px - w / 2, py - h * 0.9 + 2, w, h * 0.9);
-      // 朝向水平翻转 + 缓慢上下浮动（呼吸/行走感）
-      const [idx, idy] = moveIntent();
-      const flip = idx < 0;                       // 朝左走时镜像翻面
-      const floatY = Math.sin(now / 300) * 2;
-      const topY = py - h * 0.85 + floatY;
-      ctx.save();
-      if (flip) {
-        ctx.translate(px, 0);
-        ctx.scale(-1, 1);
-        ctx.translate(-px, 0);
-      }
-      ctx.drawImage(plImg, px - w / 2, topY, w, h);
-      ctx.restore();
-      // 朝向箭头
-      if (idx || idy) {
-        ctx.strokeStyle = "rgba(234,255,244,.85)";
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.moveTo(px, topY);
-        ctx.lineTo(px + idx * 15, topY + idy * 15);
-        ctx.stroke(); ctx.lineWidth = 1;
-      }
-    } else {
-      ctx.fillStyle = "rgba(90,220,160,1)";
-      ctx.beginPath(); ctx.arc(px, py, 8, 0, 6.28); ctx.fill();
-      ctx.strokeStyle = "#eafff4"; ctx.lineWidth = 2; ctx.stroke(); ctx.lineWidth = 1;
-    }
-
-    // 附近可交互提示
-    const near = nearbyList();
-    if (near.length) {
-      ctx.font = "12px sans-serif"; ctx.fillStyle = "rgba(255,255,255,.88)";
-      ctx.textAlign = "center";
-      const hint = near.map(o => o.name).join(" / ");
-      ctx.fillText("按 E 交互：" + hint, W / 2, H - 8);
-    }
-
-    // ---------- 环境氛围层（可选、帧率友好）----------
-    // 角落暗角 vignette：四角各一个软径向暗罩，景深/神秘感（固定开销，几笔渐变绘制）
-    const vig = 90;
-    const corners = [
-      [0, 0, 1, 1], [W, 0, -1, 1], [0, H, 1, -1], [W, H, -1, -1]
-    ];
-    ctx.save();
-    corners.forEach(([cx, cy, dx, dy]) => {
-      const vg = ctx.createRadialGradient(cx, cy, vig * 0.2, cx, cy, vig);
-      vg.addColorStop(0, "rgba(0,0,0,0)");
-      vg.addColorStop(1, "rgba(2,2,8,.5)");
-      ctx.fillStyle = vg;
-      ctx.fillRect(cx + dx * vig * 0.1, cy + dy * vig * 0.1, vig, vig);
-    });
-    // 顶部整体微暗 + 四边内侧渐变暗边（收拢视野）
-    const edgeG = ctx.createLinearGradient(0, 0, 0, vig * 0.6);
-    edgeG.addColorStop(0, "rgba(0,0,0,.4)"); edgeG.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = edgeG; ctx.fillRect(0, 0, W, vig * 0.6);
-    ctx.restore();
-
-    // 尘埃/光斑粒子：固定 ~26 粒屏幕空间缓慢飘浮（性能恒定，不随地图增大）；光源方向模糊提亮
-    if (!motes) {
-      motes = [];
-      for (let i = 0; i < 26; i++) {
-        motes.push({ x: Math.random() * W, y: Math.random() * H, r: 0.6 + Math.random() * 1.6, phase: Math.random() * 6.28, sp: 0.12 + Math.random() * 0.3 });
-      }
-    }
-    ctx.save();
-    for (let i = 0; i < motes.length; i++) {
-      const mt = motes[i];
-      mt.y -= mt.sp * 0.02;
-      mt.x += Math.sin(now / 2600 + mt.phase) * 0.08;
-      if (mt.y < -4) { mt.y = H + 4; mt.x = Math.random() * W; }
-      const a = 0.12 + 0.16 * (0.5 + 0.5 * Math.sin(now / 1500 + mt.phase * 2));
-      const mg = ctx.createRadialGradient(mt.x, mt.y, 0.2, mt.x, mt.y, mt.r + 1);
-      mg.addColorStop(0, `rgba(214,230,255,${a})`);
-      mg.addColorStop(1, "rgba(214,230,255,0)");
-      ctx.fillStyle = mg;
-      ctx.beginPath(); ctx.arc(mt.x, mt.y, mt.r + 1, 0, 6.28); ctx.fill();
-    }
-    ctx.restore();
+      ctx.arc(locX(tx), locY(ty), Math.max(2, s), 0, Math.PI * 2);
+      ctx.fill();
+    };
+    (data.enemies || []).forEach(e => dot(e.x, e.y, "#ff4040", cell * 0.30));   // 敌人红点
+    (data.portals || []).forEach(p => dot(p.x, p.y, "#3ec9ff", cell * 0.28));   // 传送门蓝点
+    (data.zones || []).forEach(z => dot(z.x, z.y, "#6a6aff", cell * 0.30));     // 副本入口
+    (data.gates || []).forEach(g => dot(g.x, g.y, g.locked ? "#ffc040" : "#4ac47a", cell * 0.24)); // 门禁
+    (data.npcs || []).forEach(n => dot(n.x, n.y, "#3ee06a", cell * 0.28));      // NPC 绿点
+    // 玩家：白色三角（玩家所在格必已探索，无需 gate）
+    const pxp = locX(cpx), pyp = locY(cpy);
+    const pr = Math.max(3, cell * 0.34);
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.moveTo(pxp, pyp - pr);
+    ctx.lineTo(pxp + pr * 0.82, pyp + pr * 0.68);
+    ctx.lineTo(pxp - pr * 0.82, pyp + pr * 0.68);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.55)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
 
-  return { init, setData, setPlayer, keydown, keyup, start, stop, nearbyList, moveIntent,
+  // 小地图：以玩家为中心的 19×19 俯视切片
+  function drawMinimap() {
+    if (!data) return;
+    const cv = document.getElementById("minimap");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    if (!ctx) return;
+    const cpx = Math.max(0, Math.min(data.w - 1, Math.round(px)));
+    const cpy = Math.max(0, Math.min(data.h - 1, Math.round(py)));
+    const range = Math.min(MINIMAP_RANGE, Math.max(data.w, data.h));
+    const geo = drawSliceCtx(ctx, cv.width, cv.height, cpx, cpy, range);
+    drawSliceMarkers(ctx, geo, cpx, cpy);
+  }
+
+  // 大地图：整个 data.w×data.h 全图（若地图过大可退化为玩家周围 BIGMAP_RANGE 切片）
+  function drawMapFullCtx(ctx, cw, ch) {
+    if (!data) return;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, cw, ch);
+    const cellX = cw / data.w, cellY = ch / data.h;
+    for (let ty = 0; ty < data.h; ty++) {
+      const row = data.tiles[ty] || "";
+      for (let tx = 0; tx < data.w; tx++) {
+        if (!isExplored(tx, ty)) continue;           // 黑幕
+        ctx.fillStyle = (row[tx] === "#") ? "#10161c" : "#27323c";
+        ctx.fillRect(tx * cellX, ty * cellY, Math.max(1, cellX + 0.5), Math.max(1, cellY + 0.5));
+      }
+    }
+  }
+  function drawMapFullMarkers(ctx, cw, ch) {
+    if (!data) return;
+    const cellX = cw / data.w, cellY = ch / data.h;
+    const locX = (tx) => (tx + 0.5) * cellX;
+    const locY = (ty) => (ty + 0.5) * cellY;
+    const visible = (tx, ty) => isExplored(tx, ty) && tx >= 0 && tx < data.w && ty >= 0 && ty < data.h;
+    const dot = (tx, ty, fill, s) => {
+      if (!visible(tx, ty)) return;
+      ctx.fillStyle = fill;
+      ctx.beginPath(); ctx.arc(locX(tx), locY(ty), Math.max(2, s), 0, Math.PI * 2); ctx.fill();
+    };
+    (data.enemies || []).forEach(e => dot(e.x, e.y, "#ff4040", 4));
+    (data.portals || []).forEach(p => dot(p.x, p.y, "#3ec9ff", 4));
+    (data.zones || []).forEach(z => dot(z.x, z.y, "#6a6aff", 4));
+    (data.gates || []).forEach(g => dot(g.x, g.y, g.locked ? "#ffc040" : "#4ac47a", 3));
+    (data.npcs || []).forEach(n => dot(n.x, n.y, "#3ee06a", 4));
+    const pxc = Math.max(0, Math.min(data.w - 1, Math.round(px)));
+    const pyc = Math.max(0, Math.min(data.h - 1, Math.round(py)));
+    const pxp = locX(pxc), pyp = locY(pyc);
+    const pr = Math.max(4, Math.min(cw, ch) / (Math.max(data.w, data.h)) * 0.5);
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.moveTo(pxp, pyp - pr);
+    ctx.lineTo(pxp + pr * 0.82, pyp + pr * 0.68);
+    ctx.lineTo(pxp - pr * 0.82, pyp + pr * 0.68);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.55)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+  function drawBigmap() {
+    if (!data) return;
+    const cv = document.getElementById("bigmap");
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    if (!ctx) return;
+    drawMapFullCtx(ctx, cv.width, cv.height);
+    drawMapFullMarkers(ctx, cv.width, cv.height);
+  }
+
+  return {
+    init, setData, setPlayer, keydown, keyup, start, stop, nearbyList, moveIntent,
+    drawMinimap, drawBigmap,
     clearKeys: function () { keys = {}; },
-    setDpr: function (x) { dprScale = Math.max(0.5, x || 1); }, // HiDPI:由 ResolutionSys 下发 devicePixelRatio
+    setDpr: function (x) { dpr = Math.max(0.5, x || 1); if (renderer) renderer.setPixelRatio(dpr); },
   };
 })();
 

@@ -162,6 +162,40 @@ body.hurt #redPulse { opacity: 1; }
 .resBtn:hover { color: #fff; border-color: var(--blood-dim); }
 .resBtn.on { color: #ffd76a; border-color: var(--blood-dim); background: rgba(192,22,43,.18); box-shadow: 0 0 14px rgba(192,22,43,.3); }
 
+/* ---------- 设置面板（分辨率 + 帧率）---------- */
+.settingsCard { width: min(520px, 92vw); }
+.setGroup { margin: 22px 0 8px; text-align: left; }
+.setLabel { color: var(--ash); font-size: 13px; letter-spacing: 2px; margin-bottom: 10px; }
+.setRow { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.setRow .resBtn,
+.setRow .fpsBtn {
+  min-width: 84px; padding: 9px 16px; font-size: 14px; letter-spacing: 2px;
+  color: #c9c9c9; background: rgba(12,12,14,.6);
+  border: 1px solid #333; cursor: pointer; transition: all .2s;
+}
+.setRow .resBtn:hover,
+.setRow .fpsBtn:hover { color: #fff; border-color: var(--blood-dim); }
+.setRow .resBtn.on,
+.setRow .fpsBtn.on { color: #ffd76a; border-color: var(--blood-dim); background: rgba(192,22,43,.18); box-shadow: 0 0 14px rgba(192,22,43,.3); }
+.setFooter { margin-top: 26px; display: flex; justify-content: center; }
+.setFooter .mbtn { min-width: 220px; }
+
+/* ---------- 新手指引 ---------- */
+.tutorialCard { width: min(560px, 92vw); }
+.tutIntro { text-align: center !important; margin-bottom: 6px; }
+.tutList { list-style: none; margin: 16px 0 18px; padding: 0; text-align: left; }
+.tutList li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; margin-bottom: 4px;
+  background: rgba(20,20,24,.6); border-left: 2px solid var(--blood-dim);
+}
+.tutList b { color: #ffd76a; letter-spacing: 1px; font-size: 14px; }
+.tutList span { color: var(--ash); font-size: 13px; letter-spacing: 2px; }
+.tutDont { display: block; color: var(--ash); font-size: 12px; margin-bottom: 18px; letter-spacing: 1px; text-align: center; }
+.tutDont input { margin-right: 6px; accent-color: var(--blood); }
+.tutBtns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.tutBtns .mbtn { min-width: 160px; }
+
 /* ---------- 视频过场 ---------- */
 #cineWrap {
   position: fixed; inset: 0; z-index: 80; display: none;
@@ -219,6 +253,29 @@ body.hurt #redPulse { opacity: 1; }
 #worldCanvasWrap { flex:1; overflow:auto; display:flex; justify-content:center; align-items:center; padding:12px; }
 #worldCanvas { image-rendering:pixelated; box-shadow:0 0 40px rgba(0,0,0,.8); border:1px solid #1c1c24; }
 #worldMsg { position:fixed; left:50%; transform:translateX(-50%); bottom:14px; color:#ffd76a; font-size:14px; letter-spacing:1px; background:rgba(0,0,0,.7); padding:8px 18px; border:1px solid #333; z-index:31; max-width:80%; text-align:center; }
+
+/* ---------- 右上角小地图（轮回迷雾黑幕 · 独立 2D 俯视） ---------- */
+#minimap {
+  position:absolute; top:56px; right:16px; z-index:32;
+  width:184px; height:184px;
+  background:rgba(6,8,10,.72);
+  border:1px solid #2a2a30; border-radius:10px;
+  box-shadow:0 4px 22px rgba(0,0,0,.6);
+  image-rendering:pixelated;
+  pointer-events:none;
+}
+
+/* ---------- 大地图（M 键展开 · 复用 .overlay） ---------- */
+#bigmapOverlay { z-index:75; }
+.bigmapCard { position:relative; }
+#bigmap {
+  display:block; width:min(92vw,92vh); height:auto;
+  aspect-ratio:1/1;
+  background:#000; border:1px solid #333; border-radius:6px;
+  image-rendering:pixelated;
+  box-shadow:0 0 60px rgba(0,0,0,.9);
+}
+.bigmapHint { text-align:center; color:var(--ash); font-size:13px; letter-spacing:2px; margin-top:10px; }
 
 /* ---------- 开放世界 · 3D 副本 ---------- */
 #zoneView { position:fixed; inset:0; background:#000; z-index:35; display:flex; flex-direction:column; }

@@ -1,0 +1,257 @@
+{
+  "total_shots": 61,
+  "too_small": 0,
+  "failed_dungeons": [],
+  "zone3d": true,
+  "fight_shots": [
+    "fight_z1.png",
+    "fight_z2.png",
+    "fight_z3.png"
+  ],
+  "shots": [
+    {
+      "name": "00_title.png",
+      "size": 478775
+    },
+    {
+      "name": "01_nexus.png",
+      "size": 43704
+    },
+    {
+      "name": "02_world_map.png",
+      "size": 30196
+    },
+    {
+      "name": "baisun.png",
+      "size": 1341835
+    },
+    {
+      "name": "bihai.png",
+      "size": 1307494
+    },
+    {
+      "name": "cangjingge.png",
+      "size": 1310410
+    },
+    {
+      "name": "daliexi.png",
+      "size": 1474800
+    },
+    {
+      "name": "dashengtang.png",
+      "size": 1381527
+    },
+    {
+      "name": "diweidu.png",
+      "size": 1341204
+    },
+    {
+      "name": "fight_z1.png",
+      "size": 1919620
+    },
+    {
+      "name": "fight_z2.png",
+      "size": 1886592
+    },
+    {
+      "name": "fight_z3.png",
+      "size": 1794857
+    },
+    {
+      "name": "hangu.png",
+      "size": 1136082
+    },
+    {
+      "name": "hezi.png",
+      "size": 1452600
+    },
+    {
+      "name": "huanxiongshi.png",
+      "size": 1262009
+    },
+    {
+      "name": "jialebi.png",
+      "size": 1392422
+    },
+    {
+      "name": "jianzhong.png",
+      "size": 1301405
+    },
+    {
+      "name": "jiguancheng.png",
+      "size": 1393982
+    },
+    {
+      "name": "jingjiling.png",
+      "size": 1312923
+    },
+    {
+      "name": "jishengqianye.png",
+      "size": 1318935
+    },
+    {
+      "name": "jishujing.png",
+      "size": 1333086
+    },
+    {
+      "name": "juluoji.png",
+      "size": 1423450
+    },
+    {
+      "name": "lanshan.png",
+      "size": 1255924
+    },
+    {
+      "name": "mengguijie.png",
+      "size": 1174151
+    },
+    {
+      "name": "miwu.png",
+      "size": 1124802
+    },
+    {
+      "name": "mojiao.png",
+      "size": 1531818
+    },
+    {
+      "name": "moruiya.png",
+      "size": 1459199
+    },
+    {
+      "name": "moshi.png",
+      "size": 1375233
+    },
+    {
+      "name": "mumiyi.png",
+      "size": 1266878
+    },
+    {
+      "name": "nuoya.png",
+      "size": 1321778
+    },
+    {
+      "name": "panbu.png",
+      "size": 1239197
+    },
+    {
+      "name": "poxiao.png",
+      "size": 1218500
+    },
+    {
+      "name": "poxu.png",
+      "size": 1396448
+    },
+    {
+      "name": "sanlian.png",
+      "size": 1228175
+    },
+    {
+      "name": "shaqiu.png",
+      "size": 1158899
+    },
+    {
+      "name": "shenghua3.png",
+      "size": 1333525
+    },
+    {
+      "name": "shenmiao.png",
+      "size": 1391165
+    },
+    {
+      "name": "shourongsuo.png",
+      "size": 1360837
+    },
+    {
+      "name": "shuangbai.png",
+      "size": 1154513
+    },
+    {
+      "name": "sishen.png",
+      "size": 1187179
+    },
+    {
+      "name": "siwuzhen.png",
+      "size": 1294334
+    },
+    {
+      "name": "tianshe.png",
+      "size": 1273712
+    },
+    {
+      "name": "tianting.png",
+      "size": 1414369
+    },
+    {
+      "name": "tianwang.png",
+      "size": 1580879
+    },
+    {
+      "name": "tiexue.png",
+      "size": 1506590
+    },
+    {
+      "name": "tiexue2.png",
+      "size": 1617922
+    },
+    {
+      "name": "tongqu.png",
+      "size": 1402371
+    },
+    {
+      "name": "wujin.png",
+      "size": 1263418
+    },
+    {
+      "name": "wulin.png",
+      "size": 1487528
+    },
+    {
+      "name": "xingchen.png",
+      "size": 1445216
+    },
+    {
+      "name": "xinghe.png",
+      "size": 1389258
+    },
+    {
+      "name": "xingjichuanqi.png",
+      "size": 1267051
+    },
+    {
+      "name": "xingjichuanqi2.png",
+      "size": 1266896
+    },
+    {
+      "name": "xingjijianchuan.png",
+      "size": 1525504
+    },
+    {
+      "name": "xinhuangfang.png",
+      "size": 1199130
+    },
+    {
+      "name": "yinse.png",
+      "size": 1354941
+    },
+    {
+      "name": "yinxiang.png",
+      "size": 1439457
+    },
+    {
+      "name": "yiying.png",
+      "size": 1505235
+    },
+    {
+      "name": "yize.png",
+      "size": 1308124
+    },
+    {
+      "name": "yizhong.png",
+      "size": 1334616
+    },
+    {
+      "name": "zhouyuan.png",
+      "size": 1212046
+    }
+  ]
+}

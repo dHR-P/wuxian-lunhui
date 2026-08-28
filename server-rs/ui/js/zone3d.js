@@ -21,12 +21,14 @@ const Zone3D = (() => {
   let onWin = null;
   let onExit = null;
   let yaw = 0;
+  let lastTime = 0;             // Bug: 距上一帧的时间戳（用于 delta-time 移动归一化）
   const PX = { x: 0, z: 0 }; // 玩家实时位置
   const EZ = { x: 4, z: 0 }; // 敌人位置
   let attackCd = 0, dodgeCd = 0;
   let curWeaponStyle = "unarmed"; // 当前武器类型风格（gun/laser/magic/melee/unarmed），由 setData.weapon 下发
   let victoryT = 0;               // 胜利动作计时（玩家双臂上举），onZoneUpdate(win) 置 1，每帧按 0.04 衰减
-  let camDist = 4.6;
+  let camDist = 9.5;   // 第三人称比例拉远：水平距离 = camDist*0.6 ≈ 5.7，角色占画面 ~38%
+  let lastRenderMs = 0; // 帧率上限（window.getFpsLimit）渲染闸门时间戳
   const _camTarget = new THREE.Vector3(); // Bug-10: 相机 lerp 目标复用，避免每帧分配
   let onResize = null;   // 由 init 赋值，dispose 移除
   let afterImages = [];  // 闪避残影
@@ -434,7 +436,7 @@ const Zone3D = (() => {
     const key = String(kind) + "|" + (baseHex || 0);
     if (BODY_TEX_CACHE[key]) return BODY_TEX_CACHE[key];
     const r = (baseHex >> 16) & 255, g = (baseHex >> 8) & 255, b = baseHex & 255;
-    const s = 128;
+    const s = 256;   // 身体纹理 Canvas 分辨率 128 → 256（手感更细腻，显存占用仍极低）
     const zom = /zombie|horde|licker/.test(String(kind));
     const guard = kind === "guard";
     const hunter = kind === "hunter";
@@ -515,16 +517,41 @@ const Zone3D = (() => {
     const c = cfg.colors;
     const D = BODY_DIMS[cfg.bodyType || "standard"] || BODY_DIMS.standard; // 体型方块尺寸表
     const bt = cfg.bodyTex || null;   // 身体纹理 {shirt,pants,shoulder}
-    const matOf = (col, map) => map
-      ? new THREE.MeshLambertMaterial({ map, color: 0xffffff })
-      : new THREE.MeshLambertMaterial({ color: col });
-    const shirtMat = matOf(c.shirt, bt && bt.shirt);
-    const pantsMat = matOf(c.pants, bt && bt.pants);
-    const shoulderMat = matOf(c.shoulder || c.shirt, bt && bt.shoulder);
-    const shoeMat = matOf(c.shoe, null);
-    const handMat = matOf(c.hand, null);
-    const hairMat = matOf(c.hair, null);
-    const skinMat = matOf(c.skin, null);
+    // —— 分辨率系数：1.0 = 当前约 492 方块；<1 时按比例缩放体素网格（怪物用 0.7 ≈ 350 块，省算力）——
+    const detail = (typeof cfg.detail === "number" && cfg.detail >= 0.1) ? cfg.detail : 1.0;
+    const scaleAxis = (base, min) => Math.max(min, Math.round(base * detail)); // 层/环/网格轴按 detail 缩放并保底
+    // ============ 体素高分辨率化（MC 精品化扩展）：材质 PBR 化 + 每段细分多层方块，动画枢轴全部保留 ============
+    // 材质分部位 roughness/metalness（MeshStandard PBR）：
+    //   皮肤 0.60/0 · 衣服 0.82/0.05 · 裤 0.85/0.05 · 皮/肩甲 0.80/0.12 · 手 0.58/0 ·
+    //   金属/鞋 0.35/0.60 · 头发 0.90/0 · 脸(faceMap) 0.70/0.02 · 深色接缝(边缘AO) 0.9/0 · 骨/甲片 0.72/0.06
+    const MAT_SPECS = {
+      skin: { rough: 0.60, metal: 0.00 },
+      shirt: { rough: 0.82, metal: 0.05 },
+      pants: { rough: 0.85, metal: 0.05 },
+      shoulder: { rough: 0.80, metal: 0.12 },
+      hand: { rough: 0.58, metal: 0.00 },
+      shoe: { rough: 0.35, metal: 0.60 },
+      hair: { rough: 0.90, metal: 0.00 },
+      face: { rough: 0.70, metal: 0.02 },
+      metal: { rough: 0.35, metal: 0.60 },
+      seam: { rough: 0.90, metal: 0.00 },
+      bone: { rough: 0.72, metal: 0.06 },
+    };
+    const matOf = (col, map, part) => {
+      const s = MAT_SPECS[part] || MAT_SPECS.shirt;
+      return map
+        ? new THREE.MeshStandardMaterial({ map, color: 0xffffff, roughness: s.rough, metalness: s.metal })
+        : new THREE.MeshStandardMaterial({ color: col, roughness: s.rough, metalness: s.metal });
+    };
+    const shirtMat = matOf(c.shirt, bt && bt.shirt, "shirt");
+    const pantsMat = matOf(c.pants, bt && bt.pants, "pants");
+    const shoulderMat = matOf(c.shoulder || c.shirt, bt && bt.shoulder, "shoulder");
+    const shoeMat = matOf(c.shoe, null, "shoe");
+    const handMat = matOf(c.hand, null, "hand");
+    const hairMat = matOf(c.hair, null, "hair");
+    const skinMat = matOf(c.skin, null, "skin");
+    const seamMat = matOf(0x14100e, null, "seam");   // 边缘 AO 深色接缝衬块（方块交接处叠暗层增立体）
+    const metalMat = matOf(0x949da7, null, "metal"); // 关节金属护甲/鞋底
     const box = (w, h, d, mat, gx, x, y, z, extra) => {
       const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
       m.position.set(x, y, z);
@@ -535,58 +562,148 @@ const Zone3D = (() => {
     };
     const pivot = (x, y, z) => { const p = new THREE.Group(); p.position.set(x, y, z); g.add(p); return p; };
 
+    // ============ 程序化体素网格（主体约 500 块，MC 空心管/实心椭球，循环生成）============
+    // 局部辅助：空心圆环节——把管/柱按 N 块环采样（掏空内部，维持 MC 方块接缝感）。
+    //   ring(parent, cx, cz, y, rx, rz, n, bh, mat)：
+    //     在环心(cx,cz)高度 y 上，以椭圆半轴 rx(x)/rz(z) 采样 n 块，块高 bh，材质 mat。
+    const ring = (parent, cx, cz, y, rx, rz, n, bh, mat) => {
+      let cnt = 0;
+      for (let i = 0; i < n; i++) {
+        const a0 = (i / n) * Math.PI * 2;
+        const a1 = ((i + 1) / n) * Math.PI * 2;
+        const bw = Math.max(0.02, rx * Math.abs(Math.cos(a1) - Math.cos(a0)));
+        const bd = Math.max(0.02, rz * Math.abs(Math.sin(a1) - Math.sin(a0)));
+        box(bw, bh, bd, mat, parent, cx + rx * Math.cos(a0), y, cz + rz * Math.sin(a0));
+        cnt++;
+      }
+      return cnt;
+    };
+    let voxelCount = 0;   // 实际生成的方块总数（运行时读 g.userData.voxelCount 验收）
+
     // —— 枢轴高度推导：脚底贴地 y≈0 ——
     const legY = D.thighH + D.shinH + D.shoeH * 0.5;   // 髋枢轴 g-local 高
     const upperY = legY + D.waistH * 0.5 + 0.14;       // 腰枢轴 g-local 高
-    // 双腿：髋枢轴(legY) + 大腿/膝盖节/小腿 + 鞋块
+
+    // —— 双腿（程序化空心管）：大腿 4 层×8 环 + 膝金属环 + 小腿 4 层×7 环 + 踝金属环 + 鞋 3 段 ——
     const legL = pivot(-D.legSpan, legY, 0);
     const legR = pivot(D.legSpan, legY, 0);
     const kneeL = new THREE.Group(); kneeL.position.set(0, -D.thighH, 0); legL.add(kneeL);
     const kneeR = new THREE.Group(); kneeR.position.set(0, -D.thighH, 0); legR.add(kneeR);
-    box(D.thighW, D.thighH, D.thighW * 0.92, pantsMat, legL, 0, -D.thighH * 0.5, 0);   // 左大腿
-    box(D.shinW, D.shinH, D.shinW * 0.92, pantsMat, kneeL, 0, -D.shinH * 0.5, 0);      // 左小腿
-    box(D.shoeW, D.shoeH, D.shoeD, shoeMat, kneeL, 0, -D.shinH - D.shoeH * 0.5, 0.04);  // 左脚/鞋
-    box(D.thighW, D.thighH, D.thighW * 0.92, pantsMat, legR, 0, -D.thighH * 0.5, 0);   // 右大腿
-    box(D.shinW, D.shinH, D.shinW * 0.92, pantsMat, kneeR, 0, -D.shinH * 0.5, 0);      // 右小腿
-    box(D.shoeW, D.shoeH, D.shoeD, shoeMat, kneeR, 0, -D.shinH - D.shoeH * 0.5, 0.04);  // 右脚/鞋
+    const ankleL = new THREE.Group(); ankleL.position.set(0, -D.shinH, 0); kneeL.add(ankleL);
+    const ankleR = new THREE.Group(); ankleR.position.set(0, -D.shinH, 0); kneeR.add(ankleR);
+    const buildLeg = (leg, knee, ankle, zF) => {
+      // 大腿（leg 空间 y: 0 → -thighH）—— 层/环数按 detail 缩放
+      const thN = scaleAxis(4, 3), thH = D.thighH / thN;
+      for (let i = 0; i < thN; i++) {
+        voxelCount += ring(leg, 0, 0, -thH * 0.5 - i * thH, D.thighW * 0.48, D.thighW * 0.42, scaleAxis(8, 6), thH * 0.96, pantsMat);
+      }
+      // 膝金属护环（knee 空间）
+      voxelCount += ring(knee, 0, 0, -0.02, D.thighW * 0.55, D.thighW * 0.5, scaleAxis(8, 6), 0.12, metalMat);
+      // 小腿（knee 空间 y: 0 → -shinH）—— 层/环数按 detail 缩放
+      const shN = scaleAxis(4, 3), shH = D.shinH / shN;
+      for (let i = 0; i < shN; i++) {
+        voxelCount += ring(knee, 0, zF * 0.2, -shH * 0.5 - i * shH, D.shinW * 0.5, D.shinW * 0.44, scaleAxis(7, 5), shH * 0.96, pantsMat);
+      }
+      // 踝金属护环（ankle 空间）
+      voxelCount += ring(ankle, 0, zF * 0.2, -0.02, D.shinW * 0.56, D.shinW * 0.5, scaleAxis(7, 5), 0.10, metalMat);
+      // 鞋（ankle 空间）：鞋身环 + 前凸鞋头 + 金属鞋底
+      voxelCount += ring(ankle, 0, 0.05 + zF * 0.3, -D.shoeH * 0.36, D.shoeW * 0.5, D.shoeD * 0.45, scaleAxis(5, 4), D.shoeH * 0.5, shoeMat);
+      box(D.shoeW * 0.9, D.shoeH * 0.38, 0.15, shoeMat, ankle, 0, -D.shoeH * 0.72, D.shoeD * 0.45 + zF * 0.3, { rx: 0.1 }); // 鞋头
+      box(D.shoeW * 1.02, 0.04, D.shoeD * 0.5, metalMat, ankle, 0, -D.shoeH * 0.92, 0.06 + zF * 0.3);                   // 鞋底
+      voxelCount += 2;
+    };
+    const legFwd = (c.foreZ || 0) * 0.5;   // 贴地怪（licker/zombie）双腿前倾量
+    buildLeg(legL, kneeL, ankleL, legFwd);
+    buildLeg(legR, kneeR, ankleR, legFwd);
 
-    // 上部体（腰+胸+肩臂+颈头），枢轴在腰(upperY)，cfg.lean 让整体前倾（驼背/俯身）
+    // —— 躯干（程序化空心椭圆柱）：腰→胸过渡 10 层×12 环 + 腰金属带 ——
     const upper = pivot(0, upperY, 0);
-    box(D.waistW, D.waistH, D.torsoD, shirtMat, upper, 0, -D.waistH * 0.5, 0);                 // 腰
-    box(D.chestW, D.chestH, D.torsoD, shirtMat, upper, 0, D.chestPos, D.headFore * 0.4);       // 胸（beast 微前挪）
-    // 双肩（臂）枢轴 + 肩甲块 + 上臂/肘关节/前臂 + 拳头块（尺寸与臂长按体型）
+    const torsoBot = -D.waistH * 0.5;                                  // 腰底（upper 局部 y）
+    const torsoTop = D.chestPos + D.chestH * 0.5;                      // 胸顶（upper 局部 y）
+    const tLayers = scaleAxis(10, 4), tH = (torsoTop - torsoBot) / tLayers;
+    const waistR = D.waistW * 0.5, chestR = D.chestW * 0.5, torsoRz = D.torsoD * 0.5;
+    const torsoRings = scaleAxis(12, 6);                 // 躯干每层环数（按 detail 缩放）
+    for (let i = 0; i < tLayers; i++) {
+      const y = torsoBot + tH * (i + 0.5);
+      const k = i / (tLayers - 1);                      // 0：腰底 → 1：胸顶，口径过渡
+      voxelCount += ring(upper, 0, D.headFore * 0.3, y, waistR + (chestR - waistR) * k, torsoRz, torsoRings, tH * 0.96, shirtMat);
+    }
+    voxelCount += ring(upper, 0, D.headFore * 0.3, torsoBot + 0.06, waistR * 1.02, torsoRz * 1.02, torsoRings, 0.10, metalMat); // 腰金属带
+
+    // —— 双臂（程序化空心管 + 肩甲/肘金属环/拳）：上臂 3 层×8 环 + 肘金属环 + 前臂 2 层×7 环 + 拳 2 块 ——
+    const forearmZ = c.foreZ || 0;   // 贴地怪（licker/zombie）前臂前倾量
     const armL = new THREE.Group(); armL.position.set(-D.armSpan, D.armPos, 0); upper.add(armL);
     const armR = new THREE.Group(); armR.position.set(D.armSpan, D.armPos, 0); upper.add(armR);
     const elbowL = new THREE.Group(); elbowL.position.set(0, -D.upArmH, 0); armL.add(elbowL);
     const elbowR = new THREE.Group(); elbowR.position.set(0, -D.upArmH, 0); armR.add(elbowR);
-    box(D.shPadW, 0.14, D.shPadW, shoulderMat, armL, 0, -0.02, 0, { rx: 0.25 });  // 左肩甲
-    box(D.shPadW, 0.14, D.shPadW, shoulderMat, armR, 0, -0.02, 0, { rx: 0.25 });  // 右肩甲
-    box(D.upArmW, D.upArmH, D.upArmW * 0.92, shirtMat, armL, 0, -D.upArmH * 0.5, 0);            // 左上臂
-    box(D.foreW, D.foreH, D.foreW * 0.92, handMat, elbowL, 0, -D.foreH * 0.5, 0);               // 左前臂
-    box(D.fistW, D.fistH, D.fistW * 0.98, handMat, elbowL, 0, -D.foreH - D.fistH * 0.5, c.foreZ); // 左拳头
-    box(D.upArmW, D.upArmH, D.upArmW * 0.92, shirtMat, armR, 0, -D.upArmH * 0.5, 0);            // 右上臂
-    box(D.foreW, D.foreH, D.foreW * 0.92, handMat, elbowR, 0, -D.foreH * 0.5, 0);               // 右前臂
-    box(D.fistW, D.fistH, D.fistW * 0.98, handMat, elbowR, 0, -D.foreH - D.fistH * 0.5, c.foreZ); // 右拳头
+    const buildArm = (arm, elbow) => {
+      // 肩甲（突出于肩）：肩垫 + 金属镶边
+      box(D.shPadW * 1.12, 0.12, D.shPadW, shoulderMat, arm, 0, -0.02, 0, { rx: 0.25 });
+      box(D.shPadW * 1.1, 0.09, D.shPadW * 1.04, metalMat, arm, 0, -0.05, 0, { rx: 0.15 });
+      voxelCount += 2;
+      // 上臂（arm 空间 y: 0 → -upArmH），衬衫袖 —— 层/环数按 detail 缩放
+      const uN = scaleAxis(3, 3), uH = D.upArmH / uN;
+      for (let i = 0; i < uN; i++) {
+        voxelCount += ring(arm, 0, forearmZ * 0.3, -uH * 0.5 - i * uH, D.upArmW * 0.5, D.upArmW * 0.46, scaleAxis(8, 5), uH * 0.95, shirtMat);
+      }
+      // 肘金属护环（elbow 空间）
+      voxelCount += ring(elbow, 0, forearmZ * 0.3, -0.02, D.upArmW * 0.54, D.upArmW * 0.5, scaleAxis(8, 5), 0.10, metalMat);
+      // 前臂（elbow 空间 y: 0 → -foreH），裸露皮肤的手 —— 层/环数按 detail 缩放
+      const fN = scaleAxis(2, 2), fH = D.foreH / fN;
+      for (let i = 0; i < fN; i++) {
+        voxelCount += ring(elbow, 0, forearmZ, -fH * 0.5 - i * fH, D.foreW * 0.5, D.foreW * 0.46, scaleAxis(7, 5), fH * 0.95, handMat);
+      }
+      // 拳头 + 指节
+      box(D.fistW, D.fistH * 0.6, D.fistW * 0.92, handMat, elbow, 0, -D.foreH - D.fistH * 0.3, forearmZ);
+      box(D.fistW * 1.06, D.fistH * 0.5, D.fistW * 0.86, handMat, elbow, 0, -D.foreH - D.fistH * 0.78, forearmZ + 0.04);
+      voxelCount += 2;
+    };
+    buildArm(armL, elbowL);
+    buildArm(armR, elbowR);
 
-    // 颈 + 头（head 组：颈部方块在头部枢轴下延，供转头动画）+ 发顶
+    // ============ 颈 + 头（程序化实心椭球体素网格：6×6×5≈90 块，发顶 hairMat / 脸带 faceFrontMat / 其余 skinMat）============
     const headPosY = D.chestPos + D.chestH * 0.5 + D.neckH * 0.5 + D.headH * 0.45; // 头枢轴 upper 局部 y
     const head = new THREE.Group(); head.position.set(0, headPosY, D.headFore); upper.add(head);
     box(D.neckW, D.neckH, D.neckW * 0.92, skinMat, head, 0, -D.neckH * 0.5, 0);   // 颈部
+    box(D.neckW * 1.12, 0.05, D.neckW * 1.05, seamMat, head, 0, -0.03, 0);        // 颈肩 AO 接缝
+    voxelCount += 2;
+    const HW = D.headW, HH = D.headH;
     const faceMap = (cfg.face && typeof document !== "undefined")
       ? makeFaceTexture(cfg.face.kind, faceSkinHex(cfg.face.kind))
       : null;
-    const headMat = faceMap
-      ? new THREE.MeshLambertMaterial({ map: faceMap, color: 0xffffff })
-      : matOf(c.skin, null);
-    const hd = new THREE.Mesh(new THREE.BoxGeometry(D.headW, D.headH, D.headW), headMat);
-    hd.position.set(0, D.headH * 0.12, 0);
-    hd.castShadow = true; hd.receiveShadow = true;
-    head.add(hd);
-    box(D.headW * 0.92, D.hairH, D.headW * 0.92, hairMat, head, 0, D.headH * 0.12 + D.headH * 0.5 + D.hairH * 0.5, 0); // 发顶/帽顶
+    const faceFrontMat = faceMap
+      ? new THREE.MeshStandardMaterial({ map: faceMap, color: 0xffffff, roughness: 0.70, metalness: 0.02 })
+      : skinMat;
+    // 头骨椭球体素网格：按"头骨+下颚"轮廓筛选（椭球裁剪），正面脸带贴 faceMap，顶部覆盖头发，其余皮肤。
+    const gX = scaleAxis(6, 1), gY = scaleAxis(6, 1), gZ = scaleAxis(5, 1); // 网格尺寸按 detail 缩放（保底 ≥1）
+    const s = HW / gX;                 // 每格尺寸：gX 格跨头宽
+    for (let ix = 0; ix < gX; ix++) {
+      for (let iy = 0; iy < gY; iy++) {
+        for (let iz = 0; iz < gZ; iz++) {
+          const px = (ix - (gX - 1) * 0.5) * s, py = (iy - (gY - 1) * 0.5) * s, pz = (iz - (gZ - 1) * 0.5) * s;
+          const nx = px / (HW * 0.5), ny = py / (HH * 0.5), nz = pz / (HW * 0.5); // 归一化到 [-1,1]
+          if (nx * nx + ny * ny + nz * nz > 1.06) continue;                        // 椭球裁剪（含下颚收窄）
+          // 发顶：顶部半球帽用头发材质
+          if (py > HH * 0.28 && Math.hypot(px, pz) < HW * 0.5) {
+            box(s * 0.99, s * 0.99, s * 0.99, hairMat, head, px, py, pz);
+          }
+          // 正面脸带（眼/鼻/嘴高度带且靠前）用 faceMap，其余皮肤
+          else if (pz > HW * 0.42 && iy >= 2 && iy <= 4) {
+            box(s * 0.99, s * 0.99, s * 0.99, faceFrontMat, head, px, py, pz);
+          }
+          else {
+            box(s * 0.99, s * 0.99, s * 0.99, skinMat, head, px, py, pz);
+          }
+          voxelCount++;
+        }
+      }
+    }
+    g.userData.voxelCount = voxelCount;   // 记录实际方块总数，供调试验收（detail=1.0≈500，detail=0.7≈350）
+    g.userData.detail = detail;           // 记录本次分辨率系数，便于外部按 detail 差异处理
     upper.rotation.x = cfg.lean || 0;
     g.userData.rig = { upper, head,
       armL, elbowL, armR, elbowR,
-      legL, kneeL, legR, kneeR,
+      legL, kneeL, legR, kneeR, ankleL, ankleR,
       baseLean: cfg.lean || 0 };   // baseLean 供动画在呼吸/lean 基础上叠加攻击姿势
   }
 
@@ -612,11 +729,12 @@ const Zone3D = (() => {
     const ftxt = (refRaw && /(fula|dream|梦魇|弗莱迪|freddy)/i.test(String(refRaw))) ? "fulaidi" : (kind === "horde" ? "horde" : kind);
     const repaint = tint || (kind === "hunter" ? 0x4a4a52 : kind === "licker" ? 0x8a2a2a : 0x6a5a3a);
     const V = {
-      hunter: { sc: 1.32, lean: -0.10, shirt: 0x4a4a52, skin: 0x5f5f6a, hair: 0x8f96a3, pants: 0x2a2a30, foreZ: 0.0, bob: 0.05 },
-      licker: { sc: 0.86, lean: 0.58, shirt: 0x8a2a2a, skin: 0x6a1f1f, hair: 0x3f1010, pants: 0x2a1818, foreZ: 0.34, bob: 0.02 },
-      zombie: { sc: 1.02, lean: 0.34, shirt: 0x6a5a3a, skin: 0x7d8a6a, hair: 0x3a3f2c, pants: 0x3a3430, foreZ: 0.16, bob: 0.04 },
-    }[kind] || { sc: 1.15, lean: 0.16, shirt: repaint, skin: repaint, hair: 0x8a7a5a, pants: 0x3a3430, foreZ: 0.06, bob: 0.05 }; // guard/horde 标准
+      hunter: { sc: 1.15, lean: -0.10, shirt: 0x4a4a52, skin: 0x5f5f6a, hair: 0x8f96a3, pants: 0x2a2a30, foreZ: 0.0, bob: 0.05 },
+      licker: { sc: 0.76, lean: 0.58, shirt: 0x8a2a2a, skin: 0x6a1f1f, hair: 0x3f1010, pants: 0x2a1818, foreZ: 0.34, bob: 0.02 },
+      zombie: { sc: 0.90, lean: 0.34, shirt: 0x6a5a3a, skin: 0x7d8a6a, hair: 0x3a3f2c, pants: 0x3a3430, foreZ: 0.16, bob: 0.04 },
+    }[kind] || { sc: 1.00, lean: 0.16, shirt: repaint, skin: repaint, hair: 0x8a7a5a, pants: 0x3a3430, foreZ: 0.06, bob: 0.05 }; // guard/horde 标准（1.15→1.0）
     buildVoxelBody(g, {
+      detail: 0.8,   // 怪物分辨率系数：体素网格精度略低于人物（约 348 块），省算力
       bodyType: bodyTypeFor(kind, refRaw),
       lean: V.lean,
       face: { kind: ftxt },
@@ -637,6 +755,7 @@ const Zone3D = (() => {
   // VOXEL_PLAYER=true 时替换立绘。直立 lean=0，肩髋枢轴同敌，供同套动画。
   function buildVoxelPlayer(g) {
     buildVoxelBody(g, {
+      detail: 1.0,  // 人物全分辨率（约 500 块），与默认一致
       bodyType: "standard",
       lean: 0.0,
       face: { kind: "player" }, // 正常青年脸（郑吒）+ 左脸刀疤
@@ -647,7 +766,7 @@ const Zone3D = (() => {
         waistW: 0.84, chestW: 0.92, headW: 0.6, torsoD: 0.5,
       },
     });
-    g.scale.setScalar(1.15);   // 与敌人体素人同比例
+    g.scale.setScalar(0.90);   // 第三人称比例缩小玩家（人物 1.15 → 0.9）
     g.userData.voxel = { phase: Math.random() * 6.28, bob: 0.05, armBoost: 1 };
   }
 
@@ -965,27 +1084,97 @@ const Zone3D = (() => {
       rig.head.rotation.x = breath * 0.03;
     }
     const baseX = rig.baseLean || 0;
+    // 攻击动作类型：按武器/法宝/技能分类（具体在攻击触发处 setData→animKind 写入）。
+    // 未设置时默认 "melee"（沿用既有挥砍三段，保持向后兼容——现有调用不传动画类型也不崩）。
+    const kind = rig.animKind || "melee";
     if (attack > 0) {
       const a = Math.min(1, attack);
-      if (a > 0.78) {
-        rig.upper.rotation.x = baseX + 0.20;
-        rig.armR.rotation.x = -2.15; rig.armR.rotation.y = -0.18;
-        rig.armL.rotation.x = 0.5;  rig.armL.rotation.y = 0.10;
-        if (rig.elbowR) rig.elbowR.rotation.x = -0.65;
-        if (rig.head) { rig.head.rotation.y = -0.15; rig.head.rotation.x = 0.10; }
-      } else if (a > 0.30) {
-        const k = (a - 0.30) / 0.48;
-        rig.upper.rotation.x = baseX - 0.16 * k;
-        rig.armR.rotation.x = 2.35 - 0.5 * (1 - k); rig.armR.rotation.y = 0.16;
-        rig.armL.rotation.x = 0.34 - 0.18 * k; rig.armL.rotation.y = 0;
-        if (rig.elbowR) rig.elbowR.rotation.x = -0.12 + 0.2 * k;
-        if (rig.head) { rig.head.rotation.y = 0.12; rig.head.rotation.x = -0.12; }
-      } else {
-        const k = a / 0.30;
-        rig.upper.rotation.x = baseX;
-        rig.armR.rotation.x = 0.5 * k; rig.armR.rotation.y = 0;
-        rig.armL.rotation.x = -0.2 * k; rig.armL.rotation.y = 0;
-        if (rig.elbowR) rig.elbowR.rotation.x = 0.2 * k;
+      switch (kind) {
+        // —— 枪械：双臂前伸持枪、射击瞬间后坐力后仰（upper 微后仰 + 双臂短促回缩）——
+        case "gun": {
+          // 腕部前伸持枪姿态（rotation.x 正向＝前伸）
+          rig.armR.rotation.x = 1.30; rig.armR.rotation.y = 0;
+          rig.armL.rotation.x = 0.96; rig.armL.rotation.y = 0;
+          if (rig.elbowR) rig.elbowR.rotation.x = 0.16;
+          if (rig.elbowL) rig.elbowL.rotation.x = 0.28;
+          // 射击后坐力：attackT 从 1 衰减，firing 0→1，越靠后坐越明显；单次冲击后回稳
+          const firing = 1 - a;
+          const recoil = Math.sin(Math.min(1, firing * 3.4) * Math.PI) * 0.30;
+          rig.upper.rotation.x = baseX + recoil;             // 微后仰
+          rig.armR.rotation.x = 1.30 - recoil * 0.5;         // 双臂随坐力短促回缩
+          rig.armL.rotation.x = 0.96 - recoil * 0.4;
+          if (rig.head) { rig.head.rotation.y = 0; rig.head.rotation.x = 0.04 + recoil * 0.1; }
+          break;
+        }
+        // —— 激光：单臂抬起瞄准发射（armR 前伸平举、head 微偏）、armL 在下方持托——
+        case "laser": {
+          const aim = Math.min(1, a * 1.6); // 抬手瞄准渐入
+          rig.armR.rotation.x = 1.50 * aim; rig.armR.rotation.y = 0.06;
+          rig.armL.rotation.x = 0.55 * aim; rig.armL.rotation.y = 0;
+          if (rig.elbowR) rig.elbowR.rotation.x = 0.08 + (1 - aim) * 0.4;
+          if (rig.elbowL) rig.elbowL.rotation.x = 0.7 - (1 - aim) * 0.3; // 下方持托微弯
+          rig.upper.rotation.x = baseX + 0.10 * aim;         // 轻微前倾瞄准
+          if (rig.head) { rig.head.rotation.y = -0.22 * aim; rig.head.rotation.x = -0.08 * aim; } // 偏头瞄准
+          break;
+        }
+        // —— 施法（魔法/法宝/施法技能）：双臂上举结印/施法 + 微后仰——
+        case "magic": {
+          const cast = Math.min(1, a * 1.3); // 抬手结印渐入
+          const pulse = Math.sin(Math.min(1, (1 - a) * 3.0) * Math.PI); // 施法能量涌动
+          rig.armR.rotation.x = -1.75 * cast; rig.armR.rotation.y = -0.25;
+          rig.armL.rotation.x = -1.30 * cast; rig.armL.rotation.y = 0.25;
+          if (rig.elbowR) rig.elbowR.rotation.x = -0.5 * cast;   // 前臂前收结印
+          if (rig.elbowL) rig.elbowL.rotation.x = -0.35 * cast;
+          rig.upper.rotation.x = baseX + 0.10 * cast + pulse * 0.05; // 微后仰 + 施法颤动
+          if (rig.head) { rig.head.rotation.y = pulse * 0.15; rig.head.rotation.x = 0.06 * cast + pulse * 0.04; }
+          break;
+        }
+        // —— 拳击（无武器 / unarmed）：右直拳前冲 + 交替勾拳——
+        case "unarmed": {
+          const jab = Math.min(1, a * 2.4);   // 前伸→收回
+          const hook = Math.sin(Math.min(1, a * 2.0) * Math.PI); // 收拳中段的勾拳上扬
+          rig.armR.rotation.x = 1.9 * jab - hook * 0.55; rig.armR.rotation.y = -hook * 0.7;
+          rig.armL.rotation.x = 0.85 - hook * 1.2;          rig.armL.rotation.y = hook * 0.35;
+          if (rig.elbowR) rig.elbowR.rotation.x = 0.10 + (1 - jab) * 0.5 + hook * 0.3;
+          if (rig.elbowL) rig.elbowL.rotation.x = 0.45 - hook * 0.25;
+          rig.upper.rotation.x = baseX + jab * 0.12 - hook * 0.18; // 前倾发力 + 勾拳收腰转体
+          if (rig.head) { rig.head.rotation.y = -hook * 0.2; rig.head.rotation.x = jab * 0.1; }
+          break;
+        }
+        // —— 道具使用：短暂抬手（可选加分；当前无 item 事件时仅作预留，无副作用）——
+        case "use_item": {
+          const raise = Math.min(1, a * 1.8);
+          const lower = Math.max(0, (a - 0.4) / 0.6); // 抬手后收回
+          rig.armR.rotation.x = 0.9 * raise - 0.8 * lower; rig.armR.rotation.y = 0.2;
+          rig.armL.rotation.x = 0.7 * raise - 0.6 * lower; rig.armL.rotation.y = -0.2;
+          if (rig.elbowR) rig.elbowR.rotation.x = 0.5 * raise;
+          if (rig.elbowL) rig.elbowL.rotation.x = 0.4 * raise;
+          rig.upper.rotation.x = baseX + 0.06 * raise;
+          if (rig.head) rig.head.rotation.x = 0.04 * raise;
+          break;
+        }
+        // —— melee 默认：挥砍三段（起手蓄力拉身后仰 → 前挥横扫 → 收招回位）——
+        default:
+          if (a > 0.78) {
+            rig.upper.rotation.x = baseX + 0.20;
+            rig.armR.rotation.x = -2.15; rig.armR.rotation.y = -0.18;
+            rig.armL.rotation.x = 0.5;  rig.armL.rotation.y = 0.10;
+            if (rig.elbowR) rig.elbowR.rotation.x = -0.65;
+            if (rig.head) { rig.head.rotation.y = -0.15; rig.head.rotation.x = 0.10; }
+          } else if (a > 0.30) {
+            const k = (a - 0.30) / 0.48;
+            rig.upper.rotation.x = baseX - 0.16 * k;
+            rig.armR.rotation.x = 2.35 - 0.5 * (1 - k); rig.armR.rotation.y = 0.16;
+            rig.armL.rotation.x = 0.34 - 0.18 * k; rig.armL.rotation.y = 0;
+            if (rig.elbowR) rig.elbowR.rotation.x = -0.12 + 0.2 * k;
+            if (rig.head) { rig.head.rotation.y = 0.12; rig.head.rotation.x = -0.12; }
+          } else {
+            const k = a / 0.30;
+            rig.upper.rotation.x = baseX;
+            rig.armR.rotation.x = 0.5 * k; rig.armR.rotation.y = 0;
+            rig.armL.rotation.x = -0.2 * k; rig.armL.rotation.y = 0;
+            if (rig.elbowR) rig.elbowR.rotation.x = 0.2 * k;
+          }
       }
     } else {
       rig.upper.rotation.x = baseX;
@@ -1268,6 +1457,21 @@ const Zone3D = (() => {
       default: return false;
     }
     return true;
+  }
+
+  // 攻击动作类型分派：按「武器类型 / 法宝 / 施法类技能」决定本次攻击的肢体动作种类。
+  //   - 装配了法宝（curFxTreasure 非空）或已学施法流派技能（skillSchools 命中）→ 优先 magic 施法动作；
+  //   - 否则按当前武器类型：gun→举枪/laser→瞄准/magic→施法/melee→挥砍/unarmed→拳击。
+  // 返回 animateRig 的 animKind（默认 melee 挥砍）。纯视觉，不影响 onAction/特效/判定。
+  function pickAttackAnimKind() {
+    if (curFxTreasure.length > 0 || skillSchools(curSkills).length > 0) return "magic";
+    if (curWeaponStyle === "unarmed") return "unarmed";
+    switch (curWeaponStyle) {
+      case "gun":    return "gun";
+      case "laser":  return "laser";
+      case "magic":  return "magic";
+      default:       return "melee"; // melee 及未匹配 → 挥砍
+    }
   }
 
   // 攻击特效分发：按当前武器细分 → 大类；随后按装配法宝 + 已学技能流派叠加附加特效。
@@ -1918,10 +2122,12 @@ const Zone3D = (() => {
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x10141c);
-    scene.fog = new THREE.Fog(0x10141c, 20, 46);
+    scene.fog = new THREE.Fog(0x10141c, 30, 80);   // 雾远界随场地放大、相机拉远而放宽
 
-    camera = new THREE.PerspectiveCamera(60, container.clientWidth / Math.max(1, container.clientHeight), 0.1, 100);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    camera = new THREE.PerspectiveCamera(50, container.clientWidth / Math.max(1, container.clientHeight), 0.1, 200);
+    // 高画质渲染器：antialias(MSAA) + high-performance + WebGL2 显式 4x samples（8G 显存预算内）
+    renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    if (renderer.capabilities && renderer.capabilities.isWebGL2) renderer.samples = 4;
     // HiDPI/8G 显存预算内激进画质:全分辨率像素比 + ACES 电影色调映射（高清屏锐利且色彩收拢）
     renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setSize(Math.max(1, container.clientWidth), Math.max(1, container.clientHeight));
@@ -1940,35 +2146,39 @@ const Zone3D = (() => {
     window.addEventListener("resize", onResize);
     setTimeout(onResize, 50);
 
-    // 灯光（二游冷主光 + 暖补光 + 半球环境）
-    const amb = new THREE.AmbientLight(0x6a7a92, 0.4);
+    // 灯光氛围深化（二游冷主光 + 暖补光 + 半球环境 + 斜后轮廓光 Rim）
+    const amb = new THREE.AmbientLight(0x6a7a92, 0.42);
     scene.add(amb);
     // 半球光：天青→地红的环境反射，让体素方块的暗面仍可见环境轮廓（省显存、纯数学）
     const hemi = new THREE.HemisphereLight(0xbfd6ff, 0x241d28, 0.55);
     scene.add(hemi);
-    const dir = new THREE.DirectionalLight(0xe8f2ff, 1.1);
+    const dir = new THREE.DirectionalLight(0xe8f2ff, 1.15);
     dir.position.set(6, 14, 5);
     dir.castShadow = true;
-    // 8G 显存充足:升高阴影贴图到 2048 + 收紧阴影相机近/边界，PCFSoft 更锐利少锯齿
-    dir.shadow.mapSize.set(2048, 2048);
+    // 8G 显存充足:升级阴影贴图到 4096(主光) 提刀锐度，PCFSoft 更锐利少锯齿；阴影相机边界随放大场地拓宽
+    dir.shadow.mapSize.set(4096, 4096);
     dir.shadow.camera.near = 1;
-    dir.shadow.camera.far = 40;
-    dir.shadow.camera.left = -16;
-    dir.shadow.camera.right = 16;
-    dir.shadow.camera.top = 16;
-    dir.shadow.camera.bottom = -16;
+    dir.shadow.camera.far = 60;
+    dir.shadow.camera.left = -20;
+    dir.shadow.camera.right = 20;
+    dir.shadow.camera.top = 20;
+    dir.shadow.camera.bottom = -20;
     dir.shadow.bias = -0.0004;      // 微调使平面接缝更干净（normalBias 亦设：减少痤疮又不至漏光）
     dir.shadow.normalBias = 0.04;
     scene.add(dir);
-    const warm = new THREE.PointLight(0xffb066, 0.8, 22);
+    const warm = new THREE.PointLight(0xffb066, 0.85, 22);
     warm.position.set(-6, 4, -4);
     warm.castShadow = true;         // 暖补光也投柔阴影(体素人更立体)
-    warm.shadow.mapSize.set(512, 512);
+    warm.shadow.mapSize.set(1024, 1024);   // 512 → 1024
     warm.shadow.bias = -0.002;
     scene.add(warm);
-    const cool = new THREE.PointLight(0x66aaff, 0.6, 20);
+    const cool = new THREE.PointLight(0x66aaff, 0.62, 20);
     cool.position.set(5, 5, 6);
     scene.add(cool);
+    // 轮廓光/背光（Rim light）：冷青从斜后下方 + 高打，给方块人边缘勾一层亮边，突出轮廓立体感（二游常见）
+    const rim = new THREE.DirectionalLight(0x7ab8ff, 0.9);
+    rim.position.set(-8, 3, -9);    // 斜后方打向角色
+    scene.add(rim);
 
     // 地板（AI 生成贴图）
     const floorTex = new THREE.TextureLoader().load("assets/img/tex_floor_hive.png", t => {
@@ -1976,7 +2186,7 @@ const Zone3D = (() => {
       t.repeat.set(6, 6);
     });
     const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(24, 24),
+      new THREE.PlaneGeometry(44, 44),   // 24→44：±22，容纳拉远后的相机视野，避免相机悬空出界
       new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.95, metalness: 0.05 })
     );
     floor.rotation.x = -Math.PI / 2;
@@ -2029,6 +2239,14 @@ const Zone3D = (() => {
     scene.add(group);
     player = group;
 
+    // 后处理接口接线（并行子代理 postfx.js）: renderer/scene/camera 就绪后挂载 window.PostFX
+    // null 安全——postfx 未加载/未就绪时静默跳过，渲染始终回退 renderer.render
+    try {
+      if (window.PostFX && typeof window.PostFX.attach === "function") {
+        window.PostFX.attach(renderer, scene, camera);
+      }
+    } catch (e) { /* PostFX 异常不应阻断战斗副本 */ }
+
     window.addEventListener("keydown", keydown);
     window.addEventListener("keyup", keyup);
   }
@@ -2040,9 +2258,9 @@ const Zone3D = (() => {
     });
     const mat = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.85, metalness: 0.08 });
     const positions = [
-      // 四周
-      [-12, 0, 0.6, 4, 0], [12, 0, 0.6, 4, 0],
-      [0, -12, 4, 0.6, 0], [0, 12, 4, 0.6, 0],
+      // 四周（从 ±12 移到 ±19，拉远相机仍有墙框住场地；战斗判定 clamp 仍 ±11.4 不受影响）
+      [-19, 0, 0.6, 4, 0], [19, 0, 0.6, 4, 0],
+      [0, -19, 4, 0.6, 0], [0, 19, 4, 0.6, 0],
       // 中央柱子
       [-6, 6, 0.8, 4, 0.8], [6, -6, 0.8, 4, 0.8],
       [6, 6, 0.8, 4, 0.8], [-6, -6, 0.8, 4, 0.8],
@@ -2056,10 +2274,10 @@ const Zone3D = (() => {
       wall.receiveShadow = true;
       scene.add(wall);
     });
-    // 墙脚冷色灯带（氛围）
-    const strip = makeLightStrip(24, 0.35);
+    // 墙脚冷色灯带（沿远处墙根，随墙位±19）—— 仅氛围，非判定
+    const strip = makeLightStrip(38, 0.35);
     strip.rotation.x = -Math.PI / 2;
-    strip.position.set(0, 0.1, -11.7);
+    strip.position.set(0, 0.1, -18.7);
     scene.add(strip);
   }
 
@@ -2173,7 +2391,14 @@ const Zone3D = (() => {
       keys[k] = true;
     }
     if (k === "j" || k === "enter") {
-      if (attackCd <= 0 && onAction) { attackCd = 0.7; onAction("attack", 0); runAttackFx(); enemyHitFx(); if (player) player.userData.attackT = 1; }
+      if (attackCd <= 0 && onAction) {
+        attackCd = 0.7; onAction("attack", 0); runAttackFx(); enemyHitFx();
+        if (player) {
+          player.userData.attackT = 1;
+          // 攻击动作类型：按当前武器 / 法宝 / 施法技能分派到肢体动作（体素玩家枢轴 animateRig 读取）
+          if (player.userData.rig) player.userData.rig.animKind = pickAttackAnimKind();
+        }
+      }
     }
     if (k === "k" || k === "shift") {
       if (dodgeCd <= 0 && onAction) {
@@ -2227,6 +2452,10 @@ const Zone3D = (() => {
         });
       });
     } catch (e) {}
+    // 后处理（PostFX）释放 —— window.PostFX 无 dispose 时安全跳过
+    try {
+      if (window.PostFX && typeof window.PostFX.dispose === "function") window.PostFX.dispose();
+    } catch (e) {}
     if (renderer) {
       try { renderer.dispose(); } catch (e) {}
       try { renderer.forceContextLoss(); } catch (e) {}
@@ -2236,8 +2465,15 @@ const Zone3D = (() => {
     }
   }
 
-  function loop() {
+  function loop(now) {
     raf = requestAnimationFrame(loop);
+    // —— 帧率上限（window.getFpsLimit 全局接口；子代理并行接入）：>0 时仅跳过 render，逻辑每帧照跑 ——
+    const fpsCap = (typeof window.getFpsLimit === "function") ? window.getFpsLimit() : 0;
+    // —— delta-time：距上一帧的秒数，clamp 防止切后台回来大跳变（上限 50ms/帧）——
+    if (!lastTime) lastTime = now;
+    const delta = Math.min(0.05, Math.max(0.0001, (now - lastTime) / 1000));
+    lastTime = now;
+    const SPEED = 5.5; // 单位/秒（60fps 与高刷屏每秒位移一致，不再瞬移贴墙）
     // 实时移动
     let dx = 0, dz = 0;
     if (keys["w"] || keys["arrowup"]) dz -= 1;
@@ -2247,8 +2483,8 @@ const Zone3D = (() => {
     if (dx || dz) {
       const len = Math.hypot(dx, dz);
       dx /= len; dz /= len;
-      PX.x = clamp(PX.x + dx * 0.09, -11.4, 11.4);
-      PX.z = clamp(PX.z + dz * 0.09, -11.4, 11.4);
+      PX.x = clamp(PX.x + dx * SPEED * delta, -11.4, 11.4);
+      PX.z = clamp(PX.z + dz * SPEED * delta, -11.4, 11.4);
       yaw = Math.atan2(dx, dz);
       if (player) {
         player.position.set(PX.x, 0, PX.z);
@@ -2256,9 +2492,9 @@ const Zone3D = (() => {
       }
       if (onAction) onAction("move", yaw);
     }
-    // 冷却
-    attackCd = Math.max(0, attackCd - 0.016);
-    dodgeCd = Math.max(0, dodgeCd - 0.016);
+    // 冷却（改为 delta 归一的秒数递减，替代原帧率依赖的 -0.016）
+    attackCd = Math.max(0, attackCd - delta);
+    dodgeCd = Math.max(0, dodgeCd - delta);
     // 残影淡出
     afterImages = afterImages.filter(ai => {
       ai.t += 0.016;
@@ -2359,13 +2595,13 @@ const Zone3D = (() => {
       if (dist < 2.4 && onMsg) onMsg("敌人逼近！按 J 攻击 / K 闪避拉开距离");
       else if (onMsg && dist > 4) onMsg("保持距离，寻找攻击时机");
     }
-    // 相机跟随（第三人称）。camDist=4.6 近距离对峙视角，稍降相机高度(4.5→3.2)以平视展示两 MC 方块人细节；
-    // 相机高于玩家头顶(体素人最高≈2.6)，水平偏移 2.76，不穿模。_camTarget 复用与 lerp 机制不变。
+    // 相机跟随（第三人称二游观感）。camDist=9.5 拉远对峙 + 稍高俯视(4.5) + 收窄 FOV(50°)，
+    // 水平距离 ≈ 5.7、相机距目标 ≈ 6.4，角色占画面 ~38%。_camTarget 复用与 lerp 机制不变。
     const camX = PX.x - Math.sin(yaw) * camDist * 0.6;
     const camZ = PX.z - Math.cos(yaw) * camDist * 0.6;
-    _camTarget.set(camX, 3.2, camZ);
+    _camTarget.set(camX, 4.5, camZ);
     camera.position.lerp(_camTarget, 0.12);
-    camera.lookAt(PX.x, 1.4, PX.z);
+    camera.lookAt(PX.x, 1.5, PX.z);
     // 氛围尘粒：缓慢上浮 + 水平缓涡（轻量，Z 宇宙战斗一致氛围）
     if (dust) {
       const t = performance.now() / 1000;
@@ -2381,7 +2617,14 @@ const Zone3D = (() => {
     if (blood.length) updateBlood(0.016);
     // 血统 aura 持续动画（随 player 跟随 + 绕身旋转/呼吸脉冲）
     if (auraPoints) updateAura(0.016);
-    renderer.render(scene, camera);
+    // 帧率上限渲染闸门：fpsCap>0 且未到帧间隔时跳过 render（GPU 省电），逻辑与动画相位已每帧更新
+    if (fpsCap <= 0 || (now - lastRenderMs) >= (1000 / fpsCap)) {
+      if (window.PostFX && window.PostFX.ready)
+        window.PostFX.render();                  // 后处理渲染（未就绪时安全回退常规渲染）
+      else
+        renderer.render(scene, camera);
+      lastRenderMs = now;
+    }
   }
 
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -2398,9 +2641,12 @@ const Zone3D = (() => {
 
   return { init, setData, start, stop, dispose, onZoneUpdate, keydown, keyup,
     // 分辨率档位支持（由 ResolutionSys 下发；level∈{720,1080,1440}）。renderer 已建则立即重设像素比+尺寸。
+    // 渲染缩放系数：720→0.75、1080→1.0、1440→1.5（相对设备 DPR），三档产生肉眼可见清晰度差异。
     setResolution(level) {
       if (renderer) {
-        renderer.setPixelRatio(window.devicePixelRatio || 1);
+        const RES_SCALE = { 720: 0.75, 1080: 1.0, 1440: 1.5 };
+        const scale = RES_SCALE[level] || 1.0;
+        renderer.setPixelRatio((window.devicePixelRatio || 1) * scale);
         const w = Math.max(1, (renderer.domElement && renderer.domElement.parentElement) ? renderer.domElement.parentElement.clientWidth : 1280);
         const h = Math.max(1, (renderer.domElement && renderer.domElement.parentElement) ? renderer.domElement.parentElement.clientHeight : 720);
         renderer.setSize(w, h);
