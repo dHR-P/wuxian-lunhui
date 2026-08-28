@@ -1,0 +1,4 @@
+pc_zhengzha_c7.png: 768x1024 near-black=65.8% solid=29.8%
+  connected-dark(near-solid, touching border): comps=0 total=0 px (0.00% of image)
+  verdict: 合格: 无明显连通暗区
+

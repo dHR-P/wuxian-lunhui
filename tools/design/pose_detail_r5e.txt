@@ -1,0 +1,58 @@
+# 逐项审图描述
+
+**1. 身体姿态**
+不是四肢着地的爬行姿态。她是**跪坐(近似正坐)姿势**：躯干基本竖直、正对镜头，双腿收在和服下摆之内(膝盖/脚部被衣袍遮盖，不可见)，两只手掌撑在身前地面、五指细长张开，指尖朝向画面下方。整体是“上身直立跪坐 + 双手前撑”的姿态，方向为**正面朝向镜头**，不是背面也不是侧面。
+
+**2. 头颈朝向**
+头部位于肩膀正上方，脖颈方向正常(无明显拉长、扭转或断裂感)。脸和五官**朝向正前方(镜头方向)**，视线略微下垂。**头颈没有从肩膀后方反折回来**——不存在“头在身体后侧、越过肩回望镜头”的结构，属于正常的头在上、脸朝前的构图。
+
+**3. 脸是否朝向镜头**
+脸正面朝向观察者。双眼为**黑色空洞眼窝**，位置正对镜头，可以与观察者形成直视感；但有数缕黑色发丝垂在眼前/眼窝上方，对视线有部分遮挡。鼻、嘴清晰可见，表情为平直的怨灵式面容。
+
+**4. 头发覆盖程度**
+黑色长发的刘海覆盖额头，并有几缕发丝垂过双眼区域，但**并没有遮住大半张脸**：脸颊、鼻、嘴、下巴大部分惨白皮肤外露，属于“发丝遮挡眼部、脸大体可见”，而非“只露半张脸”。
+
+**5. 多余异物**
+画面中**没有**猫头鹰、鸟、动物头或其他生物/器物。唯一需要说明的细节：双手指间/指根部画有细线状的**网状(蛛网样)薄膜**，这是手部绘制的一部分，不是独立异物。除此之外只有人物本体和环绕的绿色辉光。
+
+**6. 背景与裁切**
+背景为**纯黑色**，人物周身有一圈绿色光晕。四肢与发尾**未见明显被画面边缘裁切**：双手指尖非常接近画面底边但完整在框内；两侧和服袖口(深色破损边)接近左右边缘但未出框；胸前垂落的长发束末端收在腿部前方，完整可见。
+
+---
+
+**结论：REVERSED=否，EXTRA=无，USABLE=可用降标稿是**
+[reasoning]
+Let me carefully observe the image described.
+
+The image shows a Japanese female ghost (Kayako-style) illustration. Let me analyze:
+
+1. Body posture: The figure appears to be kneeling/crouching - she's in a seiza-like or kneeling position with her body upright (torso vertical), wearing a white kimono. Her hands are placed on the ground in front of her, palms down with long fingers spread. Her legs appear to be folded/kneeling beneath her (the kimono drapes over). So it's not a four-limbed crawl - it's more of a kneeling/sitting posture with hands planted on the ground in front. The torso is upright, facing the camera directly.
+
+2. Head/neck direction: The head is on top of the shoulders, facing forward toward the camera. The face is visible with dark eye sockets, looking downward slightly or straight. The head is NOT twisted backward. The neck appears normal - head atop shoulders, facing viewer.
+
+3. Face toward camera: Yes, the face is toward the camera. The eyes are dark/black hollow sockets with dark hair strands over them partially. The eyes appear as dark shadowed areas - can they directly face the observer? The face is oriented toward the viewer, eyes appear as dark hollows, though partially covered by hair strands. The gaze seems directed forward/downward.
+
+4. Hair covering: The long black hair covers parts of the face - strands fall over the eyes area. But the face is largely visible - pale white face with visible nose and mouth. The hair covers maybe the eye region partially with strands, but not "大半张脸只露半张" - actually the face is mostly visible: forehead covered by bangs, eyes partially covered by strands, nose and mouth clearly visible. So hair does not cover most of the face; the pale face is mostly exposed.
+
+5. Other objects/animals: Looking at the image - there's a green glow around her. Are there any animals like owls or birds? I don't see any. There might be spider web-like patterns near her hands? The description mentions "网状" patterns near the hands - looking at the hands, there appear to be some web/crack-like lines between fingers or near hands - could be interpreted as spider web lines (Kayako association). But no animal heads visible. Let me think - the hands have long fingers, and there seem to be thin lines connecting fingers like a web (膜状/蛛网状). That's part of the hands, not an extra creature. No owl, no bird, no animal head.
+
+6. Background: Pure black background with green glow around the figure. Are limbs/hair tips cropped at edges? The hands at bottom - the fingers extend down; the bottom of the image - the hands appear near the bottom edge but seem complete? The fingertips appear to reach close to the bottom edge. Looking at the image, the hands are at the bottom, fingers spread, and they seem to be fully within frame, though very close to the bottom edge. The hair strands extend down the front of the body - the long strands in the middle end around the lap area, within frame. The kimono sleeves spread to the sides - the left and right sleeve edges with dark tattered trim extend toward the edges but appear within frame. Actually the sleeves flare out to the sides and their tips appear near the left/right edges but not cropped. The bottom - fingertips appear very close to bottom edge, possibly touching? Let me consider: the image is 768x1024 roughly. The hands are at around y=880-990, so within frame. Seems not cropped.
+
+So conclusions:
+- REVERSED = 否 (head is normal, facing forward on top of shoulders)
+- EXTRA = 无 (no extra animals/objects)
+- USABLE = 可用降标稿是 (usable)
+
+Wait, need to double check the posture: Is she crawling on all fours? Her hands are on the ground in front, but her torso is upright - she's kneeling (跪坐/正坐) with hands planted on ground. The legs are hidden under the kimono - appears to be kneeling/sitting on heels. So it's a kneeling posture with hands on ground, not a quadruped crawl. Direction: facing the camera frontally.
+
+Head: on top of shoulders, slightly tilted down maybe, facing camera. Not reversed.
+
+Face: facing camera, dark eye sockets visible but partially veiled by hair strands; the eyes are dark hollows - can be seen facing observer, though hair strands cross over them. The gaze direction appears forward.
+
+Hair: bangs cover forehead and strands over eyes, but nose, mouth, cheeks visible - so not covering most of the face. Roughly the eye region has strands; overall face mostly exposed pale white.
+
+Extra objects: none visible. There are web-like thin lines between the fingers of hands (like spider webbing between fingers) - that's an anatomical feature of the drawing, not a separate creature. Should mention it for accuracy.
+
+Background: pure black with green glow halo. Cropping: no obvious cropping; fingertips near bottom edge but appear complete; sleeve tips near side edges but within frame.
+
+Let me write the answer in Chinese, structured in 6 sections, then the conclusion line.

@@ -1,0 +1,36 @@
+# ===== Rust 编译产物 =====
+server-rs/target/
+target/
+*.pdb
+*.rlib
+*.rmeta
+
+# ===== 本地数据 / 存档 =====
+server-rs/data/
+data/save.json
+*.db
+
+# ===== 日志 / 临时 =====
+*.log
+tools/artifacts/
+tools/logs/
+
+# ===== 素材中间产物（最终素材已部署到 assets/）=====
+tools/design/raw_*/
+tools/design/cutout_*/
+tools/design/qc_*/
+tools/design/audio_*/
+tools/design/*_ol.html
+tools/design/_source_*.txt
+*.pyc
+__pycache__/
+
+# ===== 旧版前端（已被 server-rs/ui 取代）=====
+game/
+
+# ===== 系统 / 编辑器 =====
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,554 @@
+﻿cargo :    Compiling wuxian-horror-ch1 v1.0.0 (C:\Users\GWL\Desktop\itwillclaude\games\wuxian-horror-ch1\server-rs)
+At line:1 char:201
++ ... orror-ch1\server-rs; cargo test --release --no-fail-fast 2>&1 | Out-F ...
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (   Compiling wu...-ch1\server-rs):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: unused variable: `st`
+   --> src\scenes_jianzhong.rs:218:17
+    |
+218 | fn mirror_win_1(st: &GameState) -> String { "jz_13_mirror1_win".to_string() }
+    |                 ^^ help: if this is intentional, prefix it with an underscore: `_st`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `st`
+   --> src\scenes_jianzhong.rs:219:17
+    |
+219 | fn mirror_win_2(st: &GameState) -> String { "jz_23_mirror2_win".to_string() }
+    |                 ^^ help: if this is intentional, prefix it with an underscore: `_st`
+
+warning: unused variable: `st`
+   --> src\scenes_jianzhong.rs:220:20
+    |
+220 | fn mirror_win_apex(st: &GameState) -> String { "jz_33_mirror_apex_win".to_string() }
+    |                    ^^ help: if this is intentional, prefix it with an underscore: `_st`
+
+warning: variable does not need to be mutable
+   --> src\scenes_mojiao.rs:210:9
+    |
+210 |     let mut count: usize = {
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `st`
+   --> src\scenes_tianting.rs:161:27
+    |
+161 |             finisher_if: |st, ehp| ehp <= 50,
+    |                           ^^ help: if this is intentional, prefix it with an underscore: `_st`
+
+warning: unused variable: `st`
+   --> src\scenes_tongqu.rs:571:18
+    |
+571 | fn tq_after_dark(st: &mut GameState) -> String {
+    |                  ^^ help: if this is intentional, prefix it with an underscore: `_st`
+
+warning: function `cond_has_tan_token` is never used
+  --> src\scenes_cangjingge.rs:45:4
+   |
+45 | fn cond_has_tan_token(st: &GameState) -> bool { inv(st, "it_tan_token") }
+   |    ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `cond_has_miju_full` is never used
+  --> src\scenes_cangjingge.rs:46:4
+   |
+46 | fn cond_has_miju_full(st: &GameState) -> bool { inv(st, "it_miju_full") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_keeper_clue1` is never used
+  --> src\scenes_cangjingge.rs:47:4
+   |
+47 | fn cond_keeper_clue1(st: &GameState) -> bool { st.flag("keeper_clue_1") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cj_win_l0` is never used
+   --> src\scenes_cangjingge.rs:188:4
+    |
+188 | fn cj_win_l0(_st: &GameState) -> String { "cj_01".to_string() }
+    |    ^^^^^^^^^
+
+warning: function `cond_has_jingxin_stone` is never used
+  --> src\scenes_jianzhong.rs:48:4
+   |
+48 | fn cond_has_jingxin_stone(st: &GameState) -> bool { inv(st, "it_jingxin_stone") }
+   |    ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_old_case` is never used
+  --> src\scenes_jianzhong.rs:49:4
+   |
+49 | fn cond_old_case(st: &GameState) -> bool { st.flag("jz_old_case") }
+   |    ^^^^^^^^^^^^^
+
+warning: function `cond_shortcut_open` is never used
+  --> src\scenes_jianzhong.rs:50:4
+   |
+50 | fn cond_shortcut_open(st: &GameState) -> bool { st.flag("jz_shortcut_open") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_stele_secret` is never used
+  --> src\scenes_jianzhong.rs:51:4
+   |
+51 | fn cond_stele_secret(st: &GameState) -> bool { st.flag("jz_stele_secret") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cond_has_gear_key` is never used
+  --> src\scenes_jiguancheng.rs:41:4
+   |
+41 | fn cond_has_gear_key(st: &GameState) -> bool { inv(st, "it_gear_key") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cond_rune_full` is never used
+  --> src\scenes_jiguancheng.rs:47:4
+   |
+47 | fn cond_rune_full(st: &GameState) -> bool { st.flag("rune_full") }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `cond_colossus_down` is never used
+  --> src\scenes_jiguancheng.rs:48:4
+   |
+48 | fn cond_colossus_down(st: &GameState) -> bool { st.flag("jc_colossus_down") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_after_rage` is never used
+  --> src\scenes_jiguancheng.rs:49:4
+   |
+49 | fn cond_after_rage(st: &GameState) -> bool {
+   |    ^^^^^^^^^^^^^^^
+
+warning: function `jl_win_l3` is never used
+   --> src\scenes_juluoji.rs:130:4
+    |
+130 | fn jl_win_l3(_st: &GameState) -> String { "jl_03_arrive_fence".to_string() }
+    |    ^^^^^^^^^
+
+warning: function `cond_raged` is never used
+  --> src\scenes_mojiao.rs:46:4
+   |
+46 | fn cond_raged(st: &GameState) -> bool { st.fight.as_ref().map(|f| f.raged).unwrap_or(false) }
+   |    ^^^^^^^^^^
+
+warning: function `cond_gandalf_alive` is never used
+  --> src\scenes_moruiya.rs:31:4
+   |
+31 | fn cond_gandalf_alive(st: &GameState) -> bool { st.flag("mo_gandalf_alive") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_ammo_ready` is never used
+  --> src\scenes_moshi.rs:27:4
+   |
+27 | fn cond_ammo_ready(st: &GameState) -> bool { st.flag("ammo_ready") }
+   |    ^^^^^^^^^^^^^^^
+
+warning: function `cond_recon_done` is never used
+  --> src\scenes_moshi.rs:29:4
+   |
+29 | fn cond_recon_done(st: &GameState) -> bool { st.flag("recon_done") }
+   |    ^^^^^^^^^^^^^^^
+
+warning: function `cond_medic_trusted` is never used
+  --> src\scenes_moshi.rs:31:4
+   |
+31 | fn cond_medic_trusted(st: &GameState) -> bool { st.flag("medic_trusted") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_beacon_ready` is never used
+  --> src\scenes_moshi.rs:41:4
+   |
+41 | fn cond_beacon_ready(st: &GameState) -> bool { st.flag("ms_beacon_ready") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cond_cell_restored` is never used
+  --> src\scenes_moshi.rs:45:4
+   |
+45 | fn cond_cell_restored(st: &GameState) -> bool { st.flag("cell_restored") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `txt_medic` is never used
+  --> src\scenes_moshi.rs:54:4
+   |
+54 | fn txt_medic(st: &GameState) -> String {
+   |    ^^^^^^^^^
+
+warning: function `rage_none` is never used
+  --> src\scenes_moshi.rs:88:4
+   |
+88 | fn rage_none(_st: &mut GameState, _log: &mut Vec<String>) {}
+   |    ^^^^^^^^^
+
+warning: function `cond_curse` is never used
+  --> src\scenes_mumiyi.rs:85:4
+   |
+85 | fn cond_curse(st: &GameState) -> bool { st.flag("mm_curse") }
+   |    ^^^^^^^^^^
+
+warning: function `cond_sarc_open` is never used
+  --> src\scenes_mumiyi.rs:86:4
+   |
+86 | fn cond_sarc_open(st: &GameState) -> bool { st.flag("mm_open_sarc") }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `cond_water_prep` is never used
+  --> src\scenes_mumiyi.rs:87:4
+   |
+87 | fn cond_water_prep(st: &GameState) -> bool { inv(st, "it_mumi_water") }
+   |    ^^^^^^^^^^^^^^^
+
+warning: function `cond_in_boss` is never used
+  --> src\scenes_mumiyi.rs:89:4
+   |
+89 | fn cond_in_boss(st: &GameState) -> bool { st.fight.as_ref().map(|f| f.hp > 0).unwrap_or(false) }
+   |    ^^^^^^^^^^^^
+
+warning: function `cond_fate_rewritten` is never used
+  --> src\scenes_sishen.rs:30:4
+   |
+30 | fn cond_fate_rewritten(st: &GameState) -> bool { st.flag("ss_fate_rewritten") }
+   |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `has_token` is never used
+  --> src\scenes_tianshe.rs:34:4
+   |
+34 | fn has_token(st: &GameState) -> bool {
+   |    ^^^^^^^^^
+
+warning: function `ts_rage_none` is never used
+   --> src\scenes_tianshe.rs:170:4
+    |
+170 | fn ts_rage_none(_st: &mut GameState, _log: &mut Vec<String>) {}
+    |    ^^^^^^^^^^^^
+
+warning: function `cond_has_p2` is never used
+  --> src\scenes_tianting.rs:27:4
+   |
+27 | fn cond_has_p2(st: &GameState) -> bool { st.flag("tt_fengshen_p2") }
+   |    ^^^^^^^^^^^
+
+warning: function `cond_stars_lit` is never used
+  --> src\scenes_tianting.rs:30:4
+   |
+30 | fn cond_stars_lit(st: &GameState) -> bool { st.flag("tt_stars_lit") }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `cond_r1_interrupted` is never used
+  --> src\scenes_tianting.rs:32:4
+   |
+32 | fn cond_r1_interrupted(st: &GameState) -> bool { st.flag("tt_r1_interrupted") }
+   |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_fengshen_truth_seed` is never used
+  --> src\scenes_tianting.rs:33:4
+   |
+33 | fn cond_fengshen_truth_seed(st: &GameState) -> bool { st.flag("tt_fengshen_truth_seed") }
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `tt_rage_none` is never used
+  --> src\scenes_tianting.rs:70:4
+   |
+70 | fn tt_rage_none(_st: &mut GameState, _log: &mut Vec<String>) {}
+   |    ^^^^^^^^^^^^
+
+warning: function `cond_no_wonder` is never used
+  --> src\scenes_hezi.rs:52:4
+   |
+52 | fn cond_no_wonder(st: &GameState) -> bool { wonder_count(st) == 0 }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `inv` is never used
+  --> src\scenes_tongqu.rs:36:4
+   |
+36 | fn inv(st: &GameState, item: &str) -> bool { st.inventory.iter().any(|i| i == item) }
+   |    ^^^
+
+warning: function `cond_has_armor` is never used
+  --> src\scenes_xinghe.rs:40:4
+   |
+40 | fn cond_has_armor(st: &GameState) -> bool { inv(st, "it_xh_armor") }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `cond_brain_raged` is never used
+  --> src\scenes_xinghe.rs:43:4
+   |
+43 | fn cond_brain_raged(st: &GameState) -> bool { st.fight.as_ref().map(|f| f.raged).unwrap_or(false) }
+   |    ^^^^^^^^^^^^^^^^
+
+warning: function `xh_win_nest` is never used
+   --> src\scenes_xinghe.rs:148:4
+    |
+148 | fn xh_win_nest(_st: &GameState) -> String { "xh_20_arrive_nest".to_string() }
+    |    ^^^^^^^^^^^
+
+warning: function `xh_rage_none` is never used
+   --> src\scenes_xinghe.rs:153:4
+    |
+153 | fn xh_rage_none(_st: &mut GameState, _log: &mut Vec<String>) {}
+    |    ^^^^^^^^^^^^
+
+warning: function `cond_has_asang` is never used
+  --> src\scenes_yinse.rs:26:4
+   |
+26 | fn cond_has_asang(st: &GameState) -> bool { st.flag("ys_save_asang") }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `cond_asang_dead` is never used
+  --> src\scenes_yinse.rs:27:4
+   |
+27 | fn cond_asang_dead(st: &GameState) -> bool { st.flag("ys_asang_dead") }
+   |    ^^^^^^^^^^^^^^^
+
+warning: function `cond_lou_bypassed` is never used
+  --> src\scenes_yinse.rs:30:4
+   |
+30 | fn cond_lou_bypassed(st: &GameState) -> bool { st.flag("ys_lou_bypassed") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cond_power_master_done` is never used
+  --> src\scenes_yinse.rs:32:4
+   |
+32 | fn cond_power_master_done(st: &GameState) -> bool { st.flag("ys_l2_power_master") }
+   |    ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_power_b_done` is never used
+  --> src\scenes_yinse.rs:33:4
+   |
+33 | fn cond_power_b_done(st: &GameState) -> bool { st.flag("ys_l2_power_b") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cond_has_key` is never used
+  --> src\scenes_yinse.rs:34:4
+   |
+34 | fn cond_has_key(st: &GameState) -> bool { st.inventory.iter().any(|i| i == "item_key") }
+   |    ^^^^^^^^^^^^
+
+warning: function `cond_has_truth` is never used
+  --> src\scenes_yinse.rs:36:4
+   |
+36 | fn cond_has_truth(st: &GameState) -> bool { st.flag("ys_waro_truth") }
+   |    ^^^^^^^^^^^^^^
+
+warning: function `cond_has_machine_off` is never used
+  --> src\scenes_yinse.rs:38:4
+   |
+38 | fn cond_has_machine_off(st: &GameState) -> bool { st.flag("ys_waro_machine_off") }
+   |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_rift_closed` is never used
+  --> src\scenes_yinse.rs:40:4
+   |
+40 | fn cond_rift_closed(st: &GameState) -> bool { st.flag("ys_rift_closed") }
+   |    ^^^^^^^^^^^^^^^^
+
+warning: function `cond_cast_stopped` is never used
+  --> src\scenes_yinse.rs:42:4
+   |
+42 | fn cond_cast_stopped(st: &GameState) -> bool { st.flag("ys_waro_cast_stopped") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `cond_waro_defeated` is never used
+  --> src\scenes_yinse.rs:43:4
+   |
+43 | fn cond_waro_defeated(st: &GameState) -> bool { st.flag("ys_waro_defeated") }
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `cond_entered_side` is never used
+  --> src\scenes_yinse.rs:44:4
+   |
+44 | fn cond_entered_side(st: &GameState) -> bool { st.flag("ys_entered_side") }
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: function `ys_rage_none` is never used
+  --> src\scenes_yinse.rs:70:4
+   |
+70 | fn ys_rage_none(_st: &mut GameState, _log: &mut Vec<String>) {}
+   |    ^^^^^^^^^^^^
+
+warning: function `cond_has_em` is never used
+  --> src\scenes_yiying.rs:26:4
+   |
+26 | fn cond_has_em(st: &GameState) -> bool { st.inventory.iter().any(|i| i == "yiy_em_restraint") }
+   |    ^^^^^^^^^^^
+
+warning: function `cond_arb_down` is never used
+  --> src\scenes_yize.rs:44:4
+   |
+44 | fn cond_arb_down(st: &GameState) -> bool { st.flag("yz_arbiter_defeated") }
+   |    ^^^^^^^^^^^^^
+
+warning: function `yz_win_ending` is never used
+   --> src\scenes_yize.rs:104:4
+    |
+104 | fn yz_win_ending(_st: &GameState) -> String { "yz_05_ending_choice".to_string() }
+    |    ^^^^^^^^^^^^^
+
+warning: function `inv` is never used
+  --> src\scenes_poxiao.rs:29:4
+   |
+29 | fn inv(st: &GameState, item: &str) -> bool { st.inventory.iter().any(|i| i == item) }
+   |    ^^^
+
+warning: function `cond_has_sentry` is never used
+  --> src\scenes_poxiao.rs:58:4
+   |
+58 | fn cond_has_sentry(st: &GameState) -> bool { inv(st, "it_px_sentry_charm") }
+   |    ^^^^^^^^^^^^^^^
+
+warning: function `cond_acid_not_primed` is never used
+  --> src\scenes_tiexue.rs:72:4
+   |
+72 | fn cond_acid_not_primed(st: &GameState) -> bool { !st.flag("tx_acid_primed") }
+   |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `gate_at` is never used
+   --> src\worlds\hezi.rs:158:8
+    |
+158 | pub fn gate_at(floor: usize, x: usize, y: usize) -> Option<&'static maps::GateDef> {
+    |        ^^^^^^^
+
+warning: function `gate_by_id` is never used
+   --> src\worlds\hezi.rs:163:8
+    |
+163 | pub fn gate_by_id(id: &str) -> Option<&'static maps::GateDef> {
+    |        ^^^^^^^^^^
+
+warning: function `tile` is never used
+   --> src\worlds\hezi.rs:168:8
+    |
+168 | pub fn tile(floor: usize, x: usize, y: usize) -> char {
+    |        ^^^^
+
+warning: function `walkable` is never used
+   --> src\worlds\hezi.rs:181:8
+    |
+181 | pub fn walkable(floor: usize, x: usize, y: usize) -> bool {
+    |        ^^^^^^^^
+
+warning: function `spawn` is never used
+   --> src\worlds\hezi.rs:186:8
+    |
+186 | pub fn spawn() -> (usize, usize) {
+    |        ^^^^^
+
+warning: static `MUMIYI_FLOORS` is never used
+   --> src\worlds\mumiyi.rs:174:12
+    |
+174 | pub static MUMIYI_FLOORS: &[&[&str]] = &[
+    |            ^^^^^^^^^^^^^
+
+warning: function `gate_at` is never used
+   --> src\worlds\shaqiu.rs:225:8
+    |
+225 | pub fn gate_at(floor: usize, x: usize, y: usize) -> Option<&'static maps::GateDef> {
+    |        ^^^^^^^
+
+warning: function `gate_by_id` is never used
+   --> src\worlds\shaqiu.rs:230:8
+    |
+230 | pub fn gate_by_id(id: &str) -> Option<&'static maps::GateDef> {
+    |        ^^^^^^^^^^
+
+warning: function `tile` is never used
+   --> src\worlds\shaqiu.rs:235:8
+    |
+235 | pub fn tile(floor: usize, x: usize, y: usize) -> char {
+    |        ^^^^
+
+warning: function `walkable` is never used
+   --> src\worlds\shaqiu.rs:249:8
+    |
+249 | pub fn walkable(floor: usize, x: usize, y: usize) -> bool {
+    |        ^^^^^^^^
+
+warning: function `spawn` is never used
+   --> src\worlds\shaqiu.rs:254:8
+    |
+254 | pub fn spawn() -> (usize, usize) {
+    |        ^^^^^
+
+warning: function `settle_A` should have a snake case name
+   --> src\scenes_tianting.rs:805:4
+    |
+805 | fn settle_A(st: &mut GameState) -> String {
+    |    ^^^^^^^^ help: convert the identifier to snake case: `settle_a`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `wuxian-horror-ch1` (lib test) generated 77 warnings (run `cargo fix --lib -p wuxian-horror-ch1 --tests` to ap
+ply 6 suggestions)
+warning: `wuxian-horror-ch1` (lib) generated 77 warnings (77 duplicates)
+warning: function `crate_set_item` is never used
+  --> tests\shaqiu_flow.rs:46:4
+   |
+46 | fn crate_set_item(st: &mut GameState, item: &str) {
+   |    ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `foresee` is never used
+  --> tests\sishen_flow.rs:45:4
+   |
+45 | fn foresee(st: &mut GameState, which: &str) {
+   |    ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+error[E0425]: cannot find value `WORLD_SHENMIAO` in module `wuxian_horror_ch1::worlds`
+ --> tests\shenmiao_flow.rs:9:51
+  |
+9 |     worlds::find_world(wuxian_horror_ch1::worlds::WORLD_SHENMIAO).expect("沉没神殿世界已注册（合并阶段）")
+  |                                                   ^^^^^^^^^^^^^^ not found in `wuxian_horror_ch1::worlds`
+
+error[E0425]: cannot find value `WORLD_SHENMIAO` in module `wuxian_horror_ch1::worlds`
+  --> tests\shenmiao_flow.rs:36:49
+   |
+36 |     assert_eq!(w.id, wuxian_horror_ch1::worlds::WORLD_SHENMIAO);
+   |                                                 ^^^^^^^^^^^^^^ not found in `wuxian_horror_ch1::worlds`
+
+error[E0433]: cannot find `scenes_tiexue2` in `wuxian_horror_ch1`
+  --> tests\tiexue2_flow.rs:40:37
+   |
+40 |     let fights = wuxian_horror_ch1::scenes_tiexue2::tiexue2_figths();
+   |                                     ^^^^^^^^^^^^^^ could not find `scenes_tiexue2` in `wuxian_horror_ch1`
+
+error[E0433]: cannot find `scenes_tiexue2` in `wuxian_horror_ch1`
+  --> tests\tiexue2_flow.rs:65:39
+   |
+65 |     for (id, _) in wuxian_horror_ch1::scenes_tiexue2::tiexue2_figths() {
+   |                                       ^^^^^^^^^^^^^^ could not find `scenes_tiexue2` in `wuxian_horror_ch1`
+
+error[E0433]: cannot find `scenes_tiexue2` in `wuxian_horror_ch1`
+  --> tests\tiexue2_flow.rs:80:37
+   |
+80 |     let fights = wuxian_horror_ch1::scenes_tiexue2::tiexue2_figths();
+   |                                     ^^^^^^^^^^^^^^ could not find `scenes_tiexue2` in `wuxian_horror_ch1`
+
+error[E0425]: cannot find value `WORLD_TIEXUE2` in module `wuxian_horror_ch1::worlds`
+  --> tests\tiexue2_flow.rs:14:51
+   |
+14 |     worlds::find_world(wuxian_horror_ch1::worlds::WORLD_TIEXUE2).expect("铁血AVP世界已注册（合并阶段）")
+   |                                                   ^^^^^^^^^^^^^
+   |
+  ::: src\worlds\mod.rs:53:1
+   |
+53 | pub const WORLD_TIEXUE: &str = "tiexue";            // 铁血·地底金字塔
+   | ---------------------------- similarly named constant `WORLD_TIEXUE` defined here
+   |
+help: a constant with a similar name exists
+   |
+14 -     worlds::find_world(wuxian_horror_ch1::worlds::WORLD_TIEXUE2).expect("铁血AVP世界已注册（合并阶段）")
+14 +     worlds::find_world(wuxian_horror_ch1::worlds::WORLD_TIEXUE).expect("铁血AVP世界已注册（合并阶段）")
+   |
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `wuxian-horror-ch1` (test "shenmiao_flow") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `wuxian-horror-ch1` (test "tiexue2_flow") due to 4 previous errors
+warning: `wuxian-horror-ch1` (test "sishen_flow") generated 1 warning
+warning: `wuxian-horror-ch1` (test "shaqiu_flow") generated 1 warning
+EXIT=101

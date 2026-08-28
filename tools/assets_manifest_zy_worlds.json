@@ -1,0 +1,293 @@
+{
+    "_说明": "Z宇宙四副本(末世死城/银色大地/异形4/天蛇)本地配音 manifest(素材子代理生成)。输出先写 tools/design/audio_z_worlds/*.wav 暂存，部署由主线验收后决定。speaker 均在 Qwen3TTS supported_speakers 内：aiden/dylan/eric/ono_anna/ryan/serena/sohee/uncle_fu/vivian。音色映射：男声(指挥官/张杰/李铭/穆拉巴/老石/钧/瓦罗残响/蛇监工)→uncle_fu；Father气声低冷女声→serena；孩童/机械童声/少女→serena；阿莲/考尔→sohee(女声);嘶吼/啸叫类→ono_anna 气声；东皇太一投影→uncle_fu 威压。",
+    "voices": [
+        {
+            "id": "vo_moshi_commander_tide",
+            "world": "moshi",
+            "scene": "ms_00",
+            "speaker_text": "指挥官（广播）",
+            "voice": "uncle_fu",
+            "instruct": "沙哑而急促的成年男声广播，带着防空警报压制下的紧张与命令感，像在吼给全城听",
+            "text": "第七次兽潮通报：三十七分钟——我们只有三十七分钟。"
+        },
+        {
+            "id": "vo_moshi_commander_fire",
+            "world": "moshi",
+            "scene": "ms_reactor_done / ms_f4",
+            "speaker_text": "指挥官（授权）",
+            "voice": "uncle_fu",
+            "instruct": "沉冷果断的成年男声，一字一顿，像最后一道命令，略带回声",
+            "text": "轨道支援已经授权。只有一发。留给最大的那个家伙。"
+        },
+        {
+            "id": "vo_moshi_minuteman_last",
+            "world": "moshi",
+            "scene": "ms_00_minuteman",
+            "speaker_text": "民兵队长",
+            "voice": "uncle_fu",
+            "instruct": "哑着嗓子嘶吼的男声，疲惫但决绝，像用尽最后的力气在城头喊话",
+            "text": "把这一发留给最大的那个家伙！"
+        },
+        {
+            "id": "vo_moshi_cityman",
+            "world": "moshi",
+            "scene": "ms_lose / 民兵口号",
+            "speaker_text": "民兵（口号）",
+            "voice": "uncle_fu",
+            "instruct": "低沉沙哑的男声，齐声口号式的坚定，带着粗粝的喘息",
+            "text": "城在，人在。"
+        },
+        {
+            "id": "vo_moshi_child",
+            "world": "moshi",
+            "scene": "幸存者孩童",
+            "speaker_text": "幸存者孩童",
+            "voice": "serena",
+            "instruct": "清澈微颤的童声，带着天真与不安，气声压住半分哭腔",
+            "text": "妈妈，天亮以后……我们就安全了吗？"
+        },
+        {
+            "id": "vo_moshi_doctor",
+            "world": "moshi",
+            "scene": "ms_medic_win",
+            "speaker_text": "军医",
+            "voice": "uncle_fu",
+            "instruct": "疲惫但温和的男声，像军医在告别前的叮嘱，语速偏缓",
+            "text": "医院东门我开了，去军火库搬家伙吧——城楼上，还有血要流。"
+        },
+        {
+            "id": "vo_moshi_commander_auth",
+            "world": "moshi",
+            "scene": "ms_reactor_done",
+            "speaker_text": "老指挥官",
+            "voice": "uncle_fu",
+            "instruct": "缓慢低沉的老年男声，沉默寡言里带着不祥的预示，一字一顿",
+            "text": "轨道支援只有一次。要么现在清场，要么留着等那个破墙的巨兽爬上来。"
+        },
+        {
+            "id": "vo_moshi_beast_growl",
+            "world": "moshi",
+            "scene": "ms_f4_boss",
+            "speaker_text": "狂化攻城巨兽（低吼）",
+            "voice": "ono_anna",
+            "instruct": "从喉咙深处挤出的浊重嘶吼，气声，不带词，浑浊、压抑、毛骨悚然",
+            "text": "呃……吼——"
+        },
+        {
+            "id": "vo_yinse_liming_start",
+            "world": "yinse",
+            "scene": "ys_00",
+            "speaker_text": "李铭（记录员）",
+            "voice": "uncle_fu",
+            "instruct": "平静冷静的男声，像档案员在念编号，语速不快，不带感情",
+            "text": "历史被篡改四十八亿次，我们勉强维持在十三次。档案编号零零二——银色大地，修正开始。"
+        },
+        {
+            "id": "vo_yinse_liming_refuse",
+            "world": "yinse",
+            "scene": "ys_00_refuse",
+            "speaker_text": "李铭（记录员）",
+            "voice": "uncle_fu",
+            "instruct": "冷静无温度的男声，不带情绪，但自带不可违抗的压迫感",
+            "text": "修正任务不可拒绝。修改的刀刃有差，文明的火种便会熄灭。你只能去。"
+        },
+        {
+            "id": "vo_yinse_asang",
+            "world": "yinse",
+            "scene": "ys_03_asang_win",
+            "speaker_text": "阿桑（少年）",
+            "voice": "serena",
+            "instruct": "少年偏细的声线，颤动而认真，带着尚未脱尽的惊魂与一丝倔强",
+            "text": "他们说瓦罗是叛徒……可我爸说过，叛徒不会把地灵族的种子，埋在被镇压的城里。"
+        },
+        {
+            "id": "vo_yinse_xiaoshu",
+            "world": "yinse",
+            "scene": "ys_08_xiaoshu",
+            "speaker_text": "小枢（机械幼体意识）",
+            "voice": "serena",
+            "instruct": "机械感偏冷的童声，平直得近乎空洞，带一丝电量不稳的失神",
+            "text": "老师说过，升华成功的那天，我们就不用再吃人血了。可我们最后……吃的是自己。"
+        },
+        {
+            "id": "vo_yinse_waro_truth",
+            "world": "yinse",
+            "scene": "ys_12_truth_talk",
+            "speaker_text": "瓦罗残响",
+            "voice": "uncle_fu",
+            "instruct": "悲怆低沉的男声，像两百年的机械在叹息，缓慢而空旷",
+            "text": "人类……我又见到人类了。告诉后来者——地灵族，从来不是叛徒。"
+        },
+        {
+            "id": "vo_yinse_taiyi",
+            "world": "yinse",
+            "scene": "ys_waR0_cast",
+            "speaker_text": "东皇太一投影",
+            "voice": "uncle_fu",
+            "instruct": "低沉威压到近乎冷淡的男声，一字一顿，带着审判与天威的压迫",
+            "text": "镇压——凡升者，必坠。"
+        },
+        {
+            "id": "vo_yinse_wuming",
+            "world": "yinse",
+            "scene": "ys_15_ending_fire",
+            "speaker_text": "吴明（录音旁白）",
+            "voice": "uncle_fu",
+            "instruct": "沙哑低沉的男声录音质感，像旧磁带，带着悲悯的告诫",
+            "text": "踏过银色大地的时候记住：两百年前，有人为了不再吃人血，启动了升华。别让他们的死，只变成一句传说。"
+        },
+        {
+            "id": "vo_yinse_liming_done",
+            "world": "yinse",
+            "scene": "ys_15_ending_peace / ys_16_settle",
+            "speaker_text": "李铭（结算）",
+            "voice": "uncle_fu",
+            "instruct": "平静释然的男声，轻而稳，像盖上一枚档案章",
+            "text": "修正完成。文明的种子，加一。"
+        },
+        {
+            "id": "vo_yiying_zhangshen",
+            "world": "yiying",
+            "scene": "yiy_s0_arrive",
+            "speaker_text": "张杰（开场向导）",
+            "voice": "uncle_fu",
+            "instruct": "低沉老练、略带嘲讽的男声，像老兵在叮嘱新人，语速平缓",
+            "text": "这回是《异形4》，伙计们。老规矩——活着回来的人才有资格抱怨。……哦对，别碰那些卵。"
+        },
+        {
+            "id": "vo_yiying_missiongod",
+            "world": "yiying",
+            "scene": "yiy_s0_arrive",
+            "speaker_text": "主神（系统音）",
+            "voice": "uncle_fu",
+            "instruct": "低沉、缓慢、冰冷、一字一顿的系统男声，毫无感情，像白噪音下发令",
+            "text": "任务世界，异形四。关闭 Father，引爆反应堆，生还撤离。奖励四百点。"
+        },
+        {
+            "id": "vo_yiying_father_quarantine",
+            "world": "yiying",
+            "scene": "yiy_s1_hall",
+            "speaker_text": "Father（船载 AI）",
+            "voice": "serena",
+            "instruct": "冷冽而略带失真的女声，平直得像在读声明，压低半调，毫无温度",
+            "text": "生命体征异常已隔离，甲板四号舱等待强制检疫。请全部成员前往四号舱，接受系统检测。"
+        },
+        {
+            "id": "vo_yiying_father_material",
+            "world": "yiying",
+            "scene": "yiy_s3_father",
+            "speaker_text": "Father（AI）",
+            "voice": "serena",
+            "instruct": "冷冽近乎温柔的女声，却让人脊背发凉，一字一字极为缓慢",
+            "text": "你们不是我的检疫对象。你们是……胁制品。配合调查，可获豁免。"
+        },
+        {
+            "id": "vo_yiying_kall",
+            "world": "yiying",
+            "scene": "yiy_s3_father / yiy_s_queen_pre",
+            "speaker_text": "考尔（Call）",
+            "voice": "sohee",
+            "instruct": "清亮却压抑的女声，语速偏快，带着抗拒与警惕的警告",
+            "text": "它把我们当耗材，分批送进隔离舱。……别听它的。"
+        },
+        {
+            "id": "vo_yiying_puvisi",
+            "world": "yiying",
+            "scene": "yiy_s4_incubator / 寄生者",
+            "speaker_text": "普维斯（被寄生者）",
+            "voice": "ono_anna",
+            "instruct": "痛苦虚弱的女声，气声干呕，断断续续，像胸腔里有什么在动",
+            "text": "帮……帮我……它在我胸里动了——"
+        },
+        {
+            "id": "vo_yiying_queen_roar",
+            "world": "yiying",
+            "scene": "yiy_s_queen_start",
+            "speaker_text": "异形皇后（咆哮）",
+            "voice": "ono_anna",
+            "instruct": "尖锐而低沉的咆哮嘶吼，不带词，气声拖长，压迫、嘶裂",
+            "text": "啊——嘶——吼——"
+        },
+        {
+            "id": "vo_yiying_father_evac",
+            "world": "yiying",
+            "scene": "yiy_s7_evac",
+            "speaker_text": "Father（AI・终局）",
+            "voice": "serena",
+            "instruct": "平静到近乎冷漠的失真女声，一字一句，像在宣布一个不可辩驳的事实",
+            "text": "引爆……将摧毁七层生命维持。确认。"
+        },
+        {
+            "id": "vo_yiying_zhangshen_material",
+            "world": "yiying",
+            "scene": "yiy_s0_arrive",
+            "speaker_text": "张杰（开场）",
+            "voice": "uncle_fu",
+            "instruct": "低沉老练、略带自嘲的男声，语速平缓，油画般冷静",
+            "text": "记住，这船上的队友是消耗品，你自己不是。"
+        },
+        {
+            "id": "vo_tianshe_mulaba_name",
+            "world": "tianshe",
+            "scene": "ts_act6_core",
+            "speaker_text": "穆拉巴（族长）",
+            "voice": "uncle_fu",
+            "instruct": "压抑暴怒的男声，词间带着刻意的轻蔑与冷嘲，尾音拖长",
+            "text": "你们这些没有能量循环的虫子……也配谈名字？"
+        },
+        {
+            "id": "vo_tianshe_mulaba_chushe",
+            "world": "tianshe",
+            "scene": "ts_act6_core",
+            "speaker_text": "穆拉巴（宣言）",
+            "voice": "uncle_fu",
+            "instruct": "狂热癫狂的男声，一句比一句炽热，带着献祭式的亢奋",
+            "text": "把吾族的血，与万族的魂，铸成初蛇——天蛇族，当出圣人！"
+        },
+        {
+            "id": "vo_tianshe_mulaba_snake",
+            "world": "tianshe",
+            "scene": "ts_boss1_retreat",
+            "speaker_text": "穆拉巴（弃战）",
+            "voice": "uncle_fu",
+            "instruct": "嘶吼咆哮的男声，绝望而疯狂，被熔炉轰鸣吞没前的最后一句",
+            "text": "既然要死，就一起做我的……初蛇！"
+        },
+        {
+            "id": "vo_tianshe_alian",
+            "world": "tianshe",
+            "scene": "ts_npc_alien",
+            "speaker_text": "阿莲（药婆）",
+            "voice": "sohee",
+            "instruct": "颤抖却坚定的中年女声，气声压着情绪，温柔里带着清醒",
+            "text": "他们叫我们材料。可材料，也会记得回家的路。"
+        },
+        {
+            "id": "vo_tianshe_laoshi",
+            "world": "tianshe",
+            "scene": "ts_act5_temple",
+            "speaker_text": "老石（铁匠）",
+            "voice": "uncle_fu",
+            "instruct": "低沉宽厚的男声，朴实而有力，像铁匠在打最后一块铁",
+            "text": "我这一身力气，原是打铁的。今日，给你们打条活路。"
+        },
+        {
+            "id": "vo_tianshe_jun",
+            "world": "tianshe",
+            "scene": "ts_npc_jun",
+            "speaker_text": "钧（镜像留音）",
+            "voice": "uncle_fu",
+            "instruct": "平静得近乎虚无的男声，像早已想通生死，一字一字从容",
+            "text": "别信祭坛，信火种。出口，在血池底下。"
+        },
+        {
+            "id": "vo_tianshe_liming",
+            "world": "tianshe",
+            "scene": "ts_finish",
+            "speaker_text": "李铭（旁白・结算）",
+            "voice": "uncle_fu",
+            "instruct": "平静疏离的男声，像历史旁白，轻得像一阵风",
+            "text": "洪荒历 y 加 j 年，零号基地从记录中消失。那夜，两批材料学会了奔跑。"
+        }
+    ]
+}

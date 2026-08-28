@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>无限轮回 · 第一章 生化蜂巢</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="stage">
+  <div class="bg" id="bgA"></div>
+  <div class="bg" id="bgB"></div>
+  <div id="vignette"></div>
+  <canvas id="grain"></canvas>
+  <div id="redPulse"></div>
+</div>
+
+<div id="hud" style="display:none">
+  <div class="hud-item">体力<div class="bar"><i id="hpFill"></i></div><span id="hpVal">100</span></div>
+  <div class="hud-item">理智<div class="bar"><i id="sanFill"></i></div><span id="sanVal">100</span></div>
+  <div class="hud-item">点数 <span id="ptsVal">0</span></div>
+  <div class="hud-item">武器 <span id="wpnVal">—</span></div>
+  <div class="hud-item" id="hudQi" style="display:none">真气 <span id="qiVal"></span></div>
+  <div class="hud-item" id="hudShield" style="display:none">护盾 <span id="shieldVal"></span></div>
+  <div class="hud-item" id="hudGene" style="display:none">基因 <span id="geneVal"></span></div>
+  <div class="hud-item" id="hudCult" style="display:none">修为 <span id="cultVal"></span></div>
+  <div class="hud-item" id="hudSkill" style="display:none">技能 <span id="skillVal"></span></div>
+  <div class="hud-item" id="enhanceVal" style="display:none;color:#8fd0a8;font-size:13px"></div>
+  <div class="hud-item" id="teamHud"></div>
+  <div id="locName"></div>
+</div>
+
+<div id="story" style="display:none">
+  <div id="narrBox">
+    <span id="speaker"></span>
+    <div id="narrText"></div>
+    <div id="fightBar">
+      <div class="enemyRow"><span class="enemyName" id="enemyName"></span><div class="ebar"><i id="enemyFill"></i></div><span id="enemyHpTxt"></span></div>
+      <div class="flog" id="fightLog"></div>
+    </div>
+  </div>
+  <div id="choices"></div>
+</div>
+<div id="clickHint">点击文字框加速 ▸</div>
+
+<!-- 开放世界 · 2D 俯视地图 -->
+<div id="worldView" style="display:none">
+  <div id="worldTop">
+    <span id="worldLoc">蜂巢 · B 区</span>
+    <span id="worldHint">WASD/方向键移动 · E 交互 · ESC 返回</span>
+  </div>
+  <div id="worldCanvasWrap"><canvas id="worldCanvas"></canvas></div>
+  <div id="worldMsg"></div>
+</div>
+
+<!-- 开放世界 · 3D 副本 -->
+<div id="zoneView" style="display:none">
+  <div id="zoneHud">
+    <span id="zoneTitle">副本</span>
+    <span id="zoneHint">WASD 走位 · J 攻击 · K 闪避 · ESC 退出</span>
+  </div>
+  <div id="zone3dContainer"></div>
+  <div id="zoneMsg"></div>
+</div>
+
+<!-- 视频过场 -->
+<div id="cineWrap">
+  <video id="cineVid" src="" autoplay playsinline></video>
+  <button id="cineSkip">跳 过 ▸▸</button>
+  <div id="cineTag">MINIMAX H3 本地生成过场影像</div>
+</div>
+
+<!-- 标题画面 -->
+<div id="titleScreen">
+  <video id="titleVideo" src="assets/video/vid_opening.mp4" autoplay muted loop playsinline></video>
+  <div id="titleVeil"></div>
+  <div id="titleInner">
+    <div id="gameTitle">无限轮回</div>
+    <div id="gameSub">第一章 · 生化蜂巢 —— 主神空间选中的新人，欢迎回来</div>
+  </div>
+  <div class="menuBtns">
+    <button class="mbtn" id="btnNew">进 入 轮 回</button>
+    <button class="mbtn" id="btnContinue" disabled>继 续 上 次</button>
+    <button class="mbtn" id="btnDeaths">死 亡 档 案</button>
+  </div>
+  <div class="resSel" title="渲染分辨率档位（物理像素 = 档位 × DPR）">
+    <span class="resLabel">画质</span>
+    <button class="resBtn" data-res="720">720p</button>
+    <button class="resBtn" data-res="1080">1080p</button>
+    <button class="resBtn" data-res="1440">1440p</button>
+  </div>
+  <div id="titleFoot">
+    剧情主线取材自 zhttty《无限恐怖》第一部「生化危机」篇 · 二次创作致敬<br>
+    Rust(Tauri) 全栈引擎 · 立绘 Z-Image · 过场 MiniMax-H3 · 配音 Qwen3-TTS · 质检 gemma3 视觉评估
+  </div>
+</div>
+
+<!-- 结局覆盖层 -->
+<div class="overlay" id="endOverlay"><div class="ovCard" id="ovCard"></div></div>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/world2d.js"></script>
+<script src="js/zone3d.js"></script>
+<script src="js/client.js"></script>
+</body>
+</html>

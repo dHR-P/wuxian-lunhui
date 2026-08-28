@@ -1,0 +1,110 @@
+{
+    "images":  [
+                   {
+                       "id":  "img_office",
+                       "prompt":  "电影级恐怖氛围，深夜办公室，一名穿衬衫的年轻男子背对镜头坐在工位，唯一光源是他面前显示器的幽蓝冷光，屏幕上隐约浮现猩红色文字的辉光映在他脸上，四周工位陷入黑暗，百叶窗缝隙透进城市红光，胶片颗粒感，广角构图，压迫感极强，写实电影质感，4K超清，无文字水印"
+                   },
+                   {
+                       "id":  "img_nexus",
+                       "prompt":  "科幻史诗感巨大半圆形金属广场，冰冷的深灰色巨构墙面延伸至高处消失在阴影里，一束顶光如审判之光垂直洒下照亮中央一小群渺小的人影，地面光滑反光，空气中有浮尘颗粒，冷色调，超广角仰拍，电影级光影，写实质感，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_zhangjie",
+                       "prompt":  "电影级人物半身立绘，三十岁左右的东亚男性老兵，极短寸头，左脸颊一道浅色刀疤，黑色紧身作战服，双手各持一把银色手枪垂在身侧，眼神冰冷锐利直视观众，背景为昏暗金属墙壁与侧逆光轮廓光，低饱和冷色，写实油画质感，细节丰富，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_zhengzha",
+                       "prompt":  "电影级人物半身立绘，二十五岁左右的东亚普通白领青年，白衬衫领带松开袖口卷起，双手紧握一把红色消防斧横在胸前，衬衫沾有灰尘血迹，眼神从惶恐转为坚定，额头带汗，背景昏暗走廊红光闪烁，暖色轮廓光，写实油画质感，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_rain",
+                       "prompt":  "电影级人物半身立绘，二十多岁东亚女性特种兵，利落黑色短发，绿色战术背心配臂章，唇角有一丝血迹，肩挎冲锋枪，眼神倔强不屈带着野性，背景为地下设施铁门与应急灯红光，侧光塑造脸部轮廓，写实质感，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_train",
+                       "prompt":  "废弃地下列车站台全景，锈迹斑斑的列车停在轨道上，应急红色灯管忽明忽暗，站台边缘蒸汽弥漫，水泥柱上斑驳霉渍，纵深透视强烈，恐怖寂静氛围，电影级布光，写实场景，胶片质感，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_corridor",
+                       "prompt":  "地下实验室走廊内部，惨白日光灯管部分闪烁，两侧玻璃幕墙后是黑暗培养舱轮廓，地面反光湿润，消毒水雾弥漫在空气中，尽头一片漆黑，对称单点透视构图，寂静压抑的科幻恐怖氛围，电影级打光，写实场景，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_horde",
+                       "prompt":  "惨白走廊尽头一群丧尸缓慢逼近，身穿腐朽白大褂与染血制服，皮肤灰败溃烂眼白发浊，姿态僵硬前倾张嘴嘶吼，前景虚化一只伸出的腐烂手臂，顶灯频闪效果，绿白色调，极度恐怖压抑，电影级恐怖片质感，浅景深，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_laser",
+                       "prompt":  "科幻恐怖场景，狭长玻璃幕墙通道内部，数十道蓝色激光网格从深处逐层推进切割空气，激光灼烧点冒出金属熔滴火花与烟雾，通道尽头发光，冷蓝色主调配合橙红熔融色，强透视纵深，电影级特效质感，震撼构图，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_redqueen",
+                       "prompt":  "科幻场景，球形机房内部，环状金属走廊围绕中央悬空平台，平台上方悬浮全息投影的蓝裙少女形象微微发光半透明，四周空中飘落数据流光线瀑布，幽蓝色调为主，未来感与诡异感并存，电影级CG质感，对称构图，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_licker",
+                       "prompt":  "生物恐怖怪物设计，一只舔食者怪物倒伏在天花板管道上，赤红色裸露肌腱与肌肉纤维无皮肤覆盖，大脑组织直接外露可见沟回，一条超长的细尖舌头垂下滴涎，四肢利爪抓握钢管，肌肉线条极具爆发力，昏暗机房背景仅手电光束照亮局部，极端恐怖氛围，电影级生物特效质感，4K超清，无文字"
+                   },
+                   {
+                       "id":  "img_settle",
+                       "prompt":  "科幻神圣感场景，巨大穹顶大厅内数十根纯白光柱自高处洒落，光柱中漂浮金色数据流字符微粒，地面圆形法阵式发光纹路，一名渺小人影独立于光柱中央仰望，庄严审判氛围，冷暖对比，电影级 volumetric light，4K超清，无文字"
+                   }
+               ],
+    "videos":  [
+                   {
+                       "id":  "vid_opening",
+                       "prompt":  "A five-second cinematic horror shot: slow push-in through heavy rain toward a dark office window at night, neon city reflections bleeding red, a pale screen glow flickers inside and faint crimson light pulses like a heartbeat, rain audio synchronized, natural handheld micro-shake, moody film grain, no subtitles, no logos."
+                   },
+                   {
+                       "id":  "vid_laser",
+                       "prompt":  "A five-second cinematic sci-fi horror shot inside a narrow glass-walled corridor: layers of blue laser grid sweep forward one after another through the air, sparks and molten metal droplets burst where beams touch the walls, thin smoke drifts, camera slowly dollies backward, cold blue key light, tense atmosphere, no subtitles, no logos."
+                   },
+                   {
+                       "id":  "vid_licker",
+                       "prompt":  "A five-second horror shot: a flashlight beam sweeps slowly across a dark machine-room ceiling, revealing the glistening red muscular silhouette of a skinned crawler creature clinging to pipes, its long tongue dangling and swaying, it turns its head slightly toward the camera, dust particles in the beam, deep shadows, terrifying stillness, ambient mechanical hum, no subtitles, no logos."
+                   }
+               ],
+    "voices":  [
+                   {
+                       "id":  "vo_question",
+                       "text":  "想明白生命的意义吗？想真正的……活着吗？",
+                       "speaker_id":  0
+                   },
+                   {
+                       "id":  "vo_rules",
+                       "text":  "欢迎来到主神空间。在恐怖片世界里完成任务活下来，就能获得奖励点数，用它兑换你想要的一切。",
+                       "speaker_id":  0
+                   },
+                   {
+                       "id":  "vo_warning",
+                       "text":  "记住，在这里死了，就是真的死了。主神，不会复活新人。",
+                       "speaker_id":  0
+                   },
+                   {
+                       "id":  "vo_mission",
+                       "text":  "主线任务发布：跟随佣兵小队进入蜂巢，关闭超级电脑红后，活着回到地面。",
+                       "speaker_id":  0
+                   },
+                   {
+                       "id":  "vo_awaken",
+                       "text":  "就在此刻，你听见了自己的心跳声。基因锁，第一阶段，开启！",
+                       "speaker_id":  0
+                   },
+                   {
+                       "id":  "vo_settle",
+                       "text":  "任务完成。正在结算奖励点数与支线剧情评价。",
+                       "speaker_id":  0
+                   },
+                   {
+                       "id":  "vo_zhangjie_world",
+                       "text":  "第一次进蜂巢？记住三条：别掉队，别乱碰，听见红后的声音，跑。想要活命的情报，去找那台红后终端。"
+                   },
+                   {
+                       "id":  "vo_redqueen_quiz",
+                       "text":  "回答正确，我让出核心权限。回答错误，你们将成为隔离统计的一部分。四道验证题，请听好。"
+                   },
+                   {
+                       "id":  "vo_rain_hint",
+                       "text":  "新人？跟紧我。这地方的丧尸扑人前有前摇，记住那个停顿，那就是你砍它的时机。厨房里有急救箱。"
+                   }
+               ]
+}

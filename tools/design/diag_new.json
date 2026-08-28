@@ -1,0 +1,134 @@
+[
+  {
+    "file": "enemy_zombie.png",
+    "size": [
+      768,
+      1024
+    ],
+    "mode": "RGBA",
+    "trans": 89.6813710530599,
+    "semi": 0.08494059244791666,
+    "opaque": 10.233688354492188,
+    "bbox": [
+      307,
+      86,
+      534,
+      745,
+      228,
+      660
+    ],
+    "holes": 0,
+    "max_hole_px": 0,
+    "scipy": true
+  },
+  {
+    "file": "enemy_licker.png",
+    "size": [
+      768,
+      1024
+    ],
+    "mode": "RGBA",
+    "trans": 85.11975606282553,
+    "semi": 0.3879547119140625,
+    "opaque": 14.492289225260416,
+    "bbox": [
+      30,
+      129,
+      733,
+      895,
+      704,
+      767
+    ],
+    "holes": 0,
+    "max_hole_px": 0,
+    "scipy": true
+  },
+  {
+    "file": "enemy_hunter.png",
+    "size": [
+      768,
+      1024
+    ],
+    "mode": "RGBA",
+    "trans": 87.36763000488281,
+    "semi": 0.7177988688151042,
+    "opaque": 11.914571126302082,
+    "bbox": [
+      70,
+      116,
+      706,
+      946,
+      637,
+      831
+    ],
+    "holes": 0,
+    "max_hole_px": 0,
+    "scipy": true
+  },
+  {
+    "file": "enemy_guard.png",
+    "size": [
+      768,
+      1024
+    ],
+    "mode": "RGBA",
+    "trans": 90.4229482014974,
+    "semi": 0.2201080322265625,
+    "opaque": 9.356943766276043,
+    "bbox": [
+      370,
+      183,
+      652,
+      830,
+      283,
+      648
+    ],
+    "holes": 0,
+    "max_hole_px": 0,
+    "scipy": true
+  },
+  {
+    "file": "enemy_horde.png",
+    "size": [
+      768,
+      1024
+    ],
+    "mode": "RGBA",
+    "trans": 89.91686503092447,
+    "semi": 0.19137064615885419,
+    "opaque": 9.891764322916668,
+    "bbox": [
+      185,
+      187,
+      540,
+      587,
+      356,
+      401
+    ],
+    "holes": 0,
+    "max_hole_px": 0,
+    "scipy": true
+  },
+  {
+    "file": "pc_zhengzha.png",
+    "size": [
+      768,
+      1024
+    ],
+    "mode": "RGBA",
+    "trans": 91.25162760416666,
+    "semi": 0.1922607421875,
+    "opaque": 8.556111653645832,
+    "bbox": [
+      274,
+      94,
+      499,
+      684,
+      226,
+      591
+    ],
+    "holes": 0,
+    "max_hole_px": 0,
+    "scipy": true
+  }
+]

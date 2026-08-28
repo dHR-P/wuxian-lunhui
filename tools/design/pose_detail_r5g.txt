@@ -1,0 +1,53 @@
+**1. 身体姿态**
+四肢着地爬行姿势。躯干呈拱起状(背部高高隆起，身体最高点在画面中上部偏右)，双臂向前下方伸出，两只手掌撑在画面左下与中下区域，手指细长张开、指尖触地，指节处有深色环状纹路。下肢收拢在身体右后方，呈跪蹲折叠状，画面右侧可见赤裸的脚背与脚趾(至少一只脚完整露出，脚趾朝右下方)。整体爬行方向：头在左前、臀在右后，即朝画面左前方(略偏向观察者方向)爬行，不是正对镜头，也不是背对镜头。
+
+**2. 头颈朝向**
+头部位于身体左前方、脖颈的正常延伸端，脖颈向前下方弯曲低垂，属于“低头俯视地面”的姿态。脸的朝向为斜下偏左，五官呈俯视角度可见。**头没有从肩膀或脖颈处反折**，不存在“头在肩后回望镜头”的结构——头在躯干前方，与脊柱走向一致地向前下低垂。
+
+**3. 脸是否朝向镜头**
+脸以俯视斜角部分朝向观察者：可以清楚看到惨白的额头、鼻梁、深黑色嘴部，以及双眼位置的两个黑色空洞眼窝。但视线方向是向下的，黑眼窝并非正对观察者直视，属于“低头但五官可见”的角度，不是正面直视镜头。
+
+**4. 头发遮挡情况**
+黑色长发浓密，从头顶垂落，覆盖了头部两侧、脸颊边缘及大量散落在手臂前方的发丝。面部中央区域(双眼窝、鼻、嘴)仍可见，有若干发丝横过面部，但并非“只露半张脸”的完全遮盖——双眼窝与嘴均能辨认。
+
+**5. 多余异物**
+逐区检查：头部周围、肩背上方、身体左右两侧、四肢间隙、画面四角均为纯黑或绿色轮廓光，**没有猫头鹰、鸟、动物头或其他生物**。画面右侧的深色锯齿状边缘是她衣摆/袖口的破烂布边，属于服装部分，不是异物。
+
+**6. 背景与裁切**
+背景为纯黑色，人物周身有一圈淡绿色辉光轮廓。裁切检查：左手(画面左下)五指完整且距左边缘有余量；右手(中下)完整；右侧脚部脚趾完整、未触边；头顶与背部最高点距上边缘有余量；发尾最长处收在画面内。**四肢与发尾均无明显被画面边缘裁切**。
+
+---
+
+**结论：REVERSED=否，EXTRA=无，USABLE=是**
+[reasoning]
+Let me carefully observe the image described.
+
+The image shows a horror-style illustration of a woman (Kayako-style ghost) on a black background with a green glow outline. She is on all fours (crawling position) - her body is arched, with both hands planted on the ground in front of her (fingers spread, long fingers), and her legs are bent beneath/behind her - I can see bare feet at the right side of the image, one foot visible with toes, appearing to be in a kneeling/crouching position with feet behind.
+
+Her head: The head is at the left side, hanging down, facing downward/forward-down. The face is visible - pale face with dark eye sockets (black hollow eyes), dark mouth. The face is oriented downward and slightly toward the viewer's left - she's looking down at the ground, face visible in a three-quarter or downward view. The head is NOT turned back over the shoulder toward the camera; it's hanging forward in front of her body, looking down.
+
+Hair: Long black hair covers parts of her face - the hair falls over the face, covering one side; the visible face shows pale skin with black hollow eyes and dark mouth. Hair covers maybe the right side of her face (her left), and the face is partially visible. Actually looking at the description: hair strands cover much of the face but both dark eye sockets are visible, plus nose and mouth. So hair partially covers the face but both eyes are visible.
+
+Other objects: I need to check for any animals like owls or birds. Based on the image, there don't appear to be any animals - just the woman. The dark tattered edges of her clothing might look like shapes but no animal heads.
+
+Background: Pure black background with green glow around her. Limbs: The hands are fully visible within the frame; the feet at right - the foot is visible with toes, appears complete or nearly complete; hair ends - the long hair strands extend down, appear to end within frame. The bottom of the image - her hands are near the bottom but not cut off. The right foot is near the right edge but seems fully visible.
+
+Let me structure the answer:
+
+1. Body posture: On all fours crawling (四肢着地爬行). Both palms on ground in front, fingers spread, long fingers with dark rings/joints. Legs: knees bent, feet visible behind at right side - bare feet, one foot clearly visible with toes pointing... The body is arched upward (back raised). Crawling direction: facing toward the lower-left / toward the viewer's left and slightly toward camera - head at left, body extends to right. So she's crawling toward the left-front, head facing down-left, roughly toward the viewer at an angle.
+
+2. Head/neck direction: Head hangs down at front-left of body, neck bent forward/downward, face pointing downward toward ground, slightly angled so face is visible to viewer (three-quarter down view). NOT reversed over shoulder. Head is in front of body, normal forward position, looking down.
+
+3. Face toward camera? Partially - the face is visible at a downward angle; both black eye sockets can be seen but she appears to be looking down, not directly at the viewer. The eyes are hollow black sockets; whether they "directly" gaze at observer - they appear angled downward, face tilted down. So face is partially visible to viewer but gaze directed downward.
+
+4. Hair covering: Long black hair covers much of the face - strands fall across the face; the visible portion shows pale forehead, both dark eye sockets, nose, dark mouth. So hair covers parts (sides) but both eyes are visible - not "only half a face showing". Actually the hair covers the right side of the image face... Let me think: the face is tilted down, hair frames it, some strands cross the face. Both eyes visible as black hollows. So: hair partially covers, not covering大半张脸 completely - I'd say hair covers the sides and some strands over face, but both eye sockets and mouth visible.
+
+5. Extra objects: No animals, no owl, no bird, no other creatures. Only the woman. There are dark tattered cloth edges (her sleeves/kimono hem with dark ragged trim) but those are clothing.
+
+6. Background: pure black with green glow outline around figure. Cropping: hands fully inside frame; feet - the right foot near right edge appears complete with toes; hair tips end within frame. Top of body (back/shoulder) not cut. So no obvious cropping.
+
+Conclusion: REVERSED=否, EXTRA=无, USABLE=可用降标稿是 (usable). 
+
+Wait - "USABLE=可用降标稿是/否" - meaning whether it's usable as a downgraded/standard draft. Since no reversal, no extra objects, background black, no cropping - usable = 是.
+
+Let me write detailed structural descriptions in Chinese, in paragraphs for each of the 6 items.

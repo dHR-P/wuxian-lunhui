@@ -1,0 +1,57 @@
+1. **身体姿态**：四肢着地爬行姿。双手手掌撑地，位于画面中下偏右(约画面下半部，手指细长张开、指尖朝下前方)；双腿屈膝跪伏，膝盖/小腿贴地，双脚收在身体后下方(画面左下角，脚趾朝左)。躯干弓背拱起，爬行方向朝画面右侧，整体呈侧面偏 3/4 视角，不是正对镜头也不是背对镜头。
+
+2. **头颈朝向**：头部位于躯干前上方(画面右上区域)，由脖颈自然连接肩膀，头抬起、位于身体前方，**没有**从肩后或背后反折回望。脸/五官朝向镜头偏下方(3/4 侧面角度)，属于“爬行中抬头看向观者”的正常解剖姿态，颈部虽有拉长但走向连续、无断裂或反转。
+
+3. **脸朝向镜头**：是。脸部大部分可见，双眼呈黑色眼窝/深色空洞状，与观者形成对视；鼻、嘴均可辨认，表情呆滞惨白。
+
+4. **头发遮挡**：否。黑色长发披覆头顶、两侧及背后，发缕垂落在身体左侧和右侧，但面部中央区域基本裸露，双眼、鼻、嘴清晰可见，不属于“只露半张脸”的构图。
+
+5. **多余异物**：未发现猫头鹰、鸟或其他动物/动物头部。手指上缠绕的深色细线状物为发丝/线状纹理，非生物。画面中只有该人物本体和环绕的绿色辉光。
+
+6. **背景与裁切**：背景为纯黑，人物边缘有绿色光晕。四肢检查：双手五指完整位于画面内，指尖接近但未触及下边缘；右侧发尾在画面内；**左下角的脚/脚跟非常贴近画面左边缘，脚尖部分疑似贴边或被极轻微裁切**，需放大复核，其余部位无明显裁切。
+
+结论：REVERSED=否，EXTRA=无，USABLE=可用降标稿是(左脚贴边处建议放大复核一次)
+[reasoning]
+Let me carefully observe the image described.
+
+The image shows a Japanese female ghost (Kayako-style) illustration. Let me analyze:
+
+1. Body posture: She appears to be on all fours (crawling position) - her body is bent over, with hands on the ground in front (right side of image, lower area), and her knees/lower legs on the ground at the left. Her legs are bent under her, feet visible at bottom left. She's crawling on hands and knees, facing toward the right side of the image (side view relative to camera, roughly 3/4 view). Her hands are planted on the ground with long fingers spread. Her knees/shins are on the ground, feet behind her at lower left.
+
+2. Head/neck direction: Her head is at the top right, above her shoulders. The head is raised, facing... Let me think. Her face is visible - pale face with dark eye sockets, visible at the upper right. The head appears tilted, face turned somewhat toward the viewer/left-down. The neck - is it reversed? Her body is facing right (crawling direction is to the right), and her head is up and turned back toward the viewer. Actually, looking at the description: her hair flows down her back (left side), her face is visible on the right side of her head. The head is raised above her shoulders, face visible in three-quarter view looking toward the viewer/downward. This is a normal head position - head raised up from crawling position, looking forward/down at viewer. Not reversed behind the shoulders. The head is at the front of the body (right side), face visible.
+
+Wait, need to check: is the head turned back over the shoulder? The body crawls toward the right; the head is lifted and the face is visible facing the viewer. The face appears to be looking slightly toward the viewer with dark eyes visible. The neck seems elongated but the head is in front, not behind the back. So no reversal.
+
+3. Face toward camera: Yes, the face is visible in three-quarter view, both eye areas visible - dark eye sockets/shadowed eyes. The eyes appear as dark hollows, looking toward viewer. Yes, can see the face directly.
+
+4. Hair covering face: No, the hair frames the face but the face is largely visible - pale full face visible with both eyes, nose, mouth visible. Hair covers sides but not the majority of the face.
+
+5. Extra objects: I need to check for any animals, owls, birds. From the image, I see only the figure. There's a green glow around her. No visible animals. Wait - there might be something near her hands? The hands have long fingers with what appear to be dark strands/wires around them - those look like hair strands or threads wrapped around fingers. No animal heads visible.
+
+6. Background: Pure black with green glow around figure. Limb cropping: Her feet at bottom left - the foot at lower left appears to extend to the left edge... Let me check. The left foot/leg at bottom left - the toes appear near the left edge but might be cropped? The image shows her foot at lower left, appears mostly within frame. The hands at bottom right - fingers extend down, appear within frame. Hair strands at right side extend down. The bottom of the image - her hand fingers at bottom right around y=950-990, within the 1024 height. The foot at left edge around x=0-100 - the heel/toe might touch the left edge. Looking at the description, the foot at lower left seems to be near the edge but the toes appear visible. Actually the leftmost part around x=0-30 at y=780-820 shows part of the leg/foot that may be cropped at the left edge. Hmm.
+
+Let me be careful. The image is 768x1024. The figure: head at top right (~560-660 x, 130-330 y). Hair flows down left side of body. Body hunched, crawling. Hands at bottom center-right (~500-720 x, 780-990 y). Legs folded, feet at bottom left (~0-200 x, 700-950 y). The foot at far left - around x=0-90, y=760-830, there's a foot/ankle. It appears the toes/foot may be slightly cut at the left edge? From the rendering, the foot at left appears to extend to near x=0. There seems to be a foot shape at x~0-100. It might be touching the edge.
+
+Also at the bottom, the hand fingers at y~990 near bottom edge but not cropped.
+
+The right side: hair strands extend to x~700, within frame.
+
+So possible slight cropping of the foot at left edge. I should describe honestly: the left foot appears close to/touching the left edge, possibly slightly cropped.
+
+Let me reconsider the head/neck question more carefully since that's the key check (REVERSED). In the image, the woman is crawling toward the right side. Her back is arched, head raised at top right. Her face is visible - we see her face from a three-quarter angle, eyes (dark sockets) visible, looking toward viewer/down. The neck connects head to shoulders naturally - head is in front of the body (on the right side, above shoulders), not twisted behind her back. So REVERSED = 否.
+
+Face direction: The face is visible, tilted, looking toward the viewer. Both eyes visible as dark hollows. So yes, face toward camera, dark eye sockets visible.
+
+Hair: The hair covers the sides and back, but the face is fully visible - pale face with visible features. So no, hair does not cover most of the face.
+
+Extra objects: I don't see any animals. There are dark strands around her fingers that look like hair or threads - not animals. So EXTRA = 无.
+
+Background: black with green glow. Cropping: check edges - left foot near left edge possibly slightly cropped; otherwise limbs within frame. The bottom hand fingers close to bottom edge but visible.
+
+Actually, looking again at the lower left: there's a foot at around x=0-100, y=750-840. The heel and toes - the toes point left. It looks like the foot might be complete or slightly touching the edge. I'll note it as "左脚贴近/可能轻微触及左边缘" to be honest.
+
+Also her right hand (viewer's right) at x~600-720, y~780-870 - fingers spread, visible fully. Her left hand at x~500-640, y~830-990 - long fingers, visible.
+
+Conclusion: REVERSED=否, EXTRA=无, USABLE=可用 (assuming the requirements are: not reversed, no extra objects, minimal cropping). The slight edge proximity of the foot - I should mention it. If the foot is cropped, it might affect usability. Let me describe it as it appears: the left foot at the left edge appears mostly complete but very close to the edge; hard to tell if a few pixels are cut. I'll say 基本完整,贴近左缘.
+
+Format: answer in Chinese, 6 sections, then one line conclusion.

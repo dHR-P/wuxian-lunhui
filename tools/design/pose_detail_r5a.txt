@@ -1,0 +1,55 @@
+1. **身体姿态**：四肢着地的爬行/伏低姿势。两只手掌撑在画面左下方地面，十指张开、指尖朝左前；双腿折叠在身体右后侧，赤足可见——右脚在画面右下方(脚趾朝下前方)，另一只脚在其上方偏右。臀部抬起、背部拱起，是典型的“爬行蓄势”姿态。爬行方向朝画面左前方(朝向她双手的方向)，身体大致呈侧面朝向观察者，并非正对或背对镜头。
+
+2. **头颈朝向**：头部位于躯干前端(肩胛与手臂连接处的上方)，即身体的前方一侧，而不是臀部/背侧上方。脖颈被长发部分遮挡，但头与肩的衔接位置正常。面部呈四分之三侧面朝向观察者，视线朝向镜头偏左下方。**头没有从肩膀后方或脖颈处反折180度回望**——头在身体前进方向一端，属于“爬行时抬头侧转看镜头”的正常解剖范围，不属于回头/反折结构。
+
+3. **脸朝向镜头吗**：脸以四分之三角度朝向观察者，可以清楚看到双眼的黑色凹陷眼窝、鼻、嘴和惨白面部；眼下有黑色泪痕状条纹。眼神略向下/向前，并非完全直视观察者，但面部平面明确朝向镜头方向，五官可辨。
+
+4. **头发是否遮脸**：否。长发和刘海覆盖额头、两侧脸颊与耳部，但面部中央区域(双眼窝、鼻、口、下巴)完全外露，露出的是整张惨白的脸，而非“只露半张脸”。
+
+5. **多余异物**：无。画面中只有该女性怨灵本体，未发现猫头鹰、鸟类或其他动物/生物头部等不该存在的元素。人物轮廓外有一圈绿色辉光描边，属于光效而非异物。
+
+6. **背景与裁切**：背景为纯黑(仅人物周围有绿色光晕)。头顶上方留有黑边空间；左侧发梢垂至腰部/手部附近，在画面内自然收尾；左下手指、右下双脚及脚趾均完整位于画面内。**四肢与发尾均无明显被画面边缘裁切**。
+
+---
+
+**结论：REVERSED=否，EXTRA=无，USABLE=可用降标稿是**
+[reasoning]
+Let me carefully observe the image described.
+
+The image shows a horror-style illustration of a female ghost (Kayako-style) on a black background with a green glow outline.
+
+1. Body posture: She appears to be in a crawling/crouching position on all fours - her hands are on the ground in front of her (both palms visible, fingers spread, positioned at lower left area), and her legs are bent beneath/behind her with bare feet visible at lower right. She's crawling toward the left/forward, body angled with her rear raised. Actually looking at it: her hands are planted on the ground at bottom left, her knees/lower legs are folded under her, and her bare feet are visible at bottom right. The pose is a crawling pose (四肢着地爬行), facing left/forward-left, with the body in profile-ish view but head turned... let me think about the head.
+
+2. Head/neck direction: Her head is at the top, positioned above her shoulders. The face is visible - she has long black hair, pale face with dark eye sockets. The head appears to be facing forward/downward toward the viewer's left. Is the head reversed over the shoulder? Looking at the body: her back is arched, rear is up on the right side, arms extend forward to the left. The head is at the top left, above the shoulders. The neck... The head appears to be oriented facing the viewer/left-downward. Given the crawling direction is toward the left (hands forward), the head facing toward camera-left and slightly toward viewer seems anatomically plausible - the face is visible in a three-quarter view.
+
+Wait, but I need to check if the head is twisted back. The body: shoulders are located around the middle-upper area, arms go down-left to hands. The hips/rear are to the right with feet at bottom right. So the body axis runs from upper-left (head/shoulders) to lower-right (hips/feet). The crawling direction is toward lower-left (where hands are). The head is at the top, and the face is visible facing... the face appears to be looking slightly downward and toward the viewer. The face is shown in a frontal-ish three-quarter view.
+
+Is this anatomically a "head turned back"? If she's crawling toward the left and her head faces the viewer/left, that's the natural forward direction - not reversed. The head is in front of the body (at the shoulder end where arms extend), not behind. So no reversal.
+
+Actually, let me reconsider. The face is quite visible and frontal. The neck - the hair covers much of the neck. The head sits atop the shoulders. Given the body is in a crouched crawl with head raised, the face looking at the viewer with a slight downward tilt is plausible without extreme neck rotation. The head is on the same side as the arms (forward), so it's not a 180° reversal.
+
+3. Face toward camera: Yes, the face is visible in three-quarter/frontal view; the eyes are dark hollow sockets with dark tear streaks; they appear to be looking toward the viewer, though shadowed. The eyes are dark/shadowed but visible.
+
+4. Hair covering face: Her hair covers the sides of her face and frames it, with bangs covering forehead and partially the eyes area, but the central face (nose, mouth, cheeks, eye areas) is exposed - pale white face visible. So hair does NOT cover most of the face; more than half the face is visible. The bangs come down over the eyes somewhat but both eyes/eye sockets are visible.
+
+5. Extra objects: I don't see any other animals, birds, owl, etc. Just the figure on black background. There's a green glow outline around her. No other entities.
+
+6. Background: Pure black (with subtle green glow around figure). Limbs cropped? Her hands at bottom left - fingers appear fully within frame. Feet at bottom right - the feet appear complete within frame. Hair ends - the long hair strands extend down; do they get cut off at edges? The hair on the left side extends down and appears to end within the frame or near the hand area. Looking at the image, the hair strands seem to terminate naturally within the frame. The bottom of the image - her hands and feet are near the bottom but appear fully visible. Top of head - fully visible with space above.
+
+Let me check edges more carefully: The figure occupies most of the frame. Left edge: hair strands come close but seem within. Bottom: fingers of left hand (viewer's left) extend toward bottom-left, appear complete. The right foot at bottom right appears complete with toes visible. So no obvious cropping.
+
+Conclusion: REVERSED=否, EXTRA=无, USABLE=可用 (usable).
+
+Wait - regarding the head position: is the head in front or behind? The arms extend forward-down-left; the head is above the shoulder girdle which connects to the arms. So head is at the front/forward end. The face is visible facing viewer. This is a normal crawl pose with head raised looking at viewer - anatomically the neck would be twisted slightly so the face shows to camera, but not a full reversal over the back.
+
+Hmm, but let me double-check: could this be interpreted as the head turned ~180°? The body is in profile with rear to the right. If she were looking forward (in crawling direction), we'd see the back or side of her head. Instead we see her full face. That means her head is turned toward the viewer - roughly 90° from the crawling direction, which is a normal "looking at camera while crawling" pose, achievable by turning the head to the side. Not a 180° reversal where the head looks backward over the spine toward the rear. The head is positioned at the front (above shoulders where arms attach), not swung around to the rear above the hips. So REVERSED=否.
+
+Face direction: The face is a three-quarter view facing viewer's left-down, eyes visible as dark sockets with dark streaks (like tears/blood). Can eyes "directly" face the observer? The gaze direction appears downward-forward; the dark eye sockets are visible. I'd say the face is toward the camera in a three-quarter view, eyes visible but shadowed, appearing to look slightly downward rather than straight at the viewer. I should describe honestly: face is visible, oriented toward viewer's lower-left/front, eyes are dark hollow with black tear streaks; whether they "directly" gaze at observer - they appear to gaze slightly downward/forward, but the face plane is turned toward the viewer.
+
+Hair: bangs cover forehead and reach the eyes; side locks cover cheeks' sides and ears; the central face (eye sockets, nose, mouth, chin) is exposed. So roughly the forehead and sides are covered, but the majority of the central face is visible. So answer: no, hair doesn't cover most of the face; a pale full central face is visible.
+
+Extra objects: none visible. Only the figure and green glow.
+
+Background: black, near-pure black with slight green glow halo around figure. Cropping: no obvious cropping of limbs or hair ends; all within frame with margin.
+
+Let me write the answer in Chinese, structured in 6 sections, then the final line.

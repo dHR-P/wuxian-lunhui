@@ -1,0 +1,13 @@
+diag_body_check report
+=== hunter_r4.png (768x1024) ===
+near-black(d<=3) ratio: 97.6%
+body bbox: x 290-448 (37.8%-58.3% of W), y 362-606 (35.4%-59.2% of H), size 159x245
+subject px top-half: 14268 (76.3%), bottom-half: 4436 (23.7%)
+head zone (y<12%): 0 px  |  feet zone (y>72%): 0 px
+internal near-black components: 51, total 1204 px (0.15% of image), of which outside-body-bbox: 0 px; true inner holes ~ 1204 px (0.15%)
+  hole size=1063 (0.14%) centroid=(464,336) [IN-body]
+  hole size=22 (0.00%) centroid=(423,348) [IN-body]
+  hole size=13 (0.00%) centroid=(455,442) [IN-body]
+  hole size=12 (0.00%) centroid=(458,304) [IN-body]
+  hole size=10 (0.00%) centroid=(420,408) [IN-body]
+

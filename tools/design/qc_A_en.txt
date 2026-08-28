@@ -1,0 +1,17 @@
+**QC Inspection Report**
+
+1. **Full body present (head to soles)?** — **No.** The frame cuts off at mid-thigh level. There is no empty space below feet because the feet are not in frame at all.
+
+2. **Both legs AND feet visible?** — **No.** Only the upper thighs are visible below the belt. Knees, lower legs, and both feet are completely cut off by the bottom edge of the image. This is effectively a 3/4 body shot, not a full-body shot.
+
+3. **Clothing distinguishable from background?** — **Yes.** The white/cold rim light creates a strong halo outline separating the blue-gray t-shirt, tactical belt (with holster), and dark pants from the black background. Upper-body clothing reads clearly.
+
+4. **Anatomical deformity?** — **No.** Within the visible region (head, face, torso, both arms, clenched fists), anatomy is correct: two arms, two hands, correct proportions, no twisting or extra limbs.
+
+5. **Background clean solid black?** — **Yes.** Background is solid black with no noise or stains. The broad white halo around the figure is consistent with the specified cold-white rim light, though it is quite thick/heavy in places — a minor style note, not a defect.
+
+---
+
+**LOWER BODY STATUS (explicit):** ❌ **MISSING / CUT OFF.** The legs below mid-thigh and both feet are entirely absent from the frame. This is NOT a full-body image.
+
+**VERDICT: NEEDS_REGENERATE** — The lower body (lower legs & feet) cannot be recovered by retouching since it was never rendered; the image must be regenerated with proper full-body framing and head-to-toe margin.

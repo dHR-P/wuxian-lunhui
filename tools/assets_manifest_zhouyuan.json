@@ -1,0 +1,117 @@
+{
+    "_说明": "《咒怨》本地配音 manifest（素材子代理生成）。输出先写 tools/design/audio_zhouyuan/*.wav 暂存，部署由主线验收后决定。speaker 均在 Qwen3TTS supported_speakers 内：aiden/dylan/eric/ono_anna/ryan/serena/sohee/uncle_fu/vivian。",
+    "voices": [
+        {
+            "id": "vo_zy_mission",
+            "scene": "zy_01",
+            "speaker_text": "主神（系统音）",
+            "voice": "Uncle_Fu",
+            "instruct": "低沉、缓慢、冰冷、一字一顿的神秘系统男声，充满压迫感，像个神明在下达命令",
+            "text": "主线任务：在佐伯家宅邸内存活至清晨六点，并调查怨念之源。"
+        },
+        {
+            "id": "vo_zy_mission_pact",
+            "scene": "zy_01",
+            "speaker_text": "主神（系统音）",
+            "voice": "Uncle_Fu",
+            "instruct": "沉冷慎重的系统男声，压低声线，带着不祥的预示",
+            "text": "任务完成前，禁止离开宅邸。失败代价：被咒入二重死。"
+        },
+        {
+            "id": "vo_zy_kayako_growl",
+            "scene": "zy_boss_round / zy_15_fight",
+            "speaker_text": "伽椰子（女声低语）",
+            "voice": "ono_anna",
+            "instruct": "从喉咙深处挤出的嘶哑女声喉音，拖长，恐怖、毛骨悚然",
+            "text": "嘎——"
+        },
+        {
+            "id": "vo_zy_kayako_leave",
+            "scene": "zy_15_fight",
+            "speaker_text": "伽椰子（女声低语）",
+            "voice": "ono_anna",
+            "instruct": "阴森低沉的女声低语，气声，一字一字，透过齿缝挤出来，无比诡异",
+            "text": "谁，也别想离开这栋房子。"
+        },
+        {
+            "id": "vo_zy_kayako_sympathy",
+            "scene": "zy_11_mourned",
+            "speaker_text": "伽椰子（女声低语）",
+            "voice": "ono_anna",
+            "instruct": "鬼魂般的女声低语，虚弱而幽怨，带着一丝诧异的质问",
+            "text": "你在，同情我？"
+        },
+        {
+            "id": "vo_zy_kayako_defeat",
+            "scene": "zy_17_lose",
+            "speaker_text": "伽椰子（女声低语）",
+            "voice": "ono_anna",
+            "instruct": "阴冷的女声低语，像贴着耳朵说话，一字一句，决绝",
+            "text": "我说过，谁也别想离开。"
+        },
+        {
+            "id": "vo_zy_kayako_thank",
+            "scene": "zy_11_mourned",
+            "speaker_text": "伽椰子（女声低语）",
+            "voice": "ono_anna",
+            "instruct": "极轻的释然叹息，虚弱而温柔的女声，带着一丝解脱",
+            "text": "谢谢你。"
+        },
+        {
+            "id": "vo_zy_toshio_meow",
+            "scene": "zy_03_back / zy_04",
+            "speaker_text": "俊雄（童声）",
+            "voice": "serena",
+            "instruct": "清亮却空洞的童声猫叫，拖长尾音，带着一丝渗人的寂静",
+            "text": "喵——"
+        },
+        {
+            "id": "vo_zy_toshio_come",
+            "scene": "zy_04",
+            "speaker_text": "俊雄（童声）",
+            "voice": "serena",
+            "instruct": "苍白空洞的童声，轻声气声，带着引诱与诡异",
+            "text": "来呀。"
+        },
+        {
+            "id": "vo_zy_toshio_thanks",
+            "scene": "zy_10_toshio_win",
+            "speaker_text": "俊雄（童声）",
+            "voice": "serena",
+            "instruct": "稚嫩童声，平淡中带着一点天真与感激",
+            "text": "谢谢你，请我吃饭。"
+        },
+        {
+            "id": "vo_zy_senior_hint",
+            "scene": "zy_04",
+            "speaker_text": "队友（资深者·男声）",
+            "voice": "Uncle_Fu",
+            "instruct": "压低的男声，紧张而有经验的老手提醒，语速偏快，带着警告",
+            "text": "别回头。让猫走前面。"
+        },
+        {
+            "id": "vo_zy_senior_wall",
+            "scene": "zy_05",
+            "speaker_text": "队友（资深者·男声）",
+            "voice": "Uncle_Fu",
+            "instruct": "急促、压抑着惊恐的男声低喊，带着颤",
+            "text": "壁纸……它在动！"
+        },
+        {
+            "id": "vo_zy_senior_lock",
+            "scene": "zy_02",
+            "speaker_text": "队友（资深者·男声）",
+            "voice": "Uncle_Fu",
+            "instruct": "压低声音的男声，老练低语，一字一顿地提醒，带着不祥",
+            "text": "这栋房子在锁你了。从现在起，每一项调查，都在和它赛跑。"
+        },
+        {
+            "id": "vo_zy_narrator_zhangjie",
+            "scene": "旁白/张杰预告",
+            "speaker_text": "旁白（张杰·男声预告）",
+            "voice": "Uncle_Fu",
+            "instruct": "低沉老练、略带嘲讽的男声，像老兵在叮嘱新人，语速平缓",
+            "text": "下一场是个鬼宅。别带太多新人，会死的。"
+        }
+    ]
+}

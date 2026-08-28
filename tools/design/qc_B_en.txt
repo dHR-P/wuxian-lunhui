@@ -1,0 +1,23 @@
+**Image B — CUTOUT QC Report (768×1024, transparent PNG)**
+
+**1. Silhouette clean, no holes/punch-throughs?**
+**Yes** — the visible figure body (head, torso, arms, upper legs) is solid and continuous; no internal holes or punch-throughs in the cutout itself.
+
+**2. Both legs AND both feet fully visible, feet pointing down?**
+**No** — the figure is cropped at the bottom edge of the frame. Only the thighs and upper shins are visible; the lower legs terminate abruptly at the image boundary and the **feet are entirely absent**.
+
+**3. Transparent background clean (no specks/white artifacts)?**
+**No** — besides the oversized white outline, there are irregular detached white blobs/patches near the lower-left and lower-right of the figure (around thigh/hip height), consistent with mask overflow artifacts rather than intentional rim light.
+
+**4. Edge: normal thin cold-white rim light vs. hard/thick fat white mask?**
+**Fat white mask/border** — this is NOT a thin rim light. The white outline is very thick (roughly 10–25px), uniform, and blobby, hugging the entire contour like a dilated/stroked selection mask (especially obvious around the hair, shoulders, and forearms). A true rim light would be a subtle asymmetric highlight on lit edges only; this wraps the whole silhouette as a hard white halo.
+
+---
+
+**LOWER BODY STATUS: NOT fully present.** Legs are partially present (thighs/upper shins only); **feet are missing — cut off at the bottom edge of the image.**
+
+---
+
+## VERDICT: **NEEDS_REGENERATE**
+
+Reasoning: The bottom crop (missing feet/lower legs) is a generation framing failure that cannot be fixed by edge retouching, and it is compounded by the fat white mask border and stray white mask blobs. Regenerate with full-body framing including feet with headroom/margin, and reduce the outline to a thin cold-white rim light.

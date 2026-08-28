@@ -1,0 +1,15 @@
+A single full-body character portrait of a normal healthy Chinese young man warrior (郑吒), about 25 years old, short black hair, serious determined expression, wearing a dark grayish-blue fitted T-shirt and dark cargo pants with a tactical belt, both arms hanging naturally with fists clenched, standing tall and centered. He is a normal human warrior, NOT a zombie, NOT mutated, NOT a monster.
+
+The entire body including the dark clothing is brightly and evenly lit by a cool white key light from the front, clearly brighter than the pure black background; no part of the hair, face, clothing, limbs or boots is the same darkness as the background.
+
+HAIR AND HEAD CRITICAL: The short black hair on the head must be rendered as clearly defined mid-brightness hair strands and hair clumps (gray-blue highlights), so the hair is visibly separated from the pure black background. The hair texture is smooth, solid and continuous across the whole top of the head; there must be NO thin gaps, cracks, or black holes between the hair clusters that connect through to the background. The hair fully covers the crown/top of the head in a complete solid mass; the head is fully enclosed by visible hair, face and neck. There must be healthy clear margin of plain pure black background space ABOVE the topmost hair so the head/hair is fully inside the frame and never clipped or touching the top edge. Absolutely no wispy, foggy, thin loose hair strands drifting or dissolving into the black background; every hair tip ends cleanly with a visible edge.
+
+Full body: the whole figure from top of head to the shoe soles takes up over 90% of the image height; the feet shoes touch the very bottom edge of the frame, shoe soles cropped slightly by the bottom frame edge, standing centered with almost no empty margin below the feet. Both hands fully visible with clear separate fingers, no merged or blurry fingers.
+
+Background: flat pure black, absolutely uniform matte #000000, completely dark, NO vignette, NO dark corner gradient, NO gray edge gradient anywhere in the frame, NO floor reflection, NO ground shadow, NO light glow, NO haze, NO ground plane at all, nothing behind the character; the bottom edge stays uniform pure black exactly like the rest of the background.
+
+Absolutely NO white outline, NO rim light, NO halo; the silhouette must terminate cleanly and flat against the pure black background, no white border on any edge of the character.
+
+High detail, sharp, single character, 768x1024 vertical game portrait.
+
+全身单人立绘居中, 人物全身占画面高度90%以上, 脚掌贴紧底缘被轻裁切; 短黑发以清晰可见的中明度发丝/发束呈现, 发顶完整覆盖头冠无缝隙无空洞, 发丝与纯黑背景边界干净利落分离, 头顶上方留有充足纯黑留白余量绝不出框不裁切, 不发散游离碎发落入黑底; 纯黑#000000背景, 画面四周绝无暗角/渐变灰边, 无白描边无轮廓光无地面反光

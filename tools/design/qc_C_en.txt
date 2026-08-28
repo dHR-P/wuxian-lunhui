@@ -1,0 +1,19 @@
+**QC Analysis — Image C (384×512 checkerboard preview)**
+
+**1. Silhouette clean, no large holes/punch-throughs?**
+No — the upper body silhouette is mostly solid, but near the lower legs/crotch region there are irregular checkerboard patches punching through inside the figure area, reading as punch-through holes rather than a clean gap.
+
+**2. Both legs AND both feet fully visible (feet pointing down)?**
+No — the figure is truncated by the bottom canvas edge at roughly knee/lower-thigh level. The legs run off the bottom of the frame; no feet are visible and they are not pointing down. The lower body is cut off.
+
+**3. Checkerboard/background clean, no leftover debris?**
+Yes — the checkerboard area surrounding the figure appears clean, with no stray fragments or leftover debris floating outside the silhouette.
+
+**4. Edge quality — thin cold-white rim light vs. fat white mask?**
+This is a **hard/thick fat white mask**, NOT a normal rim light. The white outline is a heavy, uniform blob-like border hugging the entire contour (head, shoulders, arms, torso) — far too thick to be a lighting rim; it reads as an inflated alpha/mask edge.
+
+---
+
+**VERDICT: NEEDS_REGENERATE**
+
+**LOWER BODY STATUS: MISSING / CUT OFF** — legs are truncated at the bottom frame edge (around knee level); feet are entirely absent. Combined with the fat white mask border and punch-through holes in the leg region, this cutout cannot be fixed by simple retouch and requires regeneration with full-body framing (feet included, pointing down).

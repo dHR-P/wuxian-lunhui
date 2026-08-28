@@ -1,0 +1,25 @@
+=== hunter 内部近黑连通域诊断 ===
+image 768x1024, near-black(d<=3) ratio: 90.6%
+connected components: 478
+border-touching (external bg): 709677 (99.5% of near-black)
+
+internal (non-border) near-black components (top 10):
+  size=273 (0.03%) bbox=(y 438-454, x 615-643)
+  size=159 (0.02%) bbox=(y 544-572, x 613-641)
+  size=158 (0.02%) bbox=(y 538-573, x 617-648)
+  size=146 (0.02%) bbox=(y 397-420, x 127-147)
+  size=134 (0.02%) bbox=(y 869-893, x 519-540)
+  size=124 (0.02%) bbox=(y 499-510, x 630-651)
+  size=119 (0.02%) bbox=(y 417-438, x 121-141)
+  size=118 (0.02%) bbox=(y 372-390, x 134-151)
+  size=114 (0.01%) bbox=(y 197-220, x 515-531)
+  size=89 (0.01%) bbox=(y 526-542, x 642-651)
+
+total internal near-black pixels: 3218 (0.41%) -> v1 cutout erases these inside subject
+
+--- 对比基线(其他原图) ---
+zombie: 768x1024 near-black=90.0% internal-holes=2974 (0.38%)
+guard: 768x1024 near-black=90.5% internal-holes=1427 (0.18%)
+horde: 768x1024 near-black=90.3% internal-holes=2066 (0.26%)
+licker: 768x1024 near-black=87.1% internal-holes=16908 (2.15%)
+pc_zhengzha: 768x1024 near-black=33.8% internal-holes=38067 (4.84%)

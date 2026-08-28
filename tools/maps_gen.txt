@@ -1,0 +1,191 @@
+pub const MAP_W: usize = 40;
+pub const MAP_H: usize = 26;
+pub const FLOORS: usize = 4;
+
+pub static FLOOR_NAMES: [&str; 4] = ["F1 入口层 · 列车站台", "F2 实验层 · B区", "F3 核心层 · 红后机房", "F4 底层 · 水道站台"];
+
+pub static F1_MAP: &[&str] = &[
+    "########################################",
+    "#P.....................................#",
+    "#......................................#",
+    "#..............#...#.....I.....I.......#",
+    "#.......I...I..##.##...................#",
+    "#..............#...#...................#",
+    "#.......I...I..#...#...................#",
+    "#..............#...#...................#",
+    "#..............##.##...................#",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "####.############.#########.############",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "#........................I.......I.....#",
+    "#......................................#",
+    "#########.####################.#########",
+    "#......................................#",
+    "#......................................#",
+    "####################.###################",
+];
+
+pub static F2_MAP: &[&str] = &[
+    "########################################",
+    "#............#............#............#",
+    "#..##.###....#.....##.###.#.........####",
+    "#.#.....#....#.....#....#.#.........#..#",
+    "#.#.....#..........#....#...........#..#",
+    "#.#.....#....#.....#....#.#............#",
+    "#.#.....#....#.....#....#.#.........#..#",
+    "#.###.###....#.....##.###.#.........#..#",
+    "#............#............#.........#..#",
+    "###.########.###########.#########.#####",
+    "#............#............#............#",
+    "#............#............#...I........#",
+    "#............#.##.##......#.....##.###.#",
+    "#....I...I.....#...#............#....#.#",
+    "#............#.#...#......#.....#....#.#",
+    "#............#.#...#......#.....#....#.#",
+    "#............#.##.##......#.....##.###.#",
+    "#............#............#............#",
+    "######.##############.##########.#######",
+    "#............#............#............#",
+    "#............#........I...#.I..........#",
+    "#.........................#............#",
+    "#............#.........................#",
+    "#.........I..#............#............#",
+    "#............#............#............#",
+    "########################################",
+];
+
+pub static F3_MAP: &[&str] = &[
+    "########################################",
+    "#......................................#",
+    "#.#####.######...................#######",
+    "#.#..........#...................#....##",
+    "#.#..........#...................#....##",
+    "#.#...............######.#####...#....##",
+    "#.#..........#....#..........#...#....##",
+    "#.#..........#....#.I......I.#...###.###",
+    "#.#####.######..I.#..........#.........#",
+    "#.................#..........#.........#",
+    "#.................#.....I....#.........#",
+    "####.###...............................#",
+    "##.....#..I.......#..........#.........#",
+    "##.....#..........#..........#..I......#",
+    "##.....#..........#.........I#.........#",
+    "##.....#..........#..........#.........#",
+    "##.....#..........#..........#.........#",
+    "####.###..........######.#####.........#",
+    "#......................................#",
+    "#......................................#",
+    "#.................................I....#",
+    "#.............######.#########.#####...#",
+    "#......................................#",
+    "#......................................#",
+    "#......................................#",
+    "########################################",
+];
+
+pub static F4_MAP: &[&str] = &[
+    "########################################",
+    "#......................................#",
+    "#......................................#",
+    "#...##.##.........................####.#",
+    "#...#...#.........................#..#.#",
+    "#...#...#...I.....I...............#..#.#",
+    "#...#...#.........................#..#.#",
+    "#...##.##............................#.#",
+    "#.................................#..#.#",
+    "#.................................#..#.#",
+    "###.##########.############.#######.####",
+    "#.................................#..#.#",
+    "#.................................#....#",
+    "#........................I........#..#.#",
+    "#.................................#..#.#",
+    "#.................................#..#.#",
+    "#.................................#..#.#",
+    "#.................................#..#.#",
+    "#.................................#..#.#",
+    "#..................................###.#",
+    "######.############.##########.#########",
+    "#......................................#",
+    "#..........I............I..............#",
+    "#...........................####.####..#",
+    "#......................................#",
+    "########################################",
+];
+
+pub struct PointDef { pub id: &'static str, pub name: &'static str, pub floor: usize, pub x: usize, pub y: usize, pub route: &'static str }
+pub static POINTS: &[PointDef] = &[
+    PointDef { id: "p_train_console", name: "列车控制台", floor: 0, x: 20, y: 17, route: "d_train_console" },
+    PointDef { id: "p_luggage", name: "行李架", floor: 0, x: 3, y: 4, route: "d_luggage" },
+    PointDef { id: "p_platform_map", name: "站台导览图", floor: 0, x: 21, y: 10, route: "d_platform_map" },
+    PointDef { id: "p_decon_terminal", name: "消毒终端", floor: 0, x: 29, y: 10, route: "d_decon" },
+    PointDef { id: "p_gate_lock", name: "大门密码锁", floor: 0, x: 33, y: 10, route: "d_entrance_gate" },
+    PointDef { id: "p_kitchen_cabinet", name: "厨房急救箱", floor: 1, x: 6, y: 10, route: "d_adrenaline" },
+    PointDef { id: "p_redqueen_terminal", name: "红后终端", floor: 1, x: 27, y: 8, route: "d_redqueen" },
+    PointDef { id: "p_laser_schematic", name: "激光通道示意图", floor: 1, x: 21, y: 16, route: "d_schematic" },
+    PointDef { id: "p_file_cabinet", name: "档案柜", floor: 1, x: 6, y: 21, route: "d_files" },
+    PointDef { id: "p_med_cabinet", name: "药品柜", floor: 1, x: 9, y: 23, route: "d_meds" },
+    PointDef { id: "p_sterile_lab", name: "无菌实验室", floor: 1, x: 12, y: 19, route: "s_b_sterile_lab" },
+    PointDef { id: "p_kitchen", name: "厨房", floor: 1, x: 23, y: 17, route: "s_b_kitchen_after" },
+    PointDef { id: "p_virus_vault", name: "病毒样本库", floor: 1, x: 33, y: 13, route: "s_virus_vault" },
+    PointDef { id: "p_isolation", name: "隔离观察室", floor: 1, x: 37, y: 8, route: "s_isolation_room" },
+    PointDef { id: "p_rq3_terminal", name: "红后终端(核心)", floor: 2, x: 24, y: 9, route: "d_redqueen" },
+    PointDef { id: "p_server_array", name: "服务器阵列", floor: 2, x: 30, y: 5, route: "d_server" },
+    PointDef { id: "p_main_console", name: "主控终端", floor: 2, x: 33, y: 12, route: "d_main_console" },
+    PointDef { id: "p_safety_manual", name: "安全手册", floor: 2, x: 36, y: 8, route: "d_manual" },
+    PointDef { id: "p_drain_gate", name: "排水闸", floor: 3, x: 6, y: 6, route: "d_drain_gate" },
+    PointDef { id: "p_pipe_valve", name: "管道阀门", floor: 3, x: 29, y: 3, route: "d_pipe_valve" },
+    PointDef { id: "p_firstaid", name: "站台急救点", floor: 3, x: 22, y: 21, route: "d_firstaid" },
+    PointDef { id: "p_train_door", name: "列车车门开关", floor: 3, x: 33, y: 14, route: "d_train_door" },
+    PointDef { id: "p_backup_power", name: "备用电源箱", floor: 3, x: 24, y: 24, route: "d_backup_power" },
+];
+
+pub struct EnemyDef { pub id: &'static str, pub name: &'static str, pub floor: usize, pub x: usize, pub y: usize, pub radius: usize, pub fight: &'static str }
+pub static ENEMIES: &[EnemyDef] = &[
+    EnemyDef { id: "e_f1_z1", name: "站台丧尸", floor: 0, x: 7, y: 6, radius: 3, fight: "zombie1_save" },
+    EnemyDef { id: "e_f1_z2", name: "列车员丧尸", floor: 0, x: 14, y: 14, radius: 3, fight: "zombie1_far" },
+    EnemyDef { id: "e_z1", name: "游荡丧尸", floor: 1, x: 25, y: 2, radius: 3, fight: "zombie1_save" },
+    EnemyDef { id: "e_z2", name: "游荡丧尸", floor: 1, x: 30, y: 2, radius: 3, fight: "zombie1_save" },
+    EnemyDef { id: "e_z3", name: "厨房丧尸", floor: 1, x: 14, y: 15, radius: 3, fight: "zombie1_far" },
+    EnemyDef { id: "e_h1", name: "水道尸群", floor: 1, x: 25, y: 24, radius: 3, fight: "horde" },
+    EnemyDef { id: "e_licker", name: "舔食者", floor: 1, x: 35, y: 22, radius: 3, fight: "licker" },
+    EnemyDef { id: "e_f3_z1", name: "回廊感染者", floor: 2, x: 12, y: 18, radius: 3, fight: "zombie1_save" },
+    EnemyDef { id: "e_f3_z2", name: "机房守卫", floor: 2, x: 28, y: 23, radius: 3, fight: "b_guard" },
+    EnemyDef { id: "e_f4_horde", name: "水道尸群", floor: 3, x: 4, y: 8, radius: 3, fight: "horde" },
+    EnemyDef { id: "e_f4_z1", name: "管道丧尸", floor: 3, x: 13, y: 18, radius: 3, fight: "zombie1_save" },
+    EnemyDef { id: "e_f4_boss", name: "舔食者·成年", floor: 3, x: 22, y: 23, radius: 3, fight: "licker" },
+];
+
+pub struct NpcDef { pub id: &'static str, pub name: &'static str, pub floor: usize, pub x: usize, pub y: usize, pub talk: &'static str }
+pub static NPCS: &[NpcDef] = &[
+    NpcDef { id: "n_zhangjie", name: "张杰", floor: 0, x: 8, y: 3, talk: "s_world_zhangjie" },
+    NpcDef { id: "n_rain", name: "蕾恩", floor: 1, x: 22, y: 16, talk: "s_world_rain" },
+    NpcDef { id: "n_kaplan", name: "卡普兰", floor: 1, x: 25, y: 13, talk: "s_world_kaplan" },
+    NpcDef { id: "n_yihao", name: "一号", floor: 1, x: 24, y: 11, talk: "s_world_yihao" },
+    NpcDef { id: "n_rain_f3", name: "蕾恩(核心层)", floor: 2, x: 32, y: 4, talk: "s_world_rain" },
+    NpcDef { id: "n_rain_f4", name: "蕾恩(站台)", floor: 3, x: 30, y: 12, talk: "s_world_rain" },
+];
+
+pub struct ZoneDef { pub id: &'static str, pub name: &'static str, pub floor: usize, pub x: usize, pub y: usize, pub kind: &'static str, pub ref_id: &'static str }
+pub static ZONES: &[ZoneDef] = &[
+    ZoneDef { id: "z_laser", name: "激光通道", floor: 1, x: 34, y: 21, kind: "puzzle", ref_id: "d_laser_room" },
+    ZoneDef { id: "z_licker", name: "站台BOSS区", floor: 1, x: 34, y: 22, kind: "fight", ref_id: "licker" },
+];
+
+pub struct PortalDef { pub id: &'static str, pub floor: usize, pub x: usize, pub y: usize, pub to_floor: usize, pub tx: usize, pub ty: usize }
+pub static PORTALS: &[PortalDef] = &[
+    PortalDef { id: "pt_elevator_down", floor: 0, x: 27, y: 4, to_floor: 1, tx: 2, ty: 2 },
+    PortalDef { id: "pt_stairs_down", floor: 0, x: 3, y: 20, to_floor: 1, tx: 23, ty: 13 },
+    PortalDef { id: "pt_elevator_up", floor: 1, x: 2, y: 2, to_floor: 0, tx: 27, ty: 4 },
+    PortalDef { id: "pt_vlift_up", floor: 1, x: 23, y: 14, to_floor: 2, tx: 30, ty: 3 },
+    PortalDef { id: "pt_vlift_down", floor: 2, x: 30, y: 3, to_floor: 1, tx: 23, ty: 14 },
+    PortalDef { id: "pt_shaft_down", floor: 2, x: 21, y: 14, to_floor: 3, tx: 21, ty: 5 },
+    PortalDef { id: "pt_shaft_up", floor: 3, x: 21, y: 5, to_floor: 2, tx: 21, ty: 14 },
+];
