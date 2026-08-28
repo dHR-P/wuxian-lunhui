@@ -35,7 +35,7 @@ fn boss_win(st: &mut GameState) -> String {
 pub static WUJIN_SCENES: &[SceneDef] = &[
     // ===== 开场扩充（钩子 + 氛围） =====
     SceneDef {
-        id: "wj_00", bg: Some("wujin_bg.png"), loc: Some("无尽森林 · 林缘"), mood: "tension",
+        id: "wj_00", bg: Some("wujin_bg_open.png"), loc: Some("无尽森林 · 林缘"), mood: "tension",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你踏入了「洪荒历 · 无尽森林」。",
@@ -50,7 +50,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
     },
     // ===== 世界展示中枢（hub） =====
     SceneDef {
-        id: "wj_hub", bg: Some("wujin_bg.png"), loc: Some("无尽森林 · 部落实地"), mood: "tension",
+        id: "wj_hub", bg: Some("wujin_bg_invest.png"), loc: Some("无尽森林 · 部落实地"), mood: "tension",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "密林深处有一处部落实地，木桩上挂着兽骨与旗帜，营地中央立着酋长的大帐。这里有几个部族共处，却各怀心思。",
@@ -69,7 +69,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
     },
     // ===== 世界展示调查点 4 个 =====
     SceneDef {
-        id: "wj_pt_altar", bg: Some("wujin_bg.png"), loc: Some("部落实地 · 圣树祭火"), mood: "awe",
+        id: "wj_pt_altar", bg: Some("wujin_bg_invest.png"), loc: Some("部落实地 · 圣树祭火"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "营地中央的圣树要几人合抱，树根盘成的祭台上燃着长年不熄的火。树身上刻满了各部落图腾，越往高处越凶戾。",
@@ -83,7 +83,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "wj_pt_totem", bg: Some("wujin_bg.png"), loc: Some("密林 · 藤蔓图腾"), mood: "mystery",
+        id: "wj_pt_totem", bg: Some("wujin_bg_open.png"), loc: Some("密林 · 藤蔓图腾"), mood: "mystery",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "一株巨藤被部族编成了整片图腾墙，藤蔓上依序缠着兽骨、彩羽与黑石。越靠中间的物什越古老，也越像……某种人的遗物。",
@@ -97,7 +97,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "wj_pt_victims", bg: Some("wujin_bg.png"), loc: Some("密林 · 兽骨堆"), mood: "fear",
+        id: "wj_pt_victims", bg: Some("wujin_bg_open.png"), loc: Some("密林 · 兽骨堆"), mood: "fear",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "一处低洼地的兽骨堆已经腐烂发黑，可骨堆最外面压着的，竟是几截折断的船桨与一部部族徽记的断矛。",
@@ -113,7 +113,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "wj_pt_pool", bg: Some("wujin_bg.png"), loc: Some("密林 · 心湖倒影"), mood: "calm",
+        id: "wj_pt_pool", bg: Some("wujin_bg_open.png"), loc: Some("密林 · 心湖倒影"), mood: "calm",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "林间一泓幽碧的湖，水面安安静静，可倒影里却游着一些你在水面看不到的『生物』。",
@@ -127,7 +127,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "wj_pt_stele", bg: Some("wujin_bg.png"), loc: Some("部落实地 · 祖声柱碑"), mood: "awe",
+        id: "wj_pt_stele", bg: Some("wujin_bg_invest.png"), loc: Some("部落实地 · 祖声柱碑"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "营地西侧立着一根三人高的柱碑，碑顶供着一串会随着风声呜呜作响的骨哨。部族管它叫『祖声』。",
@@ -142,7 +142,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
     },
     // ===== 世界居民 NPC 2 个 =====
     SceneDef {
-        id: "wj_np_hunter", bg: Some("wujin_bg.png"), loc: Some("部落实地 · 猎人围火"), mood: "calm",
+        id: "wj_np_hunter", bg: Some("wujin_bg_invest.png"), loc: Some("部落实地 · 猎人围火"), mood: "calm",
         speaker: Some("部族猎人 · 褐爪"), voice: None,
         text: TextSpec::Static(&[
             "脸上涂着白灰的猎人褐爪守着火，一边削箭头一边道:「我们从不猎杀，只打森林分给我们的那一份。越贪，死得越快。」",
@@ -156,7 +156,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "wj_np_elder", bg: Some("wujin_bg.png"), loc: Some("部落实地 · 割藤老者棚"), mood: "sad",
+        id: "wj_np_elder", bg: Some("wujin_bg_invest.png"), loc: Some("部落实地 · 割藤老者棚"), mood: "sad",
         speaker: Some("割藤老者 · 苍"), voice: None,
         text: TextSpec::Static(&[
             "割藤老者苍佝偻着背，一遍遍用麻绳勒紧藤蔓，嘴里念念有词:「老啦，割不动了。可藤还是要割，不然它会把整片营地都缠进土里。」",
@@ -171,7 +171,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
     },
     // ===== BOSS 战前铺垫（route 到迎战，保留原 BOSS 逻辑） =====
     SceneDef {
-        id: "wj_01b_prep", bg: Some("wujin_bg.png"), loc: Some("迎击口 · 战潮压顶"), mood: "danger",
+        id: "wj_01b_prep", bg: Some("wujin_bg_battle.png"), loc: Some("迎击口 · 战潮压顶"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "营地外，兽人战潮正像一道黑色的潮水漫过林线。为首的是『兽人战潮王』，他比周围所有兽人都高出半截，战斧拖地。",
@@ -186,7 +186,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
     },
     // 保留原 BOSS 入口场景
     SceneDef {
-        id: "wj_01", bg: Some("img_zhuyuan_book.png"), loc: Some("迎击口"), mood: "danger",
+        id: "wj_01", bg: Some("wujin_bg_battle.png"), loc: Some("迎击口"), mood: "danger",
         speaker: Some("BOSS"), voice: None,
         text: TextSpec::Static(&["兽人战潮王 挡在出口。森林会吃人——也吃文明。"]),
         choices: &[
@@ -196,7 +196,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "wj_round", bg: Some("img_laser.png"), loc: Some("迎击口 · 决战处"), mood: "danger",
+        id: "wj_round", bg: Some("wujin_bg_battle.png"), loc: Some("迎击口 · 决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("BOSS 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -207,7 +207,7 @@ pub static WUJIN_SCENES: &[SceneDef] = &[
     },
     // ===== 开放结局 2-3 分支（route 到原结算卡 wj_card） =====
     SceneDef {
-        id: "wj_end_choice", bg: Some("wujin_bg.png"), loc: Some("决战之后 · 林间空场"), mood: "choice",
+        id: "wj_end_choice", bg: Some("wujin_bg_battle.png"), loc: Some("决战之后 · 林间空场"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "当战潮王的战斧脱手砸进泥里，潮水般的兽群竟缓缓散去——它们来讨的账，似乎在足够多的『人』倒下后也被抵消了几分。",

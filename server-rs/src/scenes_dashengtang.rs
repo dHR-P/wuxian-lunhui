@@ -69,7 +69,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= 调查点：圣物陈列室 =================
     SceneDef {
-        id: "ds_reliquary", bg: Some("dashengtang_bg.png"), loc: Some("圣物陈列室"),
+        id: "ds_reliquary", bg: Some("dashengtang_bg_open.png"), loc: Some("圣物陈列室"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&[
             "陈列室里一部一部圣骨匣陈列在玻璃罩后，烛光在匣盖的金片上流转。你俯身看，其中一具匣盖内侧，有人用极细的字刻着一句话，几乎被岁月磨平。",
@@ -81,7 +81,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= 调查点：大吊灯下 =================
     SceneDef {
-        id: "ds_chandelier", bg: Some("dashengtang_bg.png"), loc: Some("中殿 · 大吊灯下"),
+        id: "ds_chandelier", bg: Some("dashengtang_bg_open.png"), loc: Some("中殿 · 大吊灯下"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&[
             "你站到大吊灯正下方，把脸投向头顶那圈最亮的光。圣光一贯的洁净此刻却让你后背发凉——你注意到，吊灯的铜链上，每隔几环就缠着一缕细而黑的线。",
@@ -93,7 +93,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= 调查点：圣坛 =================
     SceneDef {
-        id: "ds_tanhai", bg: Some("dashengtang_bg.png"), loc: Some("圣坛前"),
+        id: "ds_tanhai", bg: Some("dashengtang_bg_open.png"), loc: Some("圣坛前"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&[
             "走近了才发现，圣坛上那道金色裂纹不是岁月——它细密如蛛网，正沿着大理石缓缓蔓延，像活着的根。裂纹最深处，渗出一缕幽暗的、几乎看不清的甜气。",
@@ -105,7 +105,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= 调查点：地下墓穴 =================
     SceneDef {
-        id: "ds_crypt", bg: Some("dashengtang_bg.png"), loc: Some("大圣所 · 地下墓穴"),
+        id: "ds_crypt", bg: Some("dashengtang_bg_invest.png"), loc: Some("大圣所 · 地下墓穴"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&[
             "沿一道旋转石阶下到墓穴，冷气扑面。这里的骨殖被码放得整整齐齐，每一具上都盖着织工细致的圣布——这是圣所有意为之的「安息」。",
@@ -117,7 +117,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= NPC：执灯人 =================
     SceneDef {
-        id: "ds_acolyte", bg: Some("dashengtang_bg.png"), loc: Some("中殿 · 执灯人"),
+        id: "ds_acolyte", bg: Some("dashengtang_bg_open.png"), loc: Some("中殿 · 执灯人"),
         mood: "cold", speaker: Some("执灯人 · 低声"), voice: None,
         text: TextSpec::Static(&[
             "一个披着深蓝法衣的执灯人提着一盏小灯，正一排排点亮烛台。他见了你并不吃惊，只缓缓道：「来祈祷的吗？这里人不多啦——都怕那光。」",
@@ -130,7 +130,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= NPC：守门司事 =================
     SceneDef {
-        id: "ds_verger", bg: Some("dashengtang_bg.png"), loc: Some("圣所侧门 · 司事"),
+        id: "ds_verger", bg: Some("dashengtang_bg_open.png"), loc: Some("圣所侧门 · 司事"),
         mood: "cold", speaker: Some("守门司事"), voice: None,
         text: TextSpec::Static(&[
             "侧门边的司事正在擦拭一杆不知名的长烛架，听见你脚步头也不抬：「里头那束光，年轻，自以为是光的也都那么想。等它自己发觉照出了什么，就晚了。」",
@@ -143,7 +143,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战铺垫：圣光生变 =================
     SceneDef {
-        id: "ds_gather", bg: Some("dashengtang_bg.png"), loc: Some("大圣所 · 圣光渐热"),
+        id: "ds_gather", bg: Some("dashengtang_bg_open.png"), loc: Some("大圣所 · 圣光渐热"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你越是往圣所深处走，那束圣光越是发烫。吊灯下的黑线一根根鼓胀起来，圣坛的金色裂纹像被浇了油般蔓延，整座圣所的地面都在极轻地颤动。",
@@ -156,7 +156,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ds_prelude", bg: Some("img_laser.png"), loc: Some("圣坛后 · 圣光之核"),
+        id: "ds_prelude", bg: Some("dashengtang_bg_battle.png"), loc: Some("圣坛后 · 圣光之核"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "圣坛后那片最亮的光里，有什么正在成形——一具蜷曲的、由圣骨与阴影糅成的形体缓缓舒展开来。它身上披着揉碎的圣布，眉眼处却是一片空洞的、吞光的黑。",
@@ -167,7 +167,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "ds_01", bg: Some("img_zhuyuan_book.png"), loc: Some("圣坛后的甬道"), mood: "danger",
+        id: "ds_01", bg: Some("dashengtang_bg_invest.png"), loc: Some("圣坛后的甬道"), mood: "danger",
         speaker: Some("污染圣物之灵"), voice: None,
         text: TextSpec::Static(&["污染圣物之灵 挡在出口，圣光在它身侧淌成黑。圣光最盛处，腐得最深。" ]),
         choices: &[
@@ -177,7 +177,7 @@ pub static DASHENGTANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ds_round", bg: Some("img_laser.png"), loc: Some("决战 · 圣光之核"), mood: "danger",
+        id: "ds_round", bg: Some("dashengtang_bg_battle.png"), loc: Some("决战 · 圣光之核"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("污染圣物之灵 尚余 {} 气力，你 HP {}。每斩断一缕腐光，圣所就还你一分清白。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

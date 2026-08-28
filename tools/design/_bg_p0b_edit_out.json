@@ -1,0 +1,90 @@
+{
+  "total_edits": 69,
+  "report": {
+    "scenes_sishen.rs": [
+      "img_train.png x9 -> sishen_bg_open.png",
+      "img_corridor.png x8 -> sishen_bg_battle.png",
+      "img_zhuyuan_book.png x12 -> sishen_bg_invest.png"
+    ],
+    "scenes_mumiyi.rs": [
+      "img_zhuyuan_book.png x11 -> mumiyi_bg_open.png",
+      "img_laser.png x7 -> mumiyi_bg_invest.png",
+      "img_redqueen.png x6 -> mumiyi_bg_battle.png"
+    ],
+    "scenes_xinghe.rs": [
+      "img_horde.png x10 -> xinghe_bg_open.png",
+      "img_corridor.png x7 -> xinghe_bg_invest.png",
+      "img_laser.png x7 -> xinghe_bg_battle.png"
+    ],
+    "scenes_juluoji.rs": [
+      "img_zhuyuan_book.png x6 -> juluoji_bg_open.png",
+      "img_horde.png x7 -> juluoji_bg_invest.png",
+      "img_laser.png x8 -> juluoji_bg_battle.png"
+    ],
+    "scenes_yiying.rs": [
+      "img_corridor.png x10 -> yiying_bg_open.png",
+      "img_train.png x1 -> yiying_bg_open.png",
+      "img_horde.png x6 -> yiying_bg_invest.png",
+      "img_sterile_lab.png x3 -> yiying_bg_invest.png",
+      "img_isolation.png x3 -> yiying_bg_invest.png",
+      "img_redqueen.png x7 -> yiying_bg_battle.png",
+      "img_laser.png x5 -> yiying_bg_battle.png"
+    ],
+    "scenes_moruiya.rs": [
+      "mo_lake: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_open.png\")",
+      "mo_watcher_fight: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_open.png\")",
+      "mo_watcher_after: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_open.png\")",
+      "mo_02_hall: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_open.png\")",
+      "mo_rune: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_open.png\")",
+      "mo_rune_scout: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_open.png\")",
+      "mo_collapse: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_south_ambush: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_book: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_drum_ambush_scene: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_chest: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_stair: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_vault: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_vault_take: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_vault_check: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_cart: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_cart_ride: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_npc_gandalf: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_npc_boromir: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_npc_gimli: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_npc_troll: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_troll_fight: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_invest.png\")",
+      "mo_bridge_desc: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_battle.png\")",
+      "mo_boss_round: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_battle.png\")",
+      "mo_ending_survive: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_battle.png\")",
+      "mo_ending_sacrifice: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_battle.png\")",
+      "mo_exit: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"moruiya_bg_battle.png\")"
+    ],
+    "scenes_dashengtang.rs": [
+      "ds_prelude: bg: Some(\"img_laser.png\") -> bg: Some(\"dashengtang_bg_battle.png\")",
+      "ds_round: bg: Some(\"img_laser.png\") -> bg: Some(\"dashengtang_bg_battle.png\")",
+      "ds_01: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"dashengtang_bg_invest.png\")",
+      "ds_crypt: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_invest.png\")",
+      "ds_reliquary: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_open.png\")",
+      "ds_chandelier: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_open.png\")",
+      "ds_tanhai: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_open.png\")",
+      "ds_acolyte: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_open.png\")",
+      "ds_verger: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_open.png\")",
+      "ds_gather: bg: Some(\"dashengtang_bg.png\") -> bg: Some(\"dashengtang_bg_open.png\")"
+    ],
+    "scenes_wujin.rs": [
+      "wj_01: bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"wujin_bg_battle.png\")",
+      "wj_round: bg: Some(\"img_laser.png\") -> bg: Some(\"wujin_bg_battle.png\")",
+      "wj_00: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_open.png\")",
+      "wj_pt_totem: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_open.png\")",
+      "wj_pt_victims: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_open.png\")",
+      "wj_pt_pool: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_open.png\")",
+      "wj_hub: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_invest.png\")",
+      "wj_pt_altar: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_invest.png\")",
+      "wj_pt_stele: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_invest.png\")",
+      "wj_np_hunter: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_invest.png\")",
+      "wj_np_elder: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_invest.png\")",
+      "wj_01b_prep: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_battle.png\")",
+      "wj_end_choice: bg: Some(\"wujin_bg.png\") -> bg: Some(\"wujin_bg_battle.png\")"
+    ]
+  }
+}

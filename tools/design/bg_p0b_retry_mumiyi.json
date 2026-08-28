@@ -1,0 +1,12 @@
+{
+  "style_suffix": "Photorealistic empty environment scene, absolutely no people, no characters, no humanoid figures, no statues of humans, no bodies, no mummies, no sarcophagus with a human face, no figurative reliefs, no animal figures, no monsters, no watermark, no readable text, no lettering, no signage, cinematic single wide shot, vertical 768x1024 composition, film grain, high detail.",
+  "jobs": [
+    {
+      "slug": "mumiyi",
+      "type": "battle",
+      "file": "mumiyi_bg_battle.png",
+      "qdesc": "木乃伊 埃及地宫·祭司墓室(纯建筑空镜)",
+      "prompt": "An empty ancient Egyptian priest burial chamber rendered purely as architecture, tall stone columns and gilded geometric wall patterns with abstract spirals and sun-disk ornaments only, a flat empty stone altar at the center, sealed clay storage jars, scattered gold dust and sand on the floor, dramatic shafts of pale golden light from a high opening, dust in the beams. No sarcophagus, no human face, no human figures, no statues, no relief carvings of people or animals, no writing."
+    }
+  ]
+}

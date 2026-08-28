@@ -146,6 +146,97 @@ pub const BLOODLINES: &[BloodlineDef] = &[
             rage_bonus_atk: 0, label: "攻+8·减8·闪+0.08",
         },
     },
+    // ==================== 增量扩充（第 3 批 · +10 血统 · 动漫/小说） ====================
+    BloodlineDef {
+        id: "saiyan_bloodline",
+        name: "赛亚人血统",
+        desc: "濒死愈强，怒意化气——每一次倒下都让下一次站起更凶悍。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 12, leech_on_hit: 0, dodge_bonus: 0.02, dmg_reduce: 4, san_resist: 0,
+            rage_bonus_atk: 25, label: "攻+12·减4·狂暴+25",
+        },
+    },
+    BloodlineDef {
+        id: "sharingan_bloodline",
+        name: "写轮眼血统",
+        desc: "眼眸映照万象，洞察先机——闪避如影，一眼看破杀意。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 6, leech_on_hit: 0, dodge_bonus: 0.15, dmg_reduce: 0, san_resist: 4,
+            rage_bonus_atk: 10, label: "攻+6·闪+0.15·SAN抗+4",
+        },
+    },
+    BloodlineDef {
+        id: "hollow_bloodline",
+        name: "虚化血统",
+        desc: "面具之下是深渊——每一次命中都撕扯敌人生机。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 14, leech_on_hit: 8, dodge_bonus: -0.02, dmg_reduce: 0, san_resist: 0,
+            rage_bonus_atk: 15, label: "攻+14·吸血8·狂暴+15",
+        },
+    },
+    BloodlineDef {
+        id: "saint_bloodline",
+        name: "圣斗士血统",
+        desc: "第七感觉醒，小宇宙燃烧——圣衣之魂护佑己身。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 8, leech_on_hit: 0, dodge_bonus: 0.05, dmg_reduce: 10, san_resist: 6,
+            rage_bonus_atk: 0, label: "攻+8·减10·闪+0.05",
+        },
+    },
+    BloodlineDef {
+        id: "shinigami_bloodline",
+        name: "死神血统",
+        desc: "持有斩魄刀之力，灵压如渊——出手即割裂万物。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 12, leech_on_hit: 0, dodge_bonus: 0.04, dmg_reduce: 6, san_resist: 0,
+            rage_bonus_atk: 0, label: "攻+12·减6·闪+0.04",
+        },
+    },
+    BloodlineDef {
+        id: "quincy_bloodline",
+        name: "灭却师血统",
+        desc: "灵子圣弓在手，神圣灭矢——对秽物穿透尤厉。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 16, leech_on_hit: 0, dodge_bonus: 0.0, dmg_reduce: 2, san_resist: 0,
+            rage_bonus_atk: 0, label: "攻+16·减2",
+        },
+    },
+    BloodlineDef {
+        id: "uchiha_bloodline",
+        name: "宇智波血脉",
+        desc: "瞳术天之骄子，火遁贯穿——怒火化作蚀骨炎刀。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 10, leech_on_hit: 4, dodge_bonus: 0.06, dmg_reduce: 0, san_resist: 0,
+            rage_bonus_atk: 10, label: "攻+10·吸血4·闪+0.06",
+        },
+    },
+    BloodlineDef {
+        id: "senju_bloodline",
+        name: "千手血脉",
+        desc: "森罗万象之体，愈战愈勇——受创愈多，回气愈盛。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 0, leech_on_hit: 0, dodge_bonus: 0.0, dmg_reduce: 12, san_resist: 4,
+            rage_bonus_atk: 0, label: "减12·SAN抗+4 高坦",
+        },
+    },
+    BloodlineDef {
+        id: "otsutsuki_bloodline",
+        name: "大筒木血脉",
+        desc: "星天之血，神之之力——承受与撕裂并存，近乎规则之躯。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 14, leech_on_hit: 6, dodge_bonus: 0.0, dmg_reduce: 12, san_resist: 6,
+            rage_bonus_atk: 0, label: "攻+14·吸血6·减12",
+        },
+    },
+    BloodlineDef {
+        id: "mitsurugi_bloodline",
+        name: "鬼灭呼吸·日之呼吸",
+        desc: "太阳之呼吸流转，斩鬼之器——对暗秽炎克双绝。",
+        passive: crate::defs::BloodlinePassive {
+            atk_flat: 12, leech_on_hit: 0, dodge_bonus: 0.03, dmg_reduce: 6, san_resist: 0,
+            rage_bonus_atk: 8, label: "攻+12·减6·闪+0.03·狂暴+8",
+        },
+    },
 ];
 
 // ============================================================================

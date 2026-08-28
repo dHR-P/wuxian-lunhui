@@ -78,9 +78,17 @@ body.hurt #redPulse { opacity: 1; }
   backdrop-filter: blur(3px);
   box-shadow: 0 12px 48px rgba(0,0,0,.7);
 }
+.narrHead { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+#speakerPortrait {
+  width: 64px; height: 64px; object-fit: cover; object-position: top center;
+  border: 1px solid #3a2a2e; border-radius: 6px; flex: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,.6); background: #101014;
+}
+#speakerPortrait[hidden] { display: none; }
+.narrHeadText { flex: 1 1 auto; min-width: 0; }
 #speaker {
   display: inline-block; font-size: 13px; letter-spacing: 3px;
-  color: var(--blood); margin-bottom: 8px; font-weight: bold;
+  color: var(--blood); font-weight: bold;
 }
 #narrText {
   font-size: 15.5px; line-height: 1.85; color: var(--bone);
@@ -110,6 +118,8 @@ body.hurt #redPulse { opacity: 1; }
 .choice:hover { border-left-color: var(--blood); background: rgba(45,14,20,.92); transform: translateX(4px); }
 .choice::before { content: "◆"; position: absolute; left: 14px; color: var(--blood); font-size: 12px; top: 50%; transform: translateY(-50%); }
 .choice .sub { display: block; font-size: 12px; color: var(--ash); margin-top: 3px; }
+.itemIcon { display: inline-block; width: 18px; height: 18px; vertical-align: -3px; margin-right: 6px; }
+.itemIcon img { width: 18px; height: 18px; object-fit: contain; display: block; }
 .choice[disabled] { opacity: .35 !important; pointer-events: none; }
 
 /* ---------- 标题画面 ---------- */

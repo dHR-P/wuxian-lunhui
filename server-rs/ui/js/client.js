@@ -4,6 +4,57 @@
 const $ = id => document.getElementById(id);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+/* ---------------- 说话人立绘 ----------------
+ * speaker 名 → 立绘文件名映射（主神空间队友 / NPC）。找不到映射时回退兜底
+ * 立绘(img_zhangjie)。加载失败静默回退（onerror 置 hidden），绝不阻断剧情。
+ */
+const SPEAKER_PORTRAITS = {
+  "张杰": "img_zhangjie",
+  "郑吒": "pc_zhengzha",
+  "楚轩": "pc_chuxuan",
+  "詹岚": "pc_zhanlan",
+  "赵樱空": "pc_zhaoyingkong",
+};
+const SPEAKER_FALLBACK = "img_zhangjie";
+function applySpeakerPortrait(speaker) {
+  const img = $("speakerPortrait");
+  if (!img) return;
+  const key = (speaker || "").trim();
+  if (!key) { img.hidden = true; img.removeAttribute("src"); return; }
+  // 兜底：任何带名的说话人都有立绘；命中队友映射用对应立绘，否则用兜底立绘
+  const file = (SPEAKER_PORTRAITS[key] || SPEAKER_FALLBACK) + ".png";
+  img.onerror = () => { img.hidden = true; img.removeAttribute("src"); };
+  img.onload = () => { img.hidden = false; };
+  img.src = "assets/img/" + file;
+}
+
+/* ---------------- 道具/武器图标接线 ----------------
+ * item_<id>.png 已存在 assets/img（道具/武器/消耗品）。此辅助把「物品 id 或文件名」
+ * 映射到资源路径并生成一个小图标 HTML；找不到对应资源则返回空串（无图标，静默回退）。
+ * 用于兑换列表/道具栏条目（暂无独立 DOM，接入 choices 的 item 字段 / body 中 <span class="itemIcon">）。
+ */
+const ITEM_ICON_BASES = ["item", "wpn"];   // assets 前缀：item_*, （武器若后续生成 wpn_*）
+function itemIconHtml(id) {
+  if (!id) return "";
+  const name = String(id).replace(/[^a-z0-9_]/gi, "").toLowerCase();
+  if (!name) return "";
+  for (const base of ITEM_ICON_BASES) {
+    // 直接命中 item_<id>.png；或 id 已带 item_ 前缀时精确拼接
+    const candidate = name.startsWith(base + "_") ? name : base + "_" + name;
+    // 无法在 JS 里探测文件存在，靠 onerror 静默回退：坏图直接不渲染
+    const html =
+      `<span class="itemIcon" data-src="assets/img/${candidate}.png">` +
+      `<img src="assets/img/${candidate}.png" alt="" onerror="this.parentElement.remove()">` +
+      `</span>`;
+    return html;
+  }
+  return "";
+}
+/** 便捷：给一个带 item id 的数据对象返回图标，无则空串 */
+function itemIconFor(rec) {
+  return itemIconHtml(rec && (rec.item || rec.id || rec.name));
+}
+
 /* ---------------- 分辨率 / HiDPI ----------------
  * 三档渲染目标(逻辑分辨率 CSS 像素) + DPR 物理像素:
  *   720  -> 1280x720,  1080 -> 1920x1080,  1440 -> 2560x1440
@@ -470,6 +521,7 @@ async function renderSceneWithBack(view) {
   showBg(sceneEl.bg, sceneEl.loc);
   AudioSys.voice(sceneEl.voice);
   $("speaker").textContent = sceneEl.speaker || "";
+  applySpeakerPortrait(sceneEl.speaker);
   const paras = (sceneEl.paragraphs || []).join("\n\n");
   // 战斗视图
   if (view.fight) {
@@ -490,7 +542,7 @@ async function renderSceneWithBack(view) {
     (view.choices || []).forEach(c => {
       const btn = document.createElement("button");
       btn.className = "choice";
-      btn.innerHTML = c.label + (c.sub ? `<span class="sub">${c.sub}</span>` : "");
+      btn.innerHTML = (c.item ? itemIconHtml(c.item) : "") + c.label + (c.sub ? `<span class="sub">${c.sub}</span>` : "");
       btn.onclick = async () => {
         AudioSys.sfx("click");
         const next = await TAURI_INVOKE()("api_choose", { index: c.index });
@@ -621,6 +673,7 @@ async function handleView(view) {
   showBg(sceneEl.bg, sceneEl.loc);
   AudioSys.voice(sceneEl.voice);
   $("speaker").textContent = sceneEl.speaker || "";
+  applySpeakerPortrait(sceneEl.speaker);
 
   const paras = (sceneEl.paragraphs || []).join("\n\n");
 
@@ -644,7 +697,7 @@ async function handleView(view) {
     (view.choices || []).forEach(c => {
       const btn = document.createElement("button");
       btn.className = "choice";
-      btn.innerHTML = c.label + (c.sub ? `<span class="sub">${c.sub}</span>` : "");
+      btn.innerHTML = (c.item ? itemIconHtml(c.item) : "") + c.label + (c.sub ? `<span class="sub">${c.sub}</span>` : "");
       btn.onclick = async () => {
         AudioSys.sfx("click");
         handleView(await TAURI_INVOKE()("api_choose", { index: c.index }));

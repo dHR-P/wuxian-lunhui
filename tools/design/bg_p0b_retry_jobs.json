@@ -1,0 +1,33 @@
+{
+  "style_suffix": "Photorealistic empty scene, absolutely no people, no characters, no humanoid figures, no animals, no monsters, no corpse, no watermark, absolutely no readable text, letters, numbers, signs, no logos, no captions, no signage, cinematic single wide shot, vertical 768x1024 composition, film grain, high detail.",
+  "jobs": [
+    {
+      "slug": "sishen",
+      "type": "invest",
+      "file": "sishen_bg_invest.png",
+      "qdesc": "死神来了 现代机场·行李提取厅(无文字)",
+      "prompt": "Abstract empty airport baggage claim hall interior, long empty carousel belt with a few unclaimed suitcases, rows of metal luggage carts, cold fluorescent light from ceiling panels, polished grey floor, smooth featureless surfaces with no readable signs, no writing, no lettering, muted neutral tones. Completely empty of people, with no text anywhere."
+    },
+    {
+      "slug": "mumiyi",
+      "type": "battle",
+      "file": "mumiyi_bg_battle.png",
+      "qdesc": "木乃伊 埃及地宫·祭司墓室(无文字)",
+      "prompt": "Dim high priest burial chamber of an Egyptian crypt, a massive carved stone sarcophagus at the center, gilded abstract wall reliefs and stone columns, scattered treasure and sealed canopic vessels, sand drifting in the air, shafts of pale light through a high gap, dramatic dark tomb interior. No people, no writing, no hieroglyph text, no letters."
+    },
+    {
+      "slug": "juluoji",
+      "type": "open",
+      "file": "juluoji_bg_open.png",
+      "qdesc": "侏罗纪 雨林岛·园区大道(无文字)",
+      "prompt": "Empty Jurassic-theme park main concourse, a broad tarmac avenue edged with tall steel electric fence posts, dense tropical vegetation pressing in from both sides, an arched park gateway with a featureless blank sign panel, wet dirt road, overcast green jungle daylight. No people, no dinosaurs, no readable text, no lettering, no signs with letters."
+    },
+    {
+      "slug": "juluoji",
+      "type": "invest",
+      "file": "juluoji_bg_invest.png",
+      "qdesc": "侏罗纪 雨林岛·热带丛林(无文字)",
+      "prompt": "Dense steamy tropical rainforest interior, giant ferns and vine-strangled trees, low lying fog, shafts of dappled green light, muddy ground, a fallen rusted guard tower half swallowed by vegetation, all surfaces weathered and text-free. No people, no dinosaurs, no readable text, no signage, no lettering."
+    }
+  ]
+}

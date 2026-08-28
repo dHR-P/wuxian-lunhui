@@ -251,7 +251,7 @@ SceneDef {
 
 /* ---- L1 调查点场景 ---- */
 SceneDef {
-    id: "xh_02_craft", bg: Some("img_horde.png"), loc: Some("L1 · 登陆舱残骸"),
+    id: "xh_02_craft", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 登陆舱残骸"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["登陆舱半埋在尘土里，舱门被蚀成锯齿。舱壁的武器架上还挂着一副动力装甲——你剥下一块『装甲动力格』。"]),
     choices: &[ChoiceDef { label: "取下装甲动力格", sub: "Item it_xh_armor · 开 G1 装甲闸", cond: None,
@@ -259,7 +259,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_03_beacon", bg: Some("img_horde.png"), loc: Some("L1 · 通讯信标"),
+    id: "xh_03_beacon", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 通讯信标"),
     mood: "danger", speaker: Some("通讯广播"), voice: None,
     text: TextSpec::Static(&["你用装甲脉冲把信标点亮，全频广播里滚过一段断断续续的军令：「……地洞……脑虫……它用脑波调兵……斩首，斩首……」"]),
     choices: &[ChoiceDef { label: "记下军令", sub: "剧情提示", cond: None,
@@ -267,7 +267,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_04_hunter_note", bg: Some("img_horde.png"), loc: Some("L1 · 尸兵野战队记"),
+    id: "xh_04_hunter_note", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 尸兵野战队记"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["一具被螯足劈穿的尸兵压在战术板上，指头还按在一行字上：「虫群是手，脑虫是脑。手可以砍一万次，脑子只要砍一次。」"]),
     choices: &[ChoiceDef { label: "收起战术板", sub: "剧情伏笔", cond: None,
@@ -277,14 +277,14 @@ SceneDef {
 
 /* ---- L1 登陆场 · 多波次增员（战斗场景链：波1→回血→波2→回血→波3→过） ---- */
 SceneDef {
-    id: "xh_combat_wave1", bg: Some("img_horde.png"), loc: Some("L1 · 登陆场"),
+    id: "xh_combat_wave1", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 登陆场"),
     mood: "danger", speaker: Some("⚔ 第一波"), voice: None,
     text: TextSpec::Static(&["第一批虫群从地表拱出，嘶咬着压向你撑出的防线。你抬枪迎上——"]),
     choices: &[ChoiceDef { label: "迎战", sub: "虫群 · 第一波", cond: None, effects: &NO_EFF, route: Route::To("xh_combat_wave2") }],
     fight_id: Some("xh_wave_a"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_rest_wave1", bg: Some("img_horde.png"), loc: Some("L1 · 岩台掩体后"),
+    id: "xh_rest_wave1", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 岩台掩体后"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["第一波被你钉死在缺口。你退回岩台掩体后，上紧弹药、喘匀一口气——增员的低鸣没有停。"]),
     choices: &[ChoiceDef { label: "（休整回满血）", sub: "HP 回满 → 第二波", cond: None,
@@ -293,14 +293,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_combat_wave2", bg: Some("img_horde.png"), loc: Some("L1 · 登陆场"),
+    id: "xh_combat_wave2", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 登陆场"),
     mood: "danger", speaker: Some("⚔ 第二波"), voice: None,
     text: TextSpec::Static(&["第二波虫兵从崩裂的岩缝里涌出——它们在增员，越杀越多。"]),
     choices: &[ChoiceDef { label: "迎战", sub: "虫兵群 · 第二波", cond: None, effects: &NO_EFF, route: Route::To("xh_combat_wave3") }],
     fight_id: Some("xh_wave_b"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_rest_wave2", bg: Some("img_horde.png"), loc: Some("L1 · 岩台掩体后"),
+    id: "xh_rest_wave2", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 岩台掩体后"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["第二波虫兵被击散。你咬着止血带把渗血的护甲带勒紧，把最后的体力留给最后一波。"]),
     choices: &[ChoiceDef { label: "（休整回满血）", sub: "HP 回满 → 第三波", cond: None,
@@ -309,7 +309,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_combat_wave3", bg: Some("img_horde.png"), loc: Some("L1 · 登陆场"),
+    id: "xh_combat_wave3", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 登陆场"),
     mood: "danger", speaker: Some("⚔ 第三波"), voice: None,
     text: TextSpec::Static(&["最后一波黑压压的虫群漫上来，把登陆场围成一座嘶鸣的孤岛。清掉它们，找出地洞的入口。"]),
     choices: &[ChoiceDef { label: "迎战", sub: "虫群 · 第三波", cond: None, effects: &NO_EFF, route: Route::To("xh_01") }],
@@ -318,7 +318,7 @@ SceneDef {
 
 /* ---- L1 过关 hub：地洞入口 ---- */
 SceneDef {
-    id: "xh_01", bg: Some("img_horde.png"), loc: Some("L1 · 登陆场 · 地洞入口"),
+    id: "xh_01", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 登陆场 · 地洞入口"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "虫群退潮般缩回地底，登陆场归于一片死寂。不远处一处坍裂的岩缝露出一道向下的黑口，泥土里全是新鲜刨开的菌毯——脑虫把它们都叫回家了。",
@@ -333,7 +333,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_01_skirmish", bg: Some("img_horde.png"), loc: Some("L1 · 登陆场"),
+    id: "xh_01_skirmish", bg: Some("xinghe_bg_open.png"), loc: Some("L1 · 登陆场"),
     mood: "danger", speaker: None, voice: Some("vo_xh_warrior"),
     text: TextSpec::Static(&["一只漏网的虫兵从尸堆里破土而出，螯足几乎擦着你的喉——（战斗）"]),
     choices: &[],
@@ -342,7 +342,7 @@ SceneDef {
 
 /* ================= 幕二 · 地洞隧道（xh_10 / xh_11） ================= */
 SceneDef {
-    id: "xh_10_arrive_tunnel", bg: Some("img_corridor.png"), loc: Some("L2 · 地洞入口"),
+    id: "xh_10_arrive_tunnel", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 地洞入口"),
     mood: "cold", speaker: Some("老兵 · 里科"), voice: None,
     text: TextSpec::Static(&[
         "坠入地洞那一刻，头顶的菌毯在身后合拢。黑暗里响起一个压低的嗓音——老兵里科举着战术电筒：「走地洞，能避开地表虫群的大部队。但这里……是它们的窝。」",
@@ -362,7 +362,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_11_egg", bg: Some("img_corridor.png"), loc: Some("L2 · 菌毯卵堆"),
+    id: "xh_11_egg", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 菌毯卵堆"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["菌毯下压着一窝半透明虫卵，卵壁上能看见蜷缩的幼虫。里科捻灭电筒：「别碰。脑虫就靠这些续它的军团。」"]),
     choices: &[ChoiceDef { label: "记下卵堆分布", sub: "剧情", cond: None,
@@ -370,7 +370,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_12_rune", bg: Some("img_corridor.png"), loc: Some("L2 · 地道壁画 · 虫纹"),
+    id: "xh_12_rune", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 地道壁画 · 虫纹"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["隧洞壁上刻满一圈圈虫纹，像某只的脑波轨迹。你随纹路推演半晌，读懂了那句兽语般的指挥令——「垂降的节奏，是三长两短」。（xh_rune_read）"]),
     choices: &[ChoiceDef { label: "记下虫纹节律", sub: "xh_rune_read · 开 G2", cond: None,
@@ -378,7 +378,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_13_gainttrack", bg: Some("img_corridor.png"), loc: Some("L2 · 溶洞巢蜥残骸"),
+    id: "xh_13_gainttrack", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 溶洞巢蜥残骸"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["一具巨型虫被啃得只剩甲壳，钜裂的创伤边缘敷着黏腻的菌毯——脑虫拿它喂了新孵的虫群。你识得了巨型虫的猎杀特征。"]),
     choices: &[ChoiceDef { label: "记下巨型虫特征", sub: "战斗对策", cond: None,
@@ -387,14 +387,14 @@ SceneDef {
 },
 /* 地洞隧道虫群增员（多波次环节：战斗场景链 + 休息） */
 SceneDef {
-    id: "xh_combat_tunnel", bg: Some("img_corridor.png"), loc: Some("L2 · 隧道岔口"),
+    id: "xh_combat_tunnel", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 隧道岔口"),
     mood: "danger", speaker: Some("⚔ 隧道增员"), voice: None,
     text: TextSpec::Static(&["地道深处传来密集的节肢声响——脑虫的脑波传来，更多虫群沿着菌毯向你集合。一只巨型虫当先堵住岔口。"]),
     choices: &[ChoiceDef { label: "迎战", sub: "隧道虫群 · 增员", cond: None, effects: &NO_EFF, route: Route::To("xh_11_tunnel_rest") }],
     fight_id: Some("xh_tunnel_swarm"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_11_tunnel_rest", bg: Some("img_corridor.png"), loc: Some("L2 · 隧道岩龛后"),
+    id: "xh_11_tunnel_rest", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 隧道岩龛后"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["隧道虫群被你扫空一歇，你退进一处岩龛，把护甲带勒紧，等脑虫再派下一批之前冲过去。"]),
     choices: &[ChoiceDef { label: "（休整回满血）", sub: "HP 回满", cond: None,
@@ -403,7 +403,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_14_drop", bg: Some("img_corridor.png"), loc: Some("L2 · 深坑垂降"),
+    id: "xh_14_drop", bg: Some("xinghe_bg_invest.png"), loc: Some("L2 · 深坑垂降"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你默念虫纹的三长两短，菌毯分解开一架钢索吊筐。你踏上去，黑暗里一路下沉——头顶的菌毯在身后合拢，再无回头。"]),
     choices: &[ChoiceDef { label: "（深坑垂降至脑虫巢）", sub: "p_xh_2 单向 · 进 L3", cond: None,
@@ -414,7 +414,7 @@ SceneDef {
 
 /* ================= 幕三 · 脑虫巢决战（xh_20 / xh_30） ================= */
 SceneDef {
-    id: "xh_20_arrive_nest", bg: Some("img_laser.png"), loc: Some("L3 · 脑虫巢 · 巢穴外周"),
+    id: "xh_20_arrive_nest", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 脑虫巢 · 巢穴外周"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "深坑尽头豁然开朗——一座由菌毯与骸骨垒成的中枢巢穴。半透明的巢膜盖着高台，膜面下隐约可见一团蠕动的淡青色巨影。",
@@ -432,7 +432,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_21_observe", bg: Some("img_laser.png"), loc: Some("L3 · 巢膜观察窗"),
+    id: "xh_21_observe", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 巢膜观察窗"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["透过淡青的巢膜，你看见那只脑虫——巨颅半透明，脑膜下神经束搏动如血脉，一道无形的脑波正向外辐射指挥虫群。你记下了它尖啸的『频段』。（xh_brain_trace）"]),
     choices: &[ChoiceDef { label: "记下脑波频段", sub: "xh_brain_trace · 终结前置", cond: None,
@@ -440,7 +440,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_22_membrane", bg: Some("img_laser.png"), loc: Some("L3 · 巢膜边缘"),
+    id: "xh_22_membrane", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 巢膜边缘"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你从巢膜边沿剐下一片带着黏液的残片——这是脑虫巢的东西，也是唯一能破开高台那层核心巢膜的『钥匙』。" ]),
     choices: &[ChoiceDef { label: "收下巢膜残片", sub: "Item it_xh_membrane · 开 G3", cond: None,
@@ -448,7 +448,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_23_nest_guard", bg: Some("img_laser.png"), loc: Some("L3 · 巢穴外周"),
+    id: "xh_23_nest_guard", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 巢穴外周"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["巢卫虫群从骸骨缝隙里爬出，朝你收拢——（战斗）"]),
     choices: &[],
@@ -457,7 +457,7 @@ SceneDef {
 
 /* ---- BOSS · 脑虫（选择驱动遭遇） ---- */
 SceneDef {
-    id: "xh_30_brain", bg: Some("img_laser.png"), loc: Some("L3 · 脑虫高台 · 决战"),
+    id: "xh_30_brain", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 脑虫高台 · 决战"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你将巢膜残片贴上膜面，气流般向两侧裂开。高台上的脑虫缓缓转过半透明的巨颅，无数神经束同时转向你——整个巢穴的虫群在同一瞬抬起头。",
@@ -467,7 +467,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_brain_round", bg: Some("img_laser.png"), loc: Some("L3 · 脑虫高台 · 激战"),
+    id: "xh_brain_round", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 脑虫高台 · 激战"),
     mood: "danger", speaker: Some("脑虫"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("脑虫 HP {} / {}", f.hp.max(0), 220)).unwrap_or_else(|| "脑虫 HP --".to_string());
@@ -489,7 +489,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xh_41_settle", bg: Some("img_laser.png"), loc: Some("L3 · 脑虫高台"),
+    id: "xh_41_settle", bg: Some("xinghe_bg_battle.png"), loc: Some("L3 · 脑虫高台"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Static(&[
         "你辨出脑波频段，装甲喷流与突击火力齐射贯穿脑虫的巨颅——它轰然倒伏，整座巢穴的虫群在九十万分之一秒里失去指挥，如退潮般四散溃逃。",

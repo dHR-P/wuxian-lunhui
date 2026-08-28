@@ -1,0 +1,2941 @@
+?/* 开放世�?· 3D 第三人称副本引擎（Three.js）—�?二游风格强化�?
+ * 战斗副本: 实时走位躲闪 + 攻击键触发回合判定（引擎执行命中/伤害�?
+ * 解密副本: 走位躲激�?触发机关（引擎判定）
+ * 通过 window.DSH_ZONE.onAction(action, arg) �?IPC 通信
+ *
+ * 视觉升级要点（简洁二游风�?
+ *  - 玩家改为立绘精灵（pc_zhengzha.png，billboard 始终面向镜头，与敌人同待遇）
+ *  - 场景加低模装饰（铁箱/油桶/管通道/血渍贴片）+ 灯带氛围�?
+ *  - 攻击挥砍改为弧形刀�?+ 命中闪白；闪避带残影
+ */
+"use strict";
+
+const Zone3D = (() => {
+  let scene, camera, renderer, raf = null;
+  let player = null;         // 玩家组（影子 + 立绘精灵�?
+  let enemy = null;          // 敌人�?
+  let keys = {};
+  let zoneData = null;       // {id, kind, ref, enemy?}
+  let onAction = null;
+  let onMsg = null;
+  let onWin = null;
+  let onExit = null;
+  let yaw = 0;
+  const PX = { x: 0, z: 0 }; // 玩家实时位置
+  const EZ = { x: 4, z: 0 }; // 敌人位置
+  let attackCd = 0, dodgeCd = 0;
+  let curWeaponStyle = "unarmed"; // 当前武器类型风格（gun/laser/magic/melee/unarmed），�?setData.weapon 下发
+  let victoryT = 0;               // 胜利动作计时（玩家双臂上举），onZoneUpdate(win) �?1，每帧按 0.04 衰减
+  let camDist = 4.6;
+  const _camTarget = new THREE.Vector3(); // Bug-10: 相机 lerp 目标复用，避免每帧分�?
+  let onResize = null;   // �?init 赋值，dispose 移除
+  let afterImages = [];  // 闪避残影
+  let blood = [];        // 命中血粒子（方块飞溅，dispose 释放�?
+  let throwables = [];   // 投掷物（圣水/燃烧�?投掷类武器）：飞向敌人的小球�?+ 命中爆炸
+  let dust = null;       // 氛围尘粒（粒子系统，dispose 时释放）
+  let glowTex = null;    // 手写 bloom：additive 径向光晕贴图（Canvas 生成，复用）
+
+  // —�?装备体系深化特效（战斗特效对应装备体系）—�?
+  // 武器细分：curWeaponId �?setData 下发的原始武器串（id 或名称），WEAPON_FX �?id 查�?
+  //   WEAPON_FX_NAMES 按中文名兜底，两者都未命中回退 5 类大类默认特效�?
+  // 法宝：玩家装配的法宝 id 列表（data.fx.treasure），attack 时附加法宝特效�?
+  // 血统：玩家血�?id（data.bloodline），持续身体 aura（additive 光环，随 player 跟随）�?
+  // 技能流派：已学技�?id 列表（data.skills），attack 时按流派附加特效�?
+  let curWeaponId = "�?;             // 原始武器串（id 或中文名），�?WEAPON_FX 精确匹配
+  let curFxTreasure = [];            // 已装配法�?id[]（本�?护身/辅助�?
+  let curBloodline = null;           // 玩家血�?id（无�?null�?
+  let curSkills = [];                // 已学技�?id[]
+  let auraPoints = null;             // 血�?aura 粒子系统（Points，additive，随 player 跟随�?
+  let auraPulse = 0;                 // aura 动画相位 (s)
+  let weaponFxKey = null;            // 当前解析出的武器细分 fx key（weapons_* / default 类别�?
+
+  // 体素（MC 方块人）敌人开关：true 时敌人用方块拼成的体素人（BoxGeometry 六面明暗）；
+  // false 或素材缺失时回退立绘 billboard / 几何体。纯视觉，不影响战斗判定�?Tauri 契约�?
+  const VOXEL_ENEMY = true;
+  // 体素（MC 方块人）玩家开关：true 时玩家也用方块拼成的史蒂夫风体素人（蓝衣 Steve 配色），
+  // 与敌人体素人同比例对峙；false 时回退 pc_zhengzha 立绘 billboard。纯视觉开关，不影响交互契约�?
+  const VOXEL_PLAYER = true;
+  // 敌人精灵素材（fight ref �?立绘与体型；高度�?768x1024 比�?0.75 取宽�?
+  const ENEMY_SPRITES = {
+    zombie: { img: "assets/img/enemy_zombie.png", h: 3.4, y: 1.7 },
+    guard:  { img: "assets/img/enemy_guard.png",  h: 3.4, y: 1.7 },
+    licker: { img: "assets/img/enemy_licker.png", h: 2.9, y: 1.45 },
+    hunter: { img: "assets/img/enemy_hunter.png", h: 4.0, y: 2.0 },
+    horde:  { img: "assets/img/enemy_horde.png",  h: 3.6, y: 1.8 },
+  };
+  const PLAYER_SPRITE = { img: "assets/img/pc_zhengzha.png", h: 3.2, y: 1.6 };
+  function enemyKind(ref) {
+    if (ref === "licker" || ref === "licker_larva") return "licker";
+    if (ref === "hunter_elite") return "hunter";
+    if (ref === "b_guard") return "guard";
+    if (ref === "horde") return "horde";
+    return "zombie"; // zombie1_save / zombie1_far / chef_zombie / mut_guard
+  }
+
+  // 武器类型 �?攻击特效风格。输入可为武�?id（wp_*/wpn_*/tr_* 装备�?id）或中文名（hud.weapon）�?
+  // 分五类：melee(刀剑斧镰鞭) / gun(枪械弹道) / laser(激光光�? / magic(魔法·修真法术) / unarmed(拳脚无武�?�?
+  // 找不到匹配时回退 unarmed（拳脚），刀战默认保�?swingFx 弧形刀光�?
+  // 已知武器 id �?特效风格查表（覆�?items_data::WEAPONS + TRESURE_DEFS 主手/法宝）。按 id 精确归属�?
+  // 无法覆盖的再回落按名字关键字正则判别。表内归类依据该武器是枪/激�?法术还是近战刀剑�?
+  const WEAPON_STYLE_IDS = {
+    // gun（枪械弹道）：手�?高斯/银弹/电磁脉冲/引力坍缩�?轨道狙击
+    wp_gun9: "gun", wp_gauss: "gun", wp_silver_gun: "gun", wp_emi: "gun",
+    wp_gravity_collapse: "gun", wpn_rail_sniper: "gun",
+    // melee（近战刀剑斧镰鞭�?
+    wp_axe: "melee", wp_sword: "melee", wp_katana: "melee", wp_holy_sword: "melee",
+    wp_cu_ju: "melee", wp_quantum_core: "melee", wp_scythe_pobing: "melee",
+    wpn_bloodsaber: "melee", wp_quantum_annihil: "melee", wpn_taixu_godsaw: "melee",
+    wpn_nano_whip: "melee", wpn_causality_sword: "melee", cu_bab_benming_fejian: "melee",
+    // magic（修真法术：剑阵/�?剑意�?法宝�?
+    wpn_zhuai_jianpan: "magic", wpn_shihun_fan: "magic", tr_zhuxian_calendar: "magic",
+  };
+  function weaponStyle(weaponId) {
+    const key = String(weaponId || "").toLowerCase();
+    if (WEAPON_STYLE_IDS.hasOwnProperty(key)) return WEAPON_STYLE_IDS[key];
+    if (!key || key === "�? || key === "�? || key === "none") return "unarmed";
+    // —�?激光：laser/photon/beam/光刃/光剑（放枪械前，避免「激光枪」的『枪』误�?gun�?
+    if (/(laser|photon|beam|光剑|光刃|光束)/.test(key) || key.includes("激�?)) return "laser";
+    // —�?枪械：手�?高斯/狙击/轨道/银弹/电磁脉冲/引力坍缩�?· id 'wp_gun9'/'wp_gauss'/'wp_silver_gun'/'wp_emi'/'wpn_rail_sniper'/'wp_gravity_collapse'
+    if (/(gun|pistol|gauss|sniper|rail|gravit|emi|silver|手枪|高斯|狙击|轨道|电磁脉冲|引力|银弹|弹药|枪|shoot)/.test(key)) return "gun";
+    // —�?魔法/修真：法�?符箓/法宝/法阵/剑阵/剑意/�?�?�?�?�?
+    if (/(magic|spell|staff|wand|soul|sect|法杖|符|法宝|法阵|剑阵|剑意|幡|镜|炉|灵|修真|修仙|术|杖|�?/.test(key)) return "magic";
+    // —�?近战刀剑：�?刀/�?�?�?�?拳刃
+    if (/(sword|blade|saber|axe|scythe|whip|knife|dagger|katana|剑|刀|斧|镰|鞭|�?/.test(key)) return "melee";
+    return "unarmed";
+  }
+  // �?setData 下发�?weapon 字段解析当前风格（入参可能是 style 本身或原始名/id�?
+  function resolveWeaponStyle(raw) {
+    if (raw === "gun" || raw === "laser" || raw === "magic" || raw === "melee" || raw === "unarmed") return raw;
+    return weaponStyle(raw);
+  }
+  // 投掷类道具判定：圣水/燃烧�?投掷�?飞刀/手雷/油瓶等——攻击时触发 3D 投掷物（小球体飞向敌�?命中爆炸）�?
+  // 这是前端拿不到独立投�?action（onAction 只有 move/attack/dodge）时的视觉补偿：仍用 onAction("attack",0) 契约�?
+  // 只是攻击特效换作「投掷物飞行」观感。命中判定完全在 Rust 侧，本函数纯视觉�?
+  function isThrownWeapon(raw) {
+    const key = String(raw || "").toLowerCase();
+    if (!key || key === "�? || key === "�? || key === "none") return false;
+    if (/(throw|投掷|thrown|molotov|燃烧瓶|燃烧弹|汽油弹|手雷|grenade|圣水|holy.?water|圣水瓶|油瓶|酒瓶|飞刀|throwing)/.test(key)) return true;
+    return false;
+  }
+
+  // ================= 装备体系 · 武器细分特效映射�?=================
+  // �?5 类大类（melee/gun/laser/magic/unarmed）之内，再按"具体武器 id/�?细分颜色与形态�?
+  // fxKey �?类内变体，runAttackFx 先查此表命中则走细分特效，未命中回退大类默认�?
+  // 键统一小写。数�?id 取自 items_data.rs::WEAPONS / TRESURE_DEFS；中文名作名称兜�?
+  //（HUD 下发�?weapon 多为旧枚举中文名，精�?id 与中英文名兼收才能稳定命中）�?
+  const WEAPON_FX = {
+    // —�?melee 大类变体（重定向 FX_LIBRARY）—�?
+    "wpn_bloodsaber":    { key: "f_diablo_fire", name: "血戮剑" },    // 地狱烈焰（血红）
+    "wp_scythe_pobing":  { key: "f_diablo_fire", name: "破军重镰" },
+    "wpn_zhuai_jianpan": { key: "f_zhuxian_zhen", name: "诛仙剑阵�? }, // 诛仙剑阵
+    "wpn_taixu_godsaw":  { key: "f_taixu_liu",   name: "太虚神剑" },    // 太虚流光
+    "wpn_nano_whip":     { key: "f_nano_cutter", name: "纳米切割�? },  // 纳米切割
+    // —�?magic 大类变体（重定向 FX_LIBRARY）—�?
+    "wp_quantum_annihil":  { key: "f_anmiao",     name: "量子湮灭刀" }, // 反物质湮�?
+    "wp_gravity_collapse": { key: "f_gravity_well", name: "引力坍缩�? },// 重力�?
+    "wpn_causality_sword": { key: "f_warp_burst",  name: "因果律护身剑" },// 曲率爆闪
+    // —�?laser 大类变体：电磁轨道光�?—�?
+    "wpn_rail_sniper": { key: "f_dianci_guidao", name: "电磁轨道狙击�? },// 电磁轨道
+    // —�?法宝主手武器（TRESURE_DEFS slot 0，本命武）：青剑 —�?
+    "cu_bab_benming_fejian": { key: "f_yujian", name: "本命飞剑·青锋" },// 御剑�?
+    "cu_bab_qiushui_jian":   { key: "f_yujian", name: "秋水神剑" },
+  };
+  function resolveWeaponFxKey(raw) {
+    if (!raw || raw === "�? || raw === "�? || raw === "none") return null;
+    const k = String(raw).toLowerCase();
+    // 1) 精确 id
+    if (WEAPON_FX.hasOwnProperty(k)) return WEAPON_FX[k].key;
+    // 2) 中文名兜底（键含中文，原样比即可；再做拼�?ascii 小写不影响中文）
+    const byName = Object.keys(WEAPON_FX).find(id => (WEAPON_FX[id].name || "") === String(raw));
+    if (byName) return WEAPON_FX[byName].key;
+    return null;
+  }
+
+  // ============ 法宝特效映射（TRESURE_DEFS；attack 时按装配法宝附加�?============
+  // fxId 指向 FX_LIBRARY 特效 id（fxEmitter 参数化生成）
+  const TREASURE_FX = {
+    "tr_zhuxian_calendar": { fxId: "f_zhuxian_qi", name: "诛仙剑意�? },
+    "tr_blood_banner":     { fxId: "f_honghuo_binh", name: "血煞战�? },
+    "tr_taixu_shield":     { fxId: "f_guangdun", name: "太虚玄光�? },
+    "tr_shenlei_pendant":  { fxId: "f_shenlei", name: "神雷辟邪�? },
+    "tr_danxin_mirror":    { fxId: "f_jiguan_shuf", name: "锻心明镜" },
+    "tr_undo_pillowstone": { fxId: "f_shijian_feng", name: "逆转生死�? },
+  };
+
+  // ============ 血�?aura 映射（BLOODLINES；持续身体光晕，非攻击特效） ============
+  const BLOODLINE_AURAS = {
+    "angel_bloodline":    { name: "angel",    color: 0xeaf4ff }, // 白金光翼光晕
+    "demon_bloodline":    { name: "demon",    color: 0xff4466 }, // 暗红暗翼
+    "dragon_bloodline":   { name: "dragon",   color: 0xffcf3a }, // 金色龙鳞辉光
+    "cyber_prosthetic":   { name: "cyber",    color: 0x42c8ff }, // 蓝光机械�?
+  };
+
+  // ============ 技能流派特效映射（SKILLS；attack 时按已学流派附加�?============
+  // schoolKey �?FX_LIBRARY fxId + 参考色（fxEmitter 参数化生成）
+  const SCHOOL_STREAM = {
+    xiu:  { label: "修真·青气�?, color: 0x66e0a0, fxId: "f_jianyi" },
+    holy: { label: "圣光·金光�?, color: 0xffe07a, fxId: "f_shengguang" },
+    nt:   { label: "超能NT·念力", color: 0xb78aff, fxId: "f_nengliang_lie" },
+    meme: { label: "模因·绿失�?, color: 0x6bff8a, fxId: "f_nanmi_feng" },
+  };
+  // 由已学技�?id 推断流派（skills_data 前缀约定；school �?子技能的某种投掷，仅�?FX 路由�?
+  function skillSchools(ids) {
+    const set = {};
+    (ids || []).forEach(id => {
+      const s = String(id);
+      if (/^(cu_|skx_xiu_)/.test(s)) set.xiu = true;        // 修真
+      else if (/^(sk_holy_|skx_holy_)/.test(s)) set.holy = true; // 圣光
+      else if (/^(sk_nt_|skx_nt_)/.test(s)) set.nt = true;   // 超能 NT
+      else if (/^(sk_meme_|skx_meme_)/.test(s)) set.meme = true; // 模因
+    });
+    return Object.keys(set); // 返回已命中的 schoolKey[]
+  }
+
+  // ============================================================
+  // 参数化特效引擎（fxEmitter�? 百种特效�?FX_LIBRARY
+  // ============================================================
+  // 设计：每个特�?= {id,name,shape,color,particle,motion,style}，由 fxEmitter(entry) 参数化生成，
+  // 形状 shape 选几何构造器，颜�?color �?tint，粒�?particle 定火�?光尘形式�?
+  // 轨迹 motion 定飞�?旋转/扩散。复�?spawnSpark / blood 通道�?dispose，零外部依赖�?
+  // 性能红线：单�?attack 粒子 �?0，持�?aura �?0�?
+  const FX_PARTS_CAP = 40;              // 单次攻击特效粒子上限
+  const FX_AURA_CAP = 30;               // 持续光环粒子上限
+
+  // 颜色�?�?十六进制（shape 构造器内部 tint；粒子也有自己的调色�?
+  const FX_COLORS = {
+    �? 0xff3b4d, �? 0xff9f3b, �? 0xffc94d, �? 0xffe14d, �? 0x5cff6a,
+    �? 0x4dffd0, �? 0x3b9bff, �? 0xa45cff, �? 0xff5cc8, �? 0xf4f8ff,
+    �? 0x503060, �? 0xff4dc0, 深蓝: 0x2a5cff, 紫红: 0xc44dff, 天蓝: 0x66e0ff,
+    �? 0xd8e0ea,
+  };
+
+  // ============ FX_LIBRARY：百种参数化特效表（5 风格，�?�?00�?============
+  // shape: arc刀�?/ blade剑气·直线�?/ beam光束�?/ orb光球 / spire垂直光柱 /
+  //        helix螺旋 / runering符文�?/ shockwave能量波扩散环 / swordrain剑阵多道 /
+  //        bolt雷电折线 / flame火焰 / frost冰霜 / void黑洞吸聚 / warp时空扭曲 /
+  //        dragon龙形曲线粒子 / meteor流星�?
+  // particle: spark火花 / dust光尘 / arc雷电�?/ fire火焰�?/ ice冰晶 / shadow暗影 / stardust星屑 / void湮灭�?
+  // motion: track直线·追踪 / curve弧形 / spiral螺旋 / scatter散射 / orbit环绕 / burst扩散 / rise上升
+  // style: anime 动漫气功 / xianxia 仙侠小说 / scifi 科幻武器 / wuxia 武侠魔法 / divine 神性圣�?
+  const FX_LIBRARY = [
+    // ------------------- 动漫气功�?anime�?6�?------------------
+    { id: "f_qigongbo",     name: "气功�?,      shape: "orb",       color: "�?, particle: "spark",   motion: "track", style: "anime" },
+    { id: "f_luoxuan_wan",  name: "螺旋能量�?,   shape: "helix",     color: "�?, particle: "spark",   motion: "spiral", style: "anime" },
+    { id: "f_yueya_ren",    name: "暗月弧刃",     shape: "arc",       color: "�?, particle: "spark",   motion: "curve", style: "anime" },
+    { id: "f_leiqie",       name: "雷光�?,       shape: "bolt",      color: "天蓝", particle: "arc",    motion: "track", style: "anime" },
+    { id: "f_qianniao",     name: "千鸟雷光",     shape: "bolt",      color: "�?, particle: "arc",     motion: "scatter", style: "anime" },
+    { id: "f_yuanqi_dan",   name: "元气�?,       shape: "orb",       color: "�?, particle: "stardust", motion: "rise", style: "anime" },
+    { id: "f_liuxing_quan", name: "流星�?,       shape: "meteor",    color: "�?, particle: "fire",    motion: "scatter", style: "anime" },
+    { id: "f_boli",         name: "波纹",         shape: "shockwave", color: "�?, particle: "stardust", motion: "burst", style: "anime" },
+    { id: "f_tianzhao",     name: "天照黑炎",     shape: "flame",     color: "�?, particle: "shadow",  motion: "rise", style: "anime" },
+    { id: "f_suzuo_jian",   name: "须佐之剑",     shape: "blade",     color: "�?, particle: "spark",   motion: "curve", style: "anime" },
+    { id: "f_guipaizha",    name: "元气冲击�?,   shape: "shockwave", color: "�?, particle: "spark",   motion: "burst", style: "anime" },
+    { id: "f_lingwan",      name: "灵丸",         shape: "orb",       color: "�?, particle: "spark",   motion: "track", style: "anime" },
+    { id: "f_xiewang_fist", name: "邪王炎杀�?,   shape: "flame",     color: "�?, particle: "fire",    motion: "track", style: "anime" },
+    { id: "f_heiguan",      name: "黑棺囚笼",     shape: "void",      color: "�?, particle: "shadow",  motion: "burst", style: "anime" },
+    { id: "f_fenxian_huo",  name: "凤仙火之�?,   shape: "meteor",    color: "�?, particle: "fire",    motion: "scatter", style: "anime" },
+    { id: "f_luoxuan_piao", name: "螺旋丸闪",     shape: "helix",     color: "天蓝", particle: "spark",  motion: "spiral", style: "anime" },
+    { id: "f_shunjie",      name: "瞬极冲刺",     shape: "blade",     color: "�?, particle: "arc",     motion: "curve", style: "anime" },
+    { id: "f_jianqi_leng",  name: "月牙天冲",     shape: "arc",       color: "�?, particle: "spark",   motion: "curve", style: "anime" },
+    { id: "f_bawang_qi",    name: "霸王色气�?,   shape: "shockwave", color: "紫红", particle: "spark", motion: "orbit", style: "anime" },
+    { id: "f_douqi_qiang",  name: "斗气冲击",     shape: "blade",     color: "�?, particle: "spark",   motion: "track", style: "anime" },
+    { id: "f_chidiao",      name: "赤雕火翼",     shape: "flame",     color: "�?, particle: "fire",    motion: "orbit", style: "anime" },
+    { id: "f_weixie_bai",   name: "威吓白波",     shape: "shockwave", color: "�?, particle: "spark",   motion: "burst", style: "anime" },
+    { id: "f_ziyi_lei",     name: "紫翼雷闪",     shape: "bolt",      color: "�?, particle: "arc",     motion: "scatter", style: "anime" },
+    { id: "f_bolang_dan",   name: "能量浪波",     shape: "shockwave", color: "�?, particle: "stardust", motion: "burst", style: "anime" },
+    { id: "f_guangdun",     name: "金光护体",     shape: "runering",  color: "�?, particle: "spark",   motion: "orbit", style: "anime" },
+    { id: "f_yingyin_fist", name: "影分身乱�?,   shape: "meteor",    color: "�?, particle: "shadow",  motion: "scatter", style: "anime" },
+
+    // ------------------- 仙侠小说�?xianxia�?6�?------------------
+    { id: "f_yujian",       name: "御剑�?,       shape: "blade",     color: "�?, particle: "spark",   motion: "track", style: "xianxia" },
+    { id: "f_wanjian",      name: "万剑归宗",     shape: "swordrain", color: "�?, particle: "spark",   motion: "scatter", style: "xianxia" },
+    { id: "f_zhangxin_lei", name: "掌心�?,       shape: "bolt",      color: "�?, particle: "arc",     motion: "track", style: "xianxia" },
+    { id: "f_sanmei_zhen",  name: "三昧真火",     shape: "flame",     color: "�?, particle: "fire",    motion: "rise", style: "xianxia" },
+    { id: "f_wulei",        name: "五雷正法",     shape: "bolt",      color: "天蓝", particle: "arc",    motion: "scatter", style: "xianxia" },
+    { id: "f_zhuxian_zhen", name: "诛仙剑阵",     shape: "swordrain", color: "深蓝", particle: "spark",  motion: "orbit", style: "xianxia" },
+    { id: "f_jianqi_heng",  name: "剑气纵横",     shape: "blade",     color: "�?, particle: "spark",   motion: "curve", style: "xianxia" },
+    { id: "f_zhenyuan",     name: "真元护体",     shape: "runering",  color: "�?, particle: "stardust", motion: "orbit", style: "xianxia" },
+    { id: "f_faxiang",      name: "法相天地",     shape: "spire",     color: "�?, particle: "spark",   motion: "rise", style: "xianxia" },
+    { id: "f_danuoyi",      name: "大挪�?,       shape: "warp",      color: "�?, particle: "void",    motion: "spiral", style: "xianxia" },
+    { id: "f_fantian_yin",  name: "翻天�?,       shape: "shockwave", color: "�?, particle: "spark",   motion: "burst", style: "xianxia" },
+    { id: "f_zhanxian_fei", name: "斩仙飞刀",     shape: "blade",     color: "�?, particle: "spark",   motion: "track", style: "xianxia" },
+    { id: "f_hulu",         name: "葫芦收宝",     shape: "void",      color: "�?, particle: "void",    motion: "burst", style: "xianxia" },
+    { id: "f_shiwan_hua",   name: "十万剑气",     shape: "swordrain", color: "天蓝", particle: "spark",  motion: "scatter", style: "xianxia" },
+    { id: "f_jingang_zhou", name: "金刚�?,       shape: "runering",  color: "�?, particle: "stardust", motion: "orbit", style: "xianxia" },
+    { id: "f_diablo_fire",  name: "地狱烈焰",     shape: "flame",     color: "�?, particle: "fire",    motion: "rise", style: "xianxia" },
+    { id: "f_baodan",       name: "爆丹焚天",     shape: "meteor",    color: "�?, particle: "fire",    motion: "scatter", style: "xianxia" },
+    { id: "f_qinggui",      name: "青莲剑意",     shape: "blade",     color: "�?, particle: "spark",   motion: "spiral", style: "xianxia" },
+    { id: "f_zhenjun_lei",  name: "雷公轰天",     shape: "bolt",      color: "�?, particle: "arc",     motion: "track", style: "xianxia" },
+    { id: "f_taixu_liu",    name: "太虚流光",     shape: "helix",     color: "�?, particle: "stardust", motion: "spiral", style: "xianxia" },
+    { id: "f_douzhuan",     name: "斗转星移",     shape: "warp",      color: "深蓝", particle: "stardust",motion: "orbit", style: "xianxia" },
+    { id: "f_qingyun",      name: "青云直上",     shape: "spire",     color: "�?, particle: "spark",   motion: "rise", style: "xianxia" },
+    { id: "f_zhuxian_qi",   name: "诛仙剑气",     shape: "blade",     color: "深蓝", particle: "spark",  motion: "track", style: "xianxia" },
+    { id: "f_shijian_feng", name: "时间封印",     shape: "runering",  color: "�?, particle: "void",    motion: "orbit", style: "xianxia" },
+    { id: "f_dingtian_li",  name: "定天一�?,     shape: "spire",     color: "�?, particle: "fire",    motion: "burst", style: "xianxia" },
+    { id: "f_jianmo",       name: "剑魔灭世",     shape: "swordrain", color: "紫红", particle: "shadow", motion: "scatter", style: "xianxia" },
+
+    // ------------------- 科幻武器�?scifi�?6�?------------------
+    { id: "f_laser_pao",      name: "激光炮",       shape: "beam",      color: "�?, particle: "spark",    motion: "track", style: "scifi" },
+    { id: "f_plasmon_pao",    name: "等离子炮",     shape: "orb",       color: "�?, particle: "arc",      motion: "track", style: "scifi" },
+    { id: "f_dianci_guidao",  name: "电磁轨道",     shape: "beam",      color: "天蓝", particle: "arc",    motion: "track", style: "scifi" },
+    { id: "f_anmiao",         name: "反物质湮�?,   shape: "orb",       color: "�?, particle: "void",     motion: "burst", style: "scifi" },
+    { id: "f_liangzi_tan",    name: "量子坍缩",     shape: "helix",     color: "�?, particle: "void",     motion: "spiral", style: "scifi" },
+    { id: "f_yinli_bo",       name: "引力�?,       shape: "shockwave", color: "�?, particle: "stardust", motion: "burst", style: "scifi" },
+    { id: "f_heidong",        name: "黑洞坍缩",     shape: "void",      color: "�?, particle: "void",     motion: "burst", style: "scifi" },
+    { id: "f_nanmi_feng",     name: "纳米风暴",     shape: "meteor",    color: "�?, particle: "spark",    motion: "scatter", style: "scifi" },
+    { id: "f_nengliang_lie",  name: "高能粒子�?,   shape: "beam",      color: "�?, particle: "spark",    motion: "track", style: "scifi" },
+    { id: "f_guidao_gongji",  name: "轨道打击",     shape: "spire",     color: "�?, particle: "fire",     motion: "burst", style: "scifi" },
+    { id: "f_lizifengbao",    name: "离子风暴",     shape: "bolt",      color: "天蓝", particle: "arc",     motion: "scatter", style: "scifi" },
+    { id: "f_xiangwei_pao",   name: "相位�?,       shape: "beam",      color: "�?, particle: "void",     motion: "track", style: "scifi" },
+    { id: "f_qusuo_dan",      name: "曲速弹",       shape: "blade",     color: "深蓝", particle: "stardust",motion: "track", style: "scifi" },
+    { id: "f_antimatter_qi",  name: "湮灭奇点",     shape: "void",      color: "�?, particle: "void",     motion: "spiral", style: "scifi" },
+    { id: "f_plasma_bou",     name: "等离子刀�?,   shape: "blade",     color: "�?, particle: "spark",    motion: "curve", style: "scifi" },
+    { id: "f_gauss_boom",     name: "高斯碎裂",     shape: "meteor",    color: "�?, particle: "spark",    motion: "scatter", style: "scifi" },
+    { id: "f_light_blade",    name: "光刃切割",     shape: "blade",     color: "�?, particle: "spark",    motion: "curve", style: "scifi" },
+    { id: "f_black_coned",    name: "黑域封锁",     shape: "runering",  color: "�?, particle: "shadow",   motion: "orbit", style: "scifi" },
+    { id: "f_warp_burst",     name: "曲率爆闪",     shape: "warp",      color: "�?, particle: "void",     motion: "burst", style: "scifi" },
+    { id: "f_plasma_lie",     name: "等离子束",     shape: "beam",      color: "天蓝", particle: "arc",     motion: "track", style: "scifi" },
+    { id: "f_quantum_ji",     name: "量子极光",     shape: "helix",     color: "深蓝", particle: "stardust",motion: "spiral", style: "scifi" },
+    { id: "f_nano_cutter",    name: "纳米切割",     shape: "blade",     color: "�?, particle: "spark",    motion: "curve", style: "scifi" },
+    { id: "f_gravity_well",   name: "重力�?,       shape: "void",      color: "深蓝", particle: "stardust",motion: "orbit", style: "scifi" },
+    { id: "f_thunder_cannon", name: "雷神电磁�?,   shape: "beam",      color: "�?, particle: "arc",      motion: "track", style: "scifi" },
+    { id: "f_star_dragon",    name: "星陨龙啸",     shape: "dragon",    color: "�?, particle: "stardust", motion: "curve", style: "scifi" },
+    { id: "f_nuclear_core",   name: "聚变核心",     shape: "spire",     color: "�?, particle: "fire",     motion: "rise", style: "scifi" },
+
+    // ------------------- 武侠/魔法�?wuxia�?6�?------------------
+    { id: "f_jianqi",         name: "剑气",         shape: "blade",     color: "�?, particle: "spark",   motion: "track", style: "wuxia" },
+    { id: "f_daoqi",          name: "刀�?,         shape: "arc",       color: "�?, particle: "spark",   motion: "curve", style: "wuxia" },
+    { id: "f_zhangfeng",      name: "掌风",         shape: "shockwave", color: "�?, particle: "spark",   motion: "burst", style: "wuxia" },
+    { id: "f_jianyi",         name: "剑意",         shape: "blade",     color: "�?, particle: "stardust", motion: "spiral", style: "wuxia" },
+    { id: "f_neigong_qi",     name: "内功罡气",     shape: "runering",  color: "�?, particle: "spark",   motion: "orbit", style: "wuxia" },
+    { id: "f_yizhi_chan",     name: "一指禅",       shape: "beam",      color: "�?, particle: "spark",   motion: "track", style: "wuxia" },
+    { id: "f_lieyan_shu",     name: "烈焰�?,       shape: "flame",     color: "�?, particle: "fire",    motion: "track", style: "wuxia" },
+    { id: "f_hanbin_jian",    name: "寒冰�?,       shape: "blade",     color: "天蓝", particle: "ice",    motion: "track", style: "wuxia" },
+    { id: "f_shiandian_lian", name: "闪电�?,       shape: "bolt",      color: "�?, particle: "arc",     motion: "track", style: "wuxia" },
+    { id: "f_huoqiang",       name: "火墙",         shape: "flame",     color: "�?, particle: "fire",    motion: "burst", style: "wuxia" },
+    { id: "f_bing_fengbao",   name: "冰风�?,       shape: "meteor",    color: "�?, particle: "ice",     motion: "scatter", style: "wuxia" },
+    { id: "f_zhaohuan_lei",   name: "召唤雷云",     shape: "bolt",      color: "�?, particle: "arc",     motion: "scatter", style: "wuxia" },
+    { id: "f_ganshi_bing",    name: "寒霜之�?,     shape: "frost",     color: "天蓝", particle: "ice",    motion: "burst", style: "wuxia" },
+    { id: "f_huofeng",        name: "凤舞火诀",     shape: "dragon",    color: "�?, particle: "fire",    motion: "curve", style: "wuxia" },
+    { id: "f_lengyue_dao",    name: "冷月刀�?,     shape: "arc",       color: "�?, particle: "spark",   motion: "curve", style: "wuxia" },
+    { id: "f_chilong_lei",    name: "赤龙雷诀",     shape: "dragon",    color: "�?, particle: "arc",     motion: "curve", style: "wuxia" },
+    { id: "f_binglong_sha",   name: "冰龙�?,       shape: "dragon",    color: "天蓝", particle: "ice",    motion: "curve", style: "wuxia" },
+    { id: "f_honghuo_binh",   name: "红莲业火",     shape: "flame",     color: "紫红", particle: "fire",   motion: "rise", style: "wuxia" },
+    { id: "f_wudao_jian",     name: "无敌剑意",     shape: "swordrain", color: "�?, particle: "spark",   motion: "orbit", style: "wuxia" },
+    { id: "f_dijun_zhang",    name: "地龙�?,       shape: "shockwave", color: "�?, particle: "fire",    motion: "burst", style: "wuxia" },
+    { id: "f_fengbao_jian",   name: "风暴�?,       shape: "swordrain", color: "�?, particle: "spark",   motion: "spiral", style: "wuxia" },
+    { id: "f_ningbing_zhou",  name: "凝冰�?,       shape: "runering",  color: "天蓝", particle: "ice",    motion: "orbit", style: "wuxia" },
+    { id: "f_hunyuan_qi",     name: "混元气罡",     shape: "shockwave", color: "�?, particle: "stardust", motion: "burst", style: "wuxia" },
+    { id: "f_shijian_fu",     name: "时光�?,       shape: "runering",  color: "�?, particle: "stardust", motion: "orbit", style: "wuxia" },
+    { id: "f_dianceng_lei",   name: "叠层雷暴",     shape: "bolt",      color: "�?, particle: "arc",     motion: "scatter", style: "wuxia" },
+    { id: "f_hunsan_ling",    name: "魂散�?,       shape: "void",      color: "�?, particle: "shadow",  motion: "rise", style: "wuxia" },
+
+    // ------------------- 神性圣光类 divine�?0�?------------------
+    { id: "f_shengguang",     name: "圣光降临",     shape: "spire",     color: "�?, particle: "spark",    motion: "rise", style: "divine" },
+    { id: "f_jiguan_shuf",    name: "极光守护",     shape: "runering",  color: "�?, particle: "stardust", motion: "orbit", style: "divine" },
+    { id: "f_shenlei",        name: "神雷辟邪",     shape: "bolt",      color: "�?, particle: "arc",      motion: "track", style: "divine" },
+    { id: "f_tiandao_zhi",    name: "天道之剑",     shape: "blade",     color: "�?, particle: "spark",    motion: "track", style: "divine" },
+    { id: "f_shenhui",        name: "神辉焚天",     shape: "spire",     color: "�?, particle: "fire",     motion: "rise", style: "divine" },
+    { id: "f_alex_zhan",      name: "天使裁决",     shape: "shockwave", color: "�?, particle: "stardust", motion: "burst", style: "divine" },
+    { id: "f_nengliang_men",  name: "能量圣门",     shape: "arc",       color: "�?, particle: "spark",    motion: "curve", style: "divine" },
+    { id: "f_dijun_guang",    name: "帝君光环",     shape: "runering",  color: "�?, particle: "stardust", motion: "orbit", style: "divine" },
+    { id: "f_shenzhong_guang", name: "审判神光",    shape: "beam",      color: "�?, particle: "spark",    motion: "track", style: "divine" },
+    { id: "f_yuanti_hui",     name: "圆体神辉",     shape: "orb",       color: "�?, particle: "stardust", motion: "rise", style: "divine" },
+  ];
+  // 查表：id & 中文�?
+  function fxById(id) {
+    if (!id) return null;
+    const s = String(id).toLowerCase();
+    for (let i = 0; i < FX_LIBRARY.length; i++) {
+      const e = FX_LIBRARY[i];
+      if (e.id === s) return e;
+      if (e.name === String(id)) return e;
+    }
+    return null;
+  }
+  // 随机兜底：未映射时按当前武器风格挑一个风格相符特�?
+  function randomFx(styleHint) {
+    const pool = FX_LIBRARY.filter(e => !styleHint || e.style === styleHint);
+    const list = pool.length ? pool : FX_LIBRARY;
+    return list[Math.random() * list.length | 0];
+  }
+
+  // —�?参数化生成入口：从某�?FX_LIBRARY 特效生成实际视觉 —�?
+  function fxEmitter(entry) {
+    if (!entry || !player) return;
+    const col = FX_COLORS[entry.color] || 0xffffff;
+    const shape = entry.shape || "orb";
+    switch (shape) {
+      case "arc":        emitArc(entry, col); break;
+      case "blade":      emitBlade(entry, col); break;
+      case "beam":       emitBeam(entry, col); break;
+      case "orb":        emitOrb(entry, col); break;
+      case "spire":      emitSpire(entry, col); break;
+      case "helix":      emitHelix(entry, col); break;
+      case "runering":   emitRing(entry, col); break;
+      case "shockwave":  emitShock(entry, col); break;
+      case "swordrain":  emitSwordRain(entry, col); break;
+      case "bolt":       emitBolt(entry, col); break;
+      case "flame":      emitFlame(entry, col); break;
+      case "frost":      emitFrost(entry, col); break;
+      case "void":       emitVoid(entry, col); break;
+      case "warp":       emitWarp(entry, col); break;
+      case "dragon":     emitDragon(entry, col); break;
+      case "meteor":     emitMeteor(entry, col); break;
+      default:           emitOrb(entry, col); break;
+    }
+    fxSfx(shape);
+  }
+
+  // 音效联动（可选加分）：不�?shape 触发不同 sfx（laser/hit/默认 blip）。AudioSys �?client.js，防御式调用�?
+  function fxSfx(shape) {
+    try {
+      const A = (typeof window !== "undefined" && window.AudioSys) || null;
+      if (!A || !A.sfx) return;
+      if (shape === "beam" || shape === "bolt") A.sfx("laser");
+      else if (shape === "blade" || shape === "arc" || shape === "swordrain") A.sfx("hit");
+      else A.sfx();
+    } catch (e) { /* 音效失败不阻�?*/ }
+  }
+
+  // —�?朝向基向�?/ 目标�?/ 起点（供 shape 构造器复用）—�?
+  function fxDir() { return { x: Math.sin(yaw), z: Math.cos(yaw) }; }
+  function fxTarget() {
+    return enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + Math.sin(yaw) * 4, y: 1.4, z: PX.z + Math.cos(yaw) * 4 };
+  }
+  function fxFrom(back = 0.8, h = 1.6) {
+    const d = fxDir();
+    return { x: PX.x + d.x * back, y: h, z: PX.z + d.z * back };
+  }
+
+  // —�?刀�?arc（弧形）：径向渐变圆�?+ additive 光晕 —�?
+  function emitArc(entry, col) {
+    const d = fxDir();
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    const g = ctx.createRadialGradient(64, 64, 4, 64, 64, 62);
+    g.addColorStop(0, "rgba(255,255,255,.95)");
+    g.addColorStop(0.55, hexToRgba(col, 0.6));
+    g.addColorStop(1, hexToRgba(col, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(64, 64, 60, -1.15, 1.15); ctx.closePath(); ctx.fill();
+    const tex = new THREE.CanvasTexture(c);
+    const arc = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.1, 2.1),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    );
+    arc.position.set(PX.x + d.x * 1.4, 1.6, PX.z + d.z * 1.4);
+    arc.rotation.y = -yaw;
+    scene.add(arc);
+    const glow = glowSprite(col, 2.4);
+    glow.position.copy(arc.position); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.08;
+      arc.scale.setScalar(1 + t * 1.6);
+      arc.material.opacity = Math.max(0, 1 - t * 2.2);
+      arc.position.x += d.x * 0.16; arc.position.z += d.z * 0.16;
+      glow.position.set(arc.position.x, arc.position.y, arc.position.z);
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.8);
+      glow.scale.setScalar(1 + t * 1.9);
+      if (t < 0.55) requestAnimationFrame(anim);
+      else { scene.remove(arc); arc.material.dispose(); tex.dispose(); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+  }
+
+  // —�?直线�?blade（剑�?光刃）：线性渐变薄�?+ 光晕 —�?
+  function emitBlade(entry, col) {
+    const d = fxDir();
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const ctx = c.getContext("2d");
+    const g = ctx.createLinearGradient(0, 0, 64, 0);
+    g.addColorStop(0, "rgba(255,255,255,0)");
+    g.addColorStop(0.5, "rgba(255,255,255,.9)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 20, 64, 24);
+    const tex = new THREE.CanvasTexture(c);
+    const beam = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.4, 0.34),
+      new THREE.MeshBasicMaterial({ map: tex, color: col, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    beam.position.set(PX.x + d.x * 1.6, 1.75, PX.z + d.z * 1.6);
+    beam.rotation.y = -yaw;
+    scene.add(beam);
+    const glow = glowSprite(col, 2.4); glow.position.copy(beam.position); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.07;
+      beam.scale.set(1 + t * 2.2, 1, 1);
+      beam.material.opacity = Math.max(0, 1 - t * 2.4);
+      beam.position.x += d.x * 0.3; beam.position.z += d.z * 0.3;
+      glow.position.set(beam.position.x, beam.position.y, beam.position.z);
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.6);
+      glow.scale.setScalar(1 + t * 1.9);
+      if (t < 0.5) requestAnimationFrame(anim);
+      else { scene.remove(beam); beam.geometry.dispose(); beam.material.dispose(); tex.dispose(); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+  }
+
+  // —�?光柱 beam（光束柱）：从玩家到目标的圆柱光�?+ 辉光 —�?
+  function emitBeam(entry, col) {
+    const from = fxFrom(0, 1.55);
+    const to = fxTarget();
+    const dx = to.x - from.x, dy = to.y - from.y, dz = to.z - from.z;
+    const dist = Math.max(0.5, Math.hypot(dx, dy, dz));
+    const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2, z: (from.z + to.z) / 2 };
+    const core = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.07, 0.07, dist, 10),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, depthWrite: false })
+    );
+    core.position.set(mid.x, mid.y, mid.z);
+    core.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx, dy, dz).normalize());
+    scene.add(core);
+    const halo = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.16, dist, 10),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.32, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    halo.position.copy(core.position); halo.quaternion.copy(core.quaternion);
+    scene.add(halo);
+    spawnSpark(to, col, 12);
+    let t = 0;
+    const anim = () => {
+      t += 0.016;
+      const hold = Math.min(1, t / 0.3);
+      const fade = Math.max(0, 1 - (t - 0.3) * 2.4);
+      const op = Math.min(hold, fade);
+      core.material.opacity = op;
+      halo.material.opacity = 0.32 * op;
+      if (t < 0.75) requestAnimationFrame(anim);
+      else { scene.remove(core); core.geometry.dispose(); core.material.dispose(); scene.remove(halo); halo.geometry.dispose(); halo.material.dispose(); }
+    };
+    anim();
+  }
+
+  // —�?光球 orb：发光法术球 + 命中爆炸粒子 —�?
+  function emitOrb(entry, col) {
+    const from = fxFrom(0.8, 1.6);
+    const to = fxTarget();
+    const orb = glowSprite(col, 0.9);
+    orb.position.set(from.x, from.y, from.z); scene.add(orb);
+    const ring = entry.motion === "spiral" ? new THREE.Mesh(
+      new THREE.TorusGeometry(0.42, 0.02, 8, 24),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending })
+    ) : null;
+    if (ring) { ring.position.copy(orb.position); scene.add(ring); }
+    let t = 0, exploded = false;
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const anim = () => {
+      t += 0.04;
+      const k = Math.min(1, t * 1.6);
+      orb.position.set(from.x + ox * k, from.y + oy * k, from.z + oz * k);
+      if (ring) { ring.position.copy(orb.position); ring.rotation.y += 0.2; ring.rotation.x += 0.08; }
+      if (k >= 1 && !exploded) { exploded = true; spawnSpark(to, col, 16); }
+      orb.material.opacity = Math.max(0, 1 - Math.max(0, t - 0.55) * 3);
+      if (ring) ring.material.opacity = Math.max(0, 0.9 - Math.max(0, t - 0.55) * 3);
+      if (t < 0.75) requestAnimationFrame(anim);
+      else { scene.remove(orb); orb.material.dispose(); if (ring) { scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); } }
+    };
+    anim();
+  }
+
+  // —�?光柱 spire（垂直光柱）：从天而降的竖直能量柱 —�?
+  function emitSpire(entry, col) {
+    const to = fxTarget();
+    const h = 3.6;
+    const pillar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.34, h, 12),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.45, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    pillar.position.set(to.x, 2.0, to.z); scene.add(pillar);
+    const glow = glowSprite(col, 1.6); glow.position.set(to.x, 1.4, to.z); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      const hold = Math.min(1, t / 0.3);
+      const fade = Math.max(0, 1 - (t - 0.3) * 2.5);
+      pillar.material.opacity = 0.45 * Math.min(hold, fade);
+      glow.material.opacity = Math.max(0, fade * 0.8);
+      glow.scale.setScalar(1 + t * 2.5);
+      if (t < 0.7) requestAnimationFrame(anim);
+      else { scene.remove(pillar); pillar.geometry.dispose(); pillar.material.dispose(); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+    spawnSpark(to, col, 10);
+  }
+
+  // —�?螺旋 helix：一束沿螺旋轨迹飞行的光�?—�?
+  function emitHelix(entry, col) {
+    const from = fxFrom(0.6, 1.6);
+    const to = fxTarget();
+    const n = 20;
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const g = glowSprite(col, 0.3);
+      scene.add(g); pts.push(g);
+    }
+    let t = 0;
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const anim = () => {
+      t += 0.04;
+      const k = Math.min(1, t * 1.7);
+      pts.forEach((p, i) => {
+        const fi = (i / n);
+        const ph = fi * 6.28 + t * 8;
+        const lx = from.x + ox * (k - fi * 0.06) + Math.cos(ph) * 0.4;
+        const lz = from.z + oz * (k - fi * 0.06) + Math.sin(ph) * 0.4;
+        const ly = from.y + oy * (k - fi * 0.06) + Math.cos(ph * 0.7) * 0.3;
+        p.position.set(lx, ly, lz);
+        p.material.opacity = Math.max(0, 1 - (k - fi * 0.06) * 2);
+      });
+      if (t < 0.7) requestAnimationFrame(anim);
+      else pts.forEach(p => { scene.remove(p); p.material.dispose(); });
+    };
+    anim();
+    spawnSpark(to, col, 10);
+  }
+
+  // —�?符文�?runering：绕身扩散的光环 + 轨道粒子 —�?
+  function emitRing(entry, col) {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.5, 0.04, 10, 26),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    ring.position.set(PX.x, 1.6, PX.z); ring.rotation.x = Math.PI / 2; scene.add(ring);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      ring.rotation.z += 0.12;
+      ring.scale.setScalar(1 + t * 1.2);
+      ring.material.opacity = Math.max(0, 0.8 * (1 - t * 2));
+      if (t < 0.5) requestAnimationFrame(anim);
+      else { scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }
+    };
+    anim();
+    spawnSpark({ x: PX.x, y: 1.3, z: PX.z }, col, 8);
+  }
+
+  // —�?能量�?shockwave：贴地快速扩张扩散环 —�?
+  function emitShock(entry, col) {
+    const to = fxTarget();
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.3, 0.7, 30),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(to.x, 0.14, to.z); scene.add(ring);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      ring.scale.setScalar(1 + t * 3.4);
+      ring.material.opacity = Math.max(0, 1 - t * 2.6);
+      if (t < 0.4) requestAnimationFrame(anim);
+      else { scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }
+    };
+    anim();
+    spawnSpark(to, col, 12);
+  }
+
+  // —�?剑阵 swordrain：多道剑气扇形朝�?—�?
+  function emitSwordRain(entry, col) {
+    const d = fxDir();
+    const from = fxFrom(0.9, 1.7);
+    const counts = 6;
+    const swords = [];
+    for (let i = 0; i < counts; i++) {
+      const sw = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.22, 1.4),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.95, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+      );
+      const off = (i / (counts - 1) - 0.5) * 1.3;
+      const nx = from.x + d.x * 1.0 - d.z * off;
+      const nz = from.z + d.z * 1.0 + d.x * off;
+      sw.position.set(nx, 1.6, nz);
+      sw.rotation.y = -yaw + off * 0.22;
+      scene.add(sw);
+      swords.push(sw);
+    }
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      swords.forEach(s => {
+        s.position.x += d.x * 0.3; s.position.z += d.z * 0.3;
+        s.material.opacity = Math.max(0, 0.95 - t * 2.0);
+      });
+      if (t < 0.6) requestAnimationFrame(anim);
+      else swords.forEach(s => { scene.remove(s); s.geometry.dispose(); s.material.dispose(); });
+    };
+    anim();
+    spawnSpark(fxTarget(), col, 10);
+  }
+
+  // —�?雷电 bolt：多段折线闪电（Line + 命中电花）—�?
+  function emitBolt(entry, col) {
+    const to = fxTarget();
+    const top = { x: to.x, y: 3.6, z: to.z };
+    const segs = 7;
+    const pts = [new THREE.Vector3(top.x, top.y, top.z)];
+    for (let i = 1; i < segs; i++) {
+      const k = i / segs;
+      pts.push(new THREE.Vector3(
+        top.x + (to.x - top.x) * k + (Math.random() - 0.5) * 0.9,
+        top.y + (to.y - top.y) * k,
+        top.z + (to.z - top.z) * k + (Math.random() - 0.5) * 0.9
+      ));
+    }
+    pts.push(new THREE.Vector3(to.x, to.y, to.z));
+    const geom = new THREE.BufferGeometry().setFromPoints(pts);
+    const line = new THREE.Line(
+      geom,
+      new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    scene.add(line);
+    const glow = glowSprite(col, 1.4); glow.position.set(to.x, to.y, to.z); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.03;
+      line.material.opacity = Math.max(0, 0.95 - t * 2.6);
+      glow.material.opacity = Math.max(0, 1 - t * 3);
+      glow.scale.setScalar(1 + t * 2.4);
+      if (t < 0.4) requestAnimationFrame(anim);
+      else { scene.remove(line); line.geometry.dispose(); line.material.dispose(); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+    spawnSpark(to, col, 10);
+  }
+
+  // —�?火焰 flame：上升火�?—�?
+  function emitFlame(entry, col) {
+    const to = fxTarget();
+    const n = 14;
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.08, 0.08, 0.08),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
+      );
+      m.position.set(to.x + (Math.random() - 0.5) * 0.4, to.y, to.z + (Math.random() - 0.5) * 0.4);
+      m.userData = { vy: 0.7 + Math.random() * 0.9, ph: Math.random() * 6.28, t: 0 };
+      scene.add(m); parts.push(m);
+    }
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      parts.forEach(m => {
+        const u = m.userData; u.t += 0.04;
+        m.position.y += u.vy * 0.05;
+        m.position.x += Math.sin(u.ph + u.t * 6) * 0.04;
+        m.position.z += Math.cos(u.ph + u.t * 5) * 0.04;
+        m.material.opacity = Math.max(0, 1 - u.t * 1.4);
+        m.scale.setScalar(Math.max(0.05, 1 - u.t));
+      });
+      if (t < 0.7) requestAnimationFrame(anim);
+      else parts.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
+    };
+    anim();
+  }
+
+  // —�?冰霜 frost：冰晶星屑扩散下�?—�?
+  function emitFrost(entry, col) {
+    const to = fxTarget();
+    const n = 16;
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.07 + Math.random() * 0.06, 0.07 + Math.random() * 0.06, 0.07 + Math.random() * 0.06),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending })
+      );
+      const a = Math.random() * 6.28, e = 0.3 + Math.random() * 0.6;
+      m.position.set(to.x, to.y + 0.6, to.z);
+      m.userData = { vx: Math.cos(a) * e, vz: Math.sin(a) * e, vy: -0.2 - Math.random() * 0.3, t: 0 };
+      scene.add(m); parts.push(m);
+    }
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      parts.forEach(m => {
+        const u = m.userData; u.t += 0.04;
+        m.position.x += u.vx * 0.05; m.position.z += u.vz * 0.05; m.position.y += u.vy * 0.05;
+        m.rotation.x += 0.2; m.rotation.z += 0.2;
+        m.material.opacity = Math.max(0, 0.9 - u.t * 1.3);
+        if (m.position.y < 0.05) m.position.y = 0.05;
+      });
+      if (t < 0.7) requestAnimationFrame(anim);
+      else parts.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
+    };
+    anim();
+  }
+
+  // —�?黑洞 void：粒子向中心吸聚坍缩 —�?
+  function emitVoid(entry, col) {
+    const to = fxTarget();
+    const n = 18;
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.28, r = 1.2 + Math.random() * 0.8;
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.08, 0.08, 0.08),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending })
+      );
+      m.position.set(to.x + Math.cos(a) * r, to.y + (Math.random() - 0.5) * 1.2, to.z + Math.sin(a) * r);
+      m.userData = { a, r, t: 0 };
+      scene.add(m); parts.push(m);
+    }
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      parts.forEach((m) => {
+        const u = m.userData; u.t += 0.04; u.r *= 0.9;
+        m.position.x = to.x + Math.cos(u.a + u.t * 6) * u.r;
+        m.position.z = to.z + Math.sin(u.a + u.t * 6) * u.r;
+        m.position.y += (to.y - m.position.y) * 0.1;
+        m.material.opacity = Math.max(0, 1 - u.t * 1.5);
+        m.scale.setScalar(Math.max(0.05, 1 - u.t * 1.2));
+      });
+      if (t < 0.6) requestAnimationFrame(anim);
+      else parts.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
+    };
+    anim();
+    const flash = glowSprite(col, 1.0); flash.position.set(to.x, to.y, to.z); scene.add(flash);
+    setTimeout(() => { scene.remove(flash); flash.material.dispose(); }, 300);
+  }
+
+  // —�?时空 warp：扭曲旋转残影光�?—�?
+  function emitWarp(entry, col) {
+    const d = fxDir();
+    const n = 3;
+    const beams = [];
+    for (let i = 0; i < n; i++) {
+      const b = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.6, 0.26),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+      );
+      const off = (i - 1) * 0.24;
+      b.position.set(PX.x - off + d.x * 1.7, 1.8, PX.z + off + d.z * 1.7);
+      b.rotation.y = -yaw;
+      scene.add(b); beams.push(b);
+    }
+    const glow = glowSprite(col, 2.2); glow.position.set(PX.x + d.x * 1.7, 1.8, PX.z + d.z * 1.7); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.07;
+      beams.forEach((b, i) => {
+        b.position.x += d.x * 0.26; b.position.z += d.z * 0.26;
+        b.material.opacity = Math.max(0, 0.8 - t * 2.4 - i * 0.06);
+      });
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.8);
+      glow.scale.setScalar(1 + t * 2.0);
+      if (t < 0.5) requestAnimationFrame(anim);
+      else { beams.forEach(b => { scene.remove(b); b.geometry.dispose(); b.material.dispose(); }); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+  }
+
+  // —�?龙形 dragon：沿曲线飞过的一串龙首光�?—�?
+  function emitDragon(entry, col) {
+    const from = fxFrom(0.8, 1.6);
+    const to = fxTarget();
+    const n = 24;
+    const pts = [];
+    const ox = to.x - from.x, oz = to.z - from.z;
+    for (let i = 0; i < n; i++) {
+      const g = glowSprite(col, i === n - 1 ? 0.6 : 0.26);
+      scene.add(g); pts.push({ g, t: i * 0.05, base: i });
+    }
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      pts.forEach(p => {
+        p.t += 0.04;
+        const k = (p.base / n) + t * 0.4;
+        const wave = Math.sin((p.base / n) * 12 + t * 7) * 0.5;
+        p.g.position.set(from.x + ox * k + Math.cos(p.t * 9) * 0.15, 1.6 + Math.sin(p.t * 6) * 0.35 + wave * 0.25, from.z + oz * k + Math.sin(p.t * 9) * 0.15);
+        p.g.material.opacity = Math.max(0, 1 - k * 1.6);
+      });
+      if (t < 0.6) requestAnimationFrame(anim);
+      else pts.forEach(p => { scene.remove(p.g); p.g.material.dispose(); });
+    };
+    anim();
+  }
+
+  // —�?流星 meteor：散射飞撒的星屑光点 —�?
+  function emitMeteor(entry, col) {
+    const from = fxFrom(0.8, 1.6);
+    const n = 20;
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const g = glowSprite(col, 0.22);
+      const a = Math.random() * 6.28, e = 1.0 + Math.random() * 1.6;
+      g.position.set(from.x, from.y, from.z);
+      g.userData = { vx: Math.cos(a) * e, vz: Math.sin(a) * e, vy: (Math.random() - 0.3) * 1.2, t: 0 };
+      scene.add(g); parts.push(g);
+    }
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      parts.forEach(g => {
+        const u = g.userData; u.t += 0.04;
+        g.position.x += u.vx * 0.05; g.position.z += u.vz * 0.05; g.position.y += u.vy * 0.05;
+        g.material.opacity = Math.max(0, 1 - u.t * 1.6);
+      });
+      if (t < 0.6) requestAnimationFrame(anim);
+      else parts.forEach(g => { scene.remove(g); g.material.dispose(); });
+    };
+    anim();
+  }
+
+  // 十六进制 �?rgba 字符串（Canvas 工具，供 arc/光带渐变�?
+  function hexToRgba(hex, a) {
+    const r = (hex >> 16) & 255, g = (hex >> 8) & 255, b = hex & 255;
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  // ============================================================
+  // 现有 5 大类 + 装备体系映射 �?重定向到 FX_LIBRARY（保留大类回退�?
+  // 大类兜底：melee→剑�?/ gun→激光炮 / laser→激光炮 / magic→气功波 / unarmed→掌�?
+  const STYLE_DEFAULT_FX = {
+    melee:   "f_jianqi",
+    gun:     "f_laser_pao",
+    laser:   "f_laser_pao",
+    magic:   "f_qigongbo",
+    unarmed: "f_zhangfeng",
+  };
+  function defaultFxEntry(style) { return fxById(STYLE_DEFAULT_FX[style]) || fxById("f_zhangfeng"); }
+
+  // 敌人/玩家脚下软阴影（贴地椭圆渐隐�?
+  function makeShadow(r) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    const g = ctx.createRadialGradient(64, 64, 4, 64, 64, 62);
+    g.addColorStop(0, "rgba(0,0,0,0.55)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    const m = new THREE.Mesh(
+      new THREE.PlaneGeometry(r * 2, r * 2),
+      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false })
+    );
+    m.rotation.x = -Math.PI / 2;
+    m.position.y = 0.02;
+    return m;
+  }
+
+  // 程序化血�?污渍贴片（贴地，二游氛围�?
+  function makeStain(r, color) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    const blobs = 8 + (Math.random() * 6 | 0);
+    for (let i = 0; i < blobs; i++) {
+      const rr = 8 + Math.random() * (r * 4);
+      const a = Math.random() * 6.28, d = Math.random() * 18;
+      const x = 64 + Math.cos(a) * d, y = 64 + Math.sin(a) * d;
+      const g = ctx.createRadialGradient(x, y, 1, x, y, rr);
+      g.addColorStop(0, color);
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.28); ctx.fill();
+    }
+    const tex = new THREE.CanvasTexture(c);
+    const m = new THREE.Mesh(
+      new THREE.PlaneGeometry(r * 2, r * 2),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0.75 })
+    );
+    m.rotation.x = -Math.PI / 2;
+    m.position.y = 0.03;
+    return m;
+  }
+
+  // 灯带（墙脚氛围光条）
+  function makeLightStrip(w, h) {
+    const c = document.createElement("canvas");
+    c.width = 64; c.height = 4;
+    const ctx = c.getContext("2d");
+    const g = ctx.createLinearGradient(0, 0, 64, 0);
+    g.addColorStop(0, "rgba(120,190,255,0)");
+    g.addColorStop(0.5, "rgba(120,190,255,.95)");
+    g.addColorStop(1, "rgba(120,190,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 4);
+    const m = new THREE.Mesh(
+      new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false })
+    );
+    m.position.y = 0.06;
+    return m;
+  }
+
+  // 氛围尘粒（Z 宇宙各副本战斗统一：漂浮微尘空气中的悬浮微粒，增强真实 3D 空间感）
+  function makeDust(n) {
+    const pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 20;
+      pos[i * 3 + 1] = 0.4 + Math.random() * 4.6;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 20;
+    }
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color: 0xcfe8ff, size: 0.07, transparent: true, opacity: 0.55,
+      depthWrite: false, sizeAttenuation: true,
+    });
+    const p = new THREE.Points(geom, mat);
+    p.userData = { seed: Math.random() * 200, n };
+    scene.add(p);
+    return p;
+  }
+
+  // 几何体降级敌人（立绘贴图加载失败时兜底）
+  function buildPrimitiveEnemy(g, kind) {
+    const tint = kind === "hunter" ? 0x4a4a52 : kind === "licker" ? 0x8a2a2a : 0x6a5a3a;
+    const body = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.55, 1.0, 4, 10),
+      new THREE.MeshStandardMaterial({ color: tint })
+    );
+    body.position.y = 1.2;
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(0.4, 12, 10),
+      new THREE.MeshStandardMaterial({ color: kind === "licker" ? 0x6a1f1f : tint })
+    );
+    head.position.y = 2.05;
+    const claws = new THREE.Mesh(
+      new THREE.ConeGeometry(0.1, 0.7, 6),
+      new THREE.MeshStandardMaterial({ color: 0xbbb })
+    );
+    claws.position.set(0.5, 1.4, 0.5);
+    claws.rotation.z = 0.6;
+    g.add(body, head, claws);
+  }
+
+  // 几何体降级玩家（pc 立绘加载失败时兜底）
+  function buildPrimitivePlayer() {
+    const body = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.45, 0.85, 4, 10),
+      new THREE.MeshStandardMaterial({ color: 0x2e6f8e })
+    );
+    body.position.y = 1.05;
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(0.33, 12, 10),
+      new THREE.MeshStandardMaterial({ color: 0xd8b898 })
+    );
+    head.position.y = 1.9;
+    player.add(body, head);
+    player.userData.sprite = null;
+  }
+
+  // ---------- 体素方块人（MC 精品化建模）----------
+  // 段数 12：头 + 发顶/帽顶 + �?+ �?+ (上臂+前臂)×2 + (大腿+小腿/�?×2�?
+  // ============================================================
+  // 体素方块�?· Canvas 五官脸纹理（MC 皮肤风：在方块脸正面画像素五官）
+  // ============================================================
+  // makeFaceTexture(kind, skinHex)：用 256×256 Canvas 在皮肤底上绘制眼�?�?�?伤痕等像素五官，
+  // 返回 THREE.CanvasTexture，用作头部方块正面的 MeshLambertMaterial.map�?
+  // 纯视觉、零外部库、零异步加载（CanvasTexture 即时生成）。脸�?BuildGeometry 六面都贴�?
+  // 但五官集中在正面（头方块朝向 +z，与 yaw=0 正面一致），侧�?背面只见皮肤底色�?
+  const FACE_PIXEL = 256; // 纹理分辨�?
+  function makeFaceTexture(kind, skinHex) {
+    const S = FACE_PIXEL;
+    const c = document.createElement("canvas"); c.width = c.height = S;
+    const ctx = c.getContext("2d");
+    const base = (skinHex || 0xf0e0d0);
+    const skin = hexToRgba(base, 1);
+    const dark = "rgba(20,12,10,1)";
+    const blood = "rgba(150,18,10,1)";
+    const bone = "rgba(230,220,200,1)";
+
+    // —�?底：皮肤色全�?+ 轻微噪点（溃�?灰变化）—�?
+    ctx.fillStyle = skin; ctx.fillRect(0, 0, S, S);
+    const skinNoise = (kind === "zombie" || kind === "horde") ? 1 : (kind === "licker" ? 1.5 : 0.3);
+    if (skinNoise > 0) for (let i = 0; i < 900 * skinNoise; i++) {
+      const a = Math.random() * 0.18;
+      ctx.fillStyle = `rgba(${Math.random()*60|0},${Math.random()*40|0},${Math.random()*20|0},${a})`;
+      ctx.fillRect(Math.random() * S, Math.random() * S, 2 + Math.random() * 4, 2 + Math.random() * 4);
+    }
+
+    // —�?像素方块绘图小工�?—�?
+    const px = (x, y, w, h, col) => { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); };
+    const vline = (x, y0, y1, w, col) => { ctx.fillStyle = col; ctx.fillRect(x, y0, w, y1 - y0); };
+    const hline = (x0, y, x1, h, col) => { ctx.fillStyle = col; ctx.fillRect(x0, y, x1 - x0, h); };
+
+    // kind 归一到脸型（未知一�?zombie 风；fulaidi 弗莱迪单独处理）
+    const fk = (kind === "fulaidi" || kind === "dream") ? "fulaidi" : (kind || "zombie");
+
+    // 眉眼/嘴基准位置（像素，脸中央�?
+    const eyeY = 116, eyeW = 14, eyeH = 16, eyeDX = 60, eyeGap = 16;
+    // 全局血�?裂纹细节（composite 手写，非滤镜�?
+    const drips = (fk === "zombie" || fk === "horde" || fk === "licker") ? 8 : (fk === "fulaidi" ? 2 : 0);
+
+    // ———�?眼睛 ———�?
+    const drawEye = (cx, col, style) => {
+      const x = cx - eyeW / 2, y = eyeY;
+      px(x, y, eyeW, eyeH, col);                            // 眼白/眼窝
+      if (style === "hollow") {
+        // 空洞：暗色眼�?+ 黑瞳（丧�?尸群�?
+        px(cx - 5, y + 4, 10, 8, "rgba(5,4,3,1)");
+      } else if (style === "slit") {
+        // 竖瞳（猎手）：细�?
+        px(cx - 2, y + 3, 4, 10, "rgba(4,4,3,1)");
+      } else if (style === "glow") {
+        // 发光红眼（弗莱迪/梦魇）：外圈暗红 + 亮红�?
+        px(x, y, eyeW, eyeH, "rgba(60,8,8,1)");
+        px(cx - 4, y + 5, 8, 6, "rgba(255,40,30,1)");
+      } else {
+        // 正常/凶猛：黑�?+ 高光
+        px(cx - 5, y + 3, 10, 10, dark);
+        px(cx + 2, y + 5, 3, 3, "rgba(255,255,255,0.85)");
+      }
+    };
+    // ———�?眉毛 ———�?
+    const drawBrow = (cx, angry, none) => {
+      if (none) return;
+      const by = eyeY - 26;
+      if (angry) {
+        // 愤怒内斜眉（猎手）
+        hline(cx - 30, by - 4, cx - 2, 6, dark); // 内端上挑
+        hline(cx + 2, by + 2, cx + 30, 6, dark);
+      } else {
+        px(cx - 30, by, 28, 6, dark);
+        px(cx + 2, by, 28, 6, dark);
+      }
+    };
+
+    // ———�?鼻子（简单像素鼻梁；舔食者无脸不画）———�?
+    if (fk !== "licker") px(S / 2 - 2, 128, 4, 14, fk === "zombie" || fk === "horde" ? "rgba(20,28,14,1)" : "rgba(0,0,0,0.25)");
+
+    switch (fk) {
+      case "horde":  // 尸群：普通丧尸脸（空洞眼 + 微张烂嘴 + 血污）
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(60,60,50,1)", "hollow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(60,60,50,1)", "hollow");
+        drawBrow(S / 2 - eyeDX, false, true);
+        drawBrow(S / 2 + eyeDX, false, true);
+        // 微张灰嘴 + 锯齿
+        ctx.fillStyle = "rgba(40,30,20,1)";
+        ctx.fillRect(S / 2 - 34, 152, 68, 18);
+        for (let i = 0; i < 8; i++) px(S / 2 - 32 + i * 8, 150, 6, 4, bone);
+        break;
+      case "zombie":  // 丧尸：溃烂脸、空洞眼、烂嘴、血�?
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(55,55,45,1)", "hollow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(55,55,45,1)", "hollow");
+        drawBrow(S / 2 - eyeDX, false, true);
+        drawBrow(S / 2 + eyeDX, false, true);
+        // 大张烂嘴（上下颚 + 深红�? 残碎�?
+        ctx.fillStyle = blood;
+        ctx.fillRect(S / 2 - 44, 146, 88, 34);
+        ctx.fillStyle = "rgba(30,8,6,1)";
+        ctx.fillRect(S / 2 - 38, 152, 76, 6);
+        ctx.fillRect(S / 2 - 38, 168, 76, 6);
+        for (let i = 0; i < 9; i++) { px(S / 2 - 40 + i * 9, 150, 5, 6, bone); px(S / 2 - 38 + i * 9, 172, 5, 4, "rgba(200,190,170,1)"); }
+        break;
+      case "hunter":  // 猎手：狰狞、獠牙、竖瞳、怒眉
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(230,220,190,1)", "slit");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(230,220,190,1)", "slit");
+        drawBrow(S / 2 - eyeDX, true, false);
+        drawBrow(S / 2 + eyeDX, true, false);
+        // 咧嘴 + 尖獠牙（上下�?
+        px(S / 2 - 42, 154, 84, 14, "rgba(60,20,14,1)");
+        vline(S / 2 - 40, 158, 168, 5, "rgba(20,10,8,1)");
+        for (let i = 0; i < 4; i++) { px(S / 2 - 34 + i * 16, 154, 6, 9, bone); px(S / 2 - 30 + i * 16, 160, 6, 8, bone); }
+        break;
+      case "licker":  // 舔食者：无脸 / 口器状、外露脑、凶光眼
+        // 顶部外露脑花（暗红脑回）
+        px(64, 34, 128, 44, "rgba(120,20,20,1)");
+        for (let i = 0; i < 6; i++) hline(70 + i * 4, 44 + (i % 2) * 6, 70 + i * 4 + 110, 4, "rgba(80,10,10,1)");
+        // 巨大竖裂口器（血盆大嘴）覆盖脸中下，左右凶光�?
+        drawEye(S / 2 - eyeDX - eyeGap / 2 - 6, "rgba(90,8,8,1)", "glow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2 + 6, "rgba(90,8,8,1)", "glow");
+        ctx.fillStyle = "rgba(20,8,8,1)";
+        ctx.beginPath();
+        ctx.moveTo(S / 2, 92);
+        ctx.lineTo(S / 2 - 66, 178); ctx.lineTo(S / 2 + 66, 178);
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "rgba(150,16,12,1)";
+        ctx.fillRect(S / 2 - 46, 112, 92, 8);
+        ctx.fillStyle = bone;
+        for (let i = 0; i < 7; i++) px(S / 2 - 46 + i * 13, 116, 6, 7, bone); // 上排�?
+        for (let i = 0; i < 7; i++) px(S / 2 - 40 + i * 13, 142, 6, 6, "rgba(210,190,170,1)"); // 下排�?
+        break;
+      case "fulaidi":  // 弗莱迪（梦魇）：烧伤脸、红绿条纹、刀�?
+        // �?+ �?条纹（烧伤斑块）
+        px(40, 120, 176, 10, "rgba(150,20,12,0.8)");
+        px(40, 150, 176, 8, "rgba(60,110,40,0.7)");
+        px(40, 186, 176, 9, "rgba(140,16,10,0.8)");
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(60,8,6,1)", "glow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(60,8,6,1)", "glow");
+        drawBrow(S / 2 - eyeDX, true, false);
+        drawBrow(S / 2 + eyeDX, true, false);
+        // 裂到耳根的咧嘴（烧伤），含刀爪抓�?
+        px(S / 2 - 74, 156, 148, 16, "rgba(30,6,4,1)");
+        for (let i = 0; i < 9; i++) px(S / 2 - 70 + i * 16, 154, 6, 6, bone);
+        ctx.strokeStyle = "rgba(150,14,10,0.9)";
+        ctx.lineWidth = 3;
+        for (let i = -2; i <= 2; i++) {
+          const sx = S / 2 + i * 22;
+          ctx.beginPath(); ctx.moveTo(sx, 116); ctx.bezierCurveTo(sx + 10, 140, sx - 6, 170, sx + 4, 200); ctx.stroke();
+        }
+        break;
+      default:  // 正常人类脸（玩家郑吒 / guard�?
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(235,225,210,1)", "normal");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(235,225,210,1)", "normal");
+        const serious = (kind === "guard"); // 守卫严肃：眉平直、嘴抿紧
+        drawBrow(S / 2 - eyeDX, !serious && kind === "hunter", serious);
+        drawBrow(S / 2 + eyeDX, !serious && kind === "hunter", serious);
+        if (serious) {
+          // 守卫：嘴抿成直线、法令纹
+          px(S / 2 - 26, 166, 52, 6, "rgba(60,30,20,1)");
+          vline(S / 2 - 34, 152, 184, 3, "rgba(0,0,0,0.12)");
+          vline(S / 2 + 30, 152, 184, 3, "rgba(0,0,0,0.12)");
+        } else {
+          // 玩家郑吒：正常青年嘴（微抿）+ 一道左脸刀伤疤
+          px(S / 2 - 22, 164, 44, 7, "rgba(70,35,20,1)");
+          px(S / 2 - 16, 168, 32, 4, "rgba(160,60,40,0.6)");
+          ctx.strokeStyle = "rgba(150,30,20,0.85)";
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(S / 2 + 30, 104); ctx.lineTo(S / 2 + 8, 176); ctx.stroke();
+        }
+        break;
+    }
+
+    // —�?血�?裂纹细节（zombie/horde/licker 等）—�?
+    if (drips > 0) {
+      ctx.strokeStyle = "rgba(130,14,10,0.7)";
+      ctx.lineWidth = 3;
+      for (let i = 0; i < drips; i++) {
+        const sx = 40 + Math.random() * 180, sy = 96 + Math.random() * 120;
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx + (Math.random() - 0.5) * 40, sy + 34 + Math.random() * 40);
+        ctx.stroke();
+      }
+    }
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.magFilter = THREE.NearestFilter;          // MC 方块感（像素清晰�?
+    tex.minFilter = THREE.NearestFilter;
+    tex.generateMipmaps = false;
+    return tex;
+  }
+  // 脸部皮肤底色查表（与 buildVoxelEnemy/buildVoxelPlayer �?skin 配色一致，保证五官底与肤色协调�?
+  function faceSkinHex(kind) {
+    if (kind === "fulaidi" || kind === "dream") return 0xd08a72; // 弗莱迪烧伤肤�?
+    if (kind === "hunter") return 0x5f5f6a;
+    if (kind === "licker") return 0x6a1f1f;
+    if (kind === "zombie" || kind === "horde") return 0x7d8a6a;
+    return 0xd8a878; // guard / player / 默认
+  }
+
+  // ============================================================
+  // 身体 Canvas 纹理（不只脸）：给躯�?四肢方块贴衣服褶�?皮甲�?金属甲纹/血锈�?
+  // makeBodyTextureMap(kind, baseHex) �?kind 画一件「布�?甲」像素纹理，返回
+  // {shirt, pants, shoulder} 三个 CanvasTexture �?buildVoxelBody �?shirt/pants/肩甲材质使用�?
+  // �?kind 缓存（同 kind �?base 只画一次）；零异步、零外部库、NearestFilter �?MC 方块感�?
+  // ============================================================
+  const BODY_TEX_CACHE = {};
+  function makeBodyTextureMap(kind, baseHex) {
+    if (typeof document === "undefined") return null;
+    const key = String(kind) + "|" + (baseHex || 0);
+    if (BODY_TEX_CACHE[key]) return BODY_TEX_CACHE[key];
+    const r = (baseHex >> 16) & 255, g = (baseHex >> 8) & 255, b = baseHex & 255;
+    const s = 128;                                   // 分辨率（MC 像素感，越低越「块」）
+    const zom = /zombie|horde|licker/.test(String(kind));
+    const guard = kind === "guard";
+    const hunter = kind === "hunter";
+
+    const canvas = document.createElement("canvas"); canvas.width = canvas.height = s;
+    const ctx = canvas.getContext("2d");
+    const px = (x, y, w, h, col) => { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); };
+    ctx.fillStyle = `rgb(${r},${g},${b})`; ctx.fillRect(0, 0, s, s);
+
+    // —�?布面噪点基理（低量，避免纯平）—�?
+    for (let i = 0; i < 220; i++) {
+      const a = Math.random() * (zom ? 0.22 : 0.1);
+      ctx.fillStyle = `rgba(${Math.random()*40|0},${Math.random()*30|0},${Math.random()*25|0},${a})`;
+      ctx.fillRect(Math.random() * s, Math.random() * s, 2 + Math.random() * 4, 2 + Math.random() * 4);
+    }
+    // —�?褶皱阴影：横�?+ 纵向暗条（身体受力起褶）—�?
+    const fold = `rgba(0,0,0,${zom ? 0.30 : guard ? 0.20 : hunter ? 0.24 : 0.14})`;
+    for (let i = 0; i < 5; i++) ctx.fillStyle = fold, ctx.fillRect(12, 18 + i * 24, s - 24, 3);
+    for (let i = 0; i < 3; i++) ctx.fillStyle = fold, ctx.fillRect(30 + i * 34, 8, 3, s - 16);
+    // 高光条（布料受光面）
+    ctx.fillStyle = `rgba(255,255,255,${zom ? 0.05 : 0.10})`;
+    for (let i = 0; i < 3; i++) ctx.fillRect(36 + i * 30, 14, 2, s - 28);
+
+    // —�?�?kind 叠加专属�?—�?
+    if (zom) {
+      // 丧尸/尸群/舔食者：破衣烂肉 + 血�?+ 破洞
+      px(20, 34, 14, 22, "rgba(90,14,10,0.85)"); px(86, 66, 18, 14, "rgba(110,16,10,0.8)");
+      px(44, 96, 22, 12, "rgba(120,14,10,0.7)");
+      for (let i = 0; i < 8; i++) {          // 撕口
+        ctx.strokeStyle = "rgba(70,10,8,0.9)"; ctx.lineWidth = 2;
+        const x0 = 20 + Math.random() * 88, y0 = 20 + Math.random() * 88;
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + 8, y0 + 10); ctx.stroke();
+      }
+      for (let i = 0; i < 4; i++) {          // 破洞（深色内衬）
+        const x0 = 24 + Math.random() * 80, y0 = 24 + Math.random() * 80;
+        ctx.fillStyle = "rgba(40,20,16,0.9)";
+        ctx.fillRect(x0, y0, 6 + Math.random() * 8, 5 + Math.random() * 7);
+      }
+    } else if (guard) {
+      // 守卫：制服——胸腹甲片分隔线 + 胸徽�?+ 肩带
+      px(46, 8, 36, 22, "rgba(20,28,40,0.55)");         // 胸前徽牌
+      px(4, 4, 120, 4, "rgba(20,28,40,0.5)");           // 肩带
+      ctx.strokeStyle = "rgba(20,26,40,0.6)"; ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(20, 58 + i * 26); ctx.lineTo(108, 58 + i * 26); ctx.stroke(); }
+      for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.moveTo(40 + i * 44, 26); ctx.lineTo(40 + i * 44, 116); ctx.stroke(); }
+    } else if (hunter) {
+      // 猎手：皮甲——铆�?+ 拼接缝线 + 发亮护板
+      for (let i = 0; i < 6; i++) px(16 + Math.random() * 96, 16 + Math.random() * 96, 3, 3, "rgba(120,110,90,0.9)");
+      ctx.strokeStyle = "rgba(40,30,20,0.6)"; ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(12, 24 + i * 32); ctx.lineTo(116, 24 + i * 32); ctx.stroke(); }
+      for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(18 + i * 26, 16); ctx.lineTo(18 + i * 26, 112); ctx.stroke(); }
+    } else {
+      // 玩家/默认：贴身衬衫——胸前小�?+ 下摆
+      px(52, 30, 24, 16, "rgba(255,255,255,0.08)");
+      ctx.fillStyle = `rgba(0,0,0,${0.12})`; ctx.fillRect(8, 108, 112, 6); // 下摆阴影
+    }
+
+    // —�?封装一张布料纹理函数：返回 CanvasTexture（带 MC 邻近过滤）—�?
+    const toTex = (cv) => {
+      const t = new THREE.CanvasTexture(cv);
+      t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false;
+      return t;
+    };
+    const map = { shirt: toTex(canvas), pants: toTex(canvas), shoulder: toTex(canvas) };
+    BODY_TEX_CACHE[key] = map;
+    return map;
+  }
+
+  // ============================================================
+  // 体型参数化表（BODY_DIMS）：定义每种体型「每段方块」的 x/y/z 尺寸与关键枢轴，
+  // 而非只调整体 scale——让高矮胖瘦一眼可分。字段：
+  //   headW/headH=head 方块, headFore=头前�?+z 朝前, beast 弓背前探), neck�?
+  //   waistW/chestW/chestH/torsoD(胸腰共用�?、chestPos(胸在 upper 局�?y)�?
+  //   armSpan/armPos(肩枢�?upper 局�?、shPadW(肩甲)、upArm/fore/fist�?
+  //   legSpan(髋枢�?g 局�?x)、thigh/shin/shoe、hairH�?
+  //   枢轴�?legY/upperY)由段高推导保证脚底贴�?y�?�?
+  // ============================================================
+  const BODY_DIMS = {
+    standard: { headW: 0.60, headH: 0.62, headFore: 0.0, neckW: 0.22, neckH: 0.18,
+      waistW: 0.84, waistH: 0.42, chestW: 0.92, chestH: 0.62, torsoD: 0.50, chestPos: 0.50,
+      armSpan: 0.56, armPos: 0.56, shPadW: 0.40, upArmW: 0.26, upArmH: 0.36, foreW: 0.24, foreH: 0.40, fistW: 0.26, fistH: 0.20,
+      legSpan: 0.22, thighW: 0.34, thighH: 0.30, shinW: 0.30, shinH: 0.46, shoeW: 0.32, shoeH: 0.16, shoeD: 0.40, hairH: 0.12 },
+    tall_thin: { headW: 0.54, headH: 0.60, headFore: 0.0, neckW: 0.18, neckH: 0.22,
+      waistW: 0.70, waistH: 0.40, chestW: 0.76, chestH: 0.70, torsoD: 0.42, chestPos: 0.60,
+      armSpan: 0.50, armPos: 0.60, shPadW: 0.34, upArmW: 0.22, upArmH: 0.42, foreW: 0.20, foreH: 0.46, fistW: 0.22, fistH: 0.18,
+      legSpan: 0.18, thighW: 0.26, thighH: 0.34, shinW: 0.22, shinH: 0.52, shoeW: 0.26, shoeH: 0.14, shoeD: 0.34, hairH: 0.12 },
+    short_stout: { headW: 0.64, headH: 0.58, headFore: 0.0, neckW: 0.26, neckH: 0.16,
+      waistW: 1.00, waistH: 0.46, chestW: 1.06, chestH: 0.56, torsoD: 0.62, chestPos: 0.46,
+      armSpan: 0.60, armPos: 0.52, shPadW: 0.46, upArmW: 0.30, upArmH: 0.28, foreW: 0.28, foreH: 0.30, fistW: 0.30, fistH: 0.16,
+      legSpan: 0.24, thighW: 0.40, thighH: 0.24, shinW: 0.38, shinH: 0.36, shoeW: 0.40, shoeH: 0.14, shoeD: 0.44, hairH: 0.12 },
+    giant: { headW: 0.70, headH: 0.70, headFore: 0.0, neckW: 0.28, neckH: 0.24,
+      waistW: 1.10, waistH: 0.50, chestW: 1.20, chestH: 0.80, torsoD: 0.70, chestPos: 0.60,
+      armSpan: 0.64, armPos: 0.60, shPadW: 0.54, upArmW: 0.34, upArmH: 0.46, foreW: 0.30, foreH: 0.50, fistW: 0.34, fistH: 0.24,
+      legSpan: 0.30, thighW: 0.46, thighH: 0.40, shinW: 0.42, shinH: 0.56, shoeW: 0.46, shoeH: 0.20, shoeD: 0.50, hairH: 0.14 },
+    slender: { headW: 0.52, headH: 0.56, headFore: 0.0, neckW: 0.20, neckH: 0.20,
+      waistW: 0.64, waistH: 0.34, chestW: 0.68, chestH: 0.66, torsoD: 0.34, chestPos: 0.58,
+      armSpan: 0.44, armPos: 0.58, shPadW: 0.28, upArmW: 0.18, upArmH: 0.40, foreW: 0.16, foreH: 0.44, fistW: 0.18, fistH: 0.15,
+      legSpan: 0.14, thighW: 0.20, thighH: 0.30, shinW: 0.18, shinH: 0.46, shoeW: 0.22, shoeH: 0.13, shoeD: 0.30, hairH: 0.12 },
+    obese: { headW: 0.52, headH: 0.55, headFore: 0.0, neckW: 0.26, neckH: 0.14,
+      waistW: 1.16, waistH: 0.52, chestW: 1.28, chestH: 0.78, torsoD: 0.90, chestPos: 0.55,
+      armSpan: 0.70, armPos: 0.55, shPadW: 0.58, upArmW: 0.34, upArmH: 0.26, foreW: 0.30, foreH: 0.28, fistW: 0.32, fistH: 0.18,
+      legSpan: 0.34, thighW: 0.52, thighH: 0.26, shinW: 0.48, shinH: 0.34, shoeW: 0.50, shoeH: 0.14, shoeD: 0.46, hairH: 0.12 },
+    beast: { headW: 0.62, headH: 0.60, headFore: 0.10, neckW: 0.24, neckH: 0.20,
+      waistW: 0.96, waistH: 0.40, chestW: 1.04, chestH: 0.68, torsoD: 0.54, chestPos: 0.54,
+      armSpan: 0.60, armPos: 0.54, shPadW: 0.42, upArmW: 0.28, upArmH: 0.42, foreW: 0.26, foreH: 0.46, fistW: 0.28, fistH: 0.20,
+      legSpan: 0.28, thighW: 0.40, thighH: 0.34, shinW: 0.36, shinH: 0.46, shoeW: 0.40, shoeH: 0.18, shoeD: 0.44, hairH: 0.12 },
+  };
+
+  // 敌我共用 buildVoxelBody 保证同构（cfg 配色/体型不同，脚底贴地）�?
+  // 肢体均挂在肩/髋枢轴分�?Group)下，rig 记录各枢轴，�?loop() 做呼�?行走摆动/攻击前摇�?
+  // —�?精细度升级：段数�?12 拉至 18~24 —�?
+  //   新增：颈�?head �?、手�?膝盖关节枢轴(elbow/knee)、拳头块、鞋块、肩甲块�?
+  //   cfg.bodyType 决定 BODY_DIMS 各段方块尺寸（高矮胖瘦一眼可分，非只 scale）；
+  //   躯干四肢�?cfg.bodyTex �?Canvas 布料纹理（makeBodyTextureMap）�?
+  function buildVoxelBody(g, cfg) {
+    const c = cfg.colors;
+    const D = BODY_DIMS[cfg.bodyType || "standard"] || BODY_DIMS.standard; // 体型方块尺寸�?
+    const bt = cfg.bodyTex || null;   // 身体纹理 {shirt,pants,shoulder}
+    // 材质工厂：有纹理则贴 map 并白色调制（保持像素纹理本色），否则纯色
+    const matOf = (col, map) => map
+      ? new THREE.MeshLambertMaterial({ map, color: 0xffffff })
+      : new THREE.MeshLambertMaterial({ color: col });
+    const shirtMat = matOf(c.shirt, bt && bt.shirt);
+    const pantsMat = matOf(c.pants, bt && bt.pants);
+    const shoulderMat = matOf(c.shoulder || c.shirt, bt && bt.shoulder);
+    const shoeMat = matOf(c.shoe, null);
+    const handMat = matOf(c.hand, null);
+    const hairMat = matOf(c.hair, null);
+    const box = (w, h, d, mat, gx, x, y, z, extra) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      m.position.set(x, y, z);
+      if (extra) { if (extra.rx) m.rotation.x = extra.rx; if (extra.ry) m.rotation.y = extra.ry; if (extra.rz) m.rotation.z = extra.rz; }
+      m.castShadow = true; m.receiveShadow = true;
+      gx.add(m);
+      return m;
+    };
+    const pivot = (x, y, z) => { const p = new THREE.Group(); p.position.set(x, y, z); g.add(p); return p; };
+
+    // —�?枢轴高度推导：脚底贴�?y�? —�?
+    const legY = D.thighH + D.shinH + D.shoeH * 0.5;   // 髋枢�?g-local �?
+    const upperY = legY + D.waistH * 0.5 + 0.14;       // 腰枢�?g-local �?
+    // —�?双腿：髋枢轴(legY) + 大腿/膝盖�?小腿 + 鞋块 —�?
+    const legL = pivot(-D.legSpan, legY, 0);
+    const legR = pivot(D.legSpan, legY, 0);
+    const kneeL = new THREE.Group(); kneeL.position.set(0, -D.thighH, 0); legL.add(kneeL);
+    const kneeR = new THREE.Group(); kneeR.position.set(0, -D.thighH, 0); legR.add(kneeR);
+    box(D.thighW, D.thighH, D.thighW * 0.92, pantsMat, legL, 0, -D.thighH * 0.5, 0);   // 左大�?
+    box(D.shinW, D.shinH, D.shinW * 0.92, pantsMat, kneeL, 0, -D.shinH * 0.5, 0);      // 左小�?
+    box(D.shoeW, D.shoeH, D.shoeD, shoeMat, kneeL, 0, -D.shinH - D.shoeH * 0.5, 0.04);  // 左脚/�?
+    box(D.thighW, D.thighH, D.thighW * 0.92, pantsMat, legR, 0, -D.thighH * 0.5, 0);   // 右大�?
+    box(D.shinW, D.shinH, D.shinW * 0.92, pantsMat, kneeR, 0, -D.shinH * 0.5, 0);      // 右小�?
+    box(D.shoeW, D.shoeH, D.shoeD, shoeMat, kneeR, 0, -D.shinH - D.shoeH * 0.5, 0.04);  // 右脚/�?
+
+    // —�?上部体（�?�?肩臂+颈头），枢轴在腰(upperY)，cfg.lean 让整体前倾（驼背/俯身）—�?
+    const upper = pivot(0, upperY, 0);
+    box(D.waistW, D.waistH, D.torsoD, shirtMat, upper, 0, -D.waistH * 0.5, 0);                 // �?
+    box(D.chestW, D.chestH, D.torsoD, shirtMat, upper, 0, D.chestPos, D.headFore * 0.4);       // 胸（beast 微前挪）
+    // 双肩（臂）枢�?+ 肩甲�?+ 上臂/肘关�?前臂 + 拳头块（尺寸与臂长按体型�?
+    const armL = new THREE.Group(); armL.position.set(-D.armSpan, D.armPos, 0); upper.add(armL);
+    const armR = new THREE.Group(); armR.position.set(D.armSpan, D.armPos, 0); upper.add(armR);
+    const elbowL = new THREE.Group(); elbowL.position.set(0, -D.upArmH, 0); armL.add(elbowL);
+    const elbowR = new THREE.Group(); elbowR.position.set(0, -D.upArmH, 0); armR.add(elbowR);
+    box(D.shPadW, 0.14, D.shPadW, shoulderMat, armL, 0, -0.02, 0, { rx: 0.25 });  // 左肩�?
+    box(D.shPadW, 0.14, D.shPadW, shoulderMat, armR, 0, -0.02, 0, { rx: 0.25 });  // 右肩�?
+    box(D.upArmW, D.upArmH, D.upArmW * 0.92, shirtMat, armL, 0, -D.upArmH * 0.5, 0);            // 左上�?
+    box(D.foreW, D.foreH, D.foreW * 0.92, handMat, elbowL, 0, -D.foreH * 0.5, 0);               // 左前�?
+    box(D.fistW, D.fistH, D.fistW * 0.98, handMat, elbowL, 0, -D.foreH - D.fistH * 0.5, c.foreZ); // 左拳�?
+    box(D.upArmW, D.upArmH, D.upArmW * 0.92, shirtMat, armR, 0, -D.upArmH * 0.5, 0);            // 右上�?
+    box(D.foreW, D.foreH, D.foreW * 0.92, handMat, elbowR, 0, -D.foreH * 0.5, 0);               // 右前�?
+    box(D.fistW, D.fistH, D.fistW * 0.98, handMat, elbowR, 0, -D.foreH - D.fistH * 0.5, c.foreZ); // 右拳�?
+
+    // —�?�?+ 头（head 组：颈部方块在头部枢轴下延，供转头动画）+ 发顶 —�?
+    const headPosY = D.chestPos + D.chestH * 0.5 + D.neckH * 0.5 + D.headH * 0.45; // 头枢�?upper 局�?y
+    const head = new THREE.Group(); head.position.set(0, headPosY, D.headFore); upper.add(head);
+    box(D.neckW, D.neckH, D.neckW * 0.92, skinMat, head, 0, -D.neckH * 0.5, 0);   // 颈部
+    // 提供 cfg.face.kind 时给头方块贴 Canvas 五官纹理（肤色由 faceSkinHex 自动匹配；六面同贴、正面朝 +z �?yaw=0 朝向一致）
+    const faceMap = (cfg.face && typeof document !== "undefined")
+      ? makeFaceTexture(cfg.face.kind, faceSkinHex(cfg.face.kind))
+      : null;
+    const headMat = faceMap
+      ? new THREE.MeshLambertMaterial({ map: faceMap, color: 0xffffff })
+      : matOf(c.skin, null);
+    const hd = new THREE.Mesh(new THREE.BoxGeometry(D.headW, D.headH, D.headW), headMat);
+    hd.position.set(0, D.headH * 0.12, 0);
+    hd.castShadow = true; hd.receiveShadow = true;
+    head.add(hd);
+    box(D.headW * 0.92, D.hairH, D.headW * 0.92, hairMat, head, 0, D.headH * 0.12 + D.headH * 0.5 + D.hairH * 0.5, 0); // 发顶/帽顶
+    upper.rotation.x = cfg.lean || 0;
+    g.userData.rig = { upper, head,
+      armL, elbowL, armR, elbowR,
+      legL, kneeL, legR, kneeR,
+      baseLean: cfg.lean || 0 };   // baseLean 供动画在呼吸/lean 基础上叠加攻击姿�?
+  }
+
+  // 体型映射：优先读 VOXEL_VARIANTS 表里�?bodyType 字段（BOSS 独立体型），
+  // 未命中再�?BOSS ref 特征，最后按归一 kind 给默认体型（BODY_DIMS 键名）�?
+  // 返回�?= BODY_DIMS 表键名，�?buildVoxelBody 选方块的 x/y/z 尺寸�?
+  function bodyTypeFor(kind, refRaw) {
+    const vk = resolveVoxelVariant(kind, refRaw);
+    if (vk && VOXEL_VARIANTS[vk] && VOXEL_VARIANTS[vk].bodyType) return VOXEL_VARIANTS[vk].bodyType;
+    const r = String(refRaw || "").toLowerCase();
+    if (/(short|stout|矮人|胖子|dward)/.test(r)) return "short_stout";
+    if (/(tall|修士|刺客|剑灵|剑修|法师|cultivat|scholar)/.test(r)) return "tall_thin";
+    // 归一 kind 默认
+    if (kind === "hunter") return "tall_thin";      // 猎手高挑
+    if (kind === "licker") return "slender";        // 舔食者细长贴�?
+    if (kind === "zombie") return "obese";          // 尸胖（破衣烂肉横身）
+    if (kind === "guard") return "standard";
+    if (kind === "horde") return "standard";
+    return "standard";
+  }
+
+  // 体素方块人敌人（MC 风格）：�?kind 区分体型——hunter 更高�?upright)、licker 俯身贴地�?
+  // zombie 驼背前倾、guard/horde 标准。VOXEL_ENEMY=true 时替换立�?billboard�?
+  function buildVoxelEnemy(g, kind, tint, refRaw) {
+    // 弗莱迪（梦魇）识别：ref 名含 fulai/dream/梦魇/弗莱�?时用烧伤脸纹理；否则�?kind 归一
+    const ftxt = (refRaw && /(fula|dream|梦魇|弗莱迪|freddy)/i.test(String(refRaw))) ? "fulaidi" : (kind === "horde" ? "horde" : kind);
+    const repaint = tint || (kind === "hunter" ? 0x4a4a52 : kind === "licker" ? 0x8a2a2a : 0x6a5a3a);
+    const V = {
+      hunter: { sc: 1.32, lean: -0.10, shirt: 0x4a4a52, skin: 0x5f5f6a, hair: 0x8f96a3, pants: 0x2a2a30, foreZ: 0.0, bob: 0.05 },
+      licker: { sc: 0.86, lean: 0.58, shirt: 0x8a2a2a, skin: 0x6a1f1f, hair: 0x3f1010, pants: 0x2a1818, foreZ: 0.34, bob: 0.02 },
+      zombie: { sc: 1.02, lean: 0.34, shirt: 0x6a5a3a, skin: 0x7d8a6a, hair: 0x3a3f2c, pants: 0x3a3430, foreZ: 0.16, bob: 0.04 },
+    }[kind] || { sc: 1.15, lean: 0.16, shirt: repaint, skin: repaint, hair: 0x8a7a5a, pants: 0x3a3430, foreZ: 0.06, bob: 0.05 }; // guard/horde 标准
+    buildVoxelBody(g, {
+      bodyType: bodyTypeFor(kind, refRaw),  // 体型参数化：各段方块尺寸按体型定制（高矮胖瘦一眼可分）
+      lean: V.lean,
+      face: { kind: ftxt },   // Canvas 五官脸纹理（弗莱�?各类敌人�?
+      bodyTex: makeBodyTextureMap(ftxt, V.shirt),  // 全身 Canvas 布料/甲纹理（褶皱/血�?甲纹�?
+      colors: {
+        shirt: V.shirt, pants: V.pants, skin: V.skin, hair: V.hair,
+        shoe: 0x1c1a1a, hand: V.skin, foreZ: V.foreZ,
+        waistW: 0.84, chestW: 0.92, headW: 0.6, torsoD: 0.5,   //（保留兼容字段，buildVoxelBody �?BODY_DIMS 优先�?
+      },
+    });
+    g.scale.setScalar(V.sc);
+    // 体素配件系统：按 BOSS/kind 在通用 12 段上附加独立造型（覆�?scale/lean，追加配件方块与 idle 动画枢轴�?
+    addVoxelAccessory(g, kind, refRaw);
+    g.userData.voxel = { phase: Math.random() * 6.28, kind, bob: V.bob, armBoost: kind === "hunter" ? 1.2 : kind === "licker" ? 0.7 : 1 };
+  }
+
+  // 体素方块人玩家（MC 史蒂夫风）：�?buildVoxelEnemy 同构（buildVoxelBody），蓝衣 Steve 配色�?
+  // VOXEL_PLAYER=true 时替换立绘。直�?lean=0，肩髋枢轴同敌，供同套动画�?
+  function buildVoxelPlayer(g) {
+    buildVoxelBody(g, {
+      bodyType: "standard",  // 玩家标准人类体型
+      lean: 0.0,
+      face: { kind: "player" }, // 正常青年脸（郑吒�? 左脸刀�?
+      bodyTex: makeBodyTextureMap("player", 0x3a5ba0), // 蓝衣衬衫纹理
+      colors: {
+        shirt: 0x3a5ba0, pants: 0x2a3450, skin: 0xd8a878, hair: 0x2a1f16,
+        shoe: 0x1c1a1a, hand: 0xd8a878, foreZ: 0.0,
+        waistW: 0.84, chestW: 0.92, headW: 0.6, torsoD: 0.5,
+      },
+    });
+    g.scale.setScalar(1.15);   // 与敌人体素人同比�?
+    g.userData.voxel = { phase: Math.random() * 6.28, bob: 0.05, armBoost: 1 };
+  }
+
+  // =====================================================================
+  // 体素配件系统 + 每怪独立造型表（VOXEL_VARIANTS�?
+  // 目标：MC 方块人但每个 BOSS/怪有可辨识的独立体素结构（不只通用体型�?scale/lean）�?
+  // �?buildVoxelBody �?12 段（�?髋枢轴组）基础上，addVoxelAccessory �?kind/BOSS 查表
+  // 追加体素方块配件，挂到对应挂点：U=upper 上身枢轴（头/�?肩）、AL=左肩枢轴、AR=右肩枢轴（手武器）�?
+  // 顶点数有界：每�?+3~10 个方块；材质/几何体随 g 进入 dispose 遍历自动释放，零外部依赖�?
+  // 配件方块配色�?kind/BOSS 定制；发光用 MeshLambertMaterial.emissive（不引外部库）�?
+  // =====================================================================
+  // 配件条目字段�?
+  //   A: 'U'|'AL'|'AR' 挂点；w,h,d 方盒尺寸；c 颜色；x,y,z 挂点本地坐标�?
+  //   glow: emissive 发光色（脑虫发光）；rot: [rx,ry,rz] 单次旋转（弧度，�?翼倾斜）；
+  //   anim: 'tail'|'tent'|'wing'——包裹进枢轴 Group 并在 animateRig �?idle 特征动画�?
+  const VOXEL_VARIANTS = {
+    // —�?三角头：大三角金属头盔（头枢�?H，适配各体型头高）+ 巨刀（AR 手）—�?
+    sanjiaotou: { sc: 1.16, bodyType: "giant", extraLean: 0.06, parts: [
+      { A: "H", w: 0.86, h: 0.34, d: 0.86, c: 0x9aa2ad, x: 0, y: 0.38, z: 0 },     // 头盔底座（宽�?
+      { A: "H", w: 0.60, h: 0.30, d: 0.60, c: 0xaeb6c2, x: 0, y: 0.64, z: 0 },     // 盔身（中收）
+      { A: "H", w: 0.32, h: 0.30, d: 0.32, c: 0x9aa2ad, x: 0, y: 0.90, z: 0 },     // 盔顶（收窄）
+      { A: "H", w: 0.12, h: 0.26, d: 0.12, c: 0x5a4a44, x: 0, y: 1.18, z: 0 },     // 顶锥�?
+      { A: "H", w: 0.54, h: 0.10, d: 0.74, c: 0x6a6670, x: 0, y: 0.50, z: 0.42 },  // 面罩（前探头�?
+      { A: "AR", w: 0.10, h: 0.52, d: 0.10, c: 0x2a2320, x: 0.02, y: -0.98, z: 0.08 },  // 巨刀�?
+      { A: "AR", w: 0.18, h: 1.55, d: 0.05, c: 0xcfd6e0, x: 0.02, y: -1.75, z: 0.08 },  // 巨刀�?
+      { A: "AR", w: 0.10, h: 0.55, d: 0.05, c: 0x93a0b0, x: 0.02, y: -2.55, z: 0.08 },  // 刃尖
+    ] },
+    // —�?异形皇后：beast 体型 + 加长后脑/内齿(头枢�? + 尾刃 + 骨刺�?—�?
+    yiy_queen: { sc: 1.28, bodyType: "beast", extraLean: -0.04, parts: [
+      { A: "H", w: 0.52, h: 0.16, d: 0.72, c: 0x282830, x: 0, y: 0.10, z: -0.42 },  // 长后脑（向后延伸�?
+      { A: "H", w: 0.56, h: 0.10, d: 0.30, c: 0x383844, x: 0, y: 0.20, z: -0.55 },  // 后脑�?
+      { A: "H", w: 0.22, h: 0.12, d: 0.10, c: 0x1a1a20, x: 0, y: -0.22, z: 0.30 },  // 内齿上（小牙�?
+      { A: "H", w: 0.48, h: 0.10, d: 0.10, c: 0x22222a, x: 0, y: -0.32, z: 0.20 },  // 下颌骨刃
+      { A: "H", w: 0.10, h: 0.08, d: 0.14, c: 0xd8d8c8, x: 0, y: -0.20, z: 0.34 },  // 外露内齿（白�?
+      { A: "U", w: 0.14, h: 0.66, d: 0.14, c: 0x2a2a32, x: 0, y: 0.55, z: -0.72, anim: "tail" },  // 尾刃�?
+      { A: "U", w: 0.06, h: 0.15, d: 0.15, c: 0xd8d8c8, x: 0, y: 0.5, z: 0, anim: "tail" },      // 尾尖刃（随尾�?
+      { A: "U", w: 0.10, h: 0.22, d: 0.10, c: 0x6a6a78, x: 0, y: 1.02, z: -0.22 },  // 背骨�?
+      { A: "U", w: 0.08, h: 0.18, d: 0.08, c: 0x6a6a78, x: 0, y: 1.16, z: -0.30 },  // 背骨�?
+      { A: "U", w: 0.06, h: 0.14, d: 0.06, c: 0x6a6a78, x: 0, y: 1.28, z: -0.36 },  // 背骨�?
+    ] },
+    // —�?脑虫：obese 肥胖脑体 + 头枢轴发�?+ 触须 —�?
+    brain_bug: { sc: 1.05, bodyType: "obese", extraLean: 0.10, parts: [
+      { A: "U", w: 1.12, h: 0.55, d: 0.98, c: 0xa89098, x: 0, y: 0.10, z: 0 },      // 肥大脑体（加宽胸�?
+      { A: "H", w: 0.60, h: 0.10, d: 0.60, c: 0xc0a0b0, x: 0, y: 0.42, z: -0.02, glow: 0x8e2f8f }, // 脑顶发光
+      { A: "H", w: 0.10, h: 0.42, d: 0.10, c: 0x7a6a72, x: -0.55, y: -0.30, z: 0.2, anim: "tent" }, // 触须�?
+      { A: "H", w: 0.10, h: 0.46, d: 0.10, c: 0x7a6a72, x: 0.55, y: -0.30, z: 0.2, anim: "tent" },  // 触须�?
+      { A: "H", w: 0.10, h: 0.38, d: 0.10, c: 0x6a5a62, x: -0.42, y: -0.22, z: -0.1, anim: "tent" }, // 触须左右
+      { A: "H", w: 0.10, h: 0.40, d: 0.10, c: 0x6a5a62, x: 0.42, y: -0.22, z: -0.1, anim: "tent" },  // 触须右后
+      { A: "H", w: 0.10, h: 0.30, d: 0.10, c: 0x7a6a72, x: 0.06, y: -0.26, z: 0.38, anim: "tent" },  // 触须�?
+    ] },
+    // —�?弗莱迪（梦魇）：宽檐�?头枢�? + 刀�?+ 烧伤脸（脸纹理已�?buildVoxelEnemy）—�?
+    fulaidi: { sc: 1.12, bodyType: "standard", extraLean: 0.06, parts: [
+      { A: "H", w: 0.94, h: 0.06, d: 0.94, c: 0x3a2a20, x: 0, y: 0.38, z: 0 },     // 宽檐帽檐
+      { A: "H", w: 0.52, h: 0.26, d: 0.52, c: 0x3a2a20, x: 0, y: 0.50, z: 0 },     // 帽冠
+      { A: "H", w: 0.52, h: 0.10, d: 0.56, c: 0xd86a5a, x: 0, y: 0.44, z: 0 },     // 帽红�?
+      { A: "H", w: 0.60, h: 0.08, d: 0.12, c: 0x2a2a30, x: 0, y: 0.36, z: -0.22 }, // 帽檐折边（后翘）
+      { A: "AR", w: 0.06, h: 0.22, d: 0.06, c: 0xd8dde4, x: -0.10, y: -0.88, z: 0.02 }, // 刀�?
+      { A: "AR", w: 0.06, h: 0.26, d: 0.06, c: 0xd8dde4, x: 0.00, y: -0.90, z: 0.02 },  // 刀�?
+      { A: "AR", w: 0.06, h: 0.22, d: 0.06, c: 0xd8dde4, x: 0.10, y: -0.88, z: 0.02 },  // 刀�?
+    ] },
+    // —�?追踪者：巨汉体型(giant) + 触手 —�?
+    tyrant: { sc: 1.42, bodyType: "giant", extraLean: 0.00, parts: [
+      { A: "U", w: 1.04, h: 0.22, d: 0.66, c: 0x4a4a55, x: 0, y: 0.78, z: 0 },     // 巨肩�?
+      { A: "U", w: 0.88, h: 0.42, d: 0.58, c: 0x56565f, x: 0, y: 0.52, z: 0 },     // 巨胸�?
+      { A: "H", w: 0.86, h: 0.10, d: 0.70, c: 0x3a3a44, x: 0, y: 0.12, z: 0 },     // 头带/眉骨
+      { A: "U", w: 0.12, h: 0.60, d: 0.12, c: 0x8a4a4a, x: -0.6, y: 0.55, z: -0.3, anim: "tent" }, // 左触�?
+      { A: "U", w: 0.12, h: 0.56, d: 0.12, c: 0x8a4a4a, x: 0.6, y: 0.55, z: -0.3, anim: "tent" },  // 右触�?
+      { A: "U", w: 0.18, h: 0.16, d: 0.18, c: 0x56565f, x: -0.42, y: 0.90, z: 0.28, glow: 0x19439a }, // 左肩警示�?
+      { A: "U", w: 0.18, h: 0.16, d: 0.18, c: 0x56565f, x: 0.42, y: 0.90, z: 0.28, glow: 0x19439a },  // 右肩警示�?
+    ] },
+    // —�?巴博萨：骷髅�?+ 海盗�?头枢�? + 弯刀 —�?
+    barbossa: { sc: 1.12, bodyType: "standard", extraLean: 0.10, parts: [
+      { A: "H", w: 0.90, h: 0.06, d: 0.90, c: 0x4a4a5a, x: 0, y: 0.40, z: 0 },     // 船长帽底
+      { A: "H", w: 0.52, h: 0.16, d: 0.52, c: 0x3a2a20, x: 0, y: 0.50, z: 0 },     // 帽冠
+      { A: "H", w: 0.62, h: 0.06, d: 0.62, c: 0x2a2a30, x: 0, y: 0.40, z: 0.02, rot: [0, 0.6, 0] }, // 帽檐翘边
+      { A: "H", w: 0.64, h: 0.10, d: 0.64, c: 0xc8c8bc, x: 0, y: 0.08, z: 0 },     // 骷髅脸盖（白�?
+      { A: "H", w: 0.14, h: 0.08, d: 0.10, c: 0x882222, x: -0.16, y: 0.06, z: 0.36, glow: 0xff2222 }, // 左眼凄红
+      { A: "H", w: 0.14, h: 0.08, d: 0.10, c: 0x882222, x: 0.16, y: 0.06, z: 0.36, glow: 0xff2222 },  // 右眼凄红
+      { A: "U", w: 0.84, h: 0.34, d: 0.10, c: 0x3a4450, x: 0, y: 0.10, z: 0.28 },  // 船长外套披身
+      { A: "AR", w: 0.08, h: 0.26, d: 0.08, c: 0x2a2320, x: 0.03, y: -0.92, z: 0.06 }, // 弯刀�?
+      { A: "AR", w: 0.16, h: 0.70, d: 0.04, c: 0xdfe4ea, x: 0.03, y: -1.62, z: 0.06, rot: [0, 0, 0.9] }, // 弯刀刃（圆弧�?
+    ] },
+    // —�?龙：beast 体型 + 双角/鼻吻(头枢�? + 双翼 + 长尾 + 四足 —�?
+    dragon: { sc: 1.35, bodyType: "beast", extraLean: 0.0, parts: [
+      { A: "H", w: 0.14, h: 0.52, d: 0.14, c: 0xd8d0b0, x: -0.18, y: 0.34, z: 0.28, rot: [0.3, 0, -0.5] }, // 左角
+      { A: "H", w: 0.14, h: 0.52, d: 0.14, c: 0xd8d0b0, x: 0.18, y: 0.34, z: 0.28, rot: [0.3, 0, 0.5] },  // 右角
+      { A: "H", w: 0.52, h: 0.16, d: 0.10, c: 0x8a6a3a, x: 0, y: 0.12, z: 0.30 },  // 鼻吻（前伸）
+      { A: "U", w: 0.90, h: 0.06, d: 0.30, c: 0x8a6a3a, x: 0, y: 0.62, z: -0.30, anim: "wing" },  // 左翼�?
+      { A: "U", w: 0.90, h: 0.06, d: 0.30, c: 0x8a6a3a, x: 0, y: 0.62, z: -0.30, anim: "wing" },  // 右翼�?共享锚点两片)
+      { A: "U", w: 0.16, h: 0.14, d: 0.16, c: 0x9a7a4a, x: -0.5, y: 0.50, z: -0.34, anim: "tent" }, // 左翼膜（随翼扇）
+      { A: "U", w: 0.16, h: 0.14, d: 0.16, c: 0x9a7a4a, x: 0.5, y: 0.50, z: -0.34, anim: "tent" },  // 右翼�?
+      { A: "U", w: 0.14, h: 1.20, d: 0.14, c: 0x8a6a3a, x: 0, y: 0.45, z: -0.80, anim: "tail" },   // 长尾�?
+      { A: "U", w: 0.26, h: 0.12, d: 0.10, c: 0xd8d0b0, x: 0, y: 0.45, z: -0.80, anim: "tail" },   // 尾尖骨刃
+      { A: "U", w: 0.40, h: 0.40, d: 0.36, c: 0x6a4a2a, x: -0.30, y: 0.10, z: 0.32 }, // 左前足（四足�?
+      { A: "U", w: 0.40, h: 0.40, d: 0.36, c: 0x6a4a2a, x: 0.30, y: 0.10, z: 0.32 },  // 右前�?
+    ] },
+    // —�?恶魔：beast 体型 + 双角/额焰�?头枢�? + 蝠翼 + 尖尾 —�?
+    demon: { sc: 1.20, bodyType: "beast", extraLean: 0.05, parts: [
+      { A: "H", w: 0.16, h: 0.44, d: 0.16, c: 0x5a2030, x: -0.18, y: 0.32, z: 0.24, rot: [0.25, 0, -0.6] }, // 左角
+      { A: "H", w: 0.16, h: 0.44, d: 0.16, c: 0x5a2030, x: 0.18, y: 0.32, z: 0.24, rot: [0.25, 0, 0.6] },  // 右角
+      { A: "U", w: 0.86, h: 0.06, d: 0.28, c: 0x3a1420, x: 0, y: 0.70, z: -0.26, anim: "wing" },  // 左蝠翼根
+      { A: "U", w: 0.86, h: 0.06, d: 0.28, c: 0x3a1420, x: 0, y: 0.70, z: -0.26, anim: "wing" },  // 右蝠翼根
+      { A: "U", w: 0.14, h: 0.06, d: 0.52, c: 0x6a2440, x: -0.55, y: 0.56, z: -0.3, anim: "tent" }, // 左翼膜扇
+      { A: "U", w: 0.14, h: 0.06, d: 0.52, c: 0x6a2440, x: 0.55, y: 0.56, z: -0.3, anim: "tent" },  // 右翼膜扇
+      { A: "U", w: 0.12, h: 0.10, d: 0.72, c: 0x5a2030, x: 0, y: 0.88, z: -0.42, anim: "tail" },   // 尖尾�?
+      { A: "U", w: 0.12, h: 0.10, d: 0.12, c: 0xe0e0e0, x: 0, y: 0.88, z: -0.66, anim: "tail" },  // 尾尖�?
+      { A: "H", w: 0.44, h: 0.08, d: 0.28, c: 0x3a1418, x: 0, y: 0.14, z: 0.16, glow: 0xff4466 },  // 额焰�?
+    ] },
+    // —�?狼人：beast 体型 + 尖�?狼吻(头枢�? + �?+ 弓背 —�?
+    werewolf: { sc: 1.18, bodyType: "beast", extraLean: -0.08, parts: [
+      { A: "H", w: 0.12, h: 0.30, d: 0.12, c: 0x6a7178, x: -0.20, y: 0.30, z: 0.15, rot: [0, 0, -0.4] }, // 左尖�?
+      { A: "H", w: 0.12, h: 0.30, d: 0.12, c: 0x6a7178, x: 0.20, y: 0.30, z: 0.15, rot: [0, 0, 0.4] },  // 右尖�?
+      { A: "H", w: 0.46, h: 0.32, d: 0.22, c: 0x8a6a52, x: 0, y: -0.02, z: 0.30 },   // 狼吻（前伸突出）
+      { A: "U", w: 0.70, h: 0.10, d: 0.46, c: 0x5a5f66, x: 0, y: 0.60, z: -0.30 },  // 弓背毛领
+      { A: "AL", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: -0.08, y: -0.86, z: 0.02 }, // 左爪1
+      { A: "AL", w: 0.06, h: 0.18, d: 0.06, c: 0xdfe4ea, x: 0.00, y: -0.84, z: 0.02 },  // 左爪2
+      { A: "AL", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: 0.08, y: -0.86, z: 0.02 },  // 左爪3
+      { A: "AR", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: -0.08, y: -0.86, z: 0.02 }, // 右爪1
+      { A: "AR", w: 0.06, h: 0.18, d: 0.06, c: 0xdfe4ea, x: 0.00, y: -0.84, z: 0.02 },  // 右爪2
+      { A: "AR", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: 0.08, y: -0.86, z: 0.02 },  // 右爪3
+    ] },
+    // —�?石魔像：giant 体型 + 巨石方块�?+ 裂纹 + 石巨�?头枢�? —�?
+    golem: { sc: 1.30, bodyType: "giant", extraLean: 0.0, parts: [
+      { A: "U", w: 0.98, h: 0.72, d: 0.70, c: 0x8a8a82, x: 0, y: 0.42, z: 0 },     // 巨石�?
+      { A: "U", w: 0.90, h: 0.20, d: 0.62, c: 0x9a9a92, x: 0, y: 0.80, z: 0.02 },  // 巨石�?
+      { A: "U", w: 0.66, h: 0.20, d: 0.60, c: 0x8a8a82, x: 0, y: 0.0, z: 0.02 },   // 石腰�?
+      { A: "U", w: 0.06, h: 0.62, d: 0.06, c: 0x3a3a34, x: -0.2, y: 0.5, z: 0.02, rot: [0, 0, 0.3] }, // 裂纹1
+      { A: "U", w: 0.06, h: 0.08, d: 0.06, c: 0x3a3a34, x: 0.16, y: 0.66, z: 0.02, rot: [0, 0, -0.5] }, // 裂纹2
+      { A: "U", w: 0.30, h: 0.16, d: 0.30, c: 0x6a6a62, x: -0.4, y: 0.34, z: 0.04, rot: [0, 0, 0.2] },  // 左肩碎石
+      { A: "U", w: 0.30, h: 0.16, d: 0.30, c: 0x6a6a62, x: 0.4, y: 0.34, z: 0.04, rot: [0, 0, -0.2] },  // 右肩碎石
+      { A: "H", w: 0.64, h: 0.20, d: 0.64, c: 0x9a9a92, x: 0, y: 0.34, z: 0 },     // 石巨�?
+    ] },
+    // —�?触手怪：slender 细长体型 + 发光主眼(头枢�? + 多触�?—�?
+    tentacle: { sc: 1.10, bodyType: "slender", extraLean: -0.05, parts: [
+      { A: "U", w: 0.90, h: 0.40, d: 0.80, c: 0x7a5a6a, x: 0, y: 0.28, z: 0 },     // 肥体
+      { A: "H", w: 0.26, h: 0.10, d: 0.26, c: 0x2a2030, x: 0, y: 0.28, z: 0, glow: 0xff5522 }, // 主眼（发光）
+      { A: "U", w: 0.12, h: 0.72, d: 0.12, c: 0x6a4a5a, x: -0.62, y: 0.34, z: 0.1, anim: "tent" }, // 触手1
+      { A: "U", w: 0.12, h: 0.68, d: 0.12, c: 0x6a4a5a, x: 0.62, y: 0.34, z: 0.1, anim: "tent" },  // 触手2
+      { A: "U", w: 0.12, h: 0.80, d: 0.12, c: 0x5a3a4a, x: -0.4, y: 0.40, z: -0.2, anim: "tent" },  // 触手3
+      { A: "U", w: 0.12, h: 0.76, d: 0.12, c: 0x5a3a4a, x: 0.4, y: 0.40, z: -0.2, anim: "tent" },   // 触手4
+      { A: "U", w: 0.12, h: 0.62, d: 0.12, c: 0x6a4a5a, x: 0.0, y: 0.42, z: -0.42, anim: "tent" },  // 触手5（背�?
+      { A: "U", w: 0.12, h: 0.58, d: 0.12, c: 0x6a4a5a, x: -0.66, y: 0.40, z: -0.1, anim: "tent" }, // 触手6
+      { A: "U", w: 0.12, h: 0.60, d: 0.12, c: 0x6a4a5a, x: 0.66, y: 0.40, z: -0.1, anim: "tent" },  // 触手7
+    ] },
+    // —�?亡灵/骷髅：standard 体型 + 骷髅�?头枢�? + 骨手 —�?
+    undead: { sc: 1.15, bodyType: "standard", extraLean: 0.08, parts: [
+      { A: "H", w: 0.66, h: 0.12, d: 0.66, c: 0xcfc9b8, x: 0, y: 0.30, z: 0 },     // 骷髅头盖
+      { A: "H", w: 0.58, h: 0.14, d: 0.60, c: 0xc8c2b0, x: 0, y: 0.04, z: 0.12 },  // 白颧�?
+      { A: "H", w: 0.34, h: 0.14, d: 0.12, c: 0x2a2a30, x: 0, y: 0.00, z: 0.34 },  // 黑眼�?
+      { A: "AL", w: 0.10, h: 0.44, d: 0.10, c: 0xe0dbc8, x: 0, y: -0.60, z: 0.02 }, // 左骨前臂/�?
+      { A: "AR", w: 0.10, h: 0.44, d: 0.10, c: 0xe0dbc8, x: 0, y: -0.60, z: 0.02 }, // 右骨�?
+      { A: "U", w: 0.78, h: 0.44, d: 0.10, c: 0x4a3a32, x: 0, y: 0.1, z: -0.28 },   // 破布披风（背�?
+    ] },
+    // —�?通用 kind 兜底配件（守�?头盔(头枢�?／猎�?爪刃／舔舐�?长舌）—�?
+    guard: { sc: 1.15, bodyType: "standard", extraLean: 0.16, parts: [
+      { A: "H", w: 0.66, h: 0.16, d: 0.66, c: 0x55606e, x: 0, y: 0.32, z: 0 },     // 半圆头盔
+      { A: "H", w: 0.26, h: 0.44, d: 0.26, c: 0x3a4a58, x: 0, y: 0.58, z: 0 },     // 头盔冠脊
+      { A: "H", w: 0.64, h: 0.08, d: 0.08, c: 0xcfd6e0, x: 0, y: 0.06, z: 0.34 },  // 护目/面罩亮条
+    ] },
+    hunter: { extraLean: -0.10, parts: [
+      { A: "AR", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: -0.10, y: -0.84, z: 0.02 }, // 爪刃
+      { A: "AR", w: 0.08, h: 0.34, d: 0.08, c: 0xdfe4ea, x: 0.02, y: -0.88, z: 0.02 },  // 爪刃�?
+      { A: "AR", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: 0.14, y: -0.84, z: 0.02 },  // 爪刃
+      { A: "AL", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: -0.10, y: -0.84, z: 0.02 },
+      { A: "AL", w: 0.08, h: 0.34, d: 0.08, c: 0xdfe4ea, x: 0.02, y: -0.88, z: 0.02 },
+      { A: "AL", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: 0.14, y: -0.84, z: 0.02 },
+    ] },
+    licker: { extraLean: 0.58, parts: [
+      { A: "U", w: 0.14, h: 0.10, d: 0.62, c: 0x8a4a5a, x: 0, y: 0.90, z: 0.5, rot: [-0.35, 0, 0], anim: "tent" }, // 长舌（前伸）
+    ] },
+  };
+
+  // 查表：优先原�?ref 特征命中 BOSS，再回退归一 kind。未匹配返回 null（保留通用 12 段）�?
+  function resolveVoxelVariant(kind, refRaw) {
+    const r = String(refRaw || "").toLowerCase();
+    if (/sanjiao|三角头|三角|sjt|pyramid/.test(r)) return "sanjiaotou";
+    if (/yiy_|异形皇后|queen/.test(r)) return "yiy_queen";
+    if (/brain|脑虫|naochong/.test(r)) return "brain_bug";
+    if (/fula|梦魇|弗莱迪|freddy|dream/.test(r)) return "fulaidi";
+    if (/tyrant|追踪者|追迹者|追赠/.test(r)) return "tyrant";
+    if (/barbossa|巴博萨|海盗/.test(r)) return "barbossa";
+    if (/dragon|�?.test(r)) return "dragon";
+    if (/demon|恶魔/.test(r)) return "demon";
+    if (/werew|狼人/.test(r)) return "werewolf";
+    if (/golem|石魔像|魔像/.test(r)) return "golem";
+    if (/tentacle|触手/.test(r)) return "tentacle";
+    if (/undead|骷髅|skeleton|亡灵/.test(r)) return "undead";
+    if (VOXEL_VARIANTS.hasOwnProperty(kind)) return kind; // guard/hunter/licker... 通用 kind 兜底
+    return null;
+  }
+
+  // 体素配件系统：在通用 12 段基础上按 BOSS/kind 追加造型方块（挂点在 buildVoxelBody �?rig 枢轴�?
+  function addVoxelAccessory(g, kind, refRaw) {
+    const rig = (g.userData && g.userData.rig) || null;
+    const vk = resolveVoxelVariant(kind, refRaw);
+    const variant = vk ? VOXEL_VARIANTS[vk] : null;
+    if (!variant) return;                       // 未匹�?�?保留通用 12 �?
+    if (rig && variant.extraLean) {
+      // 追加前�?弓背：同时写死到 upper �?rig.baseLean（animateRig �?baseLean 叠加攻击姿势，避免被覆盖�?
+      rig.baseLean = (rig.baseLean || 0) + variant.extraLean;
+      rig.upper.rotation.x = rig.baseLean;
+    }
+    if (variant.sc) g.scale.setScalar(variant.sc);                              // 覆盖体型缩放
+    if (rig) {
+      // 记录造型归属 + 动画枢轴收集桶（animateRig 读取�?idle 特征动画�?
+      rig.variant = vk;
+      rig.animParts = { tail: [], tent: [], wing: [] };
+    }
+    const boxAt = (parent, p) => {
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(p.w, p.h, p.d),
+        new THREE.MeshLambertMaterial({ color: p.c })
+      );
+      m.position.set(p.x, p.y, p.z);
+      if (p.rot) { m.rotation.set(p.rot[0], p.rot[1], p.rot[2]); }
+      if (p.glow !== undefined) { m.material.emissive = new THREE.Color(p.glow); m.material.emissiveIntensity = 1.0; }
+      m.castShadow = true; m.receiveShadow = true;
+      parent.add(m);
+      return m;
+    };
+    (variant.parts || []).forEach(p => {
+      // 选择挂点枢轴：U=upper 上身枢轴（头/�?肩）、AL/AR=左右肩枢轴、H=头部枢轴（头饰随头，适配各体型头高）
+      const host = p.A === "AR" ? (rig && rig.armR)
+        : p.A === "AL" ? (rig && rig.armL)
+        : p.A === "H" ? (rig && rig.head)
+        : (rig && rig.upper);
+      if (!host) return;
+      if (p.anim) {
+        // 动画配件：包裹进枢轴 Group（tail/tent/wing），注册�?rig.animParts �?idle 摆动
+        const grp = new THREE.Group();
+        grp.position.set(p.x, p.y, p.z);
+        grp.userData.base = (p.rot || [0, 0, 0]).slice();
+        grp.userData.ph = Math.random() * 6.28;
+        host.add(grp);
+        boxAt(grp, { w: p.w, h: p.h, d: p.d, c: p.c, x: 0, y: -p.h / 2, z: 0, glow: p.glow });
+        rig.animParts[p.anim].push(grp);
+      } else {
+        boxAt(host, p);
+      }
+    });
+  }
+
+  function spawnBlood(pos) {
+    for (let i = 0; i < 20; i++) {
+      const s = 0.09 + Math.random() * 0.13;
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(s, s, s),
+        new THREE.MeshBasicMaterial({ color: Math.random() < 0.6 ? 0x8a1414 : 0x5e0d0d, transparent: true })
+      );
+      m.position.set(pos.x, pos.y + Math.random() * 0.3, pos.z);
+      scene.add(m);
+      blood.push({
+        m,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: 0.35 + Math.random() * 0.45,
+        vz: (Math.random() - 0.5) * 0.3,
+        spin: (Math.random() - 0.5) * 0.5,
+        life: 0, max: 0.5 + Math.random() * 0.45,
+      });
+    }
+  }
+  function updateBlood(dt) {
+    const scl = dt * 60;
+    blood = blood.filter(b => {
+      b.life += dt;
+      const k = b.life / b.max;
+      b.vy -= dt * 1.15;
+      b.m.position.x += b.vx * scl;
+      b.m.position.y += b.vy * scl;
+      b.m.position.z += b.vz * scl;
+      if (b.m.position.y < 0.03) { b.m.position.y = 0.03; b.vy *= -0.35; b.vx *= 0.7; b.vz *= 0.7; } // 落地轻弹即停
+      b.m.rotation.x += b.spin * scl; b.m.rotation.z += b.spin * scl;
+      b.m.scale.setScalar(Math.max(0.08, 1 - k * 0.7));
+      b.m.material.opacity = Math.max(0, 1 - k * 1.5);
+      if (k >= 1) { scene.remove(b.m); b.m.geometry.dispose(); b.m.material.dispose(); return false; }
+      return true;
+    });
+  }
+
+  // 投掷物（圣水 / 燃烧�?/ 投掷类道具）：从玩家手中抛出一个小球体，划出抛物弧飞向敌人�?
+  // 命中（或到达目标点）时爆开成爆炸粒子。使�?blood 粒子系统做轨迹与爆散，全程逐帧�?updateThrowables 驱动�?
+  // 纯视觉：命中判定/伤害�?Rust 侧，onAction 契约（attack）不变�?
+  function throwFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x + dir.x * 0.7, y: 1.7, z: PX.z + dir.z * 0.7 };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.3, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4.2, y: 1.2, z: PX.z + dir.z * 4.2 };
+    const isHoly = /圣水|holy|herb.?water|holy.?water/.test(String(curWeaponId || ""));
+    // 投掷物本体：金属色小球弹�?+ additive 光晕（圣�?圣蓝，燃烧弹=橙红�?
+    const ballColor = isHoly ? 0x7ad0ff : 0xff9a4a;
+    const ball = new THREE.Mesh(
+      new THREE.SphereGeometry(0.16, 12, 10),
+      new THREE.MeshStandardMaterial({ color: ballColor, roughness: 0.35, metalness: 0.4, emissive: isHoly ? 0x2a6aff : 0xff6a20, emissiveIntensity: 0.9 })
+    );
+    ball.position.set(from.x, from.y, from.z);
+    ball.castShadow = true;
+    scene.add(ball);
+    const trail = glowSprite(isHoly ? 0x8ae0ff : 0xffb066, 0.7);
+    trail.position.copy(ball.position);
+    scene.add(trail);
+    // 起点手抛弧线：到目标的过程用二次贝塞尔，让投掷物画出一道内凹抛物线（更有「扔」的动感�?
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const apex = { x: from.x + ox * 0.5, y: Math.max(from.y, to.y) + 0.8, z: from.z + oz * 0.5 };
+    const P = (k) => {
+      const ik = 1 - k;
+      return {
+        x: ik * ik * from.x + 2 * ik * k * apex.x + k * k * to.x,
+        y: ik * ik * from.y + 2 * ik * k * apex.y + k * k * to.y,
+        z: ik * ik * from.z + 2 * ik * k * apex.z + k * k * to.z,
+      };
+    };
+    throwables.push({ ball, trail, t: 0, P, to, isHoly, exploded: false });
+  }
+
+  // 推进所有飞行中的投掷物（每帧由 loop 调用 dt 秒）；到点后球体爆散 + 地面爆光�?
+  function updateThrowables(dt) {
+    const scl = dt * 60;
+    throwables = throwables.filter(pr => {
+      pr.t += dt;
+      const k = Math.min(1, pr.t * 2.2);
+      const p = pr.P(k);
+      pr.ball.position.set(p.x, p.y, p.z);
+      pr.ball.rotation.x += 0.3 * scl; pr.ball.rotation.z += 0.2 * scl;
+      pr.trail.position.copy(pr.ball.position);
+      pr.trail.material.opacity = Math.max(0.25, 1 - k * 0.7);
+      if (k >= 1) {
+        scene.remove(pr.ball); pr.ball.geometry.dispose(); pr.ball.material.dispose();
+        scene.remove(pr.trail); pr.trail.material.dispose();
+        // 命中爆炸：爆散粒子（圣水=圣蓝�?/ 燃烧�?橙红�?+ 地面亮斑
+        const burstCol = pr.isHoly ? 0x8ee0ff : 0xffa050;
+        const burstCol2 = pr.isHoly ? 0xffffff : 0xffd27a;
+        for (let i = 0; i < 18; i++) {
+          const m = new THREE.Mesh(
+            new THREE.BoxGeometry(0.06 + Math.random() * 0.07, 0.06 + Math.random() * 0.07, 0.06 + Math.random() * 0.07),
+            new THREE.MeshBasicMaterial({ color: i % 4 === 0 ? burstCol2 : burstCol, transparent: true, depthWrite: false })
+          );
+          m.position.set(pr.to.x, pr.to.y, pr.to.z);
+          const a = Math.random() * 6.28, e = 0.7 + Math.random() * 1.1;
+          scene.add(m);
+          blood.push({
+            m,
+            vx: Math.cos(a) * e, vy: 0.3 + Math.random() * 1.5, vz: Math.sin(a) * e,
+            spin: (Math.random() - 0.5) * 1.3,
+            life: 0, max: 0.3 + Math.random() * 0.3,
+          });
+        }
+        // 命中地面爆炸光斑（燃�?圣水溅射范围�?
+        const flash = glowSprite(pr.isHoly ? 0xbfe8ff : 0xffb066, 1.8);
+        flash.position.set(pr.to.x, 0.4, pr.to.z);
+        scene.add(flash);
+        setTimeout(() => { scene.remove(flash); flash.material.dispose(); }, 260);
+        // 冲击地面环（一层扩散圆环贴片）
+        const ring = new THREE.Mesh(
+          new THREE.RingGeometry(0.25, 0.55, 24),
+          new THREE.MeshBasicMaterial({ color: burstCol, transparent: true, opacity: 0.6, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+        );
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.set(pr.to.x, 0.06, pr.to.z);
+        scene.add(ring);
+        let rt = 0;
+        const ringA = () => {
+          rt += 0.05;
+          const s = 1 + rt * 1.8;
+          ring.scale.set(s, s, s);
+          ring.material.opacity = Math.max(0, 0.6 - rt * 1.4);
+          if (rt < 0.45) requestAnimationFrame(ringA);
+          else { scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }
+        };
+        ringA();
+        return false;
+      }
+      return true;
+    });
+  }
+
+  // ---------- 手写 bloom（不引外部库）：additive 光晕精灵，给自发光体（刀�?能量）营造泛�?----------
+  function getGlowTex() {
+    if (glowTex) return glowTex;
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const cx = c.getContext("2d");
+    const g = cx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.35, "rgba(255,255,255,.55)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    cx.fillStyle = g; cx.fillRect(0, 0, 64, 64);
+    glowTex = new THREE.CanvasTexture(c);
+    return glowTex;
+  }
+  function glowSprite(color, size) {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: getGlowTex(), color, transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }));
+    s.scale.set(size, size, 1);
+    return s;
+  }
+
+  // 体素人程序化动画（敌我同套；onAction 语义不变，纯视觉。每帧均为绝对赋值覆盖，旋转不累积）�?
+  //   呼吸——upper 上下轻浮 + 前倾微摆；行走——四肢对侧摆（前�?后摆）、肘/膝随迈步屈伸、身体左右微晃；
+  //   待机——头部偶尔转头（环顾�? 呼吸；攻击——三段（起手蓄力拉身后仰→前挥横扫→收招回位）；
+  //   特殊�?idle——乘 rig.animParts 做触手蠕�?龙尾摆动/脑虫触须抖动/蝠翼扇动。rig �?buildVoxelBody 提供�?
+  function animateRig(rig, t, walk, attack) {
+    const moving = walk > 0.8;
+    const sp = t * 0.018 * walk;
+    const breath = Math.sin(t * 0.0017);
+    // 呼吸：上半体起伏 + 极细微前倾摆�?
+    rig.upper.position.y = breath * 0.035;
+    rig.upper.rotation.z = Math.sin(sp) * 0.03;
+    // 行走摆动：对侧手脚同步；前摆幅度略大于后摆（更自然）
+    const ph = Math.sin(sp);
+    const ls = moving ? ph * 0.46 : ph * 0.10;
+    rig.legL.rotation.x = ls;
+    rig.legR.rotation.x = -ls;
+    // 手臂摆：幅度小于腿、前端探出；后摆由肘关节屈折补偿 �?摆动更分�?
+    const as = moving ? 0.86 : 0.20;
+    const armLx = -ls * 0.80 + (moving ? 0.14 : 0.02);
+    const armRx = ls * 0.80 + (moving ? 0.14 : 0.02);
+    rig.armL.rotation.x = armLx;
+    rig.armR.rotation.x = armRx;
+    if (rig.elbowL) rig.elbowL.rotation.x = (moving ? 0.28 : 0.14) - ls * 0.22; // 手肘随摆屈伸
+    if (rig.elbowR) rig.elbowR.rotation.x = (moving ? 0.28 : 0.14) + ls * 0.22;
+    // 膝盖随迈步微屈（支撑腿）
+    if (rig.kneeL) rig.kneeL.rotation.x = Math.max(0, ls * 0.45);
+    if (rig.kneeR) rig.kneeR.rotation.x = Math.max(0, -ls * 0.45);
+    // 身体左右微晃（行走时轻微侧摆，像负重�?
+    if (moving) rig.upper.rotation.z += Math.sin(sp * 0.5) * 0.04;
+    // 待机 idle：头部偶尔转头（慢速环顾）+ 随呼吸轻点头；攻击时被下方覆�?
+    if (rig.head && attack <= 0) {
+      rig.head.rotation.y = Math.sin(t * 0.4) * 0.14;   // 慢速左右转�?
+      rig.head.rotation.x = breath * 0.03;              // 呼吸轻点
+    }
+    // 身体基准 lean（buildVoxelBody 记录�?cfg.lean），攻击姿势在其上叠�?
+    const baseX = rig.baseLean || 0;
+    // 攻击三段：attack 单调 1�? 按值分 起手蓄力→前挥→收招（手�?+ 身体协同�?
+    if (attack > 0) {
+      const a = Math.min(1, attack);
+      if (a > 0.78) {
+        // �? 起手蓄力：上身后仰蓄�?+ 右臂拉后高举 + 右肘�?
+        rig.upper.rotation.x = baseX + 0.20;
+        rig.armR.rotation.x = -2.15; rig.armR.rotation.y = -0.18;
+        rig.armL.rotation.x = 0.5;  rig.armL.rotation.y = 0.10;
+        if (rig.elbowR) rig.elbowR.rotation.x = -0.65;
+        if (rig.head) { rig.head.rotation.y = -0.15; rig.head.rotation.x = 0.10; }
+      } else if (a > 0.30) {
+        // �? 前挥：右臂大幅前探横�?+ 身体前送微�?
+        const k = (a - 0.30) / 0.48;                    // 1�?
+        rig.upper.rotation.x = baseX - 0.16 * k;
+        rig.armR.rotation.x = 2.35 - 0.5 * (1 - k); rig.armR.rotation.y = 0.16;
+        rig.armL.rotation.x = 0.34 - 0.18 * k; rig.armL.rotation.y = 0;
+        if (rig.elbowR) rig.elbowR.rotation.x = -0.12 + 0.2 * k;
+        if (rig.head) { rig.head.rotation.y = 0.12; rig.head.rotation.x = -0.12; }
+      } else {
+        // �? 收招回位：随 attack�? 平滑归零
+        const k = a / 0.30;                              // 1�?
+        rig.upper.rotation.x = baseX;
+        rig.armR.rotation.x = 0.5 * k; rig.armR.rotation.y = 0;
+        rig.armL.rotation.x = -0.2 * k; rig.armL.rotation.y = 0;
+        if (rig.elbowR) rig.elbowR.rotation.x = 0.2 * k;
+      }
+    } else {
+      // 非攻击：躯干 lean 归位（攻/受击后仰�?loop �?hurtLean 另行叠加�?
+      rig.upper.rotation.x = baseX;
+    }
+    // 特殊�?idle 特征动画（基�?rig.animParts）：触手蠕动 / 龙尾摆动 / 脑虫触须抖动 / 蝠翼扇动
+    const ap = rig.animParts;
+    if (ap) {
+      const a = t * 15;                                    // 时间相位（约 2.4Hz�?
+      ap.tail.forEach((grp) => {
+        grp.rotation.x = (grp.userData.base[0] || 0) + Math.sin(a + grp.userData.ph) * 0.30; // 尾上下摆
+        grp.rotation.z = (grp.userData.base[2] || 0) + Math.sin(a * 0.6 + grp.userData.ph) * 0.18; // 尾横�?
+      });
+      ap.tent.forEach((grp) => {
+        grp.rotation.z = (grp.userData.base[2] || 0) + Math.sin(a * 1.3 + grp.userData.ph) * 0.45;  // 触手左右蠕动
+        grp.rotation.x = (grp.userData.base[0] || 0) + Math.sin(a + grp.userData.ph * 1.7) * 0.35;  // 触手前后�?
+      });
+      ap.wing.forEach((grp) => {
+        grp.rotation.z = (grp.userData.base[2] || 0) + Math.sin(a * 0.8 + grp.userData.ph) * 0.30;  // 翼扇�?
+      });
+    }
+  }
+
+  // 攻击挥砍刀光（弧形渐变�?
+  function swingFx() {
+    if (!player) return;
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    const g = ctx.createRadialGradient(64, 64, 4, 64, 64, 62);
+    g.addColorStop(0, "rgba(255,255,255,.95)");
+    g.addColorStop(0.55, "rgba(180,220,255,.55)");
+    g.addColorStop(1, "rgba(150,200,255,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(64, 64, 60, -1.15, 1.15); ctx.closePath(); ctx.fill();
+    const tex = new THREE.CanvasTexture(c);
+    const arc = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.1, 2.1),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    );
+    // 从玩家朝向飞向敌人方向的刀�?
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    arc.position.set(PX.x + dir.x * 1.4, 1.6, PX.z + dir.z * 1.4);
+    arc.rotation.y = -yaw;
+    scene.add(arc);
+    // 手写 bloom：刀光中心叠�?additive 光晕（泛光感，帧率友好）
+    const glow = glowSprite(0xaaddff, 2.4);
+    glow.position.copy(arc.position);
+    scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.08;
+      arc.scale.setScalar(1 + t * 1.6);
+      arc.material.opacity = Math.max(0, 1 - t * 2.2);
+      arc.position.x += dir.x * 0.16;
+      arc.position.z += dir.z * 0.16;
+      glow.position.set(arc.position.x, arc.position.y, arc.position.z);
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.8);
+      glow.scale.setScalar(1 + t * 1.9);
+      if (t < 0.55) requestAnimationFrame(anim);
+      else {
+        scene.remove(arc); arc.material.dispose(); tex.dispose();
+        scene.remove(glow); glow.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 弹道（枪战）：从玩家朝向射出细长光束/子弹拖尾 + 枪口闪光 + 命中火花�?
+  function shootFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const start = { x: PX.x + dir.x * 0.6, y: 1.5, z: PX.z + dir.z * 0.6 };
+    // 枪口闪光（additive 光晕�?
+    const muzzle = glowSprite(0xffd27a, 0.5);
+    muzzle.position.set(start.x, start.y, start.z);
+    scene.add(muzzle);
+    // 弹道主体：细长胶囊（沿朝向），兼具子弹拖�?
+    const len = 1.6;
+    const bullet = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.045, len, 4, 8),
+      new THREE.MeshBasicMaterial({ color: 0xffd98a, transparent: true, depthWrite: false })
+    );
+    bullet.rotation.x = Math.PI / 2;
+    bullet.rotation.z = yaw - Math.PI / 2;
+    scene.add(bullet);
+    // 命中火花：目标敌人身�?pos 起爆一�?
+    let hitPos = null;
+    if (enemy) hitPos = { x: enemy.position.x, y: 1.4, z: enemy.position.z };
+    spawnSpark(hitPos || { x: PX.x + dir.x * 2.4, y: 1.4, z: PX.z + dir.z * 2.4 }, 0xffb066, 10);
+    let t = 0;
+    const anim = () => {
+      t += 0.06;
+      bullet.position.set(start.x + dir.x * t * 4.2, start.y, start.z + dir.z * t * 4.2);
+      bullet.material.opacity = Math.max(0, 1 - t * 2.6);
+      bullet.scale.y = Math.max(0.4, 1 - t * 6);
+      muzzle.material.opacity = Math.max(0, 1 - t * 5);
+      muzzle.scale.setScalar(1 + t * 5);
+      if (t < 0.4) requestAnimationFrame(anim);
+      else {
+        scene.remove(bullet); bullet.geometry.dispose(); bullet.material.dispose();
+        scene.remove(muzzle); muzzle.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 命中火花（小型喷射粒子，�?shootFx/beamFx 命中复用�?
+  function spawnSpark(pos, color, n) {
+    for (let i = 0; i < (n || 8); i++) {
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.06 + Math.random() * 0.06, 0.06 + Math.random() * 0.06, 0.06 + Math.random() * 0.06),
+        new THREE.MeshBasicMaterial({ color, transparent: true, depthWrite: false })
+      );
+      m.position.set(pos.x, pos.y, pos.z);
+      const a = Math.random() * 6.28, e = 0.4 + Math.random() * 0.6;
+      scene.add(m);
+      blood.push({
+        m,
+        vx: Math.cos(a) * e, vy: 0.5 + Math.random() * 0.9, vz: Math.sin(a) * e,
+        spin: (Math.random() - 0.5) * 0.9,
+        life: 0, max: 0.3 + Math.random() * 0.2,
+      });
+    }
+  }
+
+  // 激光（beamFx）：从玩家射向敌人方向的粗亮光柱 + 边缘辉光，持续约 0.3s 后淡出�?
+  function beamFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x, y: 1.55, z: PX.z };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.5, z: PX.z + dir.z * 4 };
+    const dx = to.x - from.x, dy = to.y - from.y, dz = to.z - from.z;
+    const dist = Math.max(0.5, Math.hypot(dx, dy, dz));
+    const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2, z: (from.z + to.z) / 2 };
+    const beacon = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.07, 0.07, dist, 10),
+      new THREE.MeshBasicMaterial({ color: 0x66e0ff, transparent: true, depthWrite: false })
+    );
+    beacon.position.set(mid.x, mid.y, mid.z);
+    beacon.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx, dy, dz).normalize());
+    scene.add(beacon);
+    // 边缘辉光：外圈稍粗的淡蓝色半透明柱体包裹核心光柱
+    const halo = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.16, dist, 10),
+      new THREE.MeshBasicMaterial({ color: 0x9af0ff, transparent: true, opacity: 0.32, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    halo.position.copy(beacon.position);
+    halo.quaternion.copy(beacon.quaternion);
+    scene.add(halo);
+    // 命中火花（过热灼点）
+    spawnSpark(to, 0x9ae8ff, 12);
+    let t = 0;
+    const anim = () => {
+      t += 0.016;
+      const hold = Math.min(1, t / 0.3);      // �?0.3s 持续亮起
+      const fade = Math.max(0, 1 - (t - 0.3) * 2.4); // 之后淡出
+      const op = Math.min(hold, fade);
+      beacon.material.opacity = op;
+      halo.material.opacity = 0.32 * op;
+      if (t < 0.75) requestAnimationFrame(anim);
+      else {
+        scene.remove(beacon); beacon.geometry.dispose(); beacon.material.dispose();
+        scene.remove(halo); halo.geometry.dispose(); halo.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 法术球（魔法/修真）：从玩家飞向敌人的发光球体 + 符文�?+ 命中爆炸粒子�?
+  function magicFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x + dir.x * 0.8, y: 1.6, z: PX.z + dir.z * 0.8 };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.3, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.4, z: PX.z + dir.z * 4 };
+    const orb = glowSprite(0xc79bff, 0.9);
+    orb.position.set(from.x, from.y, from.z);
+    scene.add(orb);
+    // 符文环：围绕法术球的一道旋转发光环
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.42, 0.02, 8, 24),
+      new THREE.MeshBasicMaterial({ color: 0xe0c9ff, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    ring.position.copy(orb.position);
+    scene.add(ring);
+    // 命中爆炸粒子（法阵爆散）
+    const burst = () => {
+      for (let i = 0; i < 16; i++) {
+        const m = new THREE.Mesh(
+          new THREE.BoxGeometry(0.07 + Math.random() * 0.05, 0.07 + Math.random() * 0.05, 0.07 + Math.random() * 0.05),
+          new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0xffe9a0 : 0xc79bff, transparent: true, depthWrite: false })
+        );
+        m.position.set(to.x, to.y, to.z);
+        const a = Math.random() * 6.28, e = 0.7 + Math.random() * 0.9;
+        scene.add(m);
+        blood.push({
+          m,
+          vx: Math.cos(a) * e, vy: 0.4 + Math.random() * 1.2, vz: Math.sin(a) * e,
+          spin: (Math.random() - 0.5) * 1.2,
+          life: 0, max: 0.35 + Math.random() * 0.25,
+        });
+      }
+    };
+    let t = 0, exploded = false;
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const anim = () => {
+      t += 0.04;
+      const k = Math.min(1, t * 1.6);
+      orb.position.set(from.x + ox * k, from.y + oy * k, from.z + oz * k);
+      ring.position.copy(orb.position);
+      ring.rotation.y += 0.2;
+      ring.rotation.x += 0.08;
+      if (k >= 1 && !exploded) { exploded = true; burst(); }
+      orb.material.opacity = Math.max(0, 1 - Math.max(0, t - 0.55) * 3);
+      ring.material.opacity = Math.max(0, 0.9 - Math.max(0, t - 0.55) * 3);
+      if (t < 0.75) requestAnimationFrame(anim);
+      else {
+        scene.remove(orb); orb.material.dispose();
+        scene.remove(ring); ring.geometry.dispose(); ring.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 拳击（无武器）：近身短促冲击�?+ 手臂前挥残影。玩家动画由 animateRig �?attack 驱动自然完成前挥�?
+  function punchFx() {
+    if (!player) return;
+    // 短促冲击波：贴地快速扩张的光圈
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.4, 0.7, 28),
+      new THREE.MeshBasicMaterial({ color: 0xffd9a0, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(PX.x, 0.12, PX.z);
+    scene.add(ring);
+    // 拳风拖尾：一束由肢体方向泛开的气流残影（体素人肩高附近）
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const streak = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.1, 0.5),
+      new THREE.MeshBasicMaterial({ color: 0xffe6b0, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    streak.position.set(PX.x + dir.x * 1.1, 1.5, PX.z + dir.z * 1.1);
+    streak.rotation.y = -yaw;
+    scene.add(streak);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      ring.scale.setScalar(1 + t * 3.2);
+      ring.material.opacity = Math.max(0, 1 - t * 2.6);
+      streak.scale.setScalar(1 + t * 1.4);
+      streak.material.opacity = Math.max(0, 1 - t * 3);
+      streak.position.x += dir.x * 0.1;
+      streak.position.z += dir.z * 0.1;
+      if (t < 0.4) requestAnimationFrame(anim);
+      else {
+        scene.remove(ring); ring.geometry.dispose(); ring.material.dispose();
+        scene.remove(streak); streak.geometry.dispose(); streak.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // ============================ 装备体系 · 细分特效实现（参数化引擎统一入口�?============================
+
+  // 攻击特效分发（新参数化引擎统一入口）：
+  // 优先级：�?WEAPON_FX 命中具体武器 �?FX_LIBRARY 特效；② 未命中按武器风格大类默认特效�?
+  // �?不足�?randomFx() 随机兜底（保证上百种都能被用到）�?
+  // 命中细分变体时只走细分；否则保留�?5 类大类默认特效（行为/契约不变）�?
+  function runAttackFx() {
+    // 投掷类道具（圣水/燃烧�?投掷物）：直接走 3D 投掷物飞�?+ 命中爆炸，不再走大类特效
+    if (isThrownWeapon(curWeaponId)) { throwFx(); return; }
+    // �?武器细分（WEAPON_FX �?FX_LIBRARY fxId�?
+    let entry = weaponFxKey ? fxById(weaponFxKey) : null;
+    if (entry) {
+      fxEmitter(entry);
+    } else {
+      // �?大类默认（STYLE_DEFAULT_FX�?
+      entry = defaultFxEntry(curWeaponStyle);
+      fxEmitter(entry || randomFx(curWeaponStyle));
+    }
+    // �?随机兜底：约 15% 概率额外叠加一个风格相符的随机特效，保证上百种都被用到
+    if (Math.random() < 0.15) {
+      const rnd = randomFx(curWeaponStyle);
+      if (rnd && rnd.id !== (entry && entry.id)) fxEmitter(rnd);
+    }
+    // 法宝附加（装�?& 命中代表型法宝时叠加对应法宝技特效�?
+    curFxTreasure.forEach(tid => {
+      const spec = TREASURE_FX[tid];
+      if (spec) { const fe = fxById(spec.fxId); if (fe) fxEmitter(fe); }
+    });
+    // 技能流派附加（已学流派 �?攻击时叠加流派特效）
+    skillSchools(curSkills).forEach(skKey => {
+      const spec = SCHOOL_STREAM[skKey];
+      if (spec) { const fe = fxById(spec.fxId); if (fe) fxEmitter(fe); }
+    });
+  }
+
+  // ---------- 血统变身持�?aura（additive 光环，随 player 跟随；血统视觉差异） ----------
+  function refreshBloodlineAura() {
+    // 移除�?aura（切换血统时重建�?
+    if (auraPoints) {
+      try { scene.remove(auraPoints); auraPoints.geometry.dispose(); auraPoints.material.dispose(); } catch (e) {}
+      auraPoints = null;
+    }
+    const spec = curBloodline ? BLOODLINE_AURAS[curBloodline] : null;
+    if (!spec || !player) return;
+    const n = spec.name === "angel" ? 30 : 24; // 天使光翼粒子更密
+    const pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * 6.28 + Math.random() * 0.3;
+      const r = 0.7 + Math.random() * 0.5;
+      const h = 0.5 + Math.random() * 2.2;
+      pos[i * 3] = Math.cos(a) * r;
+      pos[i * 3 + 1] = h;
+      pos[i * 3 + 2] = Math.sin(a) * r;
+    }
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color: spec.color, size: 0.16, transparent: true, opacity: 0.55,
+      depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true,
+      map: getGlowTex(), alphaTest: 0,
+    });
+    const pts = new THREE.Points(geom, mat);
+    pts.position.set(player.position.x, 0, player.position.z);
+    pts.userData = { spec: spec.name, seed: Math.random() * 100, baseN: n };
+    scene.add(pts);
+    auraPoints = pts;
+  }
+  function updateAura(dt) {
+    if (!auraPoints || !player) return;
+    auraPulse += dt;
+    const spec = BLOODLINE_AURAS[curBloodline] || null;
+    // 跟随玩家
+    auraPoints.position.set(player.position.x, 0, player.position.z);
+    const arr = auraPoints.geometry.attributes.position;
+    const n = arr.count;
+    const t = auraPulse;
+    for (let i = 0; i < n; i++) {
+      // 绕身旋转 + 上下浮动
+      let a = (i / n) * 6.28 + t * (spec && spec.name === "demon" ? 0.7 : 0.4);
+      let r = 0.7 + Math.sin(t * 1.3 + i * 0.7) * 0.25;
+      let h = 0.5 + ((i % 5) / 5) * 2.2 + Math.sin(t * 1.1 + i * 0.5) * 0.2;
+      arr.array[i * 3] = Math.cos(a) * r;
+      arr.array[i * 3 + 1] = h;
+      arr.array[i * 3 + 2] = Math.sin(a) * r;
+    }
+    arr.needsUpdate = true;
+    // 天使光翼：额外呼吸亮度；机械义体：蓝光脉�?
+    let op = 0.55 + Math.sin(t * 2.2) * 0.12;
+    if (spec && spec.name === "cyber") op = 0.5 + Math.sin(t * 5) * 0.18;
+    auraPoints.material.opacity = op;
+  }
+
+  function enemyHitFx() {
+    if (!enemy) return;
+    // 受击后仰：躯干后倾计时（体素敌人�?loop 里的 animateRig 读取，约 0.2s �?upper 后仰回落�?
+    if (enemy.userData.hurtT !== undefined) enemy.userData.hurtT = 1;
+    if (!enemy.userData.dying) spawnBlood({ x: enemy.position.x, y: 1.1, z: enemy.position.z });
+    if (enemy.userData.sprite) {
+      const spr = enemy.userData.sprite;
+      spr.scale.set(1.22, 0.88, 1);
+      const mat = spr.material;
+      const prevColor = mat.color ? mat.color.getHex() : 0xffffff;
+      if (mat.color) mat.color.setHex(0xffffff);
+      if (mat.emissive) mat.emissive.setHex(0xffffff);
+      setTimeout(() => {
+        if (!spr) return;
+        spr.scale.set(1, 1, 1);
+        if (mat.color && mat.color.getHex() === 0xffffff) mat.color.setHex(prevColor);
+        if (mat.emissive) mat.emissive.setHex(0x000000);
+      }, 90);
+    } else {
+      enemy.scale.set(1.22, 0.88, 1);
+      setTimeout(() => { if (enemy) enemy.scale.set(1, 1, 1); }, 90);
+    }
+  }
+
+  // 闪避残影
+  function spawnAfterImage(pos) {
+    if (!player || !player.userData.sprite) return;
+    const spr = player.userData.sprite;
+    const ghost = new THREE.Mesh(
+      new THREE.PlaneGeometry(PLAYER_SPRITE.h * 0.75, PLAYER_SPRITE.h),
+      new THREE.MeshBasicMaterial({
+        map: spr.material.map, transparent: true, depthWrite: false,
+        side: THREE.DoubleSide, opacity: 0.28,
+      })
+    );
+    ghost.position.set(pos.x, spr.position.y, pos.z);
+    ghost.quaternion.copy(camera.quaternion);
+    scene.add(ghost);
+    afterImages.push({ m: ghost, t: 0 });
+  }
+
+  function init(container, opts = {}) {
+    onAction = opts.onAction || null;
+    onMsg = opts.onMsg || null;
+    onWin = opts.onWin || null;
+    onExit = opts.onExit || null;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x10141c);
+    scene.fog = new THREE.Fog(0x10141c, 20, 46);
+
+    camera = new THREE.PerspectiveCamera(60, container.clientWidth / Math.max(1, container.clientHeight), 0.1, 100);
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    // HiDPI/8G 显存预算内激进画�?全分辨率像素�?+ ACES 电影色调映射（高清屏锐利且色彩收拢）
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setSize(Math.max(1, container.clientWidth), Math.max(1, container.clientHeight));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if ("toneMapping" in renderer) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.12; }
+    container.appendChild(renderer.domElement);
+    onResize = () => {
+      const w = Math.max(1, container.clientWidth), h = Math.max(1, container.clientHeight);
+      // 跨屏拖动/改档时同步像素比，DPR 变化后保持清�?
+      renderer.setPixelRatio(window.devicePixelRatio || 1);
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener("resize", onResize);
+    setTimeout(onResize, 50);
+
+    // 灯光（二游冷主光 + 暖补�?+ 半球环境�?
+    const amb = new THREE.AmbientLight(0x6a7a92, 0.4);
+    scene.add(amb);
+    // 半球光：天青→地红的环境反射，让体素方块的暗面仍可见环境轮廓（省显存、纯数学�?
+    const hemi = new THREE.HemisphereLight(0xbfd6ff, 0x241d28, 0.55);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xe8f2ff, 1.1);
+    dir.position.set(6, 14, 5);
+    dir.castShadow = true;
+    // 8G 显存充足:升高阴影贴图�?2048 + 收紧阴影相机�?边界，PCFSoft 更锐利少锯齿
+    dir.shadow.mapSize.set(2048, 2048);
+    dir.shadow.camera.near = 1;
+    dir.shadow.camera.far = 40;
+    dir.shadow.camera.left = -16;
+    dir.shadow.camera.right = 16;
+    dir.shadow.camera.top = 16;
+    dir.shadow.camera.bottom = -16;
+    dir.shadow.bias = -0.0004;      // 微调使平面接缝更干净（normalBias 亦设：减少痤疮又不至漏光�?
+    dir.shadow.normalBias = 0.04;
+    scene.add(dir);
+    const warm = new THREE.PointLight(0xffb066, 0.8, 22);
+    warm.position.set(-6, 4, -4);
+    warm.castShadow = true;         // 暖补光也投柔阴影(体素人更立体)
+    warm.shadow.mapSize.set(512, 512);
+    warm.shadow.bias = -0.002;
+    scene.add(warm);
+    const cool = new THREE.PointLight(0x66aaff, 0.6, 20);
+    cool.position.set(5, 5, 6);
+    scene.add(cool);
+
+    // 地板（AI 生成贴图�?
+    const floorTex = new THREE.TextureLoader().load("assets/img/tex_floor_hive.png", t => {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(6, 6);
+    });
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(24, 24),
+      new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.95, metalness: 0.05 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // 地板血渍贴�?
+    const stain = makeStain(2.6, "rgba(120,16,16,.75)");
+    stain.position.set(-5.5, 0, -2.5);
+    scene.add(stain);
+    const stain2 = makeStain(1.8, "rgba(80,14,14,.6)");
+    stain2.position.set(3.2, 0, 1.8);
+    scene.add(stain2);
+
+    // 围墙（AI 生成贴图�?
+    buildWalls();
+
+    // 场景装饰（低模铁�?油桶/管线�?
+    buildProps();
+
+    // 氛围尘粒（轻量粒子，增强空间纵深�?Z 宇宙一致性）
+    dust = makeDust(40);
+
+    // 玩家：影�?+ （体素方块人或立绘精�?billboard）。组结构 player 保持不变，仅换内部子对象�?
+    const group = new THREE.Group();
+    group.add(makeShadow(1.4));
+    group.userData.dying = false;
+    if (VOXEL_PLAYER) {
+      // MC 体素方块人（蓝衣 Steve 风；脚底对齐地屏 y=0，scale 1.15 与敌人体素人同比例）
+      buildVoxelPlayer(group);
+      group.userData.sprite = null;
+      group.userData.spec = null;
+    } else {
+      // 立绘 billboard（pc_zhengzha.png；贴图加载失败回退几何体）——VOXEL_PLAYER=false 时的 fallback
+      const tex = new THREE.TextureLoader().load(PLAYER_SPRITE.img, t => {
+        if ("colorSpace" in t) t.colorSpace = THREE.SRGBColorSpace;
+      }, undefined, () => buildPrimitivePlayer());
+      const spr = new THREE.Mesh(
+        new THREE.PlaneGeometry(PLAYER_SPRITE.h * 0.75, PLAYER_SPRITE.h),
+        new THREE.MeshBasicMaterial({
+          map: tex, transparent: true, alphaTest: 0.3,
+          depthWrite: false, side: THREE.DoubleSide,
+        })
+      );
+      spr.position.y = PLAYER_SPRITE.y;
+      group.add(spr);
+      group.userData.sprite = spr;
+      group.userData.spec = PLAYER_SPRITE;
+    }
+    scene.add(group);
+    player = group;
+
+    window.addEventListener("keydown", keydown);
+    window.addEventListener("keyup", keyup);
+  }
+
+  function buildWalls() {
+    const wallTex = new THREE.TextureLoader().load("assets/img/tex_wall_industrial.png", t => {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(4, 2);
+    });
+    const mat = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.85, metalness: 0.08 });
+    const positions = [
+      // 四周
+      [-12, 0, 0.6, 4, 0], [12, 0, 0.6, 4, 0],
+      [0, -12, 4, 0.6, 0], [0, 12, 4, 0.6, 0],
+      // 中央柱子
+      [-6, 6, 0.8, 4, 0.8], [6, -6, 0.8, 4, 0.8],
+      [6, 6, 0.8, 4, 0.8], [-6, -6, 0.8, 4, 0.8],
+      // 障碍
+      [0, 0, 0.9, 1.6, 0.9],
+    ];
+    positions.forEach(([x, z, w, h, d]) => {
+      const wall = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      wall.position.set(x, h / 2, z);
+      wall.castShadow = true;
+      wall.receiveShadow = true;
+      scene.add(wall);
+    });
+    // 墙脚冷色灯带（氛围）
+    const strip = makeLightStrip(24, 0.35);
+    strip.rotation.x = -Math.PI / 2;
+    strip.position.set(0, 0.1, -11.7);
+    scene.add(strip);
+  }
+
+  function buildProps() {
+    // 铁箱
+    const crateMat = new THREE.MeshStandardMaterial({ color: 0x8a7a5a, roughness: 0.9 });
+    const crate = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.9, 1.1), crateMat);
+    crate.position.set(-8.5, 0.45, 3.2);
+    crate.castShadow = true; crate.receiveShadow = true;
+    scene.add(crate);
+    const crate2 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.7, 0.8), crateMat);
+    crate2.position.set(-8.9, 0.35, 3.9);
+    crate2.castShadow = true; crate2.receiveShadow = true;
+    scene.add(crate2);
+    // 油桶
+    const drumMat = new THREE.MeshStandardMaterial({ color: 0x7a2f2f, roughness: 0.75, metalness: 0.3 });
+    const drum = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 1.0, 14), drumMat);
+    drum.position.set(8.2, 0.5, -4.5);
+    drum.castShadow = true; drum.receiveShadow = true;
+    scene.add(drum);
+    // 管通道（横跨天花）
+    const pipeMat = new THREE.MeshStandardMaterial({ color: 0x9aa7b5, roughness: 0.6, metalness: 0.5 });
+    const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 22, 10), pipeMat);
+    pipe.rotation.z = Math.PI / 2;
+    pipe.position.set(0, 3.1, 2.5);
+    pipe.castShadow = true;
+    scene.add(pipe);
+    const pipe2 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 18, 10), pipeMat);
+    pipe2.rotation.z = Math.PI / 2;
+    pipe2.position.set(0, 2.7, 3.6);
+    pipe2.castShadow = true;
+    scene.add(pipe2);
+    // 墙角杂物：灭火器
+    const extMat = new THREE.MeshStandardMaterial({ color: 0xb03030, roughness: 0.5, metalness: 0.2 });
+    const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.2, 0.7, 8), extMat);
+    ext.position.set(6.5, 0.35, -4.8);
+    ext.castShadow = true;
+    scene.add(ext);
+    // 血迹墙贴（近墙�?
+    const wallStain = makeStain(1.4, "rgba(140,20,20,.65)");
+    wallStain.position.set(3.8, 0, 11.6);
+    scene.add(wallStain);
+
+    // ---------- 战斗场地边缘 · 程序化低模装饰（碎石/骸骨/管道/箱子/杂物�?----------
+    // 用确定性种子在战斗区边�?1.5~4m 带状区散布，摆位稳定不抖动（纯观感，不碰碰撞/判定）�?
+    const urnd = ((s) => () => { s = Math.sin(s * 127.1) * 43758.5453; return s - Math.floor(s); })(137104);
+    // 场景会随副本进出重开，装饰统一集中�?buildProps 内一次性摆放，避免逐帧开销�?
+    // 材料（复�?新建低模材质�?
+    const stoneMat = new THREE.MeshStandardMaterial({ color: 0x6a7078, roughness: 0.95 });
+    const darkStoneMat = new THREE.MeshStandardMaterial({ color: 0x3a4048, roughness: 0.95 });
+    const boneMat = new THREE.MeshStandardMaterial({ color: 0xb8b0a0, roughness: 0.9 });
+    const pipeShortMat = new THREE.MeshStandardMaterial({ color: 0x8f9aa8, roughness: 0.6, metalness: 0.5 });
+    const sandbagMat = new THREE.MeshStandardMaterial({ color: 0x6a6a3a, roughness: 1 });
+    const crateSmallMat = new THREE.MeshStandardMaterial({ color: 0x6b5c42, roughness: 0.92 });
+    const brokenMat = new THREE.MeshStandardMaterial({ color: 0x4a4436, roughness: 0.95 });
+    const add = (m) => { m.castShadow = true; m.receiveShadow = true; scene.add(m); };
+
+    const SIDE_SPOTS = [
+      // 环形边带：每条边 4 个摆位点（避开中央战斗�?±5，让出走位空间）
+      [-10, 3], [-10, -3.5], [-9.5, 7], [-9.5, -7], [10, 3], [10, -3.5], [9.5, 7], [9.5, -7],
+      [3, -10], [-3, -10], [7, -9.5], [-7, -9.5], [3, 10], [-3, 10], [7, 9.5], [-7, 9.5],
+    ];
+    SIDE_SPOTS.forEach(([bx, bz], i) => {
+      const kind = i % 8;
+      // 每个摆位点以 1.5~2.8m 半径小簇散布 2~5 件杂�?
+      const clusterN = 2 + Math.floor(urnd() * 4);
+      for (let j = 0; j < clusterN; j++) {
+        const ang = urnd() * 6.28, rr = urnd() * 0.9;
+        const px = bx + Math.cos(ang) * rr, pz = bz + Math.sin(ang) * rr;
+        const s = 0.5 + urnd() * 0.8;
+        let m = null;
+        if (kind === 0) {                 // 碎石堆（几块不规则石�?
+          const m1 = new THREE.Mesh(new THREE.BoxGeometry(s * 0.8, s * 0.3, s * 0.6), stoneMat);
+          m1.position.set(px, s * 0.15, pz); m1.rotation.y = urnd() * 3.14; m1.rotation.z = urnd() * 0.3;
+          m = m1;
+        } else if (kind === 1) {          // 骸骨/骷髅（股�?+ 颅骨低模�?
+          const bone = new THREE.Mesh(new THREE.CapsuleGeometry(s * 0.08, s * 0.6, 4, 6), boneMat);
+          bone.position.set(px, 0.06, pz); bone.rotation.z = 1.2; bone.rotation.y = urnd() * 3.14;
+          add(bone);
+          const skull = new THREE.Mesh(new THREE.SphereGeometry(s * 0.24, 10, 8), boneMat);
+          skull.scale.set(1, 0.82, 1.08);
+          skull.position.set(px + Math.cos(urnd() * 6.28) * 0.3, 0.2, pz + Math.sin(urnd() * 6.28) * 0.3);
+          skull.rotation.y = urnd() * 3.14;
+          m = skull;
+        } else if (kind === 2) {          // 短管残段（横躺管道）
+          m = new THREE.Mesh(new THREE.CylinderGeometry(s * 0.18, s * 0.18, s * 1.6, 8), pipeShortMat);
+          m.position.set(px, s * 0.18, pz); m.rotation.z = Math.PI / 2; m.rotation.y = urnd() * 3.14;
+        } else if (kind === 3) {          // 散落小箱
+          m = new THREE.Mesh(new THREE.BoxGeometry(s * 0.7, s * 0.5, s * 0.7), crateSmallMat);
+          m.position.set(px, s * 0.25, pz); m.rotation.y = urnd() * 3.14;
+        } else if (kind === 4) {          // 沙袋�?
+          m = new THREE.Mesh(new THREE.BoxGeometry(s * 1.1, s * 0.5, s * 0.5), sandbagMat);
+          m.position.set(px, s * 0.25, pz); m.rotation.y = urnd() * 3.14;
+        } else if (kind === 5) {          // 断墙残段（半高破损矮墙）
+          m = new THREE.Mesh(new THREE.BoxGeometry(s * 1.4, s * 0.7, s * 0.3), brokenMat);
+          m.position.set(px, s * 0.35, pz); m.rotation.y = urnd() * 3.14;
+        } else if (kind === 6) {          // 暗色大型碎石（防落顶/混凝土块�?
+          m = new THREE.Mesh(new THREE.BoxGeometry(s, s * 0.8, s * 0.9), darkStoneMat);
+          m.position.set(px, s * 0.4, pz); m.rotation.y = urnd() * 3.14; m.rotation.x = 0.12;
+        } else {                          // 散落砖块/杂物（随机小方块若干�?
+          const n2 = 3 + Math.floor(urnd() * 3);
+          for (let b2 = 0; b2 < n2; b2++) {
+            const b = new THREE.Mesh(new THREE.BoxGeometry(0.16 + urnd() * 0.2, 0.12 + urnd() * 0.12, 0.2 + urnd() * 0.2), brokenMat);
+            b.position.set(px + Math.cos(urnd() * 6.28) * 0.3, 0.06 + urnd() * 0.08, pz + Math.sin(urnd() * 6.28) * 0.3);
+            b.rotation.y = urnd() * 6.28; b.rotation.z = urnd() * 0.5;
+            add(b);
+          }
+          return; // kind===7 已是散落砖块，本簇不必再 add 单件
+        }
+        add(m);
+      }
+    });
+    // 额外地面贴片：几处干涸血�?油渍（战斗残留氛围）
+    const extraStainPos = [[-8, -8], [8, 8], [-7, 6], [6, -7]];
+    extraStainPos.forEach(([sx, sz], i) => {
+      const st = makeStain(0.9 + urnd() * 0.6, i % 2 ? "rgba(40,34,22,.5)" : "rgba(96,14,14,.5)");
+      st.position.set(sx, 0, sz);
+      scene.add(st);
+    });
+    // 场中稀疏铁�?杂物碎片不在战斗区铺，保持走位整洁（已在边带完成氛围�?
+  }
+
+  function setData(data) {
+    zoneData = data;
+    if (data && data.weapon !== undefined) {
+      curWeaponStyle = resolveWeaponStyle(data.weapon);
+      curWeaponId = data.weapon;
+      // 武器细分：先�?WEAPON_FX 看命中具体武器变体，未命中留 null 走大类默�?
+      weaponFxKey = resolveWeaponFxKey(data.weapon);
+    }
+    // 装备体系附加：血�?aura / 法宝 / 技能流派（setData 路由传参�?
+    curBloodline = (data && data.bloodline) || null;
+    curFxTreasure = Array.isArray(data && data.treasure) ? data.treasure : [];
+    curSkills = Array.isArray(data && data.skills) ? data.skills : [];
+    // 敌人模型
+    if (enemy) scene.remove(enemy);
+    if (data.kind === "fight" && data.enemy) {
+      const kind = enemyKind(data.ref);
+      const spec = ENEMY_SPRITES[kind] || ENEMY_SPRITES.zombie;
+      const g = new THREE.Group();
+      g.add(makeShadow(1.5));
+      if (VOXEL_ENEMY) {
+        // MC 体素方块人（纯视觉；dude 默认配色�?buildVoxelEnemy 内定�?
+        buildVoxelEnemy(g, kind, null, data.ref);
+        g.position.set(EZ.x, 0, EZ.z);
+        scene.add(g);
+        enemy = g;
+        enemy.userData = { kind, spec, sprite: null, dying: false, dyingT: 0, hurtT: 0 };
+      } else {
+        // 立绘 billboard（ENEMY_SPRITES 素材；贴图失败回退几何体）——始终保留的 fallback
+        const tex = new THREE.TextureLoader().load(spec.img, t => {
+          if ("colorSpace" in t) t.colorSpace = THREE.SRGBColorSpace;
+        }, undefined, () => buildPrimitiveEnemy(g, kind));
+        const spr = new THREE.Mesh(
+          new THREE.PlaneGeometry(spec.h * 0.75, spec.h),
+          new THREE.MeshBasicMaterial({
+            map: tex, transparent: true, alphaTest: 0.3,
+            depthWrite: false, side: THREE.DoubleSide,
+          })
+        );
+        spr.position.y = spec.y;
+        g.add(spr);
+        g.position.set(EZ.x, 0, EZ.z);
+        scene.add(g);
+        enemy = g;
+        enemy.userData = { kind, spec, sprite: spr, dying: false, dyingT: 0, hurtT: 0 };
+        enemy.scale.setScalar(1.15);
+      }
+    }
+    resetPlayer();
+    refreshBloodlineAura(); // 血�?aura 需 player 就位后创�?重建
+  }
+
+  function resetPlayer() {
+    PX.x = -4; PX.z = 0;
+    if (player) { player.position.set(PX.x, 0, PX.z); }
+    yaw = 0;
+    attackCd = 0; dodgeCd = 0; if (player) player.userData.attackT = 0;
+    victoryT = 0;
+    afterImages.forEach(ai => { scene.remove(ai.m); ai.m.material.dispose(); });
+    afterImages = [];
+    throwables.forEach(pr => { scene.remove(pr.ball); pr.ball.geometry.dispose(); pr.ball.material.dispose(); scene.remove(pr.trail); pr.trail.material.dispose(); });
+    throwables = [];
+  }
+
+  function keydown(e) {
+    if (!window.ZoneActive) return;
+    const k = e.key.toLowerCase();
+    if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d", " "].includes(k)) {
+      e.preventDefault();
+      keys[k] = true;
+    }
+    if (k === "j" || k === "enter") {
+      if (attackCd <= 0 && onAction) { attackCd = 0.7; onAction("attack", 0); runAttackFx(); enemyHitFx(); if (player) player.userData.attackT = 1; }
+    }
+    if (k === "k" || k === "shift") {
+      if (dodgeCd <= 0 && onAction) {
+        dodgeCd = 1.0; onAction("dodge", 0);
+        const from = { x: PX.x, z: PX.z };
+        dodgeFx();
+        spawnAfterImage(from);
+        spawnAfterImage({ x: (PX.x + from.x) / 2, z: (PX.z + from.z) / 2 });
+      }
+    }
+    if (k === "escape" && onExit) onExit();
+  }
+  function keyup(e) { keys[e.key.toLowerCase()] = false; }
+
+  // 闪避位移特效
+  function dodgeFx() {
+    if (!player) return;
+    const dir = Math.sin(yaw), dirz = Math.cos(yaw);
+    PX.x = clamp(PX.x + dir * 0.9, -11.4, 11.4);
+    PX.z = clamp(PX.z + dirz * 0.9, -11.4, 11.4);
+    player.position.set(PX.x, 0, PX.z);
+  }
+
+  function start() { if (!raf) raf = requestAnimationFrame(loop); }
+  function stop() {
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }
+  function dispose() {
+    stop();
+    window.removeEventListener("keydown", keydown);
+    window.removeEventListener("keyup", keyup);
+    window.removeEventListener("resize", onResize);
+    afterImages.forEach(ai => { try { scene.remove(ai.m); ai.m.material.dispose(); } catch (e) {} });
+    afterImages = [];
+    throwables.forEach(pr => { try { scene.remove(pr.ball); pr.ball.geometry.dispose(); pr.ball.material.dispose(); scene.remove(pr.trail); pr.trail.material.dispose(); } catch (e) {} });
+    throwables = [];
+    blood.forEach(b => { try { scene.remove(b.m); b.m.geometry.dispose(); b.m.material.dispose(); } catch (e) {} });
+    blood = [];
+    if (glowTex) { try { glowTex.dispose(); } catch (e) {} glowTex = null; }
+    if (dust) { try { scene.remove(dust); dust.geometry.dispose(); dust.material.dispose(); } catch (e) {} dust = null; }
+    if (auraPoints) { try { scene.remove(auraPoints); auraPoints.geometry.dispose(); auraPoints.material.dispose(); } catch (e) {} auraPoints = null; }
+    curSkills = []; curFxTreasure = []; curBloodline = null; weaponFxKey = null;
+    // Bug-07:释放场景内全�?geometry/material/纹理,避免 GPU 内存�?WebGL 上下文随副本进出泄漏
+    try {
+      scene.traverse(obj => {
+        if (!obj) return;
+        if (obj.geometry) obj.geometry.dispose();
+        const mats = Array.isArray(obj.material) ? obj.material : (obj.material ? [obj.material] : []);
+        mats.forEach(m => {
+          if (!m) return;
+          if (m.map) { try { m.map.dispose(); } catch (e) {} }
+          try { m.dispose(); } catch (e) {}
+        });
+      });
+    } catch (e) {}
+    if (renderer) {
+      try { renderer.dispose(); } catch (e) {}
+      try { renderer.forceContextLoss(); } catch (e) {}
+      if (renderer.domElement && renderer.domElement.parentNode) {
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
+    }
+  }
+
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    // 实时移动
+    let dx = 0, dz = 0;
+    if (keys["w"] || keys["arrowup"]) dz -= 1;
+    if (keys["s"] || keys["arrowdown"]) dz += 1;
+    if (keys["a"] || keys["arrowleft"]) dx -= 1;
+    if (keys["d"] || keys["arrowright"]) dx += 1;
+    if (dx || dz) {
+      const len = Math.hypot(dx, dz);
+      dx /= len; dz /= len;
+      PX.x = clamp(PX.x + dx * 0.09, -11.4, 11.4);
+      PX.z = clamp(PX.z + dz * 0.09, -11.4, 11.4);
+      yaw = Math.atan2(dx, dz);
+      if (player) {
+        player.position.set(PX.x, 0, PX.z);
+        player.rotation.y = yaw;
+      }
+      if (onAction) onAction("move", yaw);
+    }
+    // 冷却
+    attackCd = Math.max(0, attackCd - 0.016);
+    dodgeCd = Math.max(0, dodgeCd - 0.016);
+    // 残影淡出
+    afterImages = afterImages.filter(ai => {
+      ai.t += 0.016;
+      ai.m.material.opacity = Math.max(0, 0.28 - ai.t * 0.7);
+      if (ai.t > 0.45) { scene.remove(ai.m); ai.m.material.dispose(); return false; }
+      return true;
+    });
+    // 玩家立绘 billboard + 待机呼吸
+    if (player && player.userData.sprite) {
+      const sprP = player.userData.sprite;
+      sprP.quaternion.copy(camera.quaternion);
+      sprP.position.y = PLAYER_SPRITE.y + Math.sin(performance.now() / 520) * 0.05;
+    }
+    // 体素玩家程序化动画：呼吸 + 行走摆动 + 攻击前摇（onAction 语义不变�?
+    if (player && player.userData.rig) {
+      if (player.userData.attackT > 0) player.userData.attackT = Math.max(0, player.userData.attackT - 0.04);
+      if (victoryT > 0) victoryT = Math.max(0, victoryT - 0.02); // 胜利动作：双臂上举持续约 0.5s
+      animateRig(player.userData.rig, performance.now() / 1000, (dx || dz) ? 5.5 : 0.7, player.userData.attackT || 0);
+      // 胜利双手高举（上臂枢�?rotation.x 负向抬举），victoryT 递减淡出
+      if (victoryT > 0) {
+        player.userData.rig.armL.rotation.x = -2.4 * victoryT;
+        player.userData.rig.armR.rotation.x = -2.4 * victoryT;
+        player.userData.rig.upper.rotation.z = 0;
+      }
+    }
+    // 敌人 AI：追踪玩家（战斗副本�?
+    if (enemy && zoneData && zoneData.kind === "fight") {
+      const dxE = PX.x - EZ.x, dzE = PX.z - EZ.z;
+      const distE = Math.hypot(dxE, dzE);
+      if (distE > 2.2) {
+        const sp = 0.045 + Math.sin(performance.now() / 700) * 0.008;
+        EZ.x += (dxE / distE) * sp;
+        EZ.z += (dzE / distE) * sp;
+      }
+      EZ.x = clamp(EZ.x, -11, 11); EZ.z = clamp(EZ.z, -11, 11);
+      enemy.position.set(EZ.x, 0, EZ.z);
+      const spr = enemy.userData.sprite;
+      if (spr) {
+        const spec = enemy.userData.spec;
+        spr.quaternion.copy(camera.quaternion);
+        spr.position.y = spec.y + Math.sin(performance.now() / 450) * 0.07;
+        spr.rotation.z = Math.sin(performance.now() / 760) * 0.03;
+        if (enemy.userData.dying) {
+          enemy.userData.dyingT += 0.016;
+          const k = Math.min(1, enemy.userData.dyingT / 0.7);
+          spr.rotation.x = -1.35 * k;
+          spr.position.y = spec.y - 0.6 * k;
+          spr.material.opacity = Math.max(0, 1 - k);
+          if (k >= 1 && scene) { scene.remove(enemy); enemy = null; }
+        }
+      } else {
+        // 体素方块人：朝向玩家 + 行走/待机程序化动画；死亡后下沉并移除
+        enemy.rotation.y = Math.atan2(PX.x - EZ.x, PX.z - EZ.z);
+        const vx = enemy.userData.voxel;
+        if (enemy.userData.dying) {
+          enemy.userData.dyingT += 0.016;
+          const k = Math.min(1, enemy.userData.dyingT / 0.7);
+          enemy.position.y = -0.5 * k;
+          // 死亡倒地：整体侧倾（rotation.z 向一侧倒）+ 略带前仰（rotation.x），配合下沉，视觉更「真倒地�?
+          enemy.rotation.z = 0.62 * k;
+          enemy.rotation.x = 0.28 * k;
+          // 精细度：死亡散架感——四肢向外张开（可选）
+          const dr = enemy.userData.rig;
+          if (dr) {
+            dr.armL.rotation.x = 1.5 * k; dr.armR.rotation.x = -1.5 * k;
+            dr.legL.rotation.x = -0.9 * k; dr.legR.rotation.x = 0.9 * k;
+            if (dr.elbowL) dr.elbowL.rotation.x = -0.4 * k;
+            if (dr.elbowR) dr.elbowR.rotation.x = 0.4 * k;
+            if (dr.kneeL) dr.kneeL.rotation.x = 0.5 * k;
+            if (dr.kneeR) dr.kneeR.rotation.x = 0.5 * k;
+          }
+          if (k >= 1 && scene) { scene.remove(enemy); enemy = null; }
+        } else if (vx) {
+          enemy.position.y = Math.sin(performance.now() / 450 + vx.phase) * 0.04; // 待机微浮
+          if (enemy.userData.rig) {
+            // 追踪�?行走摆动加速；静止时缓慢跛�?待机摆（较玩家更低频，敌人更「沉重」）
+            const walk = distE > 2.2 ? 3.2 : 0.5;
+            // 受击后仰：hurtT �?0.25s 内经 upper 后仰（rotation.x 正向仰）并线性回弹，短促带顿挫感
+            const h = enemy.userData.hurtT || 0;
+            let hurtLean = 0;
+            if (h > 0) {
+              enemy.userData.hurtT = Math.max(0, h - 0.06);
+              hurtLean = 0.4 * h; // 峰�?0.4，随 h 线性回弹到 0
+            }
+            animateRig(enemy.userData.rig, performance.now() / 1000, walk * (vx.armBoost || 1), 0);
+            enemy.userData.rig.upper.rotation.x += hurtLean;
+            // 受击甩头：头部随受击向外猛甩 + 回弹（配合躯干后仰），强化顿�?
+            const ehead = enemy.userData.rig.head;
+            if (ehead && h > 0) {
+              const hk = 1 - Math.min(1, h * 3);   // 受击→回�?
+              ehead.rotation.x = -(0.35 + 0.25 * hk) + Math.sin(performance.now() / 90) * 0.06 * hk;
+              ehead.rotation.y = 0.35 * hk;
+            }
+          }
+        }
+      }
+      const dist = Math.hypot(PX.x - EZ.x, PX.z - EZ.z);
+      if (dist < 2.4 && onMsg) onMsg("敌人逼近！按 J 攻击 / K 闪避拉开距离");
+      else if (onMsg && dist > 4) onMsg("保持距离，寻找攻击时�?);
+    }
+    // 相机跟随（第三人称）。camDist=4.6 近距离对峙视角，稍降相机高度(4.5�?.2)以平视展示两 MC 方块人细节；
+    // 相机高于玩家头顶(体素人最高≈2.6)，水平偏�?2.76，不穿模。_camTarget 复用�?lerp 机制不变�?
+    const camX = PX.x - Math.sin(yaw) * camDist * 0.6;
+    const camZ = PX.z - Math.cos(yaw) * camDist * 0.6;
+    _camTarget.set(camX, 3.2, camZ);
+    camera.position.lerp(_camTarget, 0.12);
+    camera.lookAt(PX.x, 1.4, PX.z);
+    // 氛围尘粒：缓慢上�?+ 水平缓涡（轻量，Z 宇宙战斗一致氛围）
+    if (dust) {
+      const t = performance.now() / 1000;
+      const arr = dust.geometry.attributes.position;
+      for (let i = 0; i < arr.count; i++) {
+        arr.array[i * 3 + 1] = 0.4 + ((arr.array[i * 3 + 1] - 0.4 + 0.02) % 4.6); // 上浮回环
+        arr.array[i * 3] += Math.sin(t + i * 0.7) * 0.0009;                       // 水平缓涡
+        arr.array[i * 3 + 2] += Math.cos(t + i * 0.5) * 0.0009;
+      }
+      arr.needsUpdate = true;
+    }
+    // 命中血粒子衰减（方块飞溅，含落点弹停）
+    if (blood.length) updateBlood(0.016);
+    // 投掷物推进（圣水/燃烧弹等飞行与命中爆炸）
+    if (throwables.length) updateThrowables(0.016);
+    // 血�?aura 持续动画（随 player 跟随 + 绕身旋转/呼吸脉冲�?
+    if (auraPoints) updateAura(0.016);
+    renderer.render(scene, camera);
+  }
+
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+  function onZoneUpdate(data) {
+    if (data && data.kind === "fight") {
+      if (data.win) {
+        if (enemy) { enemy.userData.dying = true; enemy.userData.dyingT = 0; }
+        victoryT = 1;   // 胜利动作：玩家双臂上举（loop 驱动�?
+        if (onWin) onWin();
+      }
+    }
+  }
+
+  return { init, setData, start, stop, dispose, onZoneUpdate, keydown, keyup,
+    // 分辨率档位支持（�?ResolutionSys 下发；level∈{720,1080,1440}）。renderer 已建则立即重设像素比+尺寸�?
+    setResolution(level) {
+      if (renderer) {
+        renderer.setPixelRatio(window.devicePixelRatio || 1);
+        const w = Math.max(1, (renderer.domElement && renderer.domElement.parentElement) ? renderer.domElement.parentElement.clientWidth : 1280);
+        const h = Math.max(1, (renderer.domElement && renderer.domElement.parentElement) ? renderer.domElement.parentElement.clientHeight : 720);
+        renderer.setSize(w, h);
+        if (camera) { camera.aspect = w / h; camera.updateProjectionMatrix(); }
+      }
+    },
+  };
+})();
+
+// 暴露到全局（index.html 先于 client.js 加载�?
+window.Zone3D = Zone3D;

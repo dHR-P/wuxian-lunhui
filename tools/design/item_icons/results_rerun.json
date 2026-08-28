@@ -1,0 +1,57 @@
+[
+  {
+    "id": "item_bandage",
+    "expect": "紧急绷带",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_bandage.png",
+    "dim": "768x768",
+    "last_raw": "{\"verdict\":\"PASS\",\"issues\":\"\",\"brief\":\"图标主体为带有红十字的绷带卷，背景纯黑，无文字水印，符合紧急绷带道具预期。\"}\n[RC]用户希望我质检一张图片，判断它是否符合“紧急绷带”道具图标的标准。\n\n标准如下：\n1.  **背景是否为纯正黑色**：观察图片，背景是黑色的。看起来非常黑，没有明显的灰色渐变或异色。虽然可能有极轻微的抗锯齿边缘，但整体是纯黑背景。\n2"
+  },
+  {
+    "id": "item_torch",
+    "expect": "火把",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_torch.png",
+    "dim": "768x768",
+    "last_raw": "{\"verdict\":\"PASS\",\"issues\":\"\",\"brief\":\"图标背景纯黑，无水印文字，主体清晰居中，符合火把预期。\"}\n[RC]用户要求质检一张道具图标（期望内容：火把）。\n质检标准：\n1) 背景是否为纯正黑色（图标主体之外的底应为漆黑、无明显异色/灰色渐变背景或画面）；\n2) 是否无任何文字、字母、数字、水印、logo、版权标识；\n3) 图标主体是否清晰可辨、居中、边缘干净、符"
+  },
+  {
+    "id": "item_jiezhou_fu",
+    "expect": "解咒符",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_jiezhou_fu.png",
+    "dim": "768x768",
+    "last_raw": "用户希望我质检一张道具图标。\n期望内容：解咒符。\n\n质检标准：\n1.  **背景是否为纯正黑色**：\n    *   观察图片，最外层确实是黑色背景。\n    *   但是，图标主体（那个黄色的符纸）占据了画面中心很大一块区域。\n    *   通常道具图标要求背景是纯黑，或者主体直接放在黑底上。这里有一个明显的淡黄色矩形区域（符纸本身）。\n    *   如果是指“图标主体之外的底应为漆黑”，这"
+  },
+  {
+    "id": "it_core_crystal",
+    "expect": "核心晶石",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_core_crystal.png",
+    "dim": "768x768",
+    "last_raw": "{\"verdict\":\"PASS\",\"issues\":\"\",\"brief\":\"图标主体清晰居中，符合核心晶石视觉预期，背景为黑色且无违规标识。\"}\n[RC]用户要求质检一张道具图标（期望内容：核心晶石）。\n判断标准：\n1) 背景是否为纯正黑色（图标主体之外的底应为漆黑、无明显异色/灰色渐变背景或画面）。\n2) 是否无任何文字、字母、数字、水印、logo、版权标识。\n3) 图标主体是否清晰可辨、居中"
+  },
+  {
+    "id": "it_soul_shard",
+    "expect": "灵魂碎片",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_soul_shard.png",
+    "dim": "768x768",
+    "last_raw": "{\"verdict\":\"PASS\",\"issues\":\"\",\"brief\":\"图标背景纯黑，无水印文字，主体为清晰的淡蓝色灵魂碎片晶体，符合预期。\"}\n[RC]用户要求质检一张道具图标（期望内容：灵魂碎片）。\n质检标准：\n1) 背景是否为纯正黑色（图标主体之外的底应为漆黑、无明显异色/灰色渐变背景或画面)\n2) 是否无任何文字、字母、数字、水印、logo、版权标识\n3) 图标主体是否清晰可辨、居中"
+  }
+]

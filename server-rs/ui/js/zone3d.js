@@ -302,53 +302,314 @@ const Zone3D = (() => {
     player.userData.sprite = null;
   }
 
-  // ---------- 体素方块人（MC 精品化建模）----------
-  // 段数 12：头 + 发顶/帽顶 + 胸 + 腰 + (上臂+前臂)×2 + (大腿+小腿/脚)×2。
-  // 敌我共用 buildVoxelBody 保证同构（仅 cfg 配色/体型不同，脚底 y=0 贴地）。
-  // 肢体均挂在肩/髋枢轴分组(Group)下，rig 记录各枢轴，供 loop() 做呼吸/行走摆动/攻击前摇。
+  // ---------- 体素方块人（MC 精品化建模）---------- 
+  // —— 精细度升级：段数由 12 拉至 18~24 ——
+  //   新增：颈部(head 组)、手肘/膝盖关节枢轴(elbow/knee)、拳头块、鞋块、肩甲块；
+  //   cfg.bodyType 决定 BODY_DIMS 各段方块尺寸（高矮胖瘦一眼可分，非只 scale）；
+  //   cfg.bodyTex 给躯干四肢贴 Canvas 布料/甲纹理；cfg.face 给头贴 Canvas 五官纹理。
+  // 敌我共用 buildVoxelBody 保证同构（仅 cfg 配色/体型不同，脚底贴地）。rig 记录各枢轴供动画。
+
+  // 十六进制颜色 → rgba() 字符串（Canvas 绘图用；供 makeFaceTexture/makeBodyTextureMap）
+  function hexToRgba(hex, alpha) {
+    const h = (hex | 0x1000000).toString(16).slice(1);
+    const r = parseInt(h.substr(0, 2), 16), g = parseInt(h.substr(2, 2), 16), b = parseInt(h.substr(4, 2), 16);
+    return `rgba(${r},${g},${b},${alpha == null ? 1 : alpha})`;
+  }
+
+  // ============================================================
+  // 体素方块人 · Canvas 五官脸纹理（MC 皮肤风：在方块脸正面画像素五官）
+  // ============================================================
+  // makeFaceTexture(kind, skinHex)：256×256 Canvas 在皮肤底上绘制眼睛/眉/嘴/伤痕等像素五官。
+  const FACE_PIXEL = 256;
+  function makeFaceTexture(kind, skinHex) {
+    const S = FACE_PIXEL;
+    const c = document.createElement("canvas"); c.width = c.height = S;
+    const ctx = c.getContext("2d");
+    const base = (skinHex || 0xf0e0d0);
+    const skin = hexToRgba(base, 1);
+    const dark = "rgba(20,12,10,1)";
+    const blood = "rgba(150,18,10,1)";
+    const bone = "rgba(230,220,200,1)";
+    ctx.fillStyle = skin; ctx.fillRect(0, 0, S, S);
+    const skinNoise = (kind === "zombie" || kind === "horde") ? 1 : (kind === "licker" ? 1.5 : 0.3);
+    if (skinNoise > 0) for (let i = 0; i < 900 * skinNoise; i++) {
+      const a = Math.random() * 0.18;
+      ctx.fillStyle = `rgba(${Math.random()*60|0},${Math.random()*40|0},${Math.random()*20|0},${a})`;
+      ctx.fillRect(Math.random() * S, Math.random() * S, 2 + Math.random() * 4, 2 + Math.random() * 4);
+    }
+    const px = (x, y, w, h, col) => { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); };
+    const vline = (x, y0, y1, w, col) => { ctx.fillStyle = col; ctx.fillRect(x, y0, w, y1 - y0); };
+    const hline = (x0, y, x1, h, col) => { ctx.fillStyle = col; ctx.fillRect(x0, y, x1 - x0, h); };
+    const fk = (kind === "fulaidi" || kind === "dream") ? "fulaidi" : (kind || "zombie");
+    const eyeY = 116, eyeW = 14, eyeH = 16, eyeDX = 60, eyeGap = 16;
+    const drawEye = (cx, col, style) => {
+      const x = cx - eyeW / 2, y = eyeY;
+      px(x, y, eyeW, eyeH, col);
+      if (style === "hollow") px(cx - 5, y + 4, 10, 8, "rgba(5,4,3,1)");
+      else if (style === "slit") px(cx - 2, y + 3, 4, 10, "rgba(4,4,3,1)");
+      else if (style === "glow") { px(x, y, eyeW, eyeH, "rgba(60,8,8,1)"); px(cx - 4, y + 5, 8, 6, "rgba(255,40,30,1)"); }
+      else { px(cx - 5, y + 3, 10, 10, dark); px(cx + 2, y + 5, 3, 3, "rgba(255,255,255,0.85)"); }
+    };
+    const drawBrow = (cx, angry, none) => {
+      if (none) return;
+      const by = eyeY - 26;
+      if (angry) { hline(cx - 30, by - 4, cx - 2, 6, dark); hline(cx + 2, by + 2, cx + 30, 6, dark); }
+      else { px(cx - 30, by, 28, 6, dark); px(cx + 2, by, 28, 6, dark); }
+    };
+    if (fk !== "licker") px(S / 2 - 2, 128, 4, 14, fk === "zombie" || fk === "horde" ? "rgba(20,28,14,1)" : "rgba(0,0,0,0.25)");
+    switch (fk) {
+      case "horde":
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(60,60,50,1)", "hollow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(60,60,50,1)", "hollow");
+        drawBrow(S / 2 - eyeDX, false, true); drawBrow(S / 2 + eyeDX, false, true);
+        ctx.fillStyle = "rgba(40,30,20,1)"; ctx.fillRect(S / 2 - 34, 152, 68, 18);
+        for (let i = 0; i < 8; i++) px(S / 2 - 32 + i * 8, 150, 6, 4, bone);
+        break;
+      case "zombie":
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(55,55,45,1)", "hollow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(55,55,45,1)", "hollow");
+        drawBrow(S / 2 - eyeDX, false, true); drawBrow(S / 2 + eyeDX, false, true);
+        ctx.fillStyle = blood; ctx.fillRect(S / 2 - 44, 146, 88, 34);
+        ctx.fillStyle = "rgba(30,8,6,1)"; ctx.fillRect(S / 2 - 38, 152, 76, 6); ctx.fillRect(S / 2 - 38, 168, 76, 6);
+        for (let i = 0; i < 9; i++) { px(S / 2 - 40 + i * 9, 150, 5, 6, bone); px(S / 2 - 38 + i * 9, 172, 5, 4, "rgba(200,190,170,1)"); }
+        break;
+      case "hunter":
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(230,220,190,1)", "slit");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(230,220,190,1)", "slit");
+        drawBrow(S / 2 - eyeDX, true, false); drawBrow(S / 2 + eyeDX, true, false);
+        px(S / 2 - 42, 154, 84, 14, "rgba(60,20,14,1)");
+        vline(S / 2 - 40, 158, 168, 5, "rgba(20,10,8,1)");
+        for (let i = 0; i < 4; i++) { px(S / 2 - 34 + i * 16, 154, 6, 9, bone); px(S / 2 - 30 + i * 16, 160, 6, 8, bone); }
+        break;
+      case "licker":
+        px(64, 34, 128, 44, "rgba(120,20,20,1)");
+        for (let i = 0; i < 6; i++) hline(70 + i * 4, 44 + (i % 2) * 6, 70 + i * 4 + 110, 4, "rgba(80,10,10,1)");
+        drawEye(S / 2 - eyeDX - eyeGap / 2 - 6, "rgba(90,8,8,1)", "glow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2 + 6, "rgba(90,8,8,1)", "glow");
+        ctx.fillStyle = "rgba(20,8,8,1)";
+        ctx.beginPath(); ctx.moveTo(S / 2, 92); ctx.lineTo(S / 2 - 66, 178); ctx.lineTo(S / 2 + 66, 178); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "rgba(150,16,12,1)"; ctx.fillRect(S / 2 - 46, 112, 92, 8);
+        for (let i = 0; i < 7; i++) px(S / 2 - 46 + i * 13, 116, 6, 7, bone);
+        for (let i = 0; i < 7; i++) px(S / 2 - 40 + i * 13, 142, 6, 6, "rgba(210,190,170,1)");
+        break;
+      case "fulaidi":
+        px(40, 120, 176, 10, "rgba(150,20,12,0.8)"); px(40, 150, 176, 8, "rgba(60,110,40,0.7)"); px(40, 186, 176, 9, "rgba(140,16,10,0.8)");
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(60,8,6,1)", "glow");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(60,8,6,1)", "glow");
+        drawBrow(S / 2 - eyeDX, true, false); drawBrow(S / 2 + eyeDX, true, false);
+        px(S / 2 - 74, 156, 148, 16, "rgba(30,6,4,1)");
+        for (let i = 0; i < 9; i++) px(S / 2 - 70 + i * 16, 154, 6, 6, bone);
+        ctx.strokeStyle = "rgba(150,14,10,0.9)"; ctx.lineWidth = 3;
+        for (let i = -2; i <= 2; i++) { const sx = S / 2 + i * 22; ctx.beginPath(); ctx.moveTo(sx, 116); ctx.bezierCurveTo(sx + 10, 140, sx - 6, 170, sx + 4, 200); ctx.stroke(); }
+        break;
+      default:
+        drawEye(S / 2 - eyeDX - eyeGap / 2, "rgba(235,225,210,1)", "normal");
+        drawEye(S / 2 + eyeDX - eyeGap / 2, "rgba(235,225,210,1)", "normal");
+        const serious = (kind === "guard");
+        drawBrow(S / 2 - eyeDX, !serious && kind === "hunter", serious);
+        drawBrow(S / 2 + eyeDX, !serious && kind === "hunter", serious);
+        if (serious) { px(S / 2 - 26, 166, 52, 6, "rgba(60,30,20,1)"); vline(S / 2 - 34, 152, 184, 3, "rgba(0,0,0,0.12)"); vline(S / 2 + 30, 152, 184, 3, "rgba(0,0,0,0.12)"); }
+        else { px(S / 2 - 22, 164, 44, 7, "rgba(70,35,20,1)"); px(S / 2 - 16, 168, 32, 4, "rgba(160,60,40,0.6)"); ctx.strokeStyle = "rgba(150,30,20,0.85)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(S / 2 + 30, 104); ctx.lineTo(S / 2 + 8, 176); ctx.stroke(); }
+        break;
+    }
+    const tex = new THREE.CanvasTexture(c);
+    tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
+    return tex;
+  }
+  // 脸部皮肤底色查表（与 buildVoxelEnemy/buildVoxelPlayer 的 skin 配色一致）
+  function faceSkinHex(kind) {
+    if (kind === "fulaidi" || kind === "dream") return 0xd08a72;
+    if (kind === "hunter") return 0x5f5f6a;
+    if (kind === "licker") return 0x6a1f1f;
+    if (kind === "zombie" || kind === "horde") return 0x7d8a6a;
+    return 0xd8a878;
+  }
+
+  // ============================================================
+  // 身体 Canvas 纹理（不只脸）：躯干/四肢方块贴衣服褶皱/皮甲纹/金属甲纹/血锈。
+  // ============================================================
+  const BODY_TEX_CACHE = {};
+  function makeBodyTextureMap(kind, baseHex) {
+    if (typeof document === "undefined") return null;
+    const key = String(kind) + "|" + (baseHex || 0);
+    if (BODY_TEX_CACHE[key]) return BODY_TEX_CACHE[key];
+    const r = (baseHex >> 16) & 255, g = (baseHex >> 8) & 255, b = baseHex & 255;
+    const s = 128;
+    const zom = /zombie|horde|licker/.test(String(kind));
+    const guard = kind === "guard";
+    const hunter = kind === "hunter";
+    const canvas = document.createElement("canvas"); canvas.width = canvas.height = s;
+    const ctx = canvas.getContext("2d");
+    const px = (x, y, w, h, col) => { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); };
+    ctx.fillStyle = `rgb(${r},${g},${b})`; ctx.fillRect(0, 0, s, s);
+    for (let i = 0; i < 220; i++) {
+      const a = Math.random() * (zom ? 0.22 : 0.1);
+      ctx.fillStyle = `rgba(${Math.random()*40|0},${Math.random()*30|0},${Math.random()*25|0},${a})`;
+      ctx.fillRect(Math.random() * s, Math.random() * s, 2 + Math.random() * 4, 2 + Math.random() * 4);
+    }
+    const fold = `rgba(0,0,0,${zom ? 0.30 : guard ? 0.20 : hunter ? 0.24 : 0.14})`;
+    for (let i = 0; i < 5; i++) ctx.fillStyle = fold, ctx.fillRect(12, 18 + i * 24, s - 24, 3);
+    for (let i = 0; i < 3; i++) ctx.fillStyle = fold, ctx.fillRect(30 + i * 34, 8, 3, s - 16);
+    ctx.fillStyle = `rgba(255,255,255,${zom ? 0.05 : 0.10})`;
+    for (let i = 0; i < 3; i++) ctx.fillRect(36 + i * 30, 14, 2, s - 28);
+    if (zom) {
+      px(20, 34, 14, 22, "rgba(90,14,10,0.85)"); px(86, 66, 18, 14, "rgba(110,16,10,0.8)"); px(44, 96, 22, 12, "rgba(120,14,10,0.7)");
+      for (let i = 0; i < 8; i++) { ctx.strokeStyle = "rgba(70,10,8,0.9)"; ctx.lineWidth = 2; const x0 = 20 + Math.random() * 88, y0 = 20 + Math.random() * 88; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + 8, y0 + 10); ctx.stroke(); }
+      for (let i = 0; i < 4; i++) { const x0 = 24 + Math.random() * 80, y0 = 24 + Math.random() * 80; ctx.fillStyle = "rgba(40,20,16,0.9)"; ctx.fillRect(x0, y0, 6 + Math.random() * 8, 5 + Math.random() * 7); }
+    } else if (guard) {
+      px(46, 8, 36, 22, "rgba(20,28,40,0.55)"); px(4, 4, 120, 4, "rgba(20,28,40,0.5)");
+      ctx.strokeStyle = "rgba(20,26,40,0.6)"; ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(20, 58 + i * 26); ctx.lineTo(108, 58 + i * 26); ctx.stroke(); }
+      for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.moveTo(40 + i * 44, 26); ctx.lineTo(40 + i * 44, 116); ctx.stroke(); }
+    } else if (hunter) {
+      for (let i = 0; i < 6; i++) px(16 + Math.random() * 96, 16 + Math.random() * 96, 3, 3, "rgba(120,110,90,0.9)");
+      ctx.strokeStyle = "rgba(40,30,20,0.6)"; ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(12, 24 + i * 32); ctx.lineTo(116, 24 + i * 32); ctx.stroke(); }
+      for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(18 + i * 26, 16); ctx.lineTo(18 + i * 26, 112); ctx.stroke(); }
+    } else {
+      px(52, 30, 24, 16, "rgba(255,255,255,0.08)");
+      ctx.fillStyle = `rgba(0,0,0,${0.12})`; ctx.fillRect(8, 108, 112, 6);
+    }
+    const toTex = (cv) => { const t = new THREE.CanvasTexture(cv); t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; return t; };
+    const map = { shirt: toTex(canvas), pants: toTex(canvas), shoulder: toTex(canvas) };
+    BODY_TEX_CACHE[key] = map;
+    return map;
+  }
+
+  // ============================================================
+  // 体型参数化表（BODY_DIMS）：定义每种体型「每段方块」的 x/y/z 尺寸与关键枢轴，
+  // 非只调整体 scale——让高矮胖瘦一眼可分。
+  // ============================================================
+  const BODY_DIMS = {
+    standard: { headW: 0.60, headH: 0.62, headFore: 0.0, neckW: 0.22, neckH: 0.18,
+      waistW: 0.84, waistH: 0.42, chestW: 0.92, chestH: 0.62, torsoD: 0.50, chestPos: 0.50,
+      armSpan: 0.56, armPos: 0.56, shPadW: 0.40, upArmW: 0.26, upArmH: 0.36, foreW: 0.24, foreH: 0.40, fistW: 0.26, fistH: 0.20,
+      legSpan: 0.22, thighW: 0.34, thighH: 0.30, shinW: 0.30, shinH: 0.46, shoeW: 0.32, shoeH: 0.16, shoeD: 0.40, hairH: 0.12 },
+    tall_thin: { headW: 0.54, headH: 0.60, headFore: 0.0, neckW: 0.18, neckH: 0.22,
+      waistW: 0.70, waistH: 0.40, chestW: 0.76, chestH: 0.70, torsoD: 0.42, chestPos: 0.60,
+      armSpan: 0.50, armPos: 0.60, shPadW: 0.34, upArmW: 0.22, upArmH: 0.42, foreW: 0.20, foreH: 0.46, fistW: 0.22, fistH: 0.18,
+      legSpan: 0.18, thighW: 0.26, thighH: 0.34, shinW: 0.22, shinH: 0.52, shoeW: 0.26, shoeH: 0.14, shoeD: 0.34, hairH: 0.12 },
+    short_stout: { headW: 0.64, headH: 0.58, headFore: 0.0, neckW: 0.26, neckH: 0.16,
+      waistW: 1.00, waistH: 0.46, chestW: 1.06, chestH: 0.56, torsoD: 0.62, chestPos: 0.46,
+      armSpan: 0.60, armPos: 0.52, shPadW: 0.46, upArmW: 0.30, upArmH: 0.28, foreW: 0.28, foreH: 0.30, fistW: 0.30, fistH: 0.16,
+      legSpan: 0.24, thighW: 0.40, thighH: 0.24, shinW: 0.38, shinH: 0.36, shoeW: 0.40, shoeH: 0.14, shoeD: 0.44, hairH: 0.12 },
+    giant: { headW: 0.70, headH: 0.70, headFore: 0.0, neckW: 0.28, neckH: 0.24,
+      waistW: 1.10, waistH: 0.50, chestW: 1.20, chestH: 0.80, torsoD: 0.70, chestPos: 0.60,
+      armSpan: 0.64, armPos: 0.60, shPadW: 0.54, upArmW: 0.34, upArmH: 0.46, foreW: 0.30, foreH: 0.50, fistW: 0.34, fistH: 0.24,
+      legSpan: 0.30, thighW: 0.46, thighH: 0.40, shinW: 0.42, shinH: 0.56, shoeW: 0.46, shoeH: 0.20, shoeD: 0.50, hairH: 0.14 },
+    slender: { headW: 0.52, headH: 0.56, headFore: 0.0, neckW: 0.20, neckH: 0.20,
+      waistW: 0.64, waistH: 0.34, chestW: 0.68, chestH: 0.66, torsoD: 0.34, chestPos: 0.58,
+      armSpan: 0.44, armPos: 0.58, shPadW: 0.28, upArmW: 0.18, upArmH: 0.40, foreW: 0.16, foreH: 0.44, fistW: 0.18, fistH: 0.15,
+      legSpan: 0.14, thighW: 0.20, thighH: 0.30, shinW: 0.18, shinH: 0.46, shoeW: 0.22, shoeH: 0.13, shoeD: 0.30, hairH: 0.12 },
+    obese: { headW: 0.52, headH: 0.55, headFore: 0.0, neckW: 0.26, neckH: 0.14,
+      waistW: 1.16, waistH: 0.52, chestW: 1.28, chestH: 0.78, torsoD: 0.90, chestPos: 0.55,
+      armSpan: 0.70, armPos: 0.55, shPadW: 0.58, upArmW: 0.34, upArmH: 0.26, foreW: 0.30, foreH: 0.28, fistW: 0.32, fistH: 0.18,
+      legSpan: 0.34, thighW: 0.52, thighH: 0.26, shinW: 0.48, shinH: 0.34, shoeW: 0.50, shoeH: 0.14, shoeD: 0.46, hairH: 0.12 },
+    beast: { headW: 0.62, headH: 0.60, headFore: 0.10, neckW: 0.24, neckH: 0.20,
+      waistW: 0.96, waistH: 0.40, chestW: 1.04, chestH: 0.68, torsoD: 0.54, chestPos: 0.54,
+      armSpan: 0.60, armPos: 0.54, shPadW: 0.42, upArmW: 0.28, upArmH: 0.42, foreW: 0.26, foreH: 0.46, fistW: 0.28, fistH: 0.20,
+      legSpan: 0.28, thighW: 0.40, thighH: 0.34, shinW: 0.36, shinH: 0.46, shoeW: 0.40, shoeH: 0.18, shoeD: 0.44, hairH: 0.12 },
+  };
+
   function buildVoxelBody(g, cfg) {
     const c = cfg.colors;
-    const box = (w, h, d, col, gx, x, y, z) => {
-      const m = new THREE.Mesh(
-        new THREE.BoxGeometry(w, h, d),
-        new THREE.MeshLambertMaterial({ color: col })
-      );
+    const D = BODY_DIMS[cfg.bodyType || "standard"] || BODY_DIMS.standard; // 体型方块尺寸表
+    const bt = cfg.bodyTex || null;   // 身体纹理 {shirt,pants,shoulder}
+    const matOf = (col, map) => map
+      ? new THREE.MeshLambertMaterial({ map, color: 0xffffff })
+      : new THREE.MeshLambertMaterial({ color: col });
+    const shirtMat = matOf(c.shirt, bt && bt.shirt);
+    const pantsMat = matOf(c.pants, bt && bt.pants);
+    const shoulderMat = matOf(c.shoulder || c.shirt, bt && bt.shoulder);
+    const shoeMat = matOf(c.shoe, null);
+    const handMat = matOf(c.hand, null);
+    const hairMat = matOf(c.hair, null);
+    const skinMat = matOf(c.skin, null);
+    const box = (w, h, d, mat, gx, x, y, z, extra) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
       m.position.set(x, y, z);
+      if (extra) { if (extra.rx) m.rotation.x = extra.rx; if (extra.ry) m.rotation.y = extra.ry; if (extra.rz) m.rotation.z = extra.rz; }
       m.castShadow = true; m.receiveShadow = true;
       gx.add(m);
       return m;
     };
     const pivot = (x, y, z) => { const p = new THREE.Group(); p.position.set(x, y, z); g.add(p); return p; };
 
-    // 双腿枢轴（髋）——大腿+小腿(脚)
-    const legL = pivot(-0.22, 0.62, 0);
-    const legR = pivot(0.22, 0.62, 0);
-    box(0.34, 0.34, 0.36, c.pants, legL, 0, -0.17, 0);      // 左大腿
-    box(0.30, 0.52, 0.32, c.shoe, legL, 0, -0.56, 0.02);     // 左小腿/脚
-    box(0.34, 0.34, 0.36, c.pants, legR, 0, -0.17, 0);      // 右大腿
-    box(0.30, 0.52, 0.32, c.shoe, legR, 0, -0.56, 0.02);     // 右小腿/脚
+    // —— 枢轴高度推导：脚底贴地 y≈0 ——
+    const legY = D.thighH + D.shinH + D.shoeH * 0.5;   // 髋枢轴 g-local 高
+    const upperY = legY + D.waistH * 0.5 + 0.14;       // 腰枢轴 g-local 高
+    // 双腿：髋枢轴(legY) + 大腿/膝盖节/小腿 + 鞋块
+    const legL = pivot(-D.legSpan, legY, 0);
+    const legR = pivot(D.legSpan, legY, 0);
+    const kneeL = new THREE.Group(); kneeL.position.set(0, -D.thighH, 0); legL.add(kneeL);
+    const kneeR = new THREE.Group(); kneeR.position.set(0, -D.thighH, 0); legR.add(kneeR);
+    box(D.thighW, D.thighH, D.thighW * 0.92, pantsMat, legL, 0, -D.thighH * 0.5, 0);   // 左大腿
+    box(D.shinW, D.shinH, D.shinW * 0.92, pantsMat, kneeL, 0, -D.shinH * 0.5, 0);      // 左小腿
+    box(D.shoeW, D.shoeH, D.shoeD, shoeMat, kneeL, 0, -D.shinH - D.shoeH * 0.5, 0.04);  // 左脚/鞋
+    box(D.thighW, D.thighH, D.thighW * 0.92, pantsMat, legR, 0, -D.thighH * 0.5, 0);   // 右大腿
+    box(D.shinW, D.shinH, D.shinW * 0.92, pantsMat, kneeR, 0, -D.shinH * 0.5, 0);      // 右小腿
+    box(D.shoeW, D.shoeH, D.shoeD, shoeMat, kneeR, 0, -D.shinH - D.shoeH * 0.5, 0.04);  // 右脚/鞋
 
-    // 上部体（腰+胸+两肩臂+头），枢轴在腰(0.98)——cfg.lean 使其整体前倾（驼背/俯身）
-    const upper = pivot(0, 0.98, 0);
-    box(c.waistW, 0.42, c.torsoD, c.shirt, upper, 0, -0.05, 0);   // 腰
-    box(c.chestW, 0.62, c.torsoD, c.shirt, upper, 0, 0.5, 0);     // 胸
-    // 双肩（臂）枢轴
-    const armL = new THREE.Group(); armL.position.set(-0.56, 0.56, 0); upper.add(armL);
-    const armR = new THREE.Group(); armR.position.set(0.56, 0.56, 0); upper.add(armR);
-    box(0.26, 0.40, 0.26, c.shirt, armL, 0, -0.30, 0);            // 左上臂
-    box(0.24, 0.44, 0.24, c.hand,  armL, 0, -0.72, c.foreZ);      // 左前臂(手)
-    box(0.26, 0.40, 0.26, c.shirt, armR, 0, -0.30, 0);            // 右上臂
-    box(0.24, 0.44, 0.24, c.hand,  armR, 0, -0.72, c.foreZ);      // 右前臂(手)
-    // 头 + 发顶/帽顶（矮扁方块，MC「顶上一块」观感）
-    box(c.headW, 0.62, c.headW, c.skin, upper, 0, 1.12, 0);
-    box(c.headW * 0.92, 0.12, c.headW * 0.92, c.hair, upper, 0, 1.49, 0);
+    // 上部体（腰+胸+肩臂+颈头），枢轴在腰(upperY)，cfg.lean 让整体前倾（驼背/俯身）
+    const upper = pivot(0, upperY, 0);
+    box(D.waistW, D.waistH, D.torsoD, shirtMat, upper, 0, -D.waistH * 0.5, 0);                 // 腰
+    box(D.chestW, D.chestH, D.torsoD, shirtMat, upper, 0, D.chestPos, D.headFore * 0.4);       // 胸（beast 微前挪）
+    // 双肩（臂）枢轴 + 肩甲块 + 上臂/肘关节/前臂 + 拳头块（尺寸与臂长按体型）
+    const armL = new THREE.Group(); armL.position.set(-D.armSpan, D.armPos, 0); upper.add(armL);
+    const armR = new THREE.Group(); armR.position.set(D.armSpan, D.armPos, 0); upper.add(armR);
+    const elbowL = new THREE.Group(); elbowL.position.set(0, -D.upArmH, 0); armL.add(elbowL);
+    const elbowR = new THREE.Group(); elbowR.position.set(0, -D.upArmH, 0); armR.add(elbowR);
+    box(D.shPadW, 0.14, D.shPadW, shoulderMat, armL, 0, -0.02, 0, { rx: 0.25 });  // 左肩甲
+    box(D.shPadW, 0.14, D.shPadW, shoulderMat, armR, 0, -0.02, 0, { rx: 0.25 });  // 右肩甲
+    box(D.upArmW, D.upArmH, D.upArmW * 0.92, shirtMat, armL, 0, -D.upArmH * 0.5, 0);            // 左上臂
+    box(D.foreW, D.foreH, D.foreW * 0.92, handMat, elbowL, 0, -D.foreH * 0.5, 0);               // 左前臂
+    box(D.fistW, D.fistH, D.fistW * 0.98, handMat, elbowL, 0, -D.foreH - D.fistH * 0.5, c.foreZ); // 左拳头
+    box(D.upArmW, D.upArmH, D.upArmW * 0.92, shirtMat, armR, 0, -D.upArmH * 0.5, 0);            // 右上臂
+    box(D.foreW, D.foreH, D.foreW * 0.92, handMat, elbowR, 0, -D.foreH * 0.5, 0);               // 右前臂
+    box(D.fistW, D.fistH, D.fistW * 0.98, handMat, elbowR, 0, -D.foreH - D.fistH * 0.5, c.foreZ); // 右拳头
+
+    // 颈 + 头（head 组：颈部方块在头部枢轴下延，供转头动画）+ 发顶
+    const headPosY = D.chestPos + D.chestH * 0.5 + D.neckH * 0.5 + D.headH * 0.45; // 头枢轴 upper 局部 y
+    const head = new THREE.Group(); head.position.set(0, headPosY, D.headFore); upper.add(head);
+    box(D.neckW, D.neckH, D.neckW * 0.92, skinMat, head, 0, -D.neckH * 0.5, 0);   // 颈部
+    const faceMap = (cfg.face && typeof document !== "undefined")
+      ? makeFaceTexture(cfg.face.kind, faceSkinHex(cfg.face.kind))
+      : null;
+    const headMat = faceMap
+      ? new THREE.MeshLambertMaterial({ map: faceMap, color: 0xffffff })
+      : matOf(c.skin, null);
+    const hd = new THREE.Mesh(new THREE.BoxGeometry(D.headW, D.headH, D.headW), headMat);
+    hd.position.set(0, D.headH * 0.12, 0);
+    hd.castShadow = true; hd.receiveShadow = true;
+    head.add(hd);
+    box(D.headW * 0.92, D.hairH, D.headW * 0.92, hairMat, head, 0, D.headH * 0.12 + D.headH * 0.5 + D.hairH * 0.5, 0); // 发顶/帽顶
     upper.rotation.x = cfg.lean || 0;
-    g.userData.rig = { legL, legR, armL, armR, upper };
+    g.userData.rig = { upper, head,
+      armL, elbowL, armR, elbowR,
+      legL, kneeL, legR, kneeR,
+      baseLean: cfg.lean || 0 };   // baseLean 供动画在呼吸/lean 基础上叠加攻击姿势
+  }
+
+  // 体型映射：优先读 VOXEL_VARIANTS 表里的 bodyType 字段（BOSS 独立体型），
+  // 未命中再按归一 kind 给默认体型（BODY_DIMS 键名）。返回值 = BODY_DIMS 键。
+  function bodyTypeFor(kind, refRaw) {
+    const vk = resolveVoxelVariant(kind, refRaw);
+    if (vk && VOXEL_VARIANTS[vk] && VOXEL_VARIANTS[vk].bodyType) return VOXEL_VARIANTS[vk].bodyType;
+    const r = String(refRaw || "").toLowerCase();
+    if (/(short|stout|矮人|胖子|dward)/.test(r)) return "short_stout";
+    if (/(tall|修士|刺客|剑灵|剑修|法师|cultivat|scholar)/.test(r)) return "tall_thin";
+    if (kind === "hunter") return "tall_thin";      // 猎手高挑
+    if (kind === "licker") return "slender";        // 舔食者细长贴地
+    if (kind === "zombie") return "obese";          // 尸胖（破衣烂肉横身）
+    if (kind === "guard") return "standard";
+    if (kind === "horde") return "standard";
+    return "standard";
   }
 
   // 体素方块人敌人（MC 风格）：按 kind 区分体型——hunter 更高大(upright)、licker 俯身贴地、
   // zombie 驼背前倾、guard/horde 标准。VOXEL_ENEMY=true 时替换立绘 billboard。
-  function buildVoxelEnemy(g, kind, tint) {
+  function buildVoxelEnemy(g, kind, tint, refRaw) {
+    const ftxt = (refRaw && /(fula|dream|梦魇|弗莱迪|freddy)/i.test(String(refRaw))) ? "fulaidi" : (kind === "horde" ? "horde" : kind);
     const repaint = tint || (kind === "hunter" ? 0x4a4a52 : kind === "licker" ? 0x8a2a2a : 0x6a5a3a);
     const V = {
       hunter: { sc: 1.32, lean: -0.10, shirt: 0x4a4a52, skin: 0x5f5f6a, hair: 0x8f96a3, pants: 0x2a2a30, foreZ: 0.0, bob: 0.05 },
@@ -356,7 +617,10 @@ const Zone3D = (() => {
       zombie: { sc: 1.02, lean: 0.34, shirt: 0x6a5a3a, skin: 0x7d8a6a, hair: 0x3a3f2c, pants: 0x3a3430, foreZ: 0.16, bob: 0.04 },
     }[kind] || { sc: 1.15, lean: 0.16, shirt: repaint, skin: repaint, hair: 0x8a7a5a, pants: 0x3a3430, foreZ: 0.06, bob: 0.05 }; // guard/horde 标准
     buildVoxelBody(g, {
+      bodyType: bodyTypeFor(kind, refRaw),
       lean: V.lean,
+      face: { kind: ftxt },
+      bodyTex: makeBodyTextureMap(ftxt, V.shirt),
       colors: {
         shirt: V.shirt, pants: V.pants, skin: V.skin, hair: V.hair,
         shoe: 0x1c1a1a, hand: V.skin, foreZ: V.foreZ,
@@ -364,6 +628,8 @@ const Zone3D = (() => {
       },
     });
     g.scale.setScalar(V.sc);
+    // 体素配件系统：按 BOSS/kind 在通用段上附加独立造型（覆盖 scale/lean，追加配件方块与 idle 动画枢轴）
+    addVoxelAccessory(g, kind, refRaw);
     g.userData.voxel = { phase: Math.random() * 6.28, kind, bob: V.bob, armBoost: kind === "hunter" ? 1.2 : kind === "licker" ? 0.7 : 1 };
   }
 
@@ -371,7 +637,10 @@ const Zone3D = (() => {
   // VOXEL_PLAYER=true 时替换立绘。直立 lean=0，肩髋枢轴同敌，供同套动画。
   function buildVoxelPlayer(g) {
     buildVoxelBody(g, {
+      bodyType: "standard",
       lean: 0.0,
+      face: { kind: "player" }, // 正常青年脸（郑吒）+ 左脸刀疤
+      bodyTex: makeBodyTextureMap("player", 0x3a5ba0), // 蓝衣衬衫纹理
       colors: {
         shirt: 0x3a5ba0, pants: 0x2a3450, skin: 0xd8a878, hair: 0x2a1f16,
         shoe: 0x1c1a1a, hand: 0xd8a878, foreZ: 0.0,
@@ -380,6 +649,233 @@ const Zone3D = (() => {
     });
     g.scale.setScalar(1.15);   // 与敌人体素人同比例
     g.userData.voxel = { phase: Math.random() * 6.28, bob: 0.05, armBoost: 1 };
+  }
+
+  // =====================================================================
+  // 体素配件系统 + 每怪独立造型表（VOXEL_VARIANTS）
+  // 在 buildVoxelBody 通用段基础上，addVoxelAccessory 按 BOSS/kind 查表追加体素方块配件，
+  // 挂到 U=upper 上身枢轴（头/背/肩）、AL/AR=左右肩枢轴（手武器随臂摆）、H=头部枢轴（头饰随头，适配各体型头高）。
+  // 顶点数有界：每怪 +3~10 个方块；材质/几何随 g 进入 dispose 遍历自动释放；零外部依赖。
+  // 条目 schema：{ A, w,h,d, c, x,y,z, glow?, rot?, anim? }；anim='tail'|'tent'|'wing' 做 idle 摆动。
+  // =====================================================================
+  const VOXEL_VARIANTS = {
+    // —— 三角头：大三角金属头盔(头枢轴 H) + 巨刀（AR 手）——
+    sanjiaotou: { sc: 1.16, bodyType: "giant", extraLean: 0.06, parts: [
+      { A: "H", w: 0.86, h: 0.34, d: 0.86, c: 0x9aa2ad, x: 0, y: 0.38, z: 0 },     // 头盔底座（宽）
+      { A: "H", w: 0.60, h: 0.30, d: 0.60, c: 0xaeb6c2, x: 0, y: 0.64, z: 0 },     // 盔身（中收）
+      { A: "H", w: 0.32, h: 0.30, d: 0.32, c: 0x9aa2ad, x: 0, y: 0.90, z: 0 },     // 盔顶（收窄）
+      { A: "H", w: 0.12, h: 0.26, d: 0.12, c: 0x5a4a44, x: 0, y: 1.18, z: 0 },     // 顶锥帽
+      { A: "H", w: 0.54, h: 0.10, d: 0.74, c: 0x6a6670, x: 0, y: 0.50, z: 0.42 },  // 面罩（前探头）
+      { A: "AR", w: 0.10, h: 0.52, d: 0.10, c: 0x2a2320, x: 0.02, y: -0.98, z: 0.08 },  // 巨刀柄
+      { A: "AR", w: 0.18, h: 1.55, d: 0.05, c: 0xcfd6e0, x: 0.02, y: -1.75, z: 0.08 },  // 巨刀刃
+      { A: "AR", w: 0.10, h: 0.55, d: 0.05, c: 0x93a0b0, x: 0.02, y: -2.55, z: 0.08 },  // 刃尖
+    ] },
+    // —— 异形皇后：beast 体型 + 加长后脑/内齿(头枢轴 H) + 尾刃 + 骨刺背 ——
+    yiy_queen: { sc: 1.28, bodyType: "beast", extraLean: -0.04, parts: [
+      { A: "H", w: 0.52, h: 0.16, d: 0.72, c: 0x282830, x: 0, y: 0.10, z: -0.42 },  // 长后脑（向后延伸）
+      { A: "H", w: 0.56, h: 0.10, d: 0.30, c: 0x383844, x: 0, y: 0.20, z: -0.55 },  // 后脑冠
+      { A: "H", w: 0.22, h: 0.12, d: 0.10, c: 0x1a1a20, x: 0, y: -0.22, z: 0.30 },  // 内齿上（小牙）
+      { A: "H", w: 0.48, h: 0.10, d: 0.10, c: 0x22222a, x: 0, y: -0.32, z: 0.20 },  // 下颌骨刃
+      { A: "H", w: 0.10, h: 0.08, d: 0.14, c: 0xd8d8c8, x: 0, y: -0.20, z: 0.34 },  // 外露内齿（白）
+      { A: "U", w: 0.14, h: 0.66, d: 0.14, c: 0x2a2a32, x: 0, y: 0.55, z: -0.72, anim: "tail" },  // 尾刃柄
+      { A: "U", w: 0.06, h: 0.15, d: 0.15, c: 0xd8d8c8, x: 0, y: 0.5, z: 0, anim: "tail" },      // 尾尖刃（随尾）
+      { A: "U", w: 0.10, h: 0.22, d: 0.10, c: 0x6a6a78, x: 0, y: 1.02, z: -0.22 },  // 背骨刺1
+      { A: "U", w: 0.08, h: 0.18, d: 0.08, c: 0x6a6a78, x: 0, y: 1.16, z: -0.30 },  // 背骨刺2
+      { A: "U", w: 0.06, h: 0.14, d: 0.06, c: 0x6a6a78, x: 0, y: 1.28, z: -0.36 },  // 背骨刺3
+    ] },
+    // —— 脑虫：obese 肥胖脑体 + 头枢轴发光 + 触须 ——
+    brain_bug: { sc: 1.05, bodyType: "obese", extraLean: 0.10, parts: [
+      { A: "U", w: 1.12, h: 0.55, d: 0.98, c: 0xa89098, x: 0, y: 0.10, z: 0 },      // 肥大脑体（加宽胸）
+      { A: "H", w: 0.60, h: 0.10, d: 0.60, c: 0xc0a0b0, x: 0, y: 0.42, z: -0.02, glow: 0x8e2f8f }, // 脑顶发光
+      { A: "H", w: 0.10, h: 0.42, d: 0.10, c: 0x7a6a72, x: -0.55, y: -0.30, z: 0.2, anim: "tent" }, // 触须左
+      { A: "H", w: 0.10, h: 0.46, d: 0.10, c: 0x7a6a72, x: 0.55, y: -0.30, z: 0.2, anim: "tent" },  // 触须右
+      { A: "H", w: 0.10, h: 0.38, d: 0.10, c: 0x6a5a62, x: -0.42, y: -0.22, z: -0.1, anim: "tent" }, // 触须左右
+      { A: "H", w: 0.10, h: 0.40, d: 0.10, c: 0x6a5a62, x: 0.42, y: -0.22, z: -0.1, anim: "tent" },  // 触须右后
+      { A: "H", w: 0.10, h: 0.30, d: 0.10, c: 0x7a6a72, x: 0.06, y: -0.26, z: 0.38, anim: "tent" },  // 触须前
+    ] },
+    // —— 弗莱迪（梦魇）：宽檐帽(头枢轴 H) + 刀爪 + 烧伤脸（脸纹理在 buildVoxelEnemy）——
+    fulaidi: { sc: 1.12, bodyType: "standard", extraLean: 0.06, parts: [
+      { A: "H", w: 0.94, h: 0.06, d: 0.94, c: 0x3a2a20, x: 0, y: 0.38, z: 0 },     // 宽檐帽檐
+      { A: "H", w: 0.52, h: 0.26, d: 0.52, c: 0x3a2a20, x: 0, y: 0.50, z: 0 },     // 帽冠
+      { A: "H", w: 0.52, h: 0.10, d: 0.56, c: 0xd86a5a, x: 0, y: 0.44, z: 0 },     // 帽红带
+      { A: "H", w: 0.60, h: 0.08, d: 0.12, c: 0x2a2a30, x: 0, y: 0.36, z: -0.22 }, // 帽檐折边（后翘）
+      { A: "AR", w: 0.06, h: 0.22, d: 0.06, c: 0xd8dde4, x: -0.10, y: -0.88, z: 0.02 }, // 刀爪1
+      { A: "AR", w: 0.06, h: 0.26, d: 0.06, c: 0xd8dde4, x: 0.00, y: -0.90, z: 0.02 },  // 刀爪2
+      { A: "AR", w: 0.06, h: 0.22, d: 0.06, c: 0xd8dde4, x: 0.10, y: -0.88, z: 0.02 },  // 刀爪3
+    ] },
+    // —— 追踪者：巨汉体型(giant) + 触手 ——
+    tyrant: { sc: 1.42, bodyType: "giant", extraLean: 0.00, parts: [
+      { A: "U", w: 1.04, h: 0.22, d: 0.66, c: 0x4a4a55, x: 0, y: 0.78, z: 0 },     // 巨肩甲
+      { A: "U", w: 0.88, h: 0.42, d: 0.58, c: 0x56565f, x: 0, y: 0.52, z: 0 },     // 巨胸甲
+      { A: "H", w: 0.86, h: 0.10, d: 0.70, c: 0x3a3a44, x: 0, y: 0.12, z: 0 },     // 头带/眉骨
+      { A: "U", w: 0.12, h: 0.60, d: 0.12, c: 0x8a4a4a, x: -0.6, y: 0.55, z: -0.3, anim: "tent" }, // 左触手
+      { A: "U", w: 0.12, h: 0.56, d: 0.12, c: 0x8a4a4a, x: 0.6, y: 0.55, z: -0.3, anim: "tent" },  // 右触手
+      { A: "U", w: 0.18, h: 0.16, d: 0.18, c: 0x56565f, x: -0.42, y: 0.90, z: 0.28, glow: 0x19439a }, // 左肩警示灯
+      { A: "U", w: 0.18, h: 0.16, d: 0.18, c: 0x56565f, x: 0.42, y: 0.90, z: 0.28, glow: 0x19439a },  // 右肩警示灯
+    ] },
+    // —— 巴博萨：骷髅脸 + 海盗帽(头枢轴 H) + 弯刀 ——
+    barbossa: { sc: 1.12, bodyType: "standard", extraLean: 0.10, parts: [
+      { A: "H", w: 0.90, h: 0.06, d: 0.90, c: 0x4a4a5a, x: 0, y: 0.40, z: 0 },     // 船长帽底
+      { A: "H", w: 0.52, h: 0.16, d: 0.52, c: 0x3a2a20, x: 0, y: 0.50, z: 0 },     // 帽冠
+      { A: "H", w: 0.62, h: 0.06, d: 0.62, c: 0x2a2a30, x: 0, y: 0.40, z: 0.02, rot: [0, 0.6, 0] }, // 帽檐翘边
+      { A: "H", w: 0.64, h: 0.10, d: 0.64, c: 0xc8c8bc, x: 0, y: 0.08, z: 0 },     // 骷髅脸盖（白）
+      { A: "H", w: 0.14, h: 0.08, d: 0.10, c: 0x882222, x: -0.16, y: 0.06, z: 0.36, glow: 0xff2222 }, // 左眼凄红
+      { A: "H", w: 0.14, h: 0.08, d: 0.10, c: 0x882222, x: 0.16, y: 0.06, z: 0.36, glow: 0xff2222 },  // 右眼凄红
+      { A: "U", w: 0.84, h: 0.34, d: 0.10, c: 0x3a4450, x: 0, y: 0.10, z: 0.28 },  // 船长外套披身
+      { A: "AR", w: 0.08, h: 0.26, d: 0.08, c: 0x2a2320, x: 0.03, y: -0.92, z: 0.06 }, // 弯刀柄
+      { A: "AR", w: 0.16, h: 0.70, d: 0.04, c: 0xdfe4ea, x: 0.03, y: -1.62, z: 0.06, rot: [0, 0, 0.9] }, // 弯刀刃（圆弧）
+    ] },
+    // —— 龙：beast 体型 + 双角/鼻吻(头枢轴 H) + 双翼 + 长尾 + 四足 ——
+    dragon: { sc: 1.35, bodyType: "beast", extraLean: 0.0, parts: [
+      { A: "H", w: 0.14, h: 0.52, d: 0.14, c: 0xd8d0b0, x: -0.18, y: 0.34, z: 0.28, rot: [0.3, 0, -0.5] }, // 左角
+      { A: "H", w: 0.14, h: 0.52, d: 0.14, c: 0xd8d0b0, x: 0.18, y: 0.34, z: 0.28, rot: [0.3, 0, 0.5] },  // 右角
+      { A: "H", w: 0.52, h: 0.16, d: 0.10, c: 0x8a6a3a, x: 0, y: 0.12, z: 0.30 },  // 鼻吻（前伸）
+      { A: "U", w: 0.90, h: 0.06, d: 0.30, c: 0x8a6a3a, x: 0, y: 0.62, z: -0.30, anim: "wing" },  // 左翼根
+      { A: "U", w: 0.90, h: 0.06, d: 0.30, c: 0x8a6a3a, x: 0, y: 0.62, z: -0.30, anim: "wing" },  // 右翼根(共享锚点两片)
+      { A: "U", w: 0.16, h: 0.14, d: 0.16, c: 0x9a7a4a, x: -0.5, y: 0.50, z: -0.34, anim: "tent" }, // 左翼膜（随翼扇）
+      { A: "U", w: 0.16, h: 0.14, d: 0.16, c: 0x9a7a4a, x: 0.5, y: 0.50, z: -0.34, anim: "tent" },  // 右翼膜
+      { A: "U", w: 0.14, h: 1.20, d: 0.14, c: 0x8a6a3a, x: 0, y: 0.45, z: -0.80, anim: "tail" },   // 长尾柄
+      { A: "U", w: 0.26, h: 0.12, d: 0.10, c: 0xd8d0b0, x: 0, y: 0.45, z: -0.80, anim: "tail" },   // 尾尖骨刃
+      { A: "U", w: 0.40, h: 0.40, d: 0.36, c: 0x6a4a2a, x: -0.30, y: 0.10, z: 0.32 }, // 左前足（四足）
+      { A: "U", w: 0.40, h: 0.40, d: 0.36, c: 0x6a4a2a, x: 0.30, y: 0.10, z: 0.32 },  // 右前足
+    ] },
+    // —— 恶魔：beast 体型 + 双角/额焰印(头枢轴 H) + 蝠翼 + 尖尾 ——
+    demon: { sc: 1.20, bodyType: "beast", extraLean: 0.05, parts: [
+      { A: "H", w: 0.16, h: 0.44, d: 0.16, c: 0x5a2030, x: -0.18, y: 0.32, z: 0.24, rot: [0.25, 0, -0.6] }, // 左角
+      { A: "H", w: 0.16, h: 0.44, d: 0.16, c: 0x5a2030, x: 0.18, y: 0.32, z: 0.24, rot: [0.25, 0, 0.6] },  // 右角
+      { A: "U", w: 0.86, h: 0.06, d: 0.28, c: 0x3a1420, x: 0, y: 0.70, z: -0.26, anim: "wing" },  // 左蝠翼根
+      { A: "U", w: 0.86, h: 0.06, d: 0.28, c: 0x3a1420, x: 0, y: 0.70, z: -0.26, anim: "wing" },  // 右蝠翼根
+      { A: "U", w: 0.14, h: 0.06, d: 0.52, c: 0x6a2440, x: -0.55, y: 0.56, z: -0.3, anim: "tent" }, // 左翼膜扇
+      { A: "U", w: 0.14, h: 0.06, d: 0.52, c: 0x6a2440, x: 0.55, y: 0.56, z: -0.3, anim: "tent" },  // 右翼膜扇
+      { A: "U", w: 0.12, h: 0.10, d: 0.72, c: 0x5a2030, x: 0, y: 0.88, z: -0.42, anim: "tail" },   // 尖尾柄
+      { A: "U", w: 0.12, h: 0.10, d: 0.12, c: 0xe0e0e0, x: 0, y: 0.88, z: -0.66, anim: "tail" },  // 尾尖刃
+      { A: "H", w: 0.44, h: 0.08, d: 0.28, c: 0x3a1418, x: 0, y: 0.14, z: 0.16, glow: 0xff4466 },  // 额焰印
+    ] },
+    // —— 狼人：beast 体型 + 尖耳/狼吻(头枢轴 H) + 爪 + 弓背 ——
+    werewolf: { sc: 1.18, bodyType: "beast", extraLean: -0.08, parts: [
+      { A: "H", w: 0.12, h: 0.30, d: 0.12, c: 0x6a7178, x: -0.20, y: 0.30, z: 0.15, rot: [0, 0, -0.4] }, // 左尖耳
+      { A: "H", w: 0.12, h: 0.30, d: 0.12, c: 0x6a7178, x: 0.20, y: 0.30, z: 0.15, rot: [0, 0, 0.4] },  // 右尖耳
+      { A: "H", w: 0.46, h: 0.32, d: 0.22, c: 0x8a6a52, x: 0, y: -0.02, z: 0.30 },   // 狼吻（前伸突出）
+      { A: "U", w: 0.70, h: 0.10, d: 0.46, c: 0x5a5f66, x: 0, y: 0.60, z: -0.30 },  // 弓背毛领
+      { A: "AL", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: -0.08, y: -0.86, z: 0.02 }, // 左爪1
+      { A: "AL", w: 0.06, h: 0.18, d: 0.06, c: 0xdfe4ea, x: 0.00, y: -0.84, z: 0.02 },  // 左爪2
+      { A: "AL", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: 0.08, y: -0.86, z: 0.02 },  // 左爪3
+      { A: "AR", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: -0.08, y: -0.86, z: 0.02 }, // 右爪1
+      { A: "AR", w: 0.06, h: 0.18, d: 0.06, c: 0xdfe4ea, x: 0.00, y: -0.84, z: 0.02 },  // 右爪2
+      { A: "AR", w: 0.06, h: 0.20, d: 0.06, c: 0xdfe4ea, x: 0.08, y: -0.86, z: 0.02 },  // 右爪3
+    ] },
+    // —— 石魔像：giant 体型 + 巨石方块身 + 裂纹 + 石巨头(头枢轴 H) ——
+    golem: { sc: 1.30, bodyType: "giant", extraLean: 0.0, parts: [
+      { A: "U", w: 0.98, h: 0.72, d: 0.70, c: 0x8a8a82, x: 0, y: 0.42, z: 0 },     // 巨石胸
+      { A: "U", w: 0.90, h: 0.20, d: 0.62, c: 0x9a9a92, x: 0, y: 0.80, z: 0.02 },  // 巨石肩
+      { A: "U", w: 0.66, h: 0.20, d: 0.60, c: 0x8a8a82, x: 0, y: 0.0, z: 0.02 },   // 石腰箍
+      { A: "U", w: 0.06, h: 0.62, d: 0.06, c: 0x3a3a34, x: -0.2, y: 0.5, z: 0.02, rot: [0, 0, 0.3] }, // 裂纹1
+      { A: "U", w: 0.06, h: 0.08, d: 0.06, c: 0x3a3a34, x: 0.16, y: 0.66, z: 0.02, rot: [0, 0, -0.5] }, // 裂纹2
+      { A: "U", w: 0.30, h: 0.16, d: 0.30, c: 0x6a6a62, x: -0.4, y: 0.34, z: 0.04, rot: [0, 0, 0.2] },  // 左肩碎石
+      { A: "U", w: 0.30, h: 0.16, d: 0.30, c: 0x6a6a62, x: 0.4, y: 0.34, z: 0.04, rot: [0, 0, -0.2] },  // 右肩碎石
+      { A: "H", w: 0.64, h: 0.20, d: 0.64, c: 0x9a9a92, x: 0, y: 0.34, z: 0 },     // 石巨头
+    ] },
+    // —— 触手怪：slender 细长体型 + 发光主眼(头枢轴 H) + 多触手 ——
+    tentacle: { sc: 1.10, bodyType: "slender", extraLean: -0.05, parts: [
+      { A: "U", w: 0.90, h: 0.40, d: 0.80, c: 0x7a5a6a, x: 0, y: 0.28, z: 0 },     // 肥体
+      { A: "H", w: 0.26, h: 0.10, d: 0.26, c: 0x2a2030, x: 0, y: 0.28, z: 0, glow: 0xff5522 }, // 主眼（发光）
+      { A: "U", w: 0.12, h: 0.72, d: 0.12, c: 0x6a4a5a, x: -0.62, y: 0.34, z: 0.1, anim: "tent" }, // 触手1
+      { A: "U", w: 0.12, h: 0.68, d: 0.12, c: 0x6a4a5a, x: 0.62, y: 0.34, z: 0.1, anim: "tent" },  // 触手2
+      { A: "U", w: 0.12, h: 0.80, d: 0.12, c: 0x5a3a4a, x: -0.4, y: 0.40, z: -0.2, anim: "tent" },  // 触手3
+      { A: "U", w: 0.12, h: 0.76, d: 0.12, c: 0x5a3a4a, x: 0.4, y: 0.40, z: -0.2, anim: "tent" },   // 触手4
+      { A: "U", w: 0.12, h: 0.62, d: 0.12, c: 0x6a4a5a, x: 0.0, y: 0.42, z: -0.42, anim: "tent" },  // 触手5（背）
+      { A: "U", w: 0.12, h: 0.58, d: 0.12, c: 0x6a4a5a, x: -0.66, y: 0.40, z: -0.1, anim: "tent" }, // 触手6
+      { A: "U", w: 0.12, h: 0.60, d: 0.12, c: 0x6a4a5a, x: 0.66, y: 0.40, z: -0.1, anim: "tent" },  // 触手7
+    ] },
+    // —— 亡灵/骷髅：standard 体型 + 骷髅头(头枢轴 H) + 骨手 ——
+    undead: { sc: 1.15, bodyType: "standard", extraLean: 0.08, parts: [
+      { A: "H", w: 0.66, h: 0.12, d: 0.66, c: 0xcfc9b8, x: 0, y: 0.30, z: 0 },     // 骷髅头盖
+      { A: "H", w: 0.58, h: 0.14, d: 0.60, c: 0xc8c2b0, x: 0, y: 0.04, z: 0.12 },  // 白颧骨
+      { A: "H", w: 0.34, h: 0.14, d: 0.12, c: 0x2a2a30, x: 0, y: 0.00, z: 0.34 },  // 黑眼窝
+      { A: "AL", w: 0.10, h: 0.44, d: 0.10, c: 0xe0dbc8, x: 0, y: -0.60, z: 0.02 }, // 左骨前臂/手
+      { A: "AR", w: 0.10, h: 0.44, d: 0.10, c: 0xe0dbc8, x: 0, y: -0.60, z: 0.02 }, // 右骨手
+      { A: "U", w: 0.78, h: 0.44, d: 0.10, c: 0x4a3a32, x: 0, y: 0.1, z: -0.28 },   // 破布披风（背）
+    ] },
+    // —— 通用 kind 兜底配件（守卫=头盔(头枢轴 H)／猎手=爪刃／舔舐者=长舌）——
+    guard: { sc: 1.15, bodyType: "standard", extraLean: 0.16, parts: [
+      { A: "H", w: 0.66, h: 0.16, d: 0.66, c: 0x55606e, x: 0, y: 0.32, z: 0 },     // 半圆头盔
+      { A: "H", w: 0.26, h: 0.44, d: 0.26, c: 0x3a4a58, x: 0, y: 0.58, z: 0 },     // 头盔冠脊
+      { A: "H", w: 0.64, h: 0.08, d: 0.08, c: 0xcfd6e0, x: 0, y: 0.06, z: 0.34 },  // 护目/面罩亮条
+    ] },
+    hunter: { bodyType: "tall_thin", extraLean: -0.10, parts: [
+      { A: "AR", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: -0.10, y: -0.84, z: 0.02 }, // 爪刃
+      { A: "AR", w: 0.08, h: 0.34, d: 0.08, c: 0xdfe4ea, x: 0.02, y: -0.88, z: 0.02 },  // 爪刃中
+      { A: "AR", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: 0.14, y: -0.84, z: 0.02 },  // 爪刃
+      { A: "AL", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: -0.10, y: -0.84, z: 0.02 },
+      { A: "AL", w: 0.08, h: 0.34, d: 0.08, c: 0xdfe4ea, x: 0.02, y: -0.88, z: 0.02 },
+      { A: "AL", w: 0.08, h: 0.30, d: 0.08, c: 0xdfe4ea, x: 0.14, y: -0.84, z: 0.02 },
+    ] },
+    licker: { bodyType: "slender", extraLean: 0.58, parts: [
+      { A: "U", w: 0.14, h: 0.10, d: 0.62, c: 0x8a4a5a, x: 0, y: 0.90, z: 0.5, rot: [-0.35, 0, 0], anim: "tent" }, // 长舌（前伸）
+    ] },
+  };
+
+  // 查表：优先原始 ref 特征命中 BOSS，再回退归一 kind。未匹配返回 null（保留通用段）。
+  function resolveVoxelVariant(kind, refRaw) {
+    const r = String(refRaw || "").toLowerCase();
+    if (/sanjiao|三角头|三角|sjt|pyramid/.test(r)) return "sanjiaotou";
+    if (/yiy_|异形皇后|queen/.test(r)) return "yiy_queen";
+    if (/brain|脑虫|naochong/.test(r)) return "brain_bug";
+    if (/fula|梦魇|弗莱迪|freddy|dream/.test(r)) return "fulaidi";
+    if (/tyrant|追踪者|追迹者|追赠/.test(r)) return "tyrant";
+    if (/barbossa|巴博萨|海盗/.test(r)) return "barbossa";
+    if (/dragon|龙/.test(r)) return "dragon";
+    if (/demon|恶魔/.test(r)) return "demon";
+    if (/werew|狼人/.test(r)) return "werewolf";
+    if (/golem|石魔像|魔像/.test(r)) return "golem";
+    if (/tentacle|触手/.test(r)) return "tentacle";
+    if (/undead|骷髅|skeleton|亡灵/.test(r)) return "undead";
+    if (VOXEL_VARIANTS.hasOwnProperty(kind)) return kind; // guard/hunter/licker... 通用 kind 兜底
+    return null;
+  }
+
+  // 体素配件系统：在通用段基础上按 BOSS/kind 追加造型方块（挂点在 rig 枢轴）
+  function addVoxelAccessory(g, kind, refRaw) {
+    const rig = (g.userData && g.userData.rig) || null;
+    const vk = resolveVoxelVariant(kind, refRaw);
+    const variant = vk ? VOXEL_VARIANTS[vk] : null;
+    if (!variant) return;                       // 未匹配 → 保留通用段
+    if (rig && variant.extraLean) {
+      rig.baseLean = (rig.baseLean || 0) + variant.extraLean;
+      rig.upper.rotation.x = rig.baseLean;
+    }
+    if (variant.sc) g.scale.setScalar(variant.sc);
+    if (rig) {
+      rig.variant = vk;
+      rig.animParts = { tail: [], tent: [], wing: [] };
+    }
+    const boxAt = (parent, p) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(p.w, p.h, p.d), new THREE.MeshLambertMaterial({ color: p.c }));
+      m.position.set(p.x, p.y, p.z);
+      if (p.rot) { m.rotation.set(p.rot[0], p.rot[1], p.rot[2]); }
+      if (p.glow !== undefined) { m.material.emissive = new THREE.Color(p.glow); m.material.emissiveIntensity = 1.0; }
+      m.castShadow = true; m.receiveShadow = true;
+      parent.add(m);
+      return m;
+    };
+    (variant.parts || []).forEach(p => {
+      const host = p.A === "AR" ? (rig && rig.armR)
+        : p.A === "AL" ? (rig && rig.armL)
+        : p.A === "H" ? (rig && rig.head)
+        : (rig && rig.upper);
+      if (!host) return;
+      if (p.anim) {
+        const grp = new THREE.Group();
+        grp.position.set(p.x, p.y, p.z);
+        grp.userData.base = (p.rot || [0, 0, 0]).slice();
+        grp.userData.ph = Math.random() * 6.28;
+        host.add(grp);
+        boxAt(grp, { w: p.w, h: p.h, d: p.d, c: p.c, x: 0, y: -p.h / 2, z: 0, glow: p.glow });
+        rig.animParts[p.anim].push(grp);
+      } else {
+        boxAt(host, p);
+      }
+    });
   }
 
   // 命中血粒子（方块飞溅，MC 风格）：数量~20，重力下落 + 落地轻弹 + 自旋 + 淡出，结束即 dispose 释放
@@ -442,24 +938,72 @@ const Zone3D = (() => {
     return s;
   }
 
-  // 体素人程序化动画（敌我同套；onAction 语义不变，纯视觉）：
-  //   呼吸——upper 上下轻浮（分组起伏）；行走——四肢对侧摆动（相位随移动加速）；
-  //   攻击前摇——右手臂快速前挥（attack 强度驱动）。rig 由 buildVoxelBody 提供。
+  // 体素人程序化动画（敌我同套；onAction 语义不变，纯视觉。每帧绝对赋值覆盖，不累积）：
+  //   呼吸——upper 起伏+轻点头；行走——四肢对侧摆（前摆>后摆）、肘/膝屈伸、身体左右微晃；
+  //   待机——头部转头环顾；攻击——三段（起手蓄力拉身后仰→前挥横扫→收招回位）；
+  //   特殊怪 idle——尾摆 tail / 触手蠕动 tent / 蝠翼扇动 wing。rig 由 buildVoxelBody 提供。
   function animateRig(rig, t, walk, attack) {
+    const moving = walk > 0.8;
     const sp = t * 0.018 * walk;
-    // 呼吸：上半体起伏 + 极细微前倾摆动
-    rig.upper.position.y = Math.sin(t * 0.0017) * 0.035;
+    const breath = Math.sin(t * 0.0017);
+    rig.upper.position.y = breath * 0.035;
     rig.upper.rotation.z = Math.sin(sp) * 0.03;
-    // 行走摆动：对侧手脚同步，幅度随移动速度爬升
-    const ls = walk > 0.8 ? Math.sin(sp) * 0.42 : Math.sin(sp) * 0.10;
+    const ph = Math.sin(sp);
+    const ls = moving ? ph * 0.46 : ph * 0.10;
     rig.legL.rotation.x = ls;
     rig.legR.rotation.x = -ls;
-    rig.armL.rotation.x = -ls * 0.85;
-    rig.armR.rotation.x = ls * 0.85;
-    // 攻击前摇：右手前挥 + 左臂略微后摆平衡
+    const as = moving ? 0.86 : 0.20;
+    rig.armL.rotation.x = -ls * 0.80 + (moving ? 0.14 : 0.02);
+    rig.armR.rotation.x = ls * 0.80 + (moving ? 0.14 : 0.02);
+    if (rig.elbowL) rig.elbowL.rotation.x = (moving ? 0.28 : 0.14) - ls * 0.22;
+    if (rig.elbowR) rig.elbowR.rotation.x = (moving ? 0.28 : 0.14) + ls * 0.22;
+    if (rig.kneeL) rig.kneeL.rotation.x = Math.max(0, ls * 0.45);
+    if (rig.kneeR) rig.kneeR.rotation.x = Math.max(0, -ls * 0.45);
+    if (moving) rig.upper.rotation.z += Math.sin(sp * 0.5) * 0.04;
+    if (rig.head && attack <= 0) {
+      rig.head.rotation.y = Math.sin(t * 0.4) * 0.14;
+      rig.head.rotation.x = breath * 0.03;
+    }
+    const baseX = rig.baseLean || 0;
     if (attack > 0) {
-      rig.armR.rotation.x = -1.4 * attack;
-      rig.armL.rotation.x = 0.25 * attack;
+      const a = Math.min(1, attack);
+      if (a > 0.78) {
+        rig.upper.rotation.x = baseX + 0.20;
+        rig.armR.rotation.x = -2.15; rig.armR.rotation.y = -0.18;
+        rig.armL.rotation.x = 0.5;  rig.armL.rotation.y = 0.10;
+        if (rig.elbowR) rig.elbowR.rotation.x = -0.65;
+        if (rig.head) { rig.head.rotation.y = -0.15; rig.head.rotation.x = 0.10; }
+      } else if (a > 0.30) {
+        const k = (a - 0.30) / 0.48;
+        rig.upper.rotation.x = baseX - 0.16 * k;
+        rig.armR.rotation.x = 2.35 - 0.5 * (1 - k); rig.armR.rotation.y = 0.16;
+        rig.armL.rotation.x = 0.34 - 0.18 * k; rig.armL.rotation.y = 0;
+        if (rig.elbowR) rig.elbowR.rotation.x = -0.12 + 0.2 * k;
+        if (rig.head) { rig.head.rotation.y = 0.12; rig.head.rotation.x = -0.12; }
+      } else {
+        const k = a / 0.30;
+        rig.upper.rotation.x = baseX;
+        rig.armR.rotation.x = 0.5 * k; rig.armR.rotation.y = 0;
+        rig.armL.rotation.x = -0.2 * k; rig.armL.rotation.y = 0;
+        if (rig.elbowR) rig.elbowR.rotation.x = 0.2 * k;
+      }
+    } else {
+      rig.upper.rotation.x = baseX;
+    }
+    const ap = rig.animParts;
+    if (ap) {
+      const a = t * 15;
+      ap.tail.forEach((grp) => {
+        grp.rotation.x = (grp.userData.base[0] || 0) + Math.sin(a + grp.userData.ph) * 0.30;
+        grp.rotation.z = (grp.userData.base[2] || 0) + Math.sin(a * 0.6 + grp.userData.ph) * 0.18;
+      });
+      ap.tent.forEach((grp) => {
+        grp.rotation.z = (grp.userData.base[2] || 0) + Math.sin(a * 1.3 + grp.userData.ph) * 0.45;
+        grp.rotation.x = (grp.userData.base[0] || 0) + Math.sin(a + grp.userData.ph * 1.7) * 0.35;
+      });
+      ap.wing.forEach((grp) => {
+        grp.rotation.z = (grp.userData.base[2] || 0) + Math.sin(a * 0.8 + grp.userData.ph) * 0.30;
+      });
     }
   }
 
@@ -1580,8 +2124,8 @@ const Zone3D = (() => {
       const g = new THREE.Group();
       g.add(makeShadow(1.5));
       if (VOXEL_ENEMY) {
-        // MC 体素方块人（纯视觉；dude 默认配色由 buildVoxelEnemy 内定）
-        buildVoxelEnemy(g, kind, null);
+        // MC 体素方块人（纯视觉；配色/配件/体型由 buildVoxelEnemy 内定，refRaw 供 BOSS 识别）
+        buildVoxelEnemy(g, kind, null, data.ref);
         g.position.set(EZ.x, 0, EZ.z);
         scene.add(g);
         enemy = g;
@@ -1776,6 +2320,16 @@ const Zone3D = (() => {
           // 死亡倒地：整体侧倾（rotation.z 向一侧倒）+ 略带前仰（rotation.x），配合下沉，视觉更「真倒地」
           enemy.rotation.z = 0.62 * k;
           enemy.rotation.x = 0.28 * k;
+          // 精细度：死亡散架感——四肢向外张开
+          const dr = enemy.userData.rig;
+          if (dr) {
+            dr.armL.rotation.x = 1.5 * k; dr.armR.rotation.x = -1.5 * k;
+            dr.legL.rotation.x = -0.9 * k; dr.legR.rotation.x = 0.9 * k;
+            if (dr.elbowL) dr.elbowL.rotation.x = -0.4 * k;
+            if (dr.elbowR) dr.elbowR.rotation.x = 0.4 * k;
+            if (dr.kneeL) dr.kneeL.rotation.x = 0.5 * k;
+            if (dr.kneeR) dr.kneeR.rotation.x = 0.5 * k;
+          }
           if (k >= 1 && scene) { scene.remove(enemy); enemy = null; }
         } else if (vx) {
           enemy.position.y = Math.sin(performance.now() / 450 + vx.phase) * 0.04; // 待机微浮
@@ -1791,6 +2345,13 @@ const Zone3D = (() => {
             }
             animateRig(enemy.userData.rig, performance.now() / 1000, walk * (vx.armBoost || 1), 0);
             enemy.userData.rig.upper.rotation.x += hurtLean;
+            // 受击甩头：头部随受击向外猛甩 + 回弹（配合躯干后仰）
+            const ehead = enemy.userData.rig.head;
+            if (ehead && h > 0) {
+              const hk = 1 - Math.min(1, h * 3);
+              ehead.rotation.x = -(0.35 + 0.25 * hk) + Math.sin(performance.now() / 90) * 0.06 * hk;
+              ehead.rotation.y = 0.35 * hk;
+            }
           }
         }
       }

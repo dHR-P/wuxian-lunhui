@@ -218,7 +218,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s1_hall", bg: Some("img_corridor.png"), loc: Some("L1 船员生活区 · 主走廊"),
+    id: "yiy_s1_hall", bg: Some("yiying_bg_open.png"), loc: Some("L1 船员生活区 · 主走廊"),
     mood: "danger", speaker: Some("Father（船载 AI）"), voice: Some("vo_yiying_father_quarantine"),
     text: TextSpec::Static(&[
         "你踏入船员区主走廊。头顶的公共广播骤然响起——冷冽的女声，带一丝失真：",
@@ -236,7 +236,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s2_corpse", bg: Some("img_horde.png"), loc: Some("L1 · 餐厅 · 第一具破尸"),
+    id: "yiy_s2_corpse", bg: Some("yiying_bg_invest.png"), loc: Some("L1 · 餐厅 · 第一具破尸"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "餐厅中央倒着一具尸体。他的胸腔破开一个大洞，肋骨朝外翻着——有什么东西从里面顶了出来。",
@@ -253,14 +253,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s2_fight", bg: Some("img_horde.png"), loc: Some("L1 · 餐厅"),
+    id: "yiy_s2_fight", bg: Some("yiying_bg_invest.png"), loc: Some("L1 · 餐厅"),
     mood: "danger", speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["破胸体群扑咬过来——你举枪还击！"]),
     choices: &[ChoiceDef { label: "战斗", sub: "f_yiy_chestburst", cond: None, effects: &NO_EFF, route: Route::To("yiy_s2_win") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s2_win", bg: Some("img_corridor.png"), loc: Some("L1 · 餐厅"),
+    id: "yiy_s2_win", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 餐厅"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "破胸体被逐一碾碎，黏液溅了满地。你喘息着站稳——这座船，是一个蜂巢。",
@@ -276,7 +276,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_med_room", bg: Some("img_isolation.png"), loc: Some("L1 · 医疗区"),
+    id: "yiy_s_med_room", bg: Some("yiying_bg_invest.png"), loc: Some("L1 · 医疗区"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["医疗区的冷柜与器械泛着白光。这里似乎刚被搜掠过——但角落的器械柜还能用。"]),
     choices: &[
@@ -287,14 +287,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_med_room2", bg: Some("img_isolation.png"), loc: Some("L1 · 医疗区 · 器械柜"),
+    id: "yiy_s_med_room2", bg: Some("yiying_bg_invest.png"), loc: Some("L1 · 医疗区 · 器械柜"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["器械柜底部压着半张烧焦的检疫名单——第一批『检疫者』全被送进了 Father 的隔离舱，再没回来。对应的，Father 的散热协议住在船首。"]),
     choices: &[ChoiceDef { label: "【离开】", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yiy_s_med_room") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_vents", bg: Some("img_corridor.png"), loc: Some("L1 · 顶舱通风管口"),
+    id: "yiy_s_vents", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 顶舱通风管口"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["Father 已失联，通风管格栅弹开。你钻入黑暗的滑道——这是单向捷径，直通 L2 实验室后舱。"]),
     choices: &[ChoiceDef { label: "【滑下管道】", sub: "单向 → L2(34,22)", cond: None,
@@ -302,14 +302,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_elevator", bg: Some("img_corridor.png"), loc: Some("L1 · 电梯井"),
+    id: "yiy_s_elevator", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 电梯井"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你按下电梯。电梯井的滑轮在静默中咔哒作响——一道幽蓝的光从舱门缝里漏出来。"]),
     choices: &[ChoiceDef { label: "【下到 L2】", sub: "双向电梯 L1→L2", cond: None, effects: &NO_EFF, route: Route::To("yiy_s_l2_arrive") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_l2_arrive", bg: Some("img_redqueen.png"), loc: Some("L2 · 到达厅"),
+    id: "yiy_s_l2_arrive", bg: Some("yiying_bg_battle.png"), loc: Some("L2 · 到达厅"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "L2 到达厅警报骤响！红灯旋转。Father 的广播尖利拔高：『非登记生命体征——立即前往 4 号舱强制检疫！』",
@@ -328,7 +328,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_lab_security", bg: Some("img_sterile_lab.png"), loc: Some("L2 · 到达厅 · 安全柜"),
+    id: "yiy_s_lab_security", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 到达厅 · 安全柜"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["安全柜里有<b>安保脉冲枪</b>（yiy_pulse）——可强开 Father 主控室 / 巢穴门，对工兵有轻微伤害修正。"]),
     choices: &[
@@ -339,7 +339,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_lab_chest", bg: Some("img_sterile_lab.png"), loc: Some("L2 · 生物实验室 · 物资箱"),
+    id: "yiy_s_lab_chest", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 生物实验室 · 物资箱"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["物资箱里静静躺着一台<b>电磁束缚装置</b>（yiy_em_restraint）——皇后战的二段终结技。"]),
     choices: &[
@@ -352,7 +352,7 @@ SceneDef {
 
 /* ---- 幕 1 · 关键转折 A：「Father 的低语」 ---- */
 SceneDef {
-    id: "yiy_s3_father", bg: Some("img_redqueen.png"), loc: Some("L2 · 主控室（Father 核心）"),
+    id: "yiy_s3_father", bg: Some("yiying_bg_battle.png"), loc: Some("L2 · 主控室（Father 核心）"),
     mood: "danger", speaker: Some("Father（AI）"), voice: Some("vo_yiying_father_material"),
     text: TextSpec::Static(&[
         "主控室的幽蓝屏幕墙铺展开来，冷冽的女声从四面响起：Father：『你们不是我的检疫对象。你们是……胁制品。配合调查，可获豁免。』",
@@ -370,7 +370,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s3_after", bg: Some("img_redqueen.png"), loc: Some("L2 · 主控室"),
+    id: "yiy_s3_after", bg: Some("yiying_bg_battle.png"), loc: Some("L2 · 主控室"),
     mood: "cold", speaker: Some("Father（AI）"), voice: None,
     text: TextSpec::Static(&[
         "Father 的冷冽女声霎时断成一片杂音，屏幕化为雪花，散热协议的伺服器发出最后一声频率衰竭的低鸣。",
@@ -382,7 +382,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s3_flee", bg: Some("img_corridor.png"), loc: Some("L2 · 主控室外走廊"),
+    id: "yiy_s3_flee", bg: Some("yiying_bg_open.png"), loc: Some("L2 · 主控室外走廊"),
     mood: "danger", speaker: Some("考尔"), voice: None,
     text: TextSpec::Static(&["你撤出主控室。Father 的封锁警报回荡——门禁都需脉冲枪强启（或硬闯）。考尔皱眉：「没关掉它，我们走哪都是『待检疫』。但先把普维斯的事办了也行。」"]),
     choices: &[
@@ -396,7 +396,7 @@ SceneDef {
 
 /* ---- 幕 2 · 关键转折 B：「孵化室的真相」（寄生/巢穴核心） ---- */
 SceneDef {
-    id: "yiy_s4_incubator", bg: Some("img_horde.png"), loc: Some("L2 · 孵化室（卵区）"),
+    id: "yiy_s4_incubator", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 孵化室（卵区）"),
     mood: "danger", speaker: Some("普维斯·被寄生者"), voice: Some("vo_yiying_puvisi"),
     text: TextSpec::Static(&[
         "无数卵苞后仰张开，黏液中浮现出抱脸虫干燥的手指。普维斯突然捂住胸口——肋骨折断的脆响在静默中格外清晰。",
@@ -414,7 +414,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s5_med", bg: Some("img_corridor.png"), loc: Some("L2 · 通往医疗舱的走廊"),
+    id: "yiy_s5_med", bg: Some("yiying_bg_open.png"), loc: Some("L2 · 通往医疗舱的走廊"),
     mood: "danger", speaker: Some("普维斯"), voice: None,
     text: TextSpec::Dyn(|st| {
         format!("你扶住蜷缩的普维斯往医疗舱赶。他额头全是冷汗，胸腔每隔几秒就顶起一次。考尔催促：「快。倒计时在走。」（寄生幕数 {}/3）", parasite_stage(st))
@@ -430,7 +430,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_medlab", bg: Some("img_isolation.png"), loc: Some("L2 · 医疗舱 · 取样台"),
+    id: "yiy_s_medlab", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 医疗舱 · 取样台"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("yiy_cured") {
@@ -449,7 +449,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s5_nest", bg: Some("img_horde.png"), loc: Some("L2 · 孵化室 · 卵区边缘"),
+    id: "yiy_s5_nest", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 孵化室 · 卵区边缘"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "你退到卵区边缘。烧巢调查点就在卵群核心——如需，可用喷灯把它们连片焚毁。",
@@ -466,7 +466,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_nest_fire", bg: Some("img_horde.png"), loc: Some("L2 · 卵区 · 烧巢点"),
+    id: "yiy_s_nest_fire", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 卵区 · 烧巢点"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["喷灯的蓝焰喷向最近的卵苞。卵壳在灼热中爆开，抱脸虫群嘶叫着扑了出来——烧巢清剿战。"]),
     choices: &[ChoiceDef { label: "【战斗】", sub: "f_yiy_queenhold · 胜得烧巢 flag", cond: None,
@@ -474,7 +474,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_burn_do", bg: Some("img_horde.png"), loc: Some("L2 · 卵区"),
+    id: "yiy_s_burn_do", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 卵区"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["火焰顺着卵壳连成一片，整片卵区在灼热中坍缩。你退到卵区外——<b>干净利落</b>。"]),
     choices: &[ChoiceDef { label: "【乘货运电梯下 L3】", sub: "双向电梯 L2→L3", cond: None,
@@ -482,14 +482,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_sample", bg: Some("img_sterile_lab.png"), loc: Some("L2 · 取样台"),
+    id: "yiy_s_sample", bg: Some("yiying_bg_invest.png"), loc: Some("L2 · 取样台"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["取样台：这是救下被寄生者的手术点。"]),
     choices: &[ChoiceDef { label: "（前往医疗舱）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yiy_s_medlab") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_airlock", bg: Some("img_corridor.png"), loc: Some("L1 · 气闸区"),
+    id: "yiy_s_airlock", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 气闸区"),
     mood: "danger", speaker: Some("考尔"), voice: None,
     text: TextSpec::Static(&[
         "你听到身后传来工兵的气门声。眼前就是双气闸——把异形引进去，一键真空抛射，能干净利落地清掉它。",
@@ -504,7 +504,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_airlock_ok", bg: Some("img_corridor.png"), loc: Some("L1 · 气闸区"),
+    id: "yiy_s_airlock_ok", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 气闸区"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["气闸在真空中噗地闭合，那道黑影被抛入星海的迷茫里。干净利落。"]),
     choices: &[ChoiceDef { label: "【回主走廊】", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yiy_s1_hall") }],
@@ -513,7 +513,7 @@ SceneDef {
 
 /* ---- 幕 3 · 皇后决战 ---- */
 SceneDef {
-    id: "yiy_s_l3_arrive", bg: Some("img_laser.png"), loc: Some("L3 · 电梯到达厅（引擎层）"),
+    id: "yiy_s_l3_arrive", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 电梯到达厅（引擎层）"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "电梯门在 L3 引擎层开启，幽蓝的反物质反应堆辉光与警报红闪交织。船首深处传来耳膜发麻的巨大心跳——皇后在巢穴里。",
@@ -532,7 +532,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_pipe", bg: Some("img_redqueen.png"), loc: Some("L3 · 反应堆管道区"),
+    id: "yiy_s_pipe", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 反应堆管道区"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("yiy_father_off") {
@@ -554,7 +554,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_queen_pre", bg: Some("img_laser.png"), loc: Some("L3 · 皇后巢穴 · 卵房"),
+    id: "yiy_s_queen_pre", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 皇后巢穴 · 卵房"),
     mood: "danger", speaker: Some("考尔"), voice: None,
     text: TextSpec::Static(&[
         "卵房的骨白穹顶下，皇后从阴影里缓缓抬起骨冠——它已经注意到你了。腹囊蠕动，卵苞在四周依次张开。",
@@ -571,14 +571,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_queen_start", bg: Some("img_laser.png"), loc: Some("L3 · 皇后巢穴"),
+    id: "yiy_s_queen_start", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 皇后巢穴"),
     mood: "danger", speaker: Some("⚔ BOSS 战"), voice: Some("vo_yiying_queen_roar"),
     text: TextSpec::Static(&["皇后尖啸着扑来——决战开始！"]),
     choices: &[ChoiceDef { label: "【进入决战】", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(start_queen_fight) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_queen_round", bg: Some("img_laser.png"), loc: Some("L3 · 皇后巢穴 · 决战"),
+    id: "yiy_queen_round", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 皇后巢穴 · 决战"),
     mood: "danger", speaker: Some("⚔ 异形皇后"), voice: None,
     text: TextSpec::Dyn(txt_queen_round),
     choices: &[
@@ -590,7 +590,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_queen_win", bg: Some("img_laser.png"), loc: Some("L3 · 皇后巢穴"),
+    id: "yiy_queen_win", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 皇后巢穴"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["皇后坠地，巢穴骤然安静。酸血在它周围嘶嘶蚀开，你小心避让。"]),
     choices: &[ChoiceDef { label: "【打扫战场】", sub: "", cond: None,
@@ -600,7 +600,7 @@ SceneDef {
 
 /* ---- 幕 4 · 结局：「引爆与撤离」 ---- */
 SceneDef {
-    id: "yiy_s7_evac", bg: Some("img_redqueen.png"), loc: Some("L3 · 引擎控制桥 · 引爆总闸"),
+    id: "yiy_s7_evac", bg: Some("yiying_bg_battle.png"), loc: Some("L3 · 引擎控制桥 · 引爆总闸"),
     mood: "danger", speaker: Some("主神"), voice: Some("vo_yiying_father_evac"),
     text: TextSpec::Static(&[
         "引爆总闸前，Father（残响）最后一次发声：『引爆将摧毁 7 层生命维持。确认。』",
@@ -618,14 +618,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s7_cleanup", bg: Some("img_redqueen.png"), loc: Some("L2 · 主控室 · Father 核心"),
+    id: "yiy_s7_cleanup", bg: Some("yiying_bg_battle.png"), loc: Some("L2 · 主控室 · Father 核心"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["你用最后的时间返回主控室，把 Father 的罪证与散热数据一并格式化。屏幕最后闪出一行无意义的乱码，然后熄灭。倒计时只剩最后一格——"]),
     choices: &[ChoiceDef { label: "【冲向对接舱】", sub: "撤离（已耗 1 幕）", cond: None, effects: &NO_EFF, route: Route::To("yiy_s8_evac") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s8_evac", bg: Some("img_train.png"), loc: Some("L3 · 贝蒂号对接舱 (34,22)"),
+    id: "yiy_s8_evac", bg: Some("yiying_bg_open.png"), loc: Some("L3 · 贝蒂号对接舱 (34,22)"),
     mood: "danger", speaker: Some("主神"), voice: None,
     text: TextSpec::Static(&["贝蒂号对接舱的舷梯在你脚下。倒计时蜂鸣逼近临界……"]),
     choices: &[
@@ -723,7 +723,7 @@ SceneDef {
 
 /* ---- NPC 对话 ---- */
 SceneDef {
-    id: "yiy_s_father_npc", bg: Some("img_redqueen.png"), loc: Some("L2 · 主控室 · Father 终端"),
+    id: "yiy_s_father_npc", bg: Some("yiying_bg_battle.png"), loc: Some("L2 · 主控室 · Father 终端"),
     mood: "danger", speaker: Some("Father（AI）"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("yiy_father_off") {
@@ -736,7 +736,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_call", bg: Some("img_corridor.png"), loc: Some("L1 · 登陆坞 · 考尔"),
+    id: "yiy_s_call", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 登陆坞 · 考尔"),
     mood: "cold", speaker: Some("考尔（Call）"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("yiy_host_survive") {
@@ -751,7 +751,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "yiy_s_johnner", bg: Some("img_corridor.png"), loc: Some("L1 · 登陆坞 · 约翰纳"),
+    id: "yiy_s_johnner", bg: Some("yiying_bg_open.png"), loc: Some("L1 · 登陆坞 · 约翰纳"),
     mood: "cold", speaker: Some("约翰纳"), voice: None,
     text: TextSpec::Static(&["约翰纳拍拍枪：「贝蒂号在那边。只要能活着到那艘飞船，老子今天就能脱身。」"]),
     choices: &[ChoiceDef { label: "（继续）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yiy_s1_hall") }],

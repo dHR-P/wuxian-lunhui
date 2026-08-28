@@ -1,0 +1,14 @@
+{
+  "total_cost_est": 0.4,
+  "results": {
+    "mumiyi/battle": {
+      "pass": true,
+      "cost": 0.4,
+      "attempts": [
+        "FAIL@1",
+        "PASS@2"
+      ],
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\mumiyi_bg_battle.png"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "style_suffix": "Photorealistic establishing empty scene, absolutely no people, no characters, no humanoid figures, no animals, no monsters, no corpse, no watermark, no readable text, no logos, cinematic single wide shot, vertical 768x1024 composition, film grain, high detail, ghost-town atmosphere, camera angled to showcase the world space.",
+  "jobs": [
+    {
+      "slug": "sishen",
+      "type": "open",
+      "file": "sishen_bg_open.png",
+      "qdesc": "死神来了 现代机场·登机廊桥",
+      "prompt": "Modern airport boarding jet bridge interior, ribbed silver accordion tunnel panels, a wide glass wall looking out at an empty runway and parked airliners in overcast light, distant terminal signage glare, polished reflective floor, tense ominous empty atmosphere. No people."
+    },
+    {
+      "slug": "sishen",
+      "type": "invest",
+      "file": "sishen_bg_invest.png",
+      "qdesc": "死神来了 现代机场·行李提取厅",
+      "prompt": "Deserted airport baggage claim hall, a long empty carousel belt with scattered unclaimed luggage, cold fluorescent lights, rows of metal carts, a travel column, hard grey polished floor reflecting the ceiling, quiet ominous public interior. No people."
+    },
+    {
+      "slug": "sishen",
+      "type": "battle",
+      "file": "sishen_bg_battle.png",
+      "qdesc": "死神来了 现代机场·跑道空镜",
+      "prompt": "Empty airport runway apron seen at dusk, long asphalt runway lines and taxiway lights stretching to the horizon, control tower silhouette, aircraft hangars in the distance, low grey sky, wide cold open industrial airfield with a sense of dread. No people, no aircraft close-up."
+    },
+    {
+      "slug": "mumiyi",
+      "type": "open",
+      "file": "mumiyi_bg_open.png",
+      "qdesc": "木乃伊 埃及地宫·墓道石壁",
+      "prompt": "Narrow sandstone tomb passage of an ancient Egyptian crypt, carved stone walls with hieroglyph reliefs and faded wall paintings, a corridor of stacked stone blocks, torchlight flicker, drifting dust, sand floor, oppressive silent underground atmosphere. No people."
+    },
+    {
+      "slug": "mumiyi",
+      "type": "invest",
+      "file": "mumiyi_bg_invest.png",
+      "qdesc": "木乃伊 埃及地宫·圣甲虫厅",
+      "prompt": "Ancient Egyptian underground scarab hall, a large chamber with rows of massive carved stone scarab beetle statues, hieroglyph-covered sand walls, gaps where beetles swarm, a dark shaft of light from a high opening, dust and sand floor, ominous tomb. No people, no insects."
+    },
+    {
+      "slug": "mumiyi",
+      "type": "battle",
+      "file": "mumiyi_bg_battle.png",
+      "qdesc": "木乃伊 埃及地宫·祭司墓室",
+      "prompt": "High priest burial chamber of an Egyptian crypt, a massive carved stone sarcophagus at the center, gilded wall reliefs and columns, scattered treasure and sealed canopic vessels, sand drifting in the air, shafts of pale light, dramatic dark tomb chamber. No people."
+    },
+    {
+      "slug": "xinghe",
+      "type": "open",
+      "file": "xinghe_bg_open.png",
+      "qdesc": "星河战队 异星虫巢·登陆场",
+      "prompt": "Alien planet landing zone at dusk, rugged rocky plain with a crashed military drop-craft and scattered supply crates, in the distance the dark mouth of a vast organic bug hive with chitin spires, red-brown sky, tense frontier. No people."
+    },
+    {
+      "slug": "xinghe",
+      "type": "invest",
+      "file": "xinghe_bg_invest.png",
+      "qdesc": "星河战队 虫巢·地洞甬道",
+      "prompt": "Claustrophobic underground bug-hive tunnel, curved chitin and slime-coated walls, layered organic ribs, faint bioluminescent glow from translucent membranes, a branching gallery receding into darkness on a slick floor, alien subterranean dread. No people."
+    },
+    {
+      "slug": "xinghe",
+      "type": "battle",
+      "file": "xinghe_bg_battle.png",
+      "qdesc": "星河战队 虫巢·脑虫巢",
+      "prompt": "Vast organic throne-nest cavern of an alien brain bug, a huge leathery bioluminescent egg-sac structure at the center on a high dais, hanging membranes and chitin pillars, columns of blue-violet glow, wet organic floor, epic alien climax space. No people."
+    },
+    {
+      "slug": "juluoji",
+      "type": "open",
+      "file": "juluoji_bg_open.png",
+      "qdesc": "侏罗纪 雨林岛·园区大道",
+      "prompt": "Deserted Jurassic theme-park main concourse, a grand avenue flanked by tall steel electric fence posts and visitor kiosks, dense tropical vegetation pressing in, a large ornate park gateway, wet tarmac, overcast green jungle daylight. No people, no dinosaurs."
+    },
+    {
+      "slug": "juluoji",
+      "type": "invest",
+      "file": "juluoji_bg_invest.png",
+      "qdesc": "侏罗纪 雨林岛·热带丛林",
+      "prompt": "Dense steamy tropical rainforest interior, giant ferns and vine-strangled trees, low fog, shafts of dappled green light, muddy ground with broken signage, an abandoned fallen guard tower half swallowed by vegetation, oppressive wet atmosphere. No people, no dinosaurs."
+    },
+    {
+      "slug": "juluoji",
+      "type": "battle",
+      "file": "juluoji_bg_battle.png",
+      "qdesc": "侏罗纪 雨林岛·围栏区",
+      "prompt": "A tall electrified paddock enclosure in the rainforest, massive concrete fence with high-voltage cables and warning posts, an empty feeding clearing beyond, lightning rod towers, dark storm clouds, damp earth, dangerous reservation fence line. No people, no dinosaurs."
+    },
+    {
+      "slug": "moruiya",
+      "type": "open",
+      "file": "moruiya_bg_open.png",
+      "qdesc": "摩瑞亚 矮人矿坑·矿坑大厅",
+      "prompt": "Vast dwarven mine hall of Moria, immense carved stone columns supporting a dark cavern roof, torchlight and faint blue glow, broken dwarf masonry, faded runes, a grand stone floor, ancient underground royal chamber. No people."
+    },
+    {
+      "slug": "moruiya",
+      "type": "invest",
+      "file": "moruiya_bg_invest.png",
+      "qdesc": "摩瑞亚 矮人矿坑·石桥深渊",
+      "prompt": "A narrow ancient stone bridge spanning a bottomless dark chasm deep in a dwarven mine, crumbling carved balustrade rails, faint torch glow and drifting mist below, chiseled rock walls and vaulted ceiling, vertigo-inducing abyss. No people."
+    },
+    {
+      "slug": "moruiya",
+      "type": "battle",
+      "file": "moruiya_bg_battle.png",
+      "qdesc": "摩瑞亚 矮人矿坑·凯撒督姆",
+      "prompt": "The ruined great bridge of Khazad-dum over a fiery chasm, a broken stone span dissolving into a burning abyss of flame and shadow, shattered ancient dwarven masonry, embers rising, dramatic final battle hall. No people."
+    },
+    {
+      "slug": "yiying",
+      "type": "open",
+      "file": "yiying_bg_open.png",
+      "qdesc": "异形4 奥瑞迦号·飞船走廊",
+      "prompt": "Derelict starship corridor of the Auriga, long metallic curved passage with ribbed alloy wall panels and exposed piping, dim emergency strip lights, faint cold blue tech glow, wet floor, abandoned sci-fi interior. No people."
+    },
+    {
+      "slug": "yiying",
+      "type": "invest",
+      "file": "yiying_bg_invest.png",
+      "qdesc": "异形4 奥瑞迦号·孵化舱",
+      "prompt": "Organic incubation chamber on a spaceship, wall of leathery parasite eggs and slime-coated membranes over metal structure, ominous green glow, dripping fluid, hatchery that overgrows the hull. No people, no creatures."
+    },
+    {
+      "slug": "yiying",
+      "type": "battle",
+      "file": "yiying_bg_battle.png",
+      "qdesc": "异形4 奥瑞迦号·舰桥",
+      "prompt": "The command bridge of a derelict starship, a wide control deck with dark console panels, a central holotable, large viewport showing empty space, emergency red lights, ominous engineered bridge. No people."
+    },
+    {
+      "slug": "dashengtang",
+      "type": "open",
+      "file": "dashengtang_bg_open.png",
+      "qdesc": "大教堂 圣所·教堂中殿",
+      "prompt": "Vast gothic cathedral nave, tall ribbed stone vaults and pointed arches, rows of empty pews, colored stained-glass windows casting dim light, brass candelabra, cold stone floor, solemn sacred empty interior. No people."
+    },
+    {
+      "slug": "dashengtang",
+      "type": "invest",
+      "file": "dashengtang_bg_invest.png",
+      "qdesc": "大教堂 圣所·地下地窖",
+      "prompt": "Underground crypt beneath a cathedral, stone vaulted cellar with rows of stone niches and reliquary shelves, damp brick and carved pillars, a single torch, dust and candle wax, eerie cloistered gloom. No people."
+    },
+    {
+      "slug": "dashengtang",
+      "type": "battle",
+      "file": "dashengtang_bg_battle.png",
+      "qdesc": "大教堂 圣所·高塔圣光",
+      "prompt": "High cathedral bell tower chamber swelling with radiant white-gold holy light, a swirling luminous core of energy at its heart, gothic stone archways, rays of divine light bursting between columns, dramatic climactic sanctum. No people."
+    },
+    {
+      "slug": "wujin",
+      "type": "open",
+      "file": "wujin_bg_open.png",
+      "qdesc": "无尽森林·林间小道",
+      "prompt": "A narrow forest track winding through an endless ancient forest, mossy ground between giant tree roots, shafts of pale green light through dense canopy, faint mist, a primal path vanishing into the woods. No people."
+    },
+    {
+      "slug": "wujin",
+      "type": "invest",
+      "file": "wujin_bg_invest.png",
+      "qdesc": "无尽森林·部族营地",
+      "prompt": "A primitive forest tribe camp clearing, wooden huts and totem poles around a central sacred-wood bonfire altar, animal-bone ornaments, hides stretched on frames, firelight against the dark jungle, ancient tribal ritual ground. No people."
+    },
+    {
+      "slug": "wujin",
+      "type": "battle",
+      "file": "wujin_bg_battle.png",
+      "qdesc": "无尽森林·巨木深处",
+      "prompt": "The cathedral-like heart of an ancient forest, colossal gargantuan trees whose trunks and roots form towering arches, heavy mist and shafts of light, mossy stone ruins half swallowed by the forest floor, primal looming depth. No people."
+    }
+  ]
+}

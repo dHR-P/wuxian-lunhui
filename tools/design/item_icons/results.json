@@ -1,0 +1,212 @@
+[
+  {
+    "id": "item_medkit",
+    "expect": "强效医疗包",
+    "status": "PASS",
+    "attempts": 2,
+    "gen_cost": 0.4,
+    "qc_notes": "r0 QC=FAIL | r1 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_medkit.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_bandage",
+    "expect": "紧急绷带",
+    "status": "FAIL",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=FAIL || last_raw=```json\n{\n    \"verdict\": \"FAIL\",\n    \"issues\": \"1. 背景非纯正黑色，存在明显噪点/颗粒感；2. 图标主体周围有厚重的深灰色描边/阴影（类似贴纸效果），导致边缘不干净，且若视为背景则不符合漆黑要求；3. 主体形象酷似卫生纸卷（Toilet Paper），缺乏“紧急绷带”典型的医疗特征（如红色十字、纱布纹理），不符合视觉预期。\",\n    \"brief\": \"图标主体似卫生纸而非绷带，且背景有噪点、主体边缘有厚重灰色描边，不符合要求。\"\n}\n```\n[RC]用户希望我质检一张图片，判断它是否符合“紧急绷带”道具图标的标准。\n\n**标准分析：**\n1",
+    "target": ""
+  },
+  {
+    "id": "item_sedative",
+    "expect": "镇静剂",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_sedative.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_antidote",
+    "expect": "净化血清",
+    "status": "PASS",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_antidote.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "ammo_crate",
+    "expect": "弹药盒",
+    "status": "PASS",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\ammo_crate.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_holy_water",
+    "expect": "圣水",
+    "status": "PASS",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=PASS 或 FAIL | r1 QC=PASS 或 FAIL | r2 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_holy_water.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_silver_bullet",
+    "expect": "银弹",
+    "status": "PASS",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_silver_bullet.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_torch",
+    "expect": "火把",
+    "status": "FAIL",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=FAIL || last_raw={\"verdict\":\"FAIL\",\"issues\":\"背景非纯正黑色，图标主体周围存在明显橙色光晕/发光效果，导致背景区域出现异色，不符合无明显异色要求\",\"brief\":\"图标周围有明显光晕，背景不符合纯正黑色及无明异色要求\"}\n[RC]用户希望我质检一张道具图标。\n期望内容：火把。\n\n**质检标准：**\n1.  **背景是否为纯正黑色**：\n    *   观察图片，背景大部分是黑色的。\n    *   但是，图标主体（火把）周围有一圈明显的橙色/黄色光晕（glow effect）。\n    *   这种光晕导致背景在靠近主体的地方不是“漆黑”的，而是有暖色调的发光效果。虽然远处是黑的，",
+    "target": ""
+  },
+  {
+    "id": "item_grenade",
+    "expect": "燃烧手雷",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_grenade.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_bottle_water",
+    "expect": "口袋圣水",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_bottle_water.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_quzhen_fu",
+    "expect": "驱邪符",
+    "status": "PASS",
+    "attempts": 2,
+    "gen_cost": 0.4,
+    "qc_notes": "r0 QC=FAIL | r1 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\item_quzhen_fu.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "item_jiezhou_fu",
+    "expect": "解咒符",
+    "status": "FAIL",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=FAIL || last_raw={\"verdict\":\"FAIL\",\"issues\":\"图标主体包含明显文字'除'，违反无文字规则；背景存在细微噪点/颗粒感，非纯正黑色\",\"brief\":\"图标包含文字且背景非纯黑，不符合要求\"}\n[RC]用户要求质检一张道具图标（期望内容：解咒符）。\n判断标准：\n1) 背景是否为纯正黑色（图标主体之外的底应为漆黑、无明显异色/灰色渐变背景或画面)\n2) 是否无任何文字、字母、数字、水印、logo、版权标识\n3) 图标主体是否清晰可辨、居中、边缘干净、符合\"解咒符\"这一道具的视觉预期。\n\n分析图片：\n1) 背景：看起来是黑色，有一些噪点或细微的纹理，但基本是黑色。不过仔细看，背景并不是纯正的",
+    "target": ""
+  },
+  {
+    "id": "it_core_crystal",
+    "expect": "核心晶石",
+    "status": "FAIL",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=FAIL || last_raw={\"verdict\":\"FAIL\",\"issues\":\"背景存在明显的青色发光光晕，非纯正黑色背景\",\"brief\":\"背景非纯黑，存在发光光晕渐变\"}\n[RC]用户要求质检一张道具图标（期望内容：核心晶石）。\n质检标准：\n1) 背景是否为纯正黑色（图标主体之外的底应为漆黑、无明显异色/灰色渐变背景或画面）。\n2) 是否无任何文字、字母、数字、水印、logo、版权标识。\n3) 图标主体是否清晰可辨、居中、边缘干净、符合\"核心晶石\"这一道具的视觉预期。\n\n分析图片：\n1) 背景：大部分是黑色，但图标周围有一圈明显的青色/蓝绿色发光光晕（glow effect），这导致背景不是纯正的黑色，有渐变的",
+    "target": ""
+  },
+  {
+    "id": "it_blood_essence",
+    "expect": "血族精血",
+    "status": "PASS",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=PASS 或 FAIL | r1 QC=FAIL | r2 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_blood_essence.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "it_soul_shard",
+    "expect": "灵魂碎片",
+    "status": "FAIL",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=FAIL || last_raw={\"verdict\":\"FAIL\",\"issues\":\"图标主体周围有明显的淡蓝色发光光晕，导致背景非纯正黑色（存在异色渐变），且边缘不够干净\",\"brief\":\"背景存在发光光晕，非纯黑背景\"}\n[RC]用户要求判断一张道具图标是否合格。\n期望内容：灵魂碎片。\n判断标准：\n1) 背景是否为纯正黑色（图标主体之外的底应为漆黑、无明显异色/灰色渐变背景或画面）。\n2) 是否无任何文字、字母、数字、水印、logo、版权标识。\n3) 图标主体是否清晰可辨、居中、边缘干净、符合\"灵魂碎片\"这一道具的视觉预期。\n\n观察图片：\n1) 背景：主体周围有一圈明显的淡蓝色/白色发光光晕（glow effect）",
+    "target": ""
+  },
+  {
+    "id": "it_core_sample",
+    "expect": "能量核心残片",
+    "status": "PASS",
+    "attempts": 3,
+    "gen_cost": 0.6000000000000001,
+    "qc_notes": "r0 QC=FAIL | r1 QC=FAIL | r2 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_core_sample.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "it_em_core",
+    "expect": "电磁炮核心",
+    "status": "PASS",
+    "attempts": 2,
+    "gen_cost": 0.4,
+    "qc_notes": "r0 QC=FAIL | r1 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_em_core.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "it_enhance_stone",
+    "expect": "普通强化石",
+    "status": "PASS",
+    "attempts": 1,
+    "gen_cost": 0.2,
+    "qc_notes": "r0 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_enhance_stone.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "it_cross_key",
+    "expect": "圣徽钥匙",
+    "status": "PASS",
+    "attempts": 2,
+    "gen_cost": 0.4,
+    "qc_notes": "r0 QC=PASS 或 FAIL | r1 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_cross_key.png",
+    "dim": "768x768",
+    "deployed": true
+  },
+  {
+    "id": "it_cross",
+    "expect": "圣徽",
+    "status": "PASS",
+    "attempts": 2,
+    "gen_cost": 0.4,
+    "qc_notes": "r0 QC=FAIL | r1 QC=PASS",
+    "target": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\it_cross.png",
+    "dim": "768x768",
+    "deployed": true
+  }
+]

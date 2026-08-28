@@ -194,7 +194,7 @@ SceneDef {
 
 /* ---- L1 园区 hub ---- */
 SceneDef {
-    id: "jl_01", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 园区"),
+    id: "jl_01", bg: Some("juluoji_bg_open.png"), loc: Some("L1 · 园区"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("fence_power") {
@@ -216,7 +216,7 @@ SceneDef {
 
 /* ---- L1 调查点 ---- */
 SceneDef {
-    id: "jl_02_powerlog", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 断电控制台"),
+    id: "jl_02_powerlog", bg: Some("juluoji_bg_open.png"), loc: Some("L1 · 断电控制台"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["控制台屏幕跳着最后的日志：「15:42 园区主电网负载异常 → 15:43 备用电源切换失败 → 15:44 全园断电」。末行是手写的红字：<em>『有人放走了所有恐龙。』</em>"]),
     choices: &[ChoiceDef { label: "记下跌电点", sub: "主线布景", cond: None,
@@ -224,7 +224,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_03_bait", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 售货亭冰柜"),
+    id: "jl_03_bait", bg: Some("juluoji_bg_open.png"), loc: Some("L1 · 售货亭冰柜"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_bait_meat") {
@@ -242,7 +242,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_04_monitor", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 监控视频墙"),
+    id: "jl_04_monitor", bg: Some("juluoji_bg_open.png"), loc: Some("L1 · 监控视频墙"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["仅存的两路信号还在跳：北区密林，一头迅猛龙领着三只幼体压低身位潜行；围栏区，一道山峦般的剪影正焦躁地来回踱步——那不是迅猛龙。"]),
     choices: &[ChoiceDef { label: "看清剪影轮廓", sub: "霸王龙预告", cond: None,
@@ -250,7 +250,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_05_guide", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 园区导览牌"),
+    id: "jl_05_guide", bg: Some("juluoji_bg_open.png"), loc: Some("L1 · 园区导览牌"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["导览牌上画着金字塔形地图：园门→<b>丛林</b>（沼泽洼地/密林）→<b>围栏区</b>（主电闸/围场/撤离台）。每层都标着一枚红色惊叹号。"]),
     choices: &[ChoiceDef { label: "记下逃生路线", sub: "园区→丛林→围栏区", cond: None,
@@ -260,7 +260,7 @@ SceneDef {
 
 /* ================= L2 丛林（逃生伏击） ================= */
 SceneDef {
-    id: "jl_02_arrive_jungle", bg: Some("img_horde.png"), loc: Some("L2 · 丛林入口"),
+    id: "jl_02_arrive_jungle", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 丛林入口"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jl_jungle"),
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_bait_meat") {
@@ -280,13 +280,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_rap_pack_fight", bg: Some("img_horde.png"), loc: Some("L2 · 丛林 · 追击战"),
+    id: "jl_rap_pack_fight", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 丛林 · 追击战"),
     mood: "danger", speaker: Some("迅猛龙群"), voice: Some("vo_jl_raptor"),
     text: TextSpec::Static(&["三头迅猛龙已然扑上来——（战斗）"]),
     choices: &[], fight_id: Some("jl_raptor_pack"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_02_jungle_hub", bg: Some("img_horde.png"), loc: Some("L2 · 丛林"),
+    id: "jl_02_jungle_hub", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 丛林"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["密林深处的闷热让你浑身发汗。泥泞足印、撕抓树痕、岗哨补给箱——每一处都可能是迅猛龙设下的记号。而穿过这片湿绿的尽头，是通往围栏区的窄道。"]),
     choices: &[
@@ -300,7 +300,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_06_track", bg: Some("img_horde.png"), loc: Some("L2 · 泥泞足印"),
+    id: "jl_06_track", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 泥泞足印"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["泥地上的足印又大又深，三趾，前爪几乎垂直于地面——是迅猛龙的。足迹一段段乱糟糟地交错，说明它刚才在这里盘桓，等你路过。"]),
     choices: &[ChoiceDef { label: "沿足迹反向绕开", sub: "避开伏击点", cond: None,
@@ -308,7 +308,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_07_marks", bg: Some("img_horde.png"), loc: Some("L2 · 撕抓树痕"),
+    id: "jl_07_marks", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 撕抓树痕"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["一棵粗壮的蕨树树干上，三道平行的深痕直切到接近根部的高度——迅猛龙用后爪划的，是它标记领地的信号。树皮缝里卡着一截锈铁丝。"]),
     choices: &[ChoiceDef { label: "抽走铁丝", sub: "起获铁丝钳 · 开 GJ2", cond: None,
@@ -316,7 +316,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_08_outpost", bg: Some("img_horde.png"), loc: Some("L2 · 岗哨补给箱"),
+    id: "jl_08_outpost", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 岗哨补给箱"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["丛林深处的补给箱弹开箱门，里面垫着碎布：一把卷刃扳手、军用水壶和半包压缩饼干。扳手是园方维修工的遗物。"]),
     choices: &[ChoiceDef { label: "取走扳手", sub: "Item it_wrench · 开冷藏门", cond: None,
@@ -326,7 +326,7 @@ SceneDef {
 
 /* ================= L3 围栏区 · 决战 ================= */
 SceneDef {
-    id: "jl_03_arrive_fence", bg: Some("img_laser.png"), loc: Some("L3 · 围栏区"),
+    id: "jl_03_arrive_fence", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围栏区"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jl_fence"),
     text: TextSpec::Static(&[
         "你冲出了密林，眼前是钢筋水泥的围栏区。远处那座最高的围场里，一头霸王龙正用粗壮的尾一次次砸向电栅，焦黑铁杆上火花飞溅——它要出来了。",
@@ -342,7 +342,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_09_fuse", bg: Some("img_laser.png"), loc: Some("L3 · 围栏主电闸"),
+    id: "jl_09_fuse", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围栏主电闸"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("fence_power") {
@@ -356,7 +356,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_10_observatory", bg: Some("img_laser.png"), loc: Some("L3 · 围场观察台"),
+    id: "jl_10_observatory", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围场观察台"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["观察台的双筒望远镜被撞歪。调焦后你能看清：霸王龙的左腿跛得厉害，每次起身都会把重心压到另一侧——那是它唯一的弱点。"]),
     choices: &[ChoiceDef { label: "记下跛脚", sub: "BOSS 提示", cond: None,
@@ -366,7 +366,7 @@ SceneDef {
 
 /* ---- BOSS · 霸王龙（选择驱动）---- */
 SceneDef {
-    id: "jl_13_trex", bg: Some("img_laser.png"), loc: Some("L3 · 围场 · 决战"),
+    id: "jl_13_trex", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围场 · 决战"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jl_trex"),
     text: TextSpec::Static(&[
         "你踏进围场的那一刻，电栅「嗡」地彻底熄灭——不是换电成功，是被那样的重量碾断了电线。",
@@ -376,7 +376,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_trex_round", bg: Some("img_laser.png"), loc: Some("L3 · 围场 · 激战"),
+    id: "jl_trex_round", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围场 · 激战"),
     mood: "danger", speaker: Some("霸王龙"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("霸王龙 HP {} / {}", f.hp.max(0), 260)).unwrap_or_else(|| "霸王龙 HP --".to_string());
@@ -399,7 +399,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_13_trex_down", bg: Some("img_laser.png"), loc: Some("L3 · 围场"),
+    id: "jl_13_trex_down", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围场"),
     mood: "calm", speaker: Some("旁白"), voice: Some("vo_jl_trex_down"),
     text: TextSpec::Static(&["霸王龙的巨躯掀起的尘暴里，最后一击落在它残缺的腿侧。它轰然跪地，粗重的呼吸逐渐断线，最后停在围场正中——庞大的、不再动弹的剪影。"]),
     choices: &[ChoiceDef { label: "（走向撤离台）", sub: "B 级 · 猎杀成功", cond: None,
@@ -409,7 +409,7 @@ SceneDef {
 
 /* ================= 撤离结算 ================= */
 SceneDef {
-    id: "jl_11_exit", bg: Some("img_laser.png"), loc: Some("L3 · 直升机撤离台"),
+    id: "jl_11_exit", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 直升机撤离台"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Dyn(|st| {
         let gauge = if st.flag("jl_trex_down") {
@@ -451,7 +451,7 @@ SceneDef {
 
 /* ================= NPC ================= */
 SceneDef {
-    id: "jl_12_granger", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 游客中心"),
+    id: "jl_12_granger", bg: Some("juluoji_bg_open.png"), loc: Some("L1 · 游客中心"),
     mood: "cold", speaker: Some("兽医 格兰杰"), voice: None,
     text: TextSpec::Static(&["一个浑身泥泞的中年男人在门口喘着气，手里握着一柄兽医钳：「孩子，我有话要说。那头放出来的霸王龙左腿有旧伤——它追不上'换位'的人。快跑，别回头。」"]),
     choices: &[ChoiceDef { label: "收下兽医的忠告", sub: "BOSS 弱点提示", cond: None,
@@ -459,7 +459,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_12_survivor", bg: Some("img_horde.png"), loc: Some("L2 · 丛林"),
+    id: "jl_12_survivor", bg: Some("juluoji_bg_invest.png"), loc: Some("L2 · 丛林"),
     mood: "cold", speaker: Some("幸存游客"), voice: None,
     text: TextSpec::Static(&["一个背包散落、脸上带着抓痕的年轻人蹲在蕨丛后：「它们不吃人，它们'猎'人……迅猛龙在丛林到处划记号。你手上可有引开它们的东西？」"]),
     choices: &[ChoiceDef { label: "问清丛林记号", sub: "情报", cond: None,
@@ -467,7 +467,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jl_12_guard", bg: Some("img_laser.png"), loc: Some("L3 · 围栏区"),
+    id: "jl_12_guard", bg: Some("juluoji_bg_battle.png"), loc: Some("L3 · 围栏区"),
     mood: "danger", speaker: Some("濒死门卫"), voice: None,
     text: TextSpec::Static(&["一个门卫半靠在观察台栏杆上，制服染红：「……跑……朝北的撤离台……电……电网，先……合闸！」他握住了你的手，另一只手指着主电闸的方向，没了气息。"]),
     choices: &[ChoiceDef { label: "合上他的眼", sub: "遗言 · 提醒先合主闸", cond: None,

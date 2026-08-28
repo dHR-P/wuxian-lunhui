@@ -1,0 +1,229 @@
+{
+  "total_cost_est": 7.8,
+  "qc_calls": 39,
+  "results": {
+    "sishen/open": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\sishen_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\sishen_bg_open.png"
+    },
+    "sishen/invest": {
+      "pass": false,
+      "cost": 0.6,
+      "attempts": [
+        "FAIL@1",
+        "FAIL@2",
+        "FAIL@3"
+      ]
+    },
+    "sishen/battle": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\sishen_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\sishen_bg_battle.png"
+    },
+    "mumiyi/open": {
+      "pass": true,
+      "cost": 0.6,
+      "attempts": [
+        "QC_NO_FILE@1",
+        "FAIL@2",
+        "PASS@3"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\mumiyi_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\mumiyi_bg_open.png"
+    },
+    "mumiyi/invest": {
+      "pass": true,
+      "cost": 0.6,
+      "attempts": [
+        "FAIL@1",
+        "FAIL@2",
+        "PASS@3"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\mumiyi_bg_invest.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\mumiyi_bg_invest.png"
+    },
+    "mumiyi/battle": {
+      "pass": false,
+      "cost": 0.6,
+      "attempts": [
+        "QC_NO_FILE@1",
+        "QC_NO_FILE@2",
+        "FAIL@3"
+      ]
+    },
+    "xinghe/open": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\xinghe_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\xinghe_bg_open.png"
+    },
+    "xinghe/invest": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\xinghe_bg_invest.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\xinghe_bg_invest.png"
+    },
+    "xinghe/battle": {
+      "pass": true,
+      "cost": 0.4,
+      "attempts": [
+        "QC_NO_FILE@1",
+        "PASS@2"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\xinghe_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\xinghe_bg_battle.png"
+    },
+    "juluoji/open": {
+      "pass": false,
+      "cost": 0.6,
+      "attempts": [
+        "QC_NO_FILE@1",
+        "FAIL@2",
+        "FAIL@3"
+      ]
+    },
+    "juluoji/invest": {
+      "pass": false,
+      "cost": 0.6,
+      "attempts": [
+        "FAIL@1",
+        "FAIL@2",
+        "FAIL@3"
+      ]
+    },
+    "juluoji/battle": {
+      "pass": true,
+      "cost": 0.4,
+      "attempts": [
+        "QC_NO_FILE@1",
+        "PASS@2"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\juluoji_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\juluoji_bg_battle.png"
+    },
+    "moruiya/open": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\moruiya_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\moruiya_bg_open.png"
+    },
+    "moruiya/invest": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\moruiya_bg_invest.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\moruiya_bg_invest.png"
+    },
+    "moruiya/battle": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\moruiya_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\moruiya_bg_battle.png"
+    },
+    "yiying/open": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\yiying_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\yiying_bg_open.png"
+    },
+    "yiying/invest": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\yiying_bg_invest.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\yiying_bg_invest.png"
+    },
+    "yiying/battle": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\yiying_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\yiying_bg_battle.png"
+    },
+    "dashengtang/open": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\dashengtang_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\dashengtang_bg_open.png"
+    },
+    "dashengtang/invest": {
+      "pass": true,
+      "cost": 0.4,
+      "attempts": [
+        "FAIL@1",
+        "PASS@2"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\dashengtang_bg_invest.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\dashengtang_bg_invest.png"
+    },
+    "dashengtang/battle": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\dashengtang_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\dashengtang_bg_battle.png"
+    },
+    "wujin/open": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\wujin_bg_open.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\wujin_bg_open.png"
+    },
+    "wujin/invest": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\wujin_bg_invest.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\wujin_bg_invest.png"
+    },
+    "wujin/battle": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_p0b\\wujin_bg_battle.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\wujin_bg_battle.png"
+    }
+  }
+}

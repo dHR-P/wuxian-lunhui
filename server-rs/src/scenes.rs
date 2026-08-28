@@ -502,6 +502,29 @@ fn route_exchange_cyberpro(st: &mut GameState) -> String {
     st.bloodline = Some("cyber_prosthetic".to_string());
     "s_nexus_exchange_done".into()
 }
+// ---- 高等血统扩容（第 3 批 · 动漫/小说 10 条，互斥 hide）----
+macro_rules! route_bloodline {
+    ($fnname:ident, $id:expr, $price:expr, $grade:expr) => {
+        fn $fnname(st: &mut GameState) -> String {
+            if !has_grade_or(st, $grade) { return "s_nexus_exchange_fail".into(); }
+            if st.points < $price { return "s_nexus_exchange_fail".into(); }
+            if st.bloodline.as_deref() == Some($id) { return "s_nexus_exchange_done".into(); }
+            st.points -= $price;
+            st.bloodline = Some($id.to_string());
+            "s_nexus_exchange_done".into()
+        }
+    };
+}
+route_bloodline!(route_exchange_saiyan, "saiyan_bloodline", 9000, Some('A'));
+route_bloodline!(route_exchange_sharingan, "sharingan_bloodline", 8200, Some('B'));
+route_bloodline!(route_exchange_hollow, "hollow_bloodline", 9800, Some('A'));
+route_bloodline!(route_exchange_saint, "saint_bloodline", 9500, Some('A'));
+route_bloodline!(route_exchange_shinigami, "shinigami_bloodline", 9000, Some('A'));
+route_bloodline!(route_exchange_quincy, "quincy_bloodline", 8800, Some('A'));
+route_bloodline!(route_exchange_uchiha, "uchiha_bloodline", 9000, Some('A'));
+route_bloodline!(route_exchange_senju, "senju_bloodline", 8600, Some('A'));
+route_bloodline!(route_exchange_otsutsuki, "otsutsuki_bloodline", 15000, Some('S'));
+route_bloodline!(route_exchange_mitsurugi, "mitsurugi_bloodline", 7600, Some('B'));
 
 // ---- 修真破境（CULTIVATION_STAGES 表：下一境界价格 = 表 need_points + need_grade）----
 fn route_exchange_cultivation(st: &mut GameState) -> String {
@@ -792,6 +815,17 @@ fn cond_angel(st: &GameState) -> bool { cond_blood_none(st, "angel_bloodline") }
 fn cond_demon(st: &GameState) -> bool { cond_blood_none(st, "demon_bloodline") }
 fn cond_dragon(st: &GameState) -> bool { cond_blood_none(st, "dragon_bloodline") }
 fn cond_cyberpro(st: &GameState) -> bool { cond_blood_none(st, "cyber_prosthetic") }
+/// 血统扩容（第 3 批 · 动漫/小说 10 条）：互斥可见性
+fn cond_saiyan(st: &GameState) -> bool { cond_blood_none(st, "saiyan_bloodline") }
+fn cond_sharingan(st: &GameState) -> bool { cond_blood_none(st, "sharingan_bloodline") }
+fn cond_hollow(st: &GameState) -> bool { cond_blood_none(st, "hollow_bloodline") }
+fn cond_saint(st: &GameState) -> bool { cond_blood_none(st, "saint_bloodline") }
+fn cond_shinigami(st: &GameState) -> bool { cond_blood_none(st, "shinigami_bloodline") }
+fn cond_quincy(st: &GameState) -> bool { cond_blood_none(st, "quincy_bloodline") }
+fn cond_uchiha(st: &GameState) -> bool { cond_blood_none(st, "uchiha_bloodline") }
+fn cond_senju(st: &GameState) -> bool { cond_blood_none(st, "senju_bloodline") }
+fn cond_otsutsuki(st: &GameState) -> bool { cond_blood_none(st, "otsutsuki_bloodline") }
+fn cond_mitsurugi(st: &GameState) -> bool { cond_blood_none(st, "mitsurugi_bloodline") }
 /// 修真破境可见性：当前境界 < 7 才有下一境可破
 fn cond_cultivable(st: &GameState) -> bool { st.cultivation_stage < 7 }
 /// 内功：未学对应才显示
@@ -971,6 +1005,33 @@ shop_cat!(CAT_SHOP, [
     (wp_quantum_annihil, "◆ 量子湮灭刀"), (wp_gravity_collapse, "◆ 引力坍缩炮"), (wpn_shihun_fan, "◆ 噬魂幡"),
     (wpn_taixu_godsaw, "◆ 太虚神剑"), (wpn_rail_sniper, "◆ 电磁轨道狙击枪"), (wpn_nano_whip, "◆ 纳米切割鞭"),
     (wpn_causality_sword, "◆ 因果律护身剑"),
+    // 武器扩容（第 3 批 · 动漫系）
+    (wp_zanjingdao_he, "◆ 斩魄刀·卍解"), (wp_ruyibang, "◆ 如意金箍棒"), (wp_excalibur_holy, "◆ 誓约胜利之剑"),
+    (wp_beam_saber, "◆ 光束军刀"), (wp_zanyue, "◆ 斩月大刀"), (wp_qianbenying, "◆ 千本樱·散舞"),
+    (wp_niutou_ren, "◆ 牛头虚刃"), (wp_wang_zhicai, "◆ 王之财宝·宝具齐射"), (wp_guaili_jian, "◆ 乖离剑·EA"),
+    (wp_long_ji, "◆ 龙骑兵系统"), (wp_death_scythe_q, "◆ 死神镰刀·终焉"),
+    (wp_diyang_zhandou, "◆ 迪迦光之刃"), (wp_shoujia_qiluo, "◆ 奇犽·电光疾影"),
+    // 武器扩容（第 3 批 · 仙侠小说系）
+    (wp_feijian_qingyun, "◆ 青云飞剑"), (wp_shenbing_ling, "◆ 神兵·灵天刃"), (wp_zhanxian_feidao, "◆ 斩仙飞刀"),
+    (wp_fantian_yin, "◆ 翻天印"), (wp_zhuxian_sijian, "◆ 诛仙四剑·合一"), (wp_xuanyuan_jian, "◆ 轩辕剑·人皇"),
+    (wp_pangu_fu, "◆ 盘古开天斧"), (wp_kongtong_yin, "◆ 崆峒印"), (wp_taiji_tu, "◆ 太极图"),
+    (wp_shanhe_shetu, "◆ 山河社稷图"), (wp_xihe_zhen, "◆ 曦和神针"),
+    // 武器扩容（第 3 批 · 科幻系）
+    (wp_gauss_rifle, "◆ 高斯步枪"), (wp_particle_cannon, "◆ 粒子炮"), (wp_electromag_gun, "◆ 电磁加速炮"),
+    (wp_plasma_dagger, "◆ 等离子刺刃"), (wp_antimatter_round, "◆ 反物质湮灭弹"), (wp_orbital_gun, "◆ 轨道天基枪"),
+    (wp_laser_sword, "◆ 纯激光剑"), (wp_nano_blade, "◆ 纳米蜂巢剑"), (wp_phase_weapon, "◆ 相位扰动枪"),
+    (wp_warpspeed_round, "◆ 曲速托卡马克枪"), (wp_rail_pistol, "◆ 微型轨道手枪"),
+    // 武器扩容（第 3 批 · 魔幻系）
+    (wp_arcan_staff, "◆ 奥术增幅法杖"), (wp_madoushu_grimoire, "◆ 禁忌魔导书"), (wp_xianzhe_zhi_shi, "◆ 贤者之石刃"),
+    (wp_dragon_lance, "◆ 龙枪·屠龙"), (wp_shuang_zhi_aisang, "◆ 霜之哀伤"), (wp_leidun_chui, "◆ 雷神之锤"),
+    (wp_sheng_jian_mj, "◆ 光之圣剑"), (wp_mo_jian_zhl, "◆ 诅咒魔剑·噬主"), (wp_lieyan_jian, "◆ 烈焰之剑"),
+    (wp_hanbing_gong, "◆ 寒冰精灵长弓"), (wp_zhigu_shenju, "◆ 翡翠贤杖·自然"),
+    // 武器扩容（第 3 批 · 武侠系）
+    (wp_yitian_jian, "◆ 倚天剑"), (wp_tulong_dao, "◆ 屠龙宝刀"), (wp_dagou_bang, "◆ 打狗棒·逍遥"),
+    (wp_xuantie_jian, "◆ 玄铁重剑"), (wp_lixiao_feidao, "◆ 小李飞刀"), (wp_liumai_jian, "◆ 六脉神剑"),
+    (wp_beiming_jian, "◆ 北冥神功·吸星剑"), (wp_dugu_jiujian, "◆ 独孤九剑"), (wp_miwu_shenzhao, "◆ 移花接玉掌刃"),
+    (wp_jinhe_zhang, "◆ 降龙十八掌"), (wp_tianmen_yuanshang, "◆ 天外飞仙·剑遁"),
+    (wp_jinghuo_zhang, "◆ 降妖真火扇"), (wp_jinlong_dao, "◆ 金蛇缠丝软剑"), (wp_zhenwu_baojian, "◆ 真武七星剑"),
     (gear_police_vest, "◆ 警用防弹背心"), (gear_kevlar, "◆ 凯夫拉防弹衣"), (gear_elven_cloak, "◆ 精灵斗篷"),
     (gear_nano_vest, "◆ 纳米作战服"), (access_strength_ring, "◆ 蛮力指环"), (access_agility_boots, "◆ 追风靴"),
     (access_qi_belt, "◆ 聚气腰带"),
@@ -978,10 +1039,35 @@ shop_cat!(CAT_SHOP, [
     (gear_adamant_cuirass, "◆ 精金胸甲"), (gear_void_leak, "◆ 虚无织物衣"), (gear_zero_absorb, "◆ 绝对零度护甲"),
     (gear_sanctum_plate, "◆ 圣域板甲"), (access_hades_cloak, "◆ 幽冥披风"), (access_will_anchor, "◆ 意志锚链"),
     (access_tianting_belt, "◆ 天庭灵气腰带"), (access_nano_tech_shield, "◆ 纳米护盾核心"),
+    // 护甲/饰品扩容（第 3 批 · 战甲/圣衣/机甲/法袍）
+    (gear_shengclothes_shooter, "◆ 射手座黄金圣衣"), (gear_nano_mecha_suit, "◆ 纳米战甲·机甲"), (gear_leidun_armor, "◆ 雷霆铠甲"),
+    (gear_longlin_jia, "◆ 龙鳞逆甲"), (gear_shengguang_fapao, "◆ 圣光法袍"), (gear_tian_yi, "◆ 神炁天衣"),
+    (gear_azote_panzhi, "◆ 奥术织纹布甲"), (gear_wh_warframe, "◆ 战争框架·重装"), (gear_ice_dragon_scale, "◆ 冰霜巨龙鳞甲"),
+    (gear_shadow_cloak_armor, "◆ 暗影皮甲"),
+    // 护甲/饰品扩容（第 3 批 · 饰品/护符）
+    (access_divine_ring, "◆ 神圣婚戒"), (access_frost_amulet, "◆ 冰封护符"), (access_lightning_core, "◆ 雷电核心吊坠"),
+    (access_soul_bind, "◆ 魂之锁结"), (access_dragon_seal, "◆ 龙纹玉玺"), (access_saint_bracelet, "◆ 圣斗士手环"),
+    (access_truth_seeker, "◆ 求真透镜·感知"), (access_tianxuan_jing, "◆ 先天玄光镜"), (access_wuxin_shaer, "◆ 无心神砂·定魂"),
+    (access_devil_contract, "◆ 恶魔契约徽记"),
+    // 护甲/饰品扩容（第 3 批 · 低中 tier 补）
+    (gear_iron_warplate, "◆ 玄铁重甲"), (gear_silk_robe, "◆ 唐锦法衣"), (gear_black_tech_suit, "◆ 黑色科技紧身衣"),
+    (gear_holy_plate_armor, "◆ 圣骑士板甲"), (access_silver_cross, "◆ 秘银圣十字"), (access_moon_pendant, "◆ 月华坠饰"),
+    (access_qi_obsidian, "◆ 聚灵黑曜石"), (access_werewolf_claw, "◆ 狼王獠牙挂坠"), (access_ice_heart, "◆ 冰晶之心"),
+    (access_phoenix_feather, "◆ 涅槃凤羽"),
     (cu_bab_hudun_fu, "◆ 护体符印"), (cu_bab_benming_fejian, "◆ 本命飞剑·青锋"), (cu_bab_hunyuan_lu, "◆ 混元炉"),
     // 法宝扩容（第 2 批）
     (tr_zhuxian_calendar, "◆ 诛仙剑意图"), (tr_blood_banner, "◆ 血煞战旗"), (tr_taixu_shield, "◆ 太虚玄光镜"),
     (tr_shenlei_pendant, "◆ 神雷辟邪佩"), (tr_danxin_mirror, "◆ 锻心明镜"), (tr_undo_pillowstone, "◆ 逆转生死盘"),
+    // 法宝扩容（第 3 批 · 动漫/小说 · slot0 本命攻）
+    (tr_shengbei_shengtian, "◆ 圣杯·神圣权柄"), (tr_mo_jie_jiujie, "◆ 魔戒·至尊戒"), (tr_guaili_yuantu, "◆ 乖离剑·原质图谱"),
+    (tr_yinyang_jing, "◆ 阴阳宝镜"), (tr_bahuang_longyin, "◆ 八荒龙印"), (tr_leishen_xianglu, "◆ 雷神锤·神威"),
+    // 法宝扩容（第 3 批 · slot1 护身防）
+    (tr_mo_jing_xianshi, "◆ 贤者之镜·洞察"), (tr_duantou_mojing, "◆ 魔镜·破碎之握"), (tr_ahnidun_shield, "◆ 埃葵斯神盾"),
+    (tr_longnei_xiangu, "◆ 龙内丹"), (tr_shenlingsan_yu, "◆ 神陵山玉符"), (tr_xuanhuang_taibao, "◆ 玄黄太宝"),
+    // 法宝扩容（第 3 批 · slot2 辅助）
+    (tr_xianzhe_ziliao, "◆ 贤者之石·点金"), (tr_sisin_luandao, "◆ 死神镰刀·摄魂"), (tr_longzu_shengyi, "◆ 龙珠·七龙珠"),
+    (tr_mishen_zhi_tong, "◆ 三千世界神瞳"), (tr_tianlu_pa, "◆ 天书残卷"), (tr_huanjing_luo, "◆ 幻境罗盘"),
+    (tr_shengwg_huanghun, "◆ 圣域星芒"), (tr_mengjing_guiji, "◆ 梦境诡计宝匣"),
     (item_medkit, "◆ 强效医疗包"), (item_bandage, "◆ 紧急绷带"), (item_sedative, "◆ 镇静剂"),
     (item_holy_water, "◆ 圣水"), (item_silver_bullet, "◆ 银弹"), (item_grenade, "◆ 燃烧手雷"),
     (item_quzhen_fu, "◆ 驱邪符"), (item_jiezhou_fu, "◆ 解咒符"), (it_qixue_dan, "◆ 气血丹"),
@@ -1216,6 +1302,17 @@ SceneDef {
         ChoiceDef { label: "◆ 恶魔血统", sub: "9500 点 · 需 A · 攻+12 吸血6 狂暴+15", cond: Some(cond_demon), effects: &NO_EFF, route: Route::Dyn(route_exchange_demon) },
         ChoiceDef { label: "◆ 龙族血统", sub: "10000 点 · 需 A · 攻+6 受击减14", cond: Some(cond_dragon), effects: &NO_EFF, route: Route::Dyn(route_exchange_dragon) },
         ChoiceDef { label: "◆ 机械义体血统", sub: "7800 点 · 需 B · 攻+8 减8 闪+0.08", cond: Some(cond_cyberpro), effects: &NO_EFF, route: Route::Dyn(route_exchange_cyberpro) },
+        // 血统扩容（第 3 批 · 动漫/小说）
+        ChoiceDef { label: "◆ 赛亚人血统", sub: "9000 点 · 需 A · 攻+12 减4 狂暴+25", cond: Some(cond_saiyan), effects: &NO_EFF, route: Route::Dyn(route_exchange_saiyan) },
+        ChoiceDef { label: "◆ 写轮眼血统", sub: "8200 点 · 需 B · 攻+6 闪+0.15", cond: Some(cond_sharingan), effects: &NO_EFF, route: Route::Dyn(route_exchange_sharingan) },
+        ChoiceDef { label: "◆ 虚化血统", sub: "9800 点 · 需 A · 攻+14 吸血8", cond: Some(cond_hollow), effects: &NO_EFF, route: Route::Dyn(route_exchange_hollow) },
+        ChoiceDef { label: "◆ 圣斗士血统", sub: "9500 点 · 需 A · 攻+8 减10 闪+0.05", cond: Some(cond_saint), effects: &NO_EFF, route: Route::Dyn(route_exchange_saint) },
+        ChoiceDef { label: "◆ 死神血统", sub: "9000 点 · 需 A · 攻+12 减6 闪+0.04", cond: Some(cond_shinigami), effects: &NO_EFF, route: Route::Dyn(route_exchange_shinigami) },
+        ChoiceDef { label: "◆ 灭却师血统", sub: "8800 点 · 需 A · 攻+16 减2", cond: Some(cond_quincy), effects: &NO_EFF, route: Route::Dyn(route_exchange_quincy) },
+        ChoiceDef { label: "◆ 宇智波血脉", sub: "9000 点 · 需 A · 攻+10 吸血4 闪+0.06", cond: Some(cond_uchiha), effects: &NO_EFF, route: Route::Dyn(route_exchange_uchiha) },
+        ChoiceDef { label: "◆ 千手血脉", sub: "8600 点 · 需 A · 减12 SAN抗+4", cond: Some(cond_senju), effects: &NO_EFF, route: Route::Dyn(route_exchange_senju) },
+        ChoiceDef { label: "◆ 大筒木血脉", sub: "15000 点 · 需 S · 攻+14 吸血6 减12", cond: Some(cond_otsutsuki), effects: &NO_EFF, route: Route::Dyn(route_exchange_otsutsuki) },
+        ChoiceDef { label: "◆ 鬼灭呼吸·日之呼吸", sub: "7600 点 · 需 B · 攻+12 减6 闪+0.03", cond: Some(cond_mitsurugi), effects: &NO_EFF, route: Route::Dyn(route_exchange_mitsurugi) },
         ChoiceDef { label: "返回兑换目录", sub: "", cond: None, effects: &NO_EFF, route: Route::To("s_nexus_exchange") },
     ],
     fight_id: None, video: None, cine_label: None, overlay: None,

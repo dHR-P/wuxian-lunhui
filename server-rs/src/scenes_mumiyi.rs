@@ -309,7 +309,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ================= F0 地宫入口 =================
     SceneDef {
-        id: "mm_01_arrive", bg: Some("img_redqueen.png"),
+        id: "mm_01_arrive", bg: Some("mumiyi_bg_battle.png"),
         loc: Some("地宫入口"), mood: "昏暗地道，风沙呜咽",
         speaker: Some("外景"), voice: None,
         text: TextSpec::Static(&[
@@ -325,7 +325,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_02_npc", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_02_npc", bg: Some("mumiyi_bg_open.png"),
         loc: Some("地宫入口 · 火把下"), mood: "考古队的低语",
         speaker: Some("考古队长·阿尔德"), voice: None,
         text: TextSpec::Static(&[
@@ -341,7 +341,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_02_npc_joy", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_02_npc_joy", bg: Some("mumiyi_bg_open.png"),
         loc: Some("地宫入口 · 南侧偏室"), mood: "学徒的虔诚",
         speaker: Some("见习考古员·乔伊"), voice: None,
         text: TextSpec::Static(&[
@@ -355,7 +355,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_03_stele", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_03_stele", bg: Some("mumiyi_bg_open.png"),
         loc: Some("地宫入口 · 无名祭碑"), mood: "晦涩经文",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -370,7 +370,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_04_scarab", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_04_scarab", bg: Some("mumiyi_bg_open.png"),
         loc: Some("地宫入口 · 壁画虫纹"), mood: "墙会呼吸",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -384,7 +384,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_05_altar", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_05_altar", bg: Some("mumiyi_bg_open.png"),
         loc: Some("地宫入口 · 前室祭坛"), mood: "干涸的血",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -398,7 +398,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_06_box_a", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_06_box_a", bg: Some("mumiyi_bg_open.png"),
         loc: Some("地宫入口 · 石匣·陶罐"), mood: "前人遗金",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -413,7 +413,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_07_gate_scarab", bg: Some("img_laser.png"),
+        id: "mm_07_gate_scarab", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("圣甲虫机关门"), mood: "机关嗡鸣",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -428,7 +428,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ================= F1 圣甲虫厅 =================
     SceneDef {
-        id: "mm_10_arrive_f1", bg: Some("img_laser.png"),
+        id: "mm_10_arrive_f1", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("圣甲虫厅"), mood: "虫影重重",
         speaker: Some("外景"), voice: None,
         text: TextSpec::Static(&[
@@ -445,7 +445,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_11_npc", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_11_npc", bg: Some("mumiyi_bg_open.png"),
         loc: Some("圣甲虫厅 · 石柱后"), mood: "悔罪的低语",
         speaker: Some("悔罪祭司·安卡图"), voice: None,
         text: TextSpec::Static(&[
@@ -461,7 +461,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_12_well", bg: Some("img_laser.png"),
+        id: "mm_12_well", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("圣甲虫厅 · 弱水井"), mood: "幽蓝微光",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -476,7 +476,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_13_hollow", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_13_hollow", bg: Some("mumiyi_bg_open.png"),
         loc: Some("圣甲虫厅 · 虫巢神像"), mood: "虫在神像里",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -491,7 +491,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_14_vault", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_14_vault", bg: Some("mumiyi_bg_open.png"),
         loc: Some("圣甲虫厅 · 宝库供案"), mood: "尘封的宝库",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -506,7 +506,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_15_gate_tomb", bg: Some("img_laser.png"),
+        id: "mm_15_gate_tomb", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("封印墓门"), mood: "啮齿咬合",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -521,7 +521,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ================= F2 祭司墓室 =================
     SceneDef {
-        id: "mm_20_sarc_room", bg: Some("img_redqueen.png"),
+        id: "mm_20_sarc_room", bg: Some("mumiyi_bg_battle.png"),
         loc: Some("祭司墓室"), mood: "正中一具石棺",
         speaker: Some("外景"), voice: None,
         text: TextSpec::Static(&[
@@ -536,7 +536,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_21_open_sarc", bg: Some("img_laser.png"),
+        id: "mm_21_open_sarc", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("伊莫顿石棺"), mood: "棺材在颤",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -552,7 +552,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_22_curse", bg: Some("img_redqueen.png"),
+        id: "mm_22_curse", bg: Some("mumiyi_bg_battle.png"),
         loc: Some("祭司墓室 · 中央"), mood: "黄沙漫卷",
         speaker: Some("考古队长·阿尔德"), voice: Some("vo_mumiyi_1"),
         text: TextSpec::Static(&[
@@ -569,7 +569,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ---- 伊莫顿一段 · 选择驱动 ----
     SceneDef {
-        id: "mm_23_imhotep1", bg: Some("img_laser.png"),
+        id: "mm_23_imhotep1", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("祭司墓室 · 诅咒战场"), mood: "沙暴压顶",
         speaker: Some("大祭司·伊莫顿"), voice: None,
         text: TextSpec::Dyn(txt_boss1),
@@ -584,7 +584,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ---- 复生二段 ----
     SceneDef {
-        id: "mm_24_reborn", bg: Some("img_redqueen.png"),
+        id: "mm_24_reborn", bg: Some("mumiyi_bg_battle.png"),
         loc: Some("祭司墓室 · 裂棺"), mood: "他再度凝形",
         speaker: Some("大祭司·伊莫顿"), voice: Some("vo_mumiyi_2"),
         text: TextSpec::Static(&[
@@ -601,7 +601,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ---- 伊莫顿二段 · 选择驱动 ----
     SceneDef {
-        id: "mm_25_imhotep2", bg: Some("img_laser.png"),
+        id: "mm_25_imhotep2", bg: Some("mumiyi_bg_invest.png"),
         loc: Some("祭司墓室 · 夺命离场"), mood: "穷途末路",
         speaker: Some("大祭司·伊莫顿"), voice: None,
         text: TextSpec::Dyn(txt_boss2),
@@ -615,7 +615,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ---- 弱水池演出（支线）----
     SceneDef {
-        id: "mm_26_pool", bg: Some("img_redqueen.png"),
+        id: "mm_26_pool", bg: Some("mumiyi_bg_battle.png"),
         loc: Some("祭司墓室 · 弱水池演出"), mood: "倒流的水",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
@@ -630,7 +630,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
 
     // ---- 结局 ----
     SceneDef {
-        id: "mm_27_win", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_27_win", bg: Some("mumiyi_bg_open.png"),
         loc: Some("祭司墓室 · 封棺"), mood: "尘埃落定",
         speaker: Some("主神提示"), voice: None,
         text: TextSpec::Static(&[
@@ -655,7 +655,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_28_escape", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_28_escape", bg: Some("mumiyi_bg_open.png"),
         loc: Some("哈姆纳塔 · 撤离"), mood: "破晓",
         speaker: Some("外景"), voice: None,
         text: TextSpec::Static(&[
@@ -667,7 +667,7 @@ pub static MUMIYI_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "mm_29_lose", bg: Some("img_redqueen.png"),
+        id: "mm_29_lose", bg: Some("mumiyi_bg_battle.png"),
         loc: Some("祭司墓室 · 沙海"), mood: "黄沙没顶",
         speaker: Some("大祭司·伊莫顿"), voice: None,
         text: TextSpec::Static(&[

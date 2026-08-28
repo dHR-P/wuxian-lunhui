@@ -310,7 +310,7 @@ SceneDef {
 
 /* ---- 湖岸（可选监视者遭遇） ---- */
 SceneDef {
-    id: "mo_lake", bg: Some("img_zhuyuan_book.png"), loc: Some("西闸门 · 幽黑湖岸"),
+    id: "mo_lake", bg: Some("moruiya_bg_open.png"), loc: Some("西闸门 · 幽黑湖岸"),
     mood: "danger", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&[
         "幽黑湖水倒映着石柱。吉姆利伏低身子，盯着水中那道黑影：「湖水太死了——连一条游鱼都没有。太安静了。」",
@@ -325,14 +325,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_watcher_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("西闸门 · 湖岸"),
+    id: "mo_watcher_fight", bg: Some("moruiya_bg_open.png"), loc: Some("西闸门 · 湖岸"),
     mood: "danger", speaker: Some("⚔ 决战"), voice: None,
     text: TextSpec::Static(&["触手如林挥舞，监视者半截身躯拔出湖面。甘道夫挥杖断喝：「看好你们的缺口——就是现在！」"]),
     choices: &NO_CH, fight_id: Some("watcher"), video: None, cine_label: None, overlay: None,
 },
 /* watcher 胜利 → 领支线 A（engine reward 已 +400，此处只置旗标） */
 SceneDef {
-    id: "mo_watcher_after", bg: Some("img_zhuyuan_book.png"), loc: Some("西闸门 · 湖岸"),
+    id: "mo_watcher_after", bg: Some("moruiya_bg_open.png"), loc: Some("西闸门 · 湖岸"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["监视者的触手俱断，沉入湖底再无声息。湖水与触手把西闸门封得严严实实——后路断绝，只能向前。门内，拱柱撑起百尺高穹顶，烛火在尘埃里摇曳。"]),
     choices: &[ChoiceDef { label: "（踏进门内 · 支线 A 结算）", sub: "支线 A · 水中监视者已斩", cond: None,
@@ -342,7 +342,7 @@ SceneDef {
 
 /* ---- 幕 2 柱厅·刻字石板（教学/解密） ---- */
 SceneDef {
-    id: "mo_02_hall", bg: Some("img_zhuyuan_book.png"), loc: Some("卡扎督姆 · 柱厅"),
+    id: "mo_02_hall", bg: Some("moruiya_bg_open.png"), loc: Some("卡扎督姆 · 柱厅"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&[
         "拱柱撑起百尺高穹顶，烛火在尘埃里摇曳。吉姆利抚过石柱上的矮人文字：「这是卡扎督姆的全盛时代……你们看，这块石板刻着开门咒文。」身侧，一根火把在墙槽里微微晃动——你举起来，黑暗退开两步。",
@@ -356,7 +356,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_rune", bg: Some("img_zhuyuan_book.png"), loc: Some("柱厅 · 刻字石板"),
+    id: "mo_rune", bg: Some("moruiya_bg_open.png"), loc: Some("柱厅 · 刻字石板"),
     mood: "danger", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["你凑近石板。矮人咒文在烛火下泛着微光——吉姆利念出几个音节，石门后传来沉闷的机簧转动声。但要完全解开，得按正确顺序拨动石钮。"]),
     choices: &[
@@ -368,7 +368,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_rune_scout", bg: Some("img_zhuyuan_book.png"), loc: Some("柱厅 · 石门"),
+    id: "mo_rune_scout", bg: Some("moruiya_bg_open.png"), loc: Some("柱厅 · 石门"),
     mood: "danger", speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["石钮被你撬得咔咔作响，机簧走火——一道石门缝炸开，一名哥布林斥候从中扑出！"]),
     choices: &NO_CH, fight_id: Some("goblin_scout"), video: None, cine_label: None, overlay: None,
@@ -376,7 +376,7 @@ SceneDef {
 
 /* ---- 幕 3 塌方与绕行 ---- */
 SceneDef {
-    id: "mo_collapse", bg: Some("img_zhuyuan_book.png"), loc: Some("北廊 · 塌方"),
+    id: "mo_collapse", bg: Some("moruiya_bg_invest.png"), loc: Some("北廊 · 塌方"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["前方轰然塌方，碎石封死了去路。北廊尽头传来低沉的石块摩擦声——这条路恐怕已经断了几百年。绕行南廊要多打一场遭遇战。"]),
     choices: &[
@@ -387,7 +387,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_south_ambush", bg: Some("img_zhuyuan_book.png"), loc: Some("南廊"),
+    id: "mo_south_ambush", bg: Some("moruiya_bg_invest.png"), loc: Some("南廊"),
     mood: "danger", speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["南廊的黑暗里，几名半兽人巡逻队拖矛逼来——没有捷径，只能杀过去。"]),
     choices: &NO_CH, fight_id: Some("goblin_pack"), video: None, cine_label: None, overlay: None,
@@ -395,7 +395,7 @@ SceneDef {
 
 /* ---- 幕 4 书库·巴林之墓（关键转折·鼓声） ---- */
 SceneDef {
-    id: "mo_book", bg: Some("img_zhuyuan_book.png"), loc: Some("马扎布尔书库 · 石棺"),
+    id: "mo_book", bg: Some("moruiya_bg_invest.png"), loc: Some("马扎布尔书库 · 石棺"),
     mood: "danger", speaker: Some("甘道夫"), voice: None,
     text: TextSpec::Static(&[
         "书库尽头立着一具石棺，墓碑上刻着：『巴林，卡扎督姆之王。』残破的书页记着远征队的覆灭：『……他们来了。鼓声，在深井里。我们出不去……』",
@@ -410,7 +410,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_drum_ambush_scene", bg: Some("img_zhuyuan_book.png"), loc: Some("书库深厅"),
+    id: "mo_drum_ambush_scene", bg: Some("moruiya_bg_invest.png"), loc: Some("书库深厅"),
     mood: "danger", speaker: Some("⚔ 鼓声伏击"), voice: None,
     text: TextSpec::Static(&["咚…咚…咚…——鼓声近在咫尺。黑压压的半兽人自书排之间涌出，把去路围成铁桶。"]),
     choices: &NO_CH, fight_id: Some("drum_ambush"), video: None, cine_label: None, overlay: None,
@@ -418,7 +418,7 @@ SceneDef {
 
 /* ---- F2 密室 · 秘银钥匙石宝箱（Give mithril_key → 支线 E 前置） ---- */
 SceneDef {
-    id: "mo_chest", bg: Some("img_zhuyuan_book.png"), loc: Some("书库底层 · 密室"),
+    id: "mo_chest", bg: Some("moruiya_bg_invest.png"), loc: Some("书库底层 · 密室"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.inventory.iter().any(|i| i == "mithril_key") {
@@ -436,7 +436,7 @@ SceneDef {
 
 /* ---- 幕 5 无底阶梯（三处坠落陷阱） ---- */
 SceneDef {
-    id: "mo_stair", bg: Some("img_zhuyuan_book.png"), loc: Some("无底阶梯 · 一步踏空"),
+    id: "mo_stair", bg: Some("moruiya_bg_invest.png"), loc: Some("无底阶梯 · 一步踏空"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(txt_stair_round),
     choices: &[
@@ -450,7 +450,7 @@ SceneDef {
 
 /* ---- 幕 6 王厅宝库（支线·可选） ---- */
 SceneDef {
-    id: "mo_vault", bg: Some("img_zhuyuan_book.png"), loc: Some("王厅宝库"),
+    id: "mo_vault", bg: Some("moruiya_bg_invest.png"), loc: Some("王厅宝库"),
     mood: "danger", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["王厅深处，一扇秘银包边的石门静静立着。吉姆利咽了口唾沫：「矮人的宝库……钥匙在书库底层的密室里。」"]),
     choices: &[
@@ -464,7 +464,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_vault_take", bg: Some("img_zhuyuan_book.png"), loc: Some("王厅宝库"),
+    id: "mo_vault_take", bg: Some("moruiya_bg_invest.png"), loc: Some("王厅宝库"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["你拧开秘银宝箱——堆叠的沉甸甸银块与一件轻盈的精灵斗篷静静躺在灰尘里。吉姆利抱着秘银块，眼眶发红：『矮人的荣光，还没全沉进黑暗。』"]),
     choices: &[ChoiceDef { label: "（收下秘银块与精灵斗篷）", sub: "+300 · AddItem mithril_block / elven_cloak", cond: None,
@@ -472,7 +472,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_vault_check", bg: Some("img_zhuyuan_book.png"), loc: Some("王厅宝库 · 机关"),
+    id: "mo_vault_check", bg: Some("moruiya_bg_invest.png"), loc: Some("王厅宝库 · 机关"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你凑近锁孔旁的机关，看见藏于石缝里的绊索——抬手拨开，机关无声解除。你拧开宝库，取走秘银块与精灵斗篷（支线 E +300）。"]),
     choices: &[ChoiceDef { label: "（取走宝物）", sub: "检查成功 · 无伤", cond: None,
@@ -482,7 +482,7 @@ SceneDef {
 
 /* ---- 幕 7 卡扎督姆桥·炎魔（终局） ---- */
 SceneDef {
-    id: "mo_bridge_desc", bg: Some("img_zhuyuan_book.png"), loc: Some("卡扎督姆桥"),
+    id: "mo_bridge_desc", bg: Some("moruiya_bg_battle.png"), loc: Some("卡扎督姆桥"),
     mood: "epic", speaker: Some("甘道夫"), voice: None,
     text: TextSpec::Static(&["石桥横跨无底深渊，宽仅容两人并肩。鼓声在这一刻骤然停止——然后，桥下的黑暗里燃起两团火焰。甘道夫踏前一步，法杖砸地：「You shall not pass!」"]),
     choices: &[ChoiceDef { label: "（迎向炎魔）", sub: "开战", cond: None, effects: &NO_EFF, route: Route::Dyn(start_balrog) }],
@@ -491,7 +491,7 @@ SceneDef {
 
 /* ---- BOSS 战 · 选择驱动回合（每回 SAN 光环） ---- */
 SceneDef {
-    id: "mo_boss_round", bg: Some("img_zhuyuan_book.png"), loc: Some("卡扎督姆桥 · 中段"),
+    id: "mo_boss_round", bg: Some("moruiya_bg_battle.png"), loc: Some("卡扎督姆桥 · 中段"),
     mood: "danger", speaker: Some("⚔ 决战 · 炎魔"), voice: None,
     text: TextSpec::Dyn(txt_boss_round),
     choices: &[
@@ -511,7 +511,7 @@ SceneDef {
 
 /* ---- 双结局终结 ---- */
 SceneDef {
-    id: "mo_ending_survive", bg: Some("img_zhuyuan_book.png"), loc: Some("卡扎督姆桥 · 断桥"),
+    id: "mo_ending_survive", bg: Some("moruiya_bg_battle.png"), loc: Some("卡扎督姆桥 · 断桥"),
     mood: "epic", speaker: Some("甘道夫"), voice: None,
     text: TextSpec::Static(&[
         "甘道夫驱动全部法力，石桥自中段轰然断裂。炎魔嘶吼着坠向无底深渊，烈焰在降落的瞬间被黑暗吞没——深渊之火熄灭了。",
@@ -522,7 +522,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_ending_sacrifice", bg: Some("img_zhuyuan_book.png"), loc: Some("卡扎督姆桥 · 断桥"),
+    id: "mo_ending_sacrifice", bg: Some("moruiya_bg_battle.png"), loc: Some("卡扎督姆桥 · 断桥"),
     mood: "epic", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "甘道夫回头最后看了你们一眼，转身立在断桥边缘。他将法杖砸向桥面——",
@@ -536,7 +536,7 @@ SceneDef {
 
 /* ---- 幕 8 东门·黎明 + 完成结算 ---- */
 SceneDef {
-    id: "mo_exit", bg: Some("img_zhuyuan_book.png"), loc: Some("东门 · 迪姆瑞尔山谷"),
+    id: "mo_exit", bg: Some("moruiya_bg_battle.png"), loc: Some("东门 · 迪姆瑞尔山谷"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["晨光从东门缝隙漏进来——你们做到了。身后是沉寂的摩瑞亚，前方是山风与林海。『我们穿越了卡扎督姆，』队伍里有人说，『深渊之火……记住了，你们对抗过它。』"]),
     choices: &[ChoiceDef { label: "（推开东门）", sub: "G6 已开", cond: Some(cond_cleared), effects: &NO_EFF, route: Route::To("mo_done") }],
@@ -576,7 +576,7 @@ SceneDef {
 
 /* ---- 矿山趣味小节：矿车（H_cart_ride） ---- */
 SceneDef {
-    id: "mo_cart", bg: Some("img_zhuyuan_book.png"), loc: Some("矿车月台"),
+    id: "mo_cart", bg: Some("moruiya_bg_invest.png"), loc: Some("矿车月台"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["一辆报废但还能滑行的矮人矿车斜停在月台上。吉姆利努努嘴：『卡扎督姆的老规矩——上得去，不一定回得来。要不要试试快感？』"]),
     choices: &[
@@ -587,7 +587,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_cart_ride", bg: Some("img_zhuyuan_book.png"), loc: Some("矿车 · 下坠"),
+    id: "mo_cart_ride", bg: Some("moruiya_bg_invest.png"), loc: Some("矿车 · 下坠"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["矿车哐当滑下,越过翻滚的石轨,直坠 F1 月台。你们抱头滚下矿车,人仰马翻却都活着——卡扎督姆的老规矩,还真不是说说而已。"]),
     choices: &[ChoiceDef { label: "（继续探索）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("mo_world_back") }],
@@ -604,14 +604,14 @@ SceneDef {
 
 /* ---- NPC 对话 ---- */
 SceneDef {
-    id: "mo_npc_gandalf", bg: Some("img_zhuyuan_book.png"), loc: Some("西闸门 · 甘道夫"),
+    id: "mo_npc_gandalf", bg: Some("moruiya_bg_invest.png"), loc: Some("西闸门 · 甘道夫"),
     mood: "calm", speaker: Some("甘道夫"), voice: None,
     text: TextSpec::Static(&["甘道夫望着幽黑的湖水，声音压得很低：『矮人们挖掘得太深、太贪婪——They delved too greedily and too deep……唤醒了\"都灵的克星\"。摩瑞亚，你们愿意的话可以叫它卡扎督姆。』"]),
     choices: &[ChoiceDef { label: "（点头，走向闸门）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("mo_01_gate") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_npc_boromir", bg: Some("img_zhuyuan_book.png"), loc: Some("柱厅 · 波罗莫"),
+    id: "mo_npc_boromir", bg: Some("moruiya_bg_invest.png"), loc: Some("柱厅 · 波罗莫"),
     mood: "calm", speaker: Some("波罗莫"), voice: None,
     text: TextSpec::Static(&["波罗莫挎着盾，警惕地环顾石柱：『一座空的矿坑，不等于一座安静的矿坑。——黑暗里有东西在听我们讲话。』他顿了顿，『它不喜欢火把。』"]),
     choices: &[ChoiceDef { label: "（举起火把，继续向前）", sub: "torch_lit 点亮提示", cond: None,
@@ -619,14 +619,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_npc_gimli", bg: Some("img_zhuyuan_book.png"), loc: Some("书库 · 吉姆利"),
+    id: "mo_npc_gimli", bg: Some("moruiya_bg_invest.png"), loc: Some("书库 · 吉姆利"),
     mood: "calm", speaker: Some("吉姆利"), voice: None,
     text: TextSpec::Static(&["吉姆利在石棺前蹲了很久，声音有些哑：『这是巴林……我的亲戚，卡扎督姆之王。他们想夺回摩瑞亚，没能活着出去。』他抬头：『但我们会。』"]),
     choices: &[ChoiceDef { label: "（安慰他，继续向前）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("mo_book") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_npc_troll", bg: Some("img_zhuyuan_book.png"), loc: Some("无底阶梯口 · 巨魔"),
+    id: "mo_npc_troll", bg: Some("moruiya_bg_invest.png"), loc: Some("无底阶梯口 · 巨魔"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["巨大的灰石头颅挡住去路，巨魔低头嗅了嗅你们——它没有主动攻击，只是占着这条必经之阶。可绕行，要多走一段黑廊（San -4）。"]),
     choices: &[
@@ -636,7 +636,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "mo_troll_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("无底阶梯口 · 巨魔"),
+    id: "mo_troll_fight", bg: Some("moruiya_bg_invest.png"), loc: Some("无底阶梯口 · 巨魔"),
     mood: "danger", speaker: Some("⚔ 巨魔"), voice: None,
     text: TextSpec::Static(&["你拔武器迎上,巨魔抡起石锤怒吼着砸下来——硬碰硬。"]),
     choices: &NO_CH, fight_id: Some("cave_troll"), video: None, cine_label: None, overlay: None,
