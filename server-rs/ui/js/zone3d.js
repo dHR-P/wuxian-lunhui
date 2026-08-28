@@ -34,6 +34,20 @@ const Zone3D = (() => {
   let dust = null;       // 氛围尘粒（粒子系统，dispose 时释放）
   let glowTex = null;    // 手写 bloom：additive 径向光晕贴图（Canvas 生成，复用）
 
+  // —— 装备体系深化特效（战斗特效对应装备体系）——
+  // 武器细分：curWeaponId 是 setData 下发的原始武器串（id 或名称），WEAPON_FX 按 id 查、
+  //   WEAPON_FX_NAMES 按中文名兜底，两者都未命中回退 5 类大类默认特效。
+  // 法宝：玩家装配的法宝 id 列表（data.fx.treasure），attack 时附加法宝特效。
+  // 血统：玩家血统 id（data.bloodline），持续身体 aura（additive 光环，随 player 跟随）。
+  // 技能流派：已学技能 id 列表（data.skills），attack 时按流派附加特效。
+  let curWeaponId = "—";             // 原始武器串（id 或中文名），供 WEAPON_FX 精确匹配
+  let curFxTreasure = [];            // 已装配法宝 id[]（本命/护身/辅助）
+  let curBloodline = null;           // 玩家血统 id（无则 null）
+  let curSkills = [];                // 已学技能 id[]
+  let auraPoints = null;             // 血统 aura 粒子系统（Points，additive，随 player 跟随）
+  let auraPulse = 0;                 // aura 动画相位 (s)
+  let weaponFxKey = null;            // 当前解析出的武器细分 fx key（weapons_* / default 类别）
+
   // 体素（MC 方块人）敌人开关：true 时敌人用方块拼成的体素人（BoxGeometry 六面明暗）；
   // false 或素材缺失时回退立绘 billboard / 几何体。纯视觉，不影响战斗判定与 Tauri 契约。
   const VOXEL_ENEMY = true;
@@ -92,6 +106,79 @@ const Zone3D = (() => {
   function resolveWeaponStyle(raw) {
     if (raw === "gun" || raw === "laser" || raw === "magic" || raw === "melee" || raw === "unarmed") return raw;
     return weaponStyle(raw);
+  }
+
+  // ================= 装备体系 · 武器细分特效映射表 =================
+  // 在 5 类大类（melee/gun/laser/magic/unarmed）之内，再按"具体武器 id/名"细分颜色与形态。
+  // fxKey → 类内变体，runAttackFx 先查此表命中则走细分特效，未命中回退大类默认。
+  // 键统一小写。数值 id 取自 items_data.rs::WEAPONS / TRESURE_DEFS；中文名作名称兜底
+  //（HUD 下发的 weapon 多为旧枚举中文名，精确 id 与中英文名兼收才能稳定命中）。
+  const WEAPON_FX = {
+    // —— melee 大类变体：血色镰风 / 青色剑阵 / 青色仙侠剑气 / 绿色纳米切割线 ——
+    "wpn_bloodsaber":    { key: "weapons_bloodscythe", name: "血戮剑" },
+    "wp_scythe_pobing":  { key: "weapons_bloodscythe", name: "破军重镰" },
+    "wpn_zhuai_jianpan": { key: "weapons_swordarray",  name: "诛仙剑阵盘" },
+    "wpn_taixu_godsaw":  { key: "weapons_taixu",       name: "太虚神剑" },
+    "wpn_nano_whip":     { key: "weapons_nanowhip",    name: "纳米切割鞭" },
+    // —— magic 大类变体：蓝紫量子粒子 / 紫色引力坍缩球 / 因果律光 ——
+    "wp_quantum_annihil":  { key: "weapons_quantum",    name: "量子湮灭刀" },
+    "wp_gravity_collapse": { key: "weapons_gravity",    name: "引力坍缩炮" },
+    "wpn_causality_sword": { key: "weapons_causality",  name: "因果律护身剑" },
+    // —— laser 大类变体：蓝色电磁轨道光束 ——
+    "wpn_rail_sniper": { key: "weapons_rail", name: "电磁轨道狙击枪" },
+    // —— 法宝主手武器（TRESURE_DEFS slot 0，本命武）：青剑意 / 秋水神剑 ——
+    "cu_bab_benming_fejian": { key: "weapons_swordqi", name: "本命飞剑·青锋" },
+    "cu_bab_qiushui_jian":   { key: "weapons_swordqi", name: "秋水神剑" },
+  };
+  function resolveWeaponFxKey(raw) {
+    if (!raw || raw === "—" || raw === "无" || raw === "none") return null;
+    const k = String(raw).toLowerCase();
+    // 1) 精确 id
+    if (WEAPON_FX.hasOwnProperty(k)) return WEAPON_FX[k].key;
+    // 2) 中文名兜底（键含中文，原样比即可；再做拼音/ascii 小写不影响中文）
+    const byName = Object.keys(WEAPON_FX).find(id => (WEAPON_FX[id].name || "") === String(raw));
+    if (byName) return WEAPON_FX[byName].key;
+    return null;
+  }
+
+  // ============ 法宝特效映射（TRESURE_DEFS；attack 时按装配法宝附加） ============
+  // fxKind: 剑意(青) / 玄光盾(金) / 雷光(雷) / 血煞(红) / 明镜(白) / 生死轮(黑白)
+  const TREASURE_FX = {
+    "tr_zhuxian_calendar": { kind: "jianyi",   name: "诛仙剑意图" },
+    "tr_blood_banner":     { kind: "blood",     name: "血煞战旗" },
+    "tr_taixu_shield":     { kind: "shield",    name: "太虚玄光镜" },
+    "tr_shenlei_pendant":  { kind: "thunder",   name: "神雷辟邪佩" },
+    "tr_danxin_mirror":    { kind: "mirror",    name: "锻心明镜" },
+    "tr_undo_pillowstone": { kind: "lifewheel", name: "逆转生死盘" },
+  };
+
+  // ============ 血统 aura 映射（BLOODLINES；持续身体光晕，非攻击特效） ============
+  const BLOODLINE_AURAS = {
+    "angel_bloodline":    { name: "angel",    color: 0xeaf4ff }, // 白金光翼光晕
+    "demon_bloodline":    { name: "demon",    color: 0xff4466 }, // 暗红暗翼
+    "dragon_bloodline":   { name: "dragon",   color: 0xffcf3a }, // 金色龙鳞辉光
+    "cyber_prosthetic":   { name: "cyber",    color: 0x42c8ff }, // 蓝光机械纹
+  };
+
+  // ============ 技能流派特效映射（SKILLS；attack 时按已学流派附加） ============
+  // schoolKey: xiu(青气劲)/holy(金色光柱)/nt(紫念力)/meme(绿色失真)
+  const SCHOOL_STREAM = {
+    xiu:  { label: "修真·青气劲", color: 0x66e0a0 },
+    holy: { label: "圣光·金光柱", color: 0xffe07a },
+    nt:   { label: "超能NT·念力", color: 0xb78aff },
+    meme: { label: "模因·绿失真", color: 0x6bff8a },
+  };
+  // 由已学技能 id 推断流派（skills_data 前缀约定；school ≠ 子技能的某种投掷，仅作 FX 路由）
+  function skillSchools(ids) {
+    const set = {};
+    (ids || []).forEach(id => {
+      const s = String(id);
+      if (/^(cu_|skx_xiu_)/.test(s)) set.xiu = true;        // 修真
+      else if (/^(sk_holy_|skx_holy_)/.test(s)) set.holy = true; // 圣光
+      else if (/^(sk_nt_|skx_nt_)/.test(s)) set.nt = true;   // 超能 NT
+      else if (/^(sk_meme_|skx_meme_)/.test(s)) set.meme = true; // 模因
+    });
+    return Object.keys(set); // 返回已命中的 schoolKey[]
   }
 
   // 敌人/玩家脚下软阴影（贴地椭圆渐隐）
@@ -619,15 +706,623 @@ const Zone3D = (() => {
     anim();
   }
 
-  // 攻击特效分发：按当前武器类型风格路由到对应特效（onAction 语义不变，attack 仍触发）。
-  function runAttackFx() {
-    switch (curWeaponStyle) {
-      case "gun":   shootFx(); break;
-      case "laser": beamFx();  break;
-      case "magic": magicFx(); break;
-      case "melee": swingFx(); break;   // 刀战/剑/斧/镰/鞭 → 保留 swingFx 弧形刀光
-      default:      punchFx(); break;   // unarmed → 拳击
+  // ============================ 装备体系 · 细分特效实现 ============================
+
+  // 武器细分特效分发：先按 WEAPON_FX 命中具体武器变体，未命中回退大类默认。
+  // onAction 语义不变：attack 仍照常触发（特效仅纯视觉）。命中细分时额外叠加法宝/技能流派特效。
+  function weaponFxFor(key) {
+    switch (key) {
+      case "weapons_bloodscythe": bloodScytheFx(); break;  // 血色/暗红镰风（melee）
+      case "weapons_swordarray":  swordArrayFx();  break;  // 青色剑阵（多道小剑气）
+      case "weapons_taixu":       taixuFx();       break;  // 青色仙侠剑气
+      case "weapons_nanowhip":    nanowhipFx();    break;  // 绿色纳米切割线
+      case "weapons_quantum":     quantumFx();     break;  // 蓝紫色量子粒子（magic）
+      case "weapons_gravity":     gravityFx();     break;  // 紫色引力坍缩球（magic）
+      case "weapons_causality":   causalityFx();   break;  // 因果律光（magic）
+      case "weapons_rail":        railFx();        break;  // 蓝色电磁轨道光束（laser）
+      case "weapons_swordqi":     taixuFx(0xb8c8ff); break;// 本命/秋水神剑→青白剑意
+      default: return false;
     }
+    return true;
+  }
+
+  // 攻击特效分发：按当前武器细分 → 大类；随后按装配法宝 + 已学技能流派叠加附加特效。
+  // 命中细分变体时只走细分；未命中则保留原 5 类大类默认特效（行为/契约不变）。
+  function runAttackFx() {
+    const fk = weaponFxFor(weaponFxKey);
+    if (!fk) {
+      switch (curWeaponStyle) {
+        case "gun":   shootFx(); break;
+        case "laser": beamFx();  break;
+        case "magic": magicFx(); break;
+        case "melee": swingFx(); break;   // 刀战/剑/斧/镰/鞭 → 保留 swingFx 弧形刀光
+        default:      punchFx(); break;   // unarmed → 拳击
+      }
+    }
+    // 法宝附加（装配 & 命中代表型法宝时叠加对应法宝技特效）
+    curFxTreasure.forEach(tid => treasureFxFor(tid));
+    // 技能流派附加（已学流派 → 攻击时叠加流派气流特效）
+    skillSchools(curSkills).forEach(skKey => schoolStreamFx(skKey));
+  }
+
+  // ---------- 血戮剑/破军重镰：血色弧光镰风（melee 变体，红色刀光 + 血色粒子） ----------
+  function bloodScytheFx() {
+    if (!player) return;
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    const g = ctx.createRadialGradient(64, 64, 4, 64, 64, 62);
+    g.addColorStop(0, "rgba(255,215,215,.92)");
+    g.addColorStop(0.5, "rgba(214,40,64,.6)");
+    g.addColorStop(1, "rgba(120,10,30,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(64, 64, 60, -1.15, 1.15); ctx.closePath(); ctx.fill();
+    const tex = new THREE.CanvasTexture(c);
+    const arc = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.3, 2.3),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    );
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    arc.position.set(PX.x + dir.x * 1.5, 1.7, PX.z + dir.z * 1.5);
+    arc.rotation.y = -yaw;
+    scene.add(arc);
+    const glow = glowSprite(0xff4d6d, 2.6);
+    glow.position.copy(arc.position);
+    scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.08;
+      arc.scale.setScalar(1 + t * 1.8);
+      arc.material.opacity = Math.max(0, 1 - t * 2.2);
+      arc.position.x += dir.x * 0.18; arc.position.z += dir.z * 0.18;
+      glow.position.set(arc.position.x, arc.position.y, arc.position.z);
+      glow.material.opacity = Math.max(0.1, 1 - t * 1.8);
+      glow.scale.setScalar(1 + t * 2.0);
+      if (t < 0.55) requestAnimationFrame(anim);
+      else { scene.remove(arc); arc.material.dispose(); tex.dispose(); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+    const hit = enemy ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+                      : { x: PX.x + dir.x * 2.6, y: 1.4, z: PX.z + dir.z * 2.6 };
+    spawnSpark(hit, 0xff5f7a, 10);
+  }
+
+  // ---------- 诛仙剑阵盘：青色剑阵（多道小剑气朝敌人扇形飞出） ----------
+  function swordArrayFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x + dir.x * 0.9, y: 1.7, z: PX.z + dir.z * 0.9 };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.4, z: PX.z + dir.z * 4 };
+    // 阵法光阵（贴地青色阵盘）
+    const disc = new THREE.Mesh(
+      new THREE.RingGeometry(0.5, 1.5, 32),
+      new THREE.MeshBasicMaterial({ color: 0x36d6b8, transparent: true, opacity: 0.55, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    disc.rotation.x = -Math.PI / 2;
+    disc.position.set(from.x, 0.05, from.z);
+    scene.add(disc);
+    // 多道小剑气（薄青刃，扇形朝敌人）
+    const counts = 6;
+    const swords = [];
+    for (let i = 0; i < counts; i++) {
+      const sw = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.22, 1.4),
+        new THREE.MeshBasicMaterial({ color: 0x57ffe0, transparent: true, opacity: 0.95, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+      );
+      const off = (i / (counts - 1) - 0.5) * 1.3; // 扇形横向偏移
+      const nx = from.x + dir.x * 1.0 - dir.z * off;
+      const nz = from.z + dir.z * 1.0 + dir.x * off;
+      sw.position.set(nx, 1.6, nz);
+      sw.rotation.y = -yaw + off * 0.22;
+      scene.add(sw);
+      swords.push({ m: sw, dx: 0, dz: 0 });
+    }
+    const glow = glowSprite(0x3dffcf, 2.2);
+    glow.position.set(from.x, 1.6, from.z); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      disc.scale.setScalar(1 + t * 2.4);
+      disc.material.opacity = Math.max(0, 0.55 - t * 1.4);
+      swords.forEach(s => {
+        s.m.position.x += dir.x * 0.3;
+        s.m.position.z += dir.z * 0.3;
+        s.m.material.opacity = Math.max(0, 0.95 - t * 2.0);
+      });
+      glow.material.opacity = Math.max(0.1, 1 - t * 1.6);
+      glow.scale.setScalar(1 + t * 1.9);
+      if (t < 0.6) requestAnimationFrame(anim);
+      else {
+        scene.remove(disc); disc.geometry.dispose(); disc.material.dispose();
+        swords.forEach(s => { scene.remove(s.m); s.m.geometry.dispose(); s.m.material.dispose(); });
+        scene.remove(glow); glow.material.dispose();
+      }
+    };
+    anim();
+    spawnSpark(to, 0x57ffe0, 12);
+  }
+
+  // ---------- 太虚神剑 / 本命神剑：青色仙侠剑气（细长剑光 + 纵向穿透） ----------
+  function taixuFx(edge = 0x66ecff) {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const ctx = c.getContext("2d");
+    const g = ctx.createLinearGradient(0, 0, 64, 0);
+    g.addColorStop(0, "rgba(255,255,255,0)");
+    g.addColorStop(0.5, "rgba(255,255,255,.9)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 20, 64, 24);
+    const tex = new THREE.CanvasTexture(c);
+    const beam = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.4, 0.34),
+      new THREE.MeshBasicMaterial({ map: tex, color: edge, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    beam.position.set(PX.x + dir.x * 1.6, 1.75, PX.z + dir.z * 1.6);
+    beam.rotation.y = -yaw;
+    scene.add(beam);
+    const glow = glowSprite(edge, 2.4);
+    glow.position.copy(beam.position); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.07;
+      beam.scale.set(1 + t * 2.2, 1, 1);
+      beam.material.opacity = Math.max(0, 1 - t * 2.4);
+      beam.position.x += dir.x * 0.3; beam.position.z += dir.z * 0.3;
+      glow.position.set(beam.position.x, beam.position.y, beam.position.z);
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.6);
+      glow.scale.setScalar(1 + t * 1.9);
+      if (t < 0.5) requestAnimationFrame(anim);
+      else { scene.remove(beam); beam.geometry.dispose(); beam.material.dispose(); tex.dispose(); scene.remove(glow); glow.material.dispose(); }
+    };
+    anim();
+  }
+
+  // ---------- 纳米切割鞭：绿色纳米切割线（高速绿刃切割闪线） ----------
+  function nanowhipFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 3.2, y: 1.5, z: PX.z + dir.z * 3.2 };
+    // 绿色纳米切割线（细长扁刃 + 锋芒端光点）
+    const line = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.0, 0.12),
+      new THREE.MeshBasicMaterial({ color: 0x5cff8a, transparent: true, opacity: 0.95, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    const mx = (PX.x + to.x) / 2, mz = (PX.z + to.z) / 2;
+    line.position.set(mx, 1.55, mz);
+    line.rotation.y = -yaw;
+    scene.add(line);
+    const tip = glowSprite(0x8affb0, 0.45);
+    tip.position.set(to.x, 1.55, to.z); scene.add(tip);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      line.scale.set(1 + t * 0.8, 1 + Math.sin(t * 30) * 0.25, 1); // 切割振荡
+      line.material.opacity = Math.max(0, 0.95 - t * 2.6);
+      tip.material.opacity = Math.max(0, 1 - t * 3.2);
+      tip.scale.setScalar(1 + t * 2.4);
+      if (t < 0.42) requestAnimationFrame(anim);
+      else { scene.remove(line); line.geometry.dispose(); line.material.dispose(); scene.remove(tip); tip.material.dispose(); }
+    };
+    anim();
+    spawnSpark(to, 0x5cff8a, 9);
+  }
+
+  // ---------- 量子湮灭刀：蓝紫色量子粒子（magic 变体，粒子喷涌 + 湮灭爆闪） ----------
+  function quantumFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x + dir.x * 0.8, y: 1.7, z: PX.z + dir.z * 0.8 };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.4, z: PX.z + dir.z * 4 };
+    const orb = glowSprite(0x7c4dff, 0.8);
+    orb.position.set(from.x, from.y, from.z); scene.add(orb);
+    let t = 0, exploded = false;
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const anim = () => {
+      t += 0.04;
+      const k = Math.min(1, t * 1.7);
+      orb.position.set(from.x + ox * k, from.y + oy * k, from.z + oz * k);
+      orb.scale.setScalar(1 + Math.sin(t * 40) * 0.15); // 量子抖动
+      if (k >= 1 && !exploded) {
+        exploded = true;
+        for (let i = 0; i < 22; i++) { // 蓝紫量子粒子（颜色在蓝/紫间跳跃）
+          const m = new THREE.Mesh(
+            new THREE.BoxGeometry(0.06 + Math.random() * 0.05, 0.06 + Math.random() * 0.05, 0.06 + Math.random() * 0.05),
+            new THREE.MeshBasicMaterial({ color: i % 2 ? 0x7c4dff : 0x42aaff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
+          );
+          m.position.set(to.x, to.y, to.z);
+          const a = Math.random() * 6.28, e = 0.6 + Math.random() * 1.0;
+          scene.add(m);
+          blood.push({ m, vx: Math.cos(a) * e, vy: 0.4 + Math.random() * 1.3, vz: Math.sin(a) * e, spin: (Math.random() - 0.5) * 1.4, life: 0, max: 0.3 + Math.random() * 0.2 });
+        }
+        const flash = glowSprite(0x7c4dff, 1.6);
+        flash.position.set(to.x, to.y, to.z); scene.add(flash);
+        setTimeout(() => { scene.remove(flash); flash.material.dispose(); }, 250);
+      }
+      orb.material.opacity = Math.max(0, 1 - Math.max(0, t - 0.5) * 3.2);
+      if (t < 0.75) requestAnimationFrame(anim);
+      else { scene.remove(orb); orb.material.dispose(); }
+    };
+    anim();
+  }
+
+  // ---------- 引力坍缩炮：紫色引力坍缩球（magic 变体，挤压收缩 + 拉伸弹道） ----------
+  function gravityFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.4, z: PX.z + dir.z * 4 };
+    const from = { x: PX.x + dir.x * 0.8, y: 1.6, z: PX.z + dir.z * 0.8 };
+    const orb = glowSprite(0xb44dff, 1.0);
+    orb.position.set(from.x, from.y, from.z); scene.add(orb);
+    // 引力环（旋转紫环）
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.5, 0.03, 8, 24),
+      new THREE.MeshBasicMaterial({ color: 0xcf8aff, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    ring.position.copy(orb.position); scene.add(ring);
+    let t = 0;
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const anim = () => {
+      t += 0.045;
+      const k = Math.min(1, t * 1.5);
+      orb.position.set(from.x + ox * k, from.y + oy * k, from.z + oz * k);
+      ring.position.copy(orb.position);
+      ring.rotation.y += 0.25; ring.rotation.x += 0.1;
+      orb.scale.setScalar(1 + Math.sin(t * 22) * 0.18); // 引力脉动
+      if (k >= 0.97) {
+        // 坍缩：向敌压缩
+        orb.scale.setScalar(Math.max(0.3, 1.2 - (t - 0.62) * 6));
+        ring.scale.setScalar(Math.max(0.3, 1 - (t - 0.62) * 4));
+      }
+      orb.material.opacity = Math.max(0, 1 - Math.max(0, t - 0.55) * 3);
+      ring.material.opacity = Math.max(0, 0.9 - Math.max(0, t - 0.55) * 3);
+      if (t < 0.8) requestAnimationFrame(anim);
+      else { scene.remove(orb); orb.material.dispose(); scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }
+    };
+    anim();
+    spawnSpark(to, 0xb44dff, 10);
+  }
+
+  // ---------- 因果律护身剑：因果律光（错位残影剑光 + 白金色因果线） ----------
+  function causalityFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const ctx = c.getContext("2d");
+    const g = ctx.createLinearGradient(0, 0, 64, 64);
+    g.addColorStop(0, "rgba(255,255,255,0)");
+    g.addColorStop(0.5, "rgba(255,255,255,.9)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 20, 64, 26);
+    const tex = new THREE.CanvasTexture(c);
+    const beams = [];
+    const cols = [0xffffff, 0xd9c8ff, 0xaad7ff];
+    for (let i = 0; i < 3; i++) { // 三道错位残影剑光
+      const b = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.6, 0.26),
+        new THREE.MeshBasicMaterial({ map: tex, color: cols[i], transparent: true, opacity: 0.9, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+      );
+      const lz = PX.z - (i - 1) * 0.22, lx = PX.x + (i - 1) * 0.22;
+      b.position.set(lx + dir.x * 1.7, 1.8, lz + dir.z * 1.7);
+      b.rotation.y = -yaw;
+      scene.add(b); beams.push(b);
+    }
+    const glow = glowSprite(0xe0d0ff, 2.4);
+    glow.position.set(PX.x + dir.x * 1.7, 1.8, PX.z + dir.z * 1.7); scene.add(glow);
+    let t = 0;
+    const anim = () => {
+      t += 0.07;
+      beams.forEach((b, i) => {
+        b.position.x += dir.x * 0.24; b.position.z += dir.z * 0.24;
+        b.material.opacity = Math.max(0, 0.9 - t * 2.2 - i * 0.06);
+        b.scale.x = 1 + t * 2.0;
+      });
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.8);
+      glow.scale.setScalar(1 + t * 2.0);
+      if (t < 0.5) requestAnimationFrame(anim);
+      else {
+        beams.forEach(b => { scene.remove(b); b.geometry.dispose(); b.material.dispose(); });
+        tex.dispose(); scene.remove(glow); glow.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // ---------- 电磁轨道狙击枪：蓝色电磁轨道光束 + 瞄准火花（laser 变体） ----------
+  function railFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x, y: 1.6, z: PX.z };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.5, z: PX.z + dir.z * 4 };
+    const dx = to.x - from.x, dy = to.y - from.y, dz = to.z - from.z;
+    const dist = Math.max(0.5, Math.hypot(dx, dy, dz));
+    const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2, z: (from.z + to.z) / 2 };
+    const core = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.06, 0.06, dist, 8),
+      new THREE.MeshBasicMaterial({ color: 0x2f9fff, transparent: true, depthWrite: false })
+    );
+    core.position.set(mid.x, mid.y, mid.z);
+    core.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx, dy, dz).normalize());
+    scene.add(core);
+    // 电磁弧光：外圈电光柱（蓝白渐变 additive）
+    const halo = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.15, 0.15, dist, 8),
+      new THREE.MeshBasicMaterial({ color: 0x7ac7ff, transparent: true, opacity: 0.4, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    halo.position.copy(core.position); halo.quaternion.copy(core.quaternion);
+    scene.add(halo);
+    // 轨道枪口电弧闪烁
+    const muzzle = glowSprite(0x8fd4ff, 0.7);
+    muzzle.position.copy(from); scene.add(muzzle);
+    let t = 0;
+    const anim = () => {
+      t += 0.016;
+      const hold = Math.min(1, t / 0.32);
+      const fade = Math.max(0, 1 - (t - 0.32) * 2.2);
+      const op = Math.min(hold, fade);
+      core.material.opacity = op;
+      halo.material.opacity = 0.4 * op;
+      muzzle.material.opacity = Math.max(0, 1 - t * 4);
+      muzzle.scale.setScalar(1 + t * 6);
+      if (t < 0.7) requestAnimationFrame(anim);
+      else {
+        scene.remove(core); core.geometry.dispose(); core.material.dispose();
+        scene.remove(halo); halo.geometry.dispose(); halo.material.dispose();
+        scene.remove(muzzle); muzzle.material.dispose();
+      }
+    };
+    anim();
+    spawnSpark(to, 0x8fd4ff, 10);
+  }
+
+  // ---------- 法宝特效（attack 时按装配法宝叠加；三类代表 → swordqi/shield/thunder） ----------
+  function treasureFxFor(tid) {
+    const spec = TREASURE_FX[tid];
+    if (!spec) return;
+    switch (spec.kind) {
+      case "jianyi":  treasureSwordQiFx(); break;  // 诛仙剑意图 → 青剑意
+      case "shield":  treasureShieldFx();  break;  // 太虚玄光镜 → 金玄光盾
+      case "thunder": treasureThunderFx(); break;  // 神雷辟邪佩 → 雷光
+      case "blood":   treasureSwordQiFx(0xff5f7a, 1.2); break; // 血煞战旗 → 红血煞
+      case "mirror":  treasureShieldFx(0xffffff, 1.1); break;  // 锻心明镜 → 白光幕
+      case "lifewheel": treasureLifewheelFx(); break; // 逆转生死盘 → 黑白生死轮
+    }
+  }
+
+  // 青剑意：玩家身侧青色剑意气流（attack 时迸发）
+  function treasureSwordQiFx(color = 0x6ee0ff, boost = 1) {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    for (let i = 0; i < 8; i++) {
+      const m = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.14, 0.9),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+      );
+      const a = Math.random() * 6.28, r = 0.6 * boost + Math.random() * 0.3;
+      m.position.set(PX.x + Math.cos(a) * r, 1.2 + Math.random() * 1.3, PX.z + Math.sin(a) * r);
+      m.rotation.y = a + Math.PI / 2;
+      m.userData = { a, t: 0, speed: 0.35 + Math.random() * 0.3 };
+      scene.add(m);
+      const anim = () => { // 剑意绕身旋转 + 上浮
+        m.userData.t += 0.05;
+        const k = m.userData.t;
+        const ang = m.userData.a + k * 3;
+        m.position.x = PX.x + Math.cos(ang) * r;
+        m.position.z = PX.z + Math.sin(ang) * r;
+        m.position.y += 0.06;
+        m.material.opacity = Math.max(0, 0.9 - k * 1.6);
+        if (k < 0.6) requestAnimationFrame(anim);
+        else { scene.remove(m); m.geometry.dispose(); m.material.dispose(); }
+      };
+      anim();
+    }
+  }
+
+  // 金玄光盾：玩家身侧金光护盾光华（attack 时迸发扩散）
+  function treasureShieldFx(color = 0xffd36b, boost = 1) {
+    if (!player) return;
+    const shield = new THREE.Mesh(
+      new THREE.SphereGeometry(1.5 * boost, 16, 12),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.28, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    shield.position.set(PX.x, 1.6, PX.z);
+    scene.add(shield);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(1.2 * boost, 0.05, 10, 28),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.7, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    ring.position.set(PX.x, 1.6, PX.z);
+    ring.rotation.x = Math.PI / 2;
+    scene.add(ring);
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      shield.material.opacity = Math.max(0, 0.28 * (1 - t * 2.2));
+      shield.scale.setScalar(1 + t * 0.6);
+      ring.material.opacity = Math.max(0, 0.7 * (1 - t * 2.4));
+      ring.rotation.z += 0.12;
+      ring.scale.setScalar(1 + t * 0.9);
+      if (t < 0.5) requestAnimationFrame(anim);
+      else { scene.remove(shield); shield.geometry.dispose(); shield.material.dispose(); scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }
+    };
+    anim();
+  }
+
+  // 雷光：神雷劈落（青色闪电光柱 + 迸射电花）
+  function treasureThunderFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 3.5, y: 1.4, z: PX.z + dir.z * 3.5 };
+    const bolt = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.09, 0.09, 4.4, 8),
+      new THREE.MeshBasicMaterial({ color: 0x30d4ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    bolt.position.set(to.x, 2.2, to.z);
+    scene.add(bolt);
+    const flash = glowSprite(0xa8ecff, 1.3);
+    flash.position.set(to.x, 1.4, to.z); scene.add(flash);
+    let t = 0;
+    const anim = () => {
+      t += 0.04;
+      const hold = Math.min(1, t / 0.25);
+      const fade = Math.max(0, 1 - (t - 0.25) * 4);
+      bolt.material.opacity = Math.min(hold, fade);
+      flash.material.opacity = Math.max(0, fade * 0.8);
+      flash.scale.setScalar(1 + t * 2.5);
+      if (t < 0.5) requestAnimationFrame(anim);
+      else { scene.remove(bolt); bolt.geometry.dispose(); bolt.material.dispose(); scene.remove(flash); flash.material.dispose(); }
+    };
+    anim();
+    spawnSpark(to, 0xa8ecff, 12);
+  }
+
+  // 逆转生死盘：黑白生死轮（attack 时浮现）
+  function treasureLifewheelFx() {
+    if (!player) return;
+    const wheel = new THREE.Mesh(
+      new THREE.RingGeometry(0.5, 1.0, 12),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    wheel.position.set(PX.x, 1.6, PX.z);
+    wheel.rotation.x = Math.PI / 2;
+    scene.add(wheel);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(1.0, 0.04, 8, 22),
+      new THREE.MeshBasicMaterial({ color: 0x7a8a9a, transparent: true, opacity: 0.7, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    ring.position.copy(wheel.position);
+    scene.add(ring);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      wheel.rotation.z += 0.18;
+      ring.rotation.x += 0.12; ring.rotation.y += 0.12;
+      ring.scale.setScalar(1 + t * 0.7);
+      wheel.material.opacity = Math.max(0, 0.6 * (1 - t * 1.8));
+      ring.material.opacity = Math.max(0, 0.7 * (1 - t * 1.8));
+      if (t < 0.55) requestAnimationFrame(anim);
+      else { scene.remove(wheel); wheel.geometry.dispose(); wheel.material.dispose(); scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }
+    };
+    anim();
+  }
+
+  // ---------- 技能流派特效（attack 时按已学流派叠加，attack 附加） ----------
+  function schoolStreamFx(schoolKey) {
+    const spec = SCHOOL_STREAM[schoolKey];
+    if (!spec || !player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    // 流派气流：围绕玩家迸发的单色能量流（每流派一种色）
+    const n = schoolKey === "meme" ? 10 : 8;
+    for (let i = 0; i < n; i++) {
+      const m = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.16, 0.5 + Math.random() * 0.5),
+        new THREE.MeshBasicMaterial({ color: spec.color, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+      );
+      const a = Math.random() * 6.28, r = 0.5 + Math.random() * 0.5;
+      m.position.set(PX.x + Math.cos(a) * r, 1.1 + Math.random() * 1.4, PX.z + Math.sin(a) * r);
+      m.rotation.y = a;
+      m.userData = { a, r, t: 0 };
+      scene.add(m);
+      const anim = () => {
+        const u = m.userData;
+        u.t += 0.05;
+        const ang = u.a + u.t * (1.5 + (schoolKey === "meme" ? 1 : 0));
+        m.position.x = PX.x + Math.cos(ang) * u.r;
+        m.position.z = PX.z + Math.sin(ang) * u.r;
+        m.position.y = 1.1 + u.t * 0.7 + Math.sin(u.t * 8) * 0.1;
+        m.rotation.z = Math.sin(u.t * 20) * 0.3; // 失真抖动（meme 更剧烈）
+        if (schoolKey === "meme") m.rotation.z *= 2;
+        m.material.opacity = Math.max(0, 0.85 - u.t * 1.8);
+        if (u.t < 0.5) requestAnimationFrame(anim);
+        else { scene.remove(m); m.geometry.dispose(); m.material.dispose(); }
+      };
+      anim();
+    }
+    // 圣光特例：额外一道金色光柱朝上
+    if (schoolKey === "holy") {
+      const pillar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.18, 0.3, 3.6, 10),
+        new THREE.MeshBasicMaterial({ color: 0xffe07a, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending })
+      );
+      pillar.position.set(PX.x, 2.0, PX.z);
+      scene.add(pillar);
+      let t = 0;
+      const animP = () => {
+        t += 0.05;
+        pillar.material.opacity = Math.max(0, 0.35 * (1 - t * 2));
+        if (t < 0.5) requestAnimationFrame(animP);
+        else { scene.remove(pillar); pillar.geometry.dispose(); pillar.material.dispose(); }
+      };
+      animP();
+    }
+  }
+
+  // ---------- 血统变身持续 aura（additive 光环，随 player 跟随；血统视觉差异） ----------
+  function refreshBloodlineAura() {
+    // 移除旧 aura（切换血统时重建）
+    if (auraPoints) {
+      try { scene.remove(auraPoints); auraPoints.geometry.dispose(); auraPoints.material.dispose(); } catch (e) {}
+      auraPoints = null;
+    }
+    const spec = curBloodline ? BLOODLINE_AURAS[curBloodline] : null;
+    if (!spec || !player) return;
+    const n = spec.name === "angel" ? 30 : 24; // 天使光翼粒子更密
+    const pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * 6.28 + Math.random() * 0.3;
+      const r = 0.7 + Math.random() * 0.5;
+      const h = 0.5 + Math.random() * 2.2;
+      pos[i * 3] = Math.cos(a) * r;
+      pos[i * 3 + 1] = h;
+      pos[i * 3 + 2] = Math.sin(a) * r;
+    }
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color: spec.color, size: 0.16, transparent: true, opacity: 0.55,
+      depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true,
+      map: getGlowTex(), alphaTest: 0,
+    });
+    const pts = new THREE.Points(geom, mat);
+    pts.position.set(player.position.x, 0, player.position.z);
+    pts.userData = { spec: spec.name, seed: Math.random() * 100, baseN: n };
+    scene.add(pts);
+    auraPoints = pts;
+  }
+  function updateAura(dt) {
+    if (!auraPoints || !player) return;
+    auraPulse += dt;
+    const spec = BLOODLINE_AURAS[curBloodline] || null;
+    // 跟随玩家
+    auraPoints.position.set(player.position.x, 0, player.position.z);
+    const arr = auraPoints.geometry.attributes.position;
+    const n = arr.count;
+    const t = auraPulse;
+    for (let i = 0; i < n; i++) {
+      // 绕身旋转 + 上下浮动
+      let a = (i / n) * 6.28 + t * (spec && spec.name === "demon" ? 0.7 : 0.4);
+      let r = 0.7 + Math.sin(t * 1.3 + i * 0.7) * 0.25;
+      let h = 0.5 + ((i % 5) / 5) * 2.2 + Math.sin(t * 1.1 + i * 0.5) * 0.2;
+      arr.array[i * 3] = Math.cos(a) * r;
+      arr.array[i * 3 + 1] = h;
+      arr.array[i * 3 + 2] = Math.sin(a) * r;
+    }
+    arr.needsUpdate = true;
+    // 天使光翼：额外呼吸亮度；机械义体：蓝光脉冲
+    let op = 0.55 + Math.sin(t * 2.2) * 0.12;
+    if (spec && spec.name === "cyber") op = 0.5 + Math.sin(t * 5) * 0.18;
+    auraPoints.material.opacity = op;
   }
 
   function enemyHitFx() {
@@ -867,7 +1562,16 @@ const Zone3D = (() => {
 
   function setData(data) {
     zoneData = data;
-    if (data && data.weapon !== undefined) curWeaponStyle = resolveWeaponStyle(data.weapon);
+    if (data && data.weapon !== undefined) {
+      curWeaponStyle = resolveWeaponStyle(data.weapon);
+      curWeaponId = data.weapon;
+      // 武器细分：先查 WEAPON_FX 看命中具体武器变体，未命中留 null 走大类默认
+      weaponFxKey = resolveWeaponFxKey(data.weapon);
+    }
+    // 装备体系附加：血统 aura / 法宝 / 技能流派（setData 路由传参）
+    curBloodline = (data && data.bloodline) || null;
+    curFxTreasure = Array.isArray(data && data.treasure) ? data.treasure : [];
+    curSkills = Array.isArray(data && data.skills) ? data.skills : [];
     // 敌人模型
     if (enemy) scene.remove(enemy);
     if (data.kind === "fight" && data.enemy) {
@@ -904,6 +1608,7 @@ const Zone3D = (() => {
       }
     }
     resetPlayer();
+    refreshBloodlineAura(); // 血统 aura 需 player 就位后创建/重建
   }
 
   function resetPlayer() {
@@ -963,6 +1668,8 @@ const Zone3D = (() => {
     blood = [];
     if (glowTex) { try { glowTex.dispose(); } catch (e) {} glowTex = null; }
     if (dust) { try { scene.remove(dust); dust.geometry.dispose(); dust.material.dispose(); } catch (e) {} dust = null; }
+    if (auraPoints) { try { scene.remove(auraPoints); auraPoints.geometry.dispose(); auraPoints.material.dispose(); } catch (e) {} auraPoints = null; }
+    curSkills = []; curFxTreasure = []; curBloodline = null; weaponFxKey = null;
     // Bug-07:释放场景内全部 geometry/material/纹理,避免 GPU 内存与 WebGL 上下文随副本进出泄漏
     try {
       scene.traverse(obj => {
@@ -1111,6 +1818,8 @@ const Zone3D = (() => {
     }
     // 命中血粒子衰减（方块飞溅，含落点弹停）
     if (blood.length) updateBlood(0.016);
+    // 血统 aura 持续动画（随 player 跟随 + 绕身旋转/呼吸脉冲）
+    if (auraPoints) updateAura(0.016);
     renderer.render(scene, camera);
   }
 
