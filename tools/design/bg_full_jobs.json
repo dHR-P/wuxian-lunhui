@@ -1,0 +1,221 @@
+{
+  "style_suffix": "Photorealistic empty scene, absolutely no people, no characters, no humanoid figures anywhere, no corpse, no watermark, cinematic single wide shot, vertical 768x1024 composition, film grain, high detail. The scene is completely empty of living and dead figures.",
+  "jobs": [
+    {
+      "slug": "yiying",
+      "new_bg": "yiying_bg.png",
+      "scenes_file": "scenes_yiying.rs",
+      "scene_id": "yiy_s0_arrive",
+      "old_bg": "img_train.png",
+      "qdesc": "异形4 宇宙飞船奥瑞迦号金属走廊/孵化舱",
+      "prompt": "Interior of a derelict colony starship 'Auriga', a long metallic sci-fi corridor with ribbed alloy wall panels, exposed maintenance conduits, dim emergency strip lights, faint cold blue tech glow, the entrance to a dark incubation chamber with organic slime coating a hatch. Empty, no people."
+    },
+    {
+      "slug": "moruiya",
+      "new_bg": "moruiya_bg.png",
+      "scenes_file": "scenes_moruiya.rs",
+      "scene_id": "mo_01_gate",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "摩瑞亚 矮人矿坑石柱大厅",
+      "prompt": "Vast dwarven mine hall of Moria, immense carved stone pillars supporting a dark cavern roof, torchlight and faint blue glow, broken dwarf masonry and faded runes, stone floor, grand ancient underground space. Empty, no people."
+    },
+    {
+      "slug": "sishen",
+      "new_bg": "sishen_bg.png",
+      "scenes_file": "scenes_sishen.rs",
+      "scene_id": "ss_00",
+      "old_bg": "img_train.png",
+      "qdesc": "死神来了 机场候机厅",
+      "prompt": "Modern airport departures hall, long rows of empty seats, large glass windows facing an empty runway and jet bridges, a departure board, sleek polished floor, cold fluorescent light, quiet ominous atmosphere. Empty, no people."
+    },
+    {
+      "slug": "mumiyi",
+      "new_bg": "mumiyi_bg.png",
+      "scenes_file": "scenes_mumiyi.rs",
+      "scene_id": "mm_00_camp",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "木乃伊 埃及地宫圣甲虫厅",
+      "prompt": "Ancient Egyptian underground crypt hall, carved sandstone walls with hieroglyph reliefs, rows of massive stone scarab statues, dust-filled beam of torchlight from above, a sand floor, ominous dark tomb chamber. Empty, no people."
+    },
+    {
+      "slug": "xinghe",
+      "new_bg": "xinghe_bg.png",
+      "scenes_file": "scenes_xinghe.rs",
+      "scene_id": "xh_00",
+      "old_bg": "img_horde.png",
+      "qdesc": "星河战队 异星虫巢/登陆场",
+      "prompt": "Alien planet landing zone at dusk, a rugged rocky terrain with a crashed military drop-craft, scattered supply crates, and in the distance the dark entrance of a vast organic bug hive carved with tunnels and chitin spires. Empty, no people."
+    },
+    {
+      "slug": "juluoji",
+      "new_bg": "juluoji_bg.png",
+      "scenes_file": "scenes_juluoji.rs",
+      "scene_id": "jl_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "侏罗纪 热带雨林/围栏",
+      "prompt": "Jurassic visitor center at the edge of a dense tropical rainforest, tall glass visitor hall alongside towering electric fence posts, wet foliage, foggy jungle canopy, faint amber lights, damp oppressive jungle atmosphere. Empty, no people, no dinosaur."
+    },
+    {
+      "slug": "yinse",
+      "new_bg": "yinse_bg.png",
+      "scenes_file": "scenes_yinse.rs",
+      "scene_id": "ys_01_drop",
+      "old_bg": "img_ysd_l1_waste.png",
+      "qdesc": "银色大地 白银死战荒原",
+      "prompt": "A desolate pale silver wasteland battlefield, flat white-grey cracking ground with scattered ruined war banners and broken weapons stuck in the dirt, a dim overcast glow, ash drifting, vast empty dead plains stretching to the horizon. Empty, no people."
+    },
+    {
+      "slug": "tianshe",
+      "new_bg": "tianshe_bg.png",
+      "scenes_file": "scenes_tianshe.rs",
+      "scene_id": "ts_open",
+      "old_bg": "img_corridor.png",
+      "qdesc": "天蛇 地下基因实验室",
+      "prompt": "Underground genetic laboratory corridor, cold concrete and steel walls, rows of sealed glass incubation tanks filled with faint green liquid, exposed pipes and cables, dim fluorescent tubes, clinical oppressive horror atmosphere. Empty, no people."
+    },
+    {
+      "slug": "tianting",
+      "new_bg": "tianting_bg.png",
+      "scenes_file": "scenes_tianting.rs",
+      "scene_id": "tt_01_drop",
+      "old_bg": "img_zhuyuan_book",
+      "qdesc": "洪荒天庭 南天门/凌霄殿",
+      "prompt": "Ruined celestial heavenly palace gate complex, broken white jade gate with shattered stone pillars, drifting cloud and faint golden divine light, cracked marble steps, an ancient majestic fallen palace courtyard among the clouds. Empty, no people."
+    },
+    {
+      "slug": "jiguancheng",
+      "new_bg": "jiguancheng_bg.png",
+      "scenes_file": "scenes_jiguancheng.rs",
+      "scene_id": "jg_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "机关城 墨家机关城",
+      "prompt": "Ancient Mohist mechanism city, towering bronze and wood city gate with turning gears and pulley systems, interlocking machine walls, blue and bronze tones, steam vents, brass fittings, an abandoned grand steampunk chinese mechanism fortress plaza. Empty, no people."
+    },
+    {
+      "slug": "cangjingge",
+      "new_bg": "cangjingge_bg.png",
+      "scenes_file": "scenes_cangjingge.rs",
+      "scene_id": "cj_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "藏经阁 藏经阁书楼",
+      "prompt": "Ancient Chinese sutra repository tower interior, towering wooden bookshelves stacked with scrolls and ancient texts reaching the high ceiling, carved wooden beams, lantern light, dust motes in the air, quiet sacred dim library. Empty, no people."
+    },
+    {
+      "slug": "wulin",
+      "new_bg": "wulin_bg.png",
+      "scenes_file": "scenes_wulin.rs",
+      "scene_id": "wl_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "武林大会 擂台广场",
+      "prompt": "Martial arts tournament arena square, a large stone fighting platform in the center surrounded by wooden stands and banners fluttering in the wind, oil lamps, mountain temple backdrop, an ancient chinese competition plaza. Empty, no people."
+    },
+    {
+      "slug": "tongqu",
+      "new_bg": "tongqu_bg.png",
+      "scenes_file": "scenes_tongqu.rs",
+      "scene_id": "tq_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "通衢古镇 江南古镇夜雨街",
+      "prompt": "Jiangnan ancient water-town street on a rainy night, wet bluestone alley reflecting lantern light, black-tiled eaves dripping rain, wooden shopfronts with dim red paper lanterns, a stone bridge over a small canal, glistening wet road. Empty, no people."
+    },
+    {
+      "slug": "mojiao",
+      "new_bg": "mojiao_bg.png",
+      "scenes_file": "scenes_mojiao.rs",
+      "scene_id": "mj_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "魔教总坛 血月山道",
+      "prompt": "A narrow mountain path leading up to a demonic cult headquarters under a blood-red full moon, dark pine forest on both sides, jagged cliffs, a crimson banner and stone gateway in the distance, ominous crimson moonlight casting long shadows. Empty, no people."
+    },
+    {
+      "slug": "hezi",
+      "new_bg": "hezi_bg.png",
+      "scenes_file": "scenes_hezi.rs",
+      "scene_id": "hz_00",
+      "old_bg": "img_laser.png",
+      "qdesc": "异位面 倒影界星海",
+      "prompt": "A dreamlike alternate-dimension mirror realm, a vast dark space filled with a huge inverted sea of stars, floating shards of land, a luminous nebula and star field where the ground reflects the sky, surreal cold otherworldly scene. Empty, no people."
+    },
+    {
+      "slug": "shaqiu",
+      "new_bg": "shaqiu_bg.png",
+      "scenes_file": "scenes_shaqiu.rs",
+      "scene_id": "sq_00_intro",
+      "old_bg": "img_laser.png",
+      "qdesc": "沙丘魔海 绿潮荒漠",
+      "prompt": "A desolate desert flooded with an eerie green toxic tide, shallow green glowing water pooling between red sand dunes, a half-buried crashed spacecraft wreck, strange green light haze over the horizon at dusk. Empty, no people."
+    },
+    {
+      "slug": "yize",
+      "new_bg": "yize_bg.png",
+      "scenes_file": "scenes_yize.rs",
+      "scene_id": "yz_01_arrive",
+      "old_bg": "img_laser.png",
+      "qdesc": "遗泽 神迹殿堂",
+      "prompt": "Interior of an ancient sacred relic temple ruin from a lost advanced civilization, a vast vaulted hall with towering columns, a colossal doorway of sealed stone, glowing energy runes on the walls, shafts of pale divine light from a high opening. Empty, no people."
+    },
+    {
+      "slug": "poxiao",
+      "new_bg": "poxiao_bg.png",
+      "scenes_file": "scenes_poxiao.rs",
+      "scene_id": "px_00_open",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "破晓 黎明之城清晨",
+      "prompt": "A barricaded city street at the first light of dawn, a holy medieval European town with a cathedral spire, police barricades and quarantine tape, cobblestone road in pale morning light, scattered papers, cold sunrise glow. Empty, no people."
+    },
+    {
+      "slug": "tiexue",
+      "new_bg": "tiexue_bg.png",
+      "scenes_file": "scenes_tiexue.rs",
+      "scene_id": "tx_00_open",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "铁血金字塔 冰川金字塔",
+      "prompt": "A massive black angular pyramid rising from a frozen glacial valley, ice cliffs and snow around its base, dark alien architecture, frigid blue atmosphere, a crack in the ice leading toward an entrance ramp. Empty, no people."
+    },
+    {
+      "slug": "xingjichuanqi2",
+      "new_bg": "xingjichuanqi2_bg.png",
+      "scenes_file": "scenes_xingjichuanqi2.rs",
+      "scene_id": "xj2_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "寂静岭2 灰雾矿洞",
+      "prompt": "Grey fog-filled abandoned mine entrance, dark dripping rock tunnel mouth half hidden in spreading mist, rusty mine cart rails leading into blackness, pale ashen fog, oppressive silent horror. Empty, no people."
+    },
+    {
+      "slug": "jialebi",
+      "new_bg": "jialebi_bg.png",
+      "scenes_file": "scenes_jialebi.rs",
+      "scene_id": "jb_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "加勒比 黑珍珠海盗船",
+      "prompt": "Deck of a black pirate ship 'Black Pearl' at sea, worn black wooden deck planks, furled black sails, ropes and rigging, a wheel at the stern, dark stormy sea and faint moonlight. Empty, no people."
+    },
+    {
+      "slug": "shenghua3",
+      "new_bg": "shenghua3_bg.png",
+      "scenes_file": "scenes_shenghua3.rs",
+      "scene_id": "sh3_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "生化3 浣熊市地下",
+      "prompt": "Raccoon City underground sewer tunnel, flooded concrete channel with murky still water, broken pipes dripping, rusted metal ladders and grates, sickly green emergency light, abandoned filth. Empty, no people, no zombie."
+    },
+    {
+      "slug": "jishujing",
+      "new_bg": "jishujing_bg.png",
+      "scenes_file": "scenes_jishujing.rs",
+      "scene_id": "jj2_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "弗莱迪归来 梦境锅炉房",
+      "prompt": "A dreamlike boiler room of a decaying industrial building, massive rusted steel boilers and tangled pipes, orange furnace glow leaking between cracks, steam hissing, crumbling floor, nightmare dark atmosphere. Empty, no people."
+    },
+    {
+      "slug": "bihai",
+      "new_bg": "bihai_bg.png",
+      "scenes_file": "scenes_bihai.rs",
+      "scene_id": "bh_00",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "深海阴影 深海沉船",
+      "prompt": "A dark deep-sea shipwreck resting on the ocean floor, a rusted sunken vessel half buried in silt, a faint deep blue shaft of light from above piercing the black water, drifting sediment, looming deep darkness. Empty, no people."
+    }
+  ]
+}

@@ -309,7 +309,7 @@ pub static JIGUAN_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 开场（s_jc_open）================= */
 SceneDef {
-    id: "jg_00", bg: Some("img_zhuyuan_book.png"), loc: Some("机关城 · 外城广场"),
+    id: "jg_00", bg: Some("jiguancheng_bg.png"), loc: Some("机关城 · 外城广场"),
     mood: "mystery", speaker: Some("墨门断碑遗刻"), voice: Some("vo_jg_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>潜入机关城，破解齿轮阵，直取核心密室。失败代价：被扣 300 点复活。",

@@ -157,7 +157,7 @@ pub static JISHUJING_SCENES: &[SceneDef] = &[
 
 /* ================= 开场 ================= */
 SceneDef {
-    id: "jj2_00", bg: Some("img_zhuyuan_book.png"), loc: Some("梦境边缘 ≪任务发布≫"),
+    id: "jj2_00", bg: Some("jishujing_bg.png"), loc: Some("梦境边缘 ≪任务发布≫"),
     mood: "mystery", speaker: Some("主神·梦境入口"), voice: Some("vo_jj2_1"),
     text: TextSpec::Static(&[
         "<b>【主线任务·寻回梦境】</b>你被拖进榆树街的午后。午睡本不该是杀人的地方——可梦里有人睡得「富可敌国」，有人却再也没能醒。",

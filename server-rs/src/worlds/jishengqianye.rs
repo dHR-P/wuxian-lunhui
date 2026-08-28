@@ -91,7 +91,7 @@ pub static POINTS: &[PointDef] = &[
     PointDef { id: "js_pt_1", name: "调查点", floor: 0, x: 20, y: 5, route: "js_00" },
 ];
 pub static ENEMIES: &[EnemyDef] = &[
-    EnemyDef { id: "js_e_1", name: "敌人", floor: 0, x: 30, y: 5, radius: 3, fight: "js_boss" },
+    EnemyDef { id: "js_e_1", name: "敌人", floor: 0, x: 30, y: 5, radius: 3, fight: "wc_jq_boss" },
 ];
 pub static NPCS: &[NpcDef] = &[];
 pub static ZONES: &[ZoneDef] = &[];

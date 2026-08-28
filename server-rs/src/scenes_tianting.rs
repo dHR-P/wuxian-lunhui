@@ -204,7 +204,7 @@ pub static TIANTING_SCENES: &[SceneDef] = &[
 
 /* ---- 幕 0 ・ 坠落：南天门残垣（L1） ---- */
 SceneDef {
-    id: "tt_01_drop", bg: Some("img_zhuyuan_book"), loc: Some("主神广场 · 解锁·洪荒天庭"),
+    id: "tt_01_drop", bg: Some("tianting_bg.png"), loc: Some("主神广场 · 解锁·洪荒天庭"),
     mood: "danger", speaker: Some("李铭（记录员）"), voice: Some("vo_tianting_liming_start"),
     text: TextSpec::Static(&[
         "<b>【高难副本·主线任务】</b>深入被封印的「洪荒天庭残境」，调查封神战的真相，在镇压与被镇压之间求生。",

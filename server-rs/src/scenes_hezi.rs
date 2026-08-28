@@ -193,7 +193,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
 
     /* ================= 序 · 世界展示 ================= */
     SceneDef {
-        id: "hz_00", bg: Some("img_laser.png"), loc: Some("倒影界 · 入境口"),
+        id: "hz_00", bg: Some("hezi_bg.png"), loc: Some("倒影界 · 入境口"),
         mood: "wonder", speaker: Some("旁白"), voice: Some("vo_hz_open"),
         text: TextSpec::Static(&[
             "一阵失重感过后，你踏入一个不属于任何已知经纬的地方。天空倒映在脚下，河流向天上倒流，远处的岛悬在半空。",

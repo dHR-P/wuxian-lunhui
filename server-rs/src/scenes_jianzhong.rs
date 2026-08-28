@@ -344,7 +344,7 @@ pub static JIANZHONG_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 开场 山门古道（L1）================= */
 SceneDef {
-    id: "jz_00", bg: Some("img_zhuyuan_book.png"), loc: Some("剑冢 · 山门古道"),
+    id: "jz_00", bg: Some("bg_jz_l1_shanmen.png"), loc: Some("剑冢 · 山门古道"),
     mood: "mystery", speaker: Some("守陵人"), voice: Some("vo_jz_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>潜入千年禁地剑冢，承受剑意压迫、破心魔镜像，直面剑冢之灵，带着答案全身而退。失败代价：被扣 200 点复活。",
@@ -399,7 +399,7 @@ SceneDef {
 
 /* ================= L1 山门古道 hub ================= */
 SceneDef {
-    id: "jz_01", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 山门古道"),
+    id: "jz_01", bg: Some("bg_jz_l1_shanmen.png"), loc: Some("L1 · 山门古道"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "冷雾锁着残破的石坊。守陵人的小屋在西南，碑林在北，一条荒径隐入西侧浓雾。主道甬道直通石阶，石阶之上便是埋剑长廊。",

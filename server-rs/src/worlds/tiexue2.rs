@@ -123,7 +123,7 @@ pub static POINTS: &[maps::PointDef] = &[
     // ---- L2 金字塔墓道 ----
     maps::PointDef { id: "tx2_p_wall_l2", name: "入口雨刻壁画", floor: 1, x: 4, y: 4, route: "tx2_30_wall" },
     maps::PointDef { id: "tx2_p_warrack", name: "陪葬室 · 铁锈武器架", floor: 1, x: 17, y: 8, route: "tx2_30_warrack" },
-    maps::PointDef { id: "tx2_p_oracle", name: "祭坛预言碑", floor: 1, x: 19, y: 16, route: "tx2_31_oracle" },
+    maps::PointDef { id: "tx2_p_oracle", name: "祭坛预言碑", floor: 1, x: 19, y: 16, route: "tx2_33_core" },
     maps::PointDef { id: "tx2_p_acid", name: "酸液锁管", floor: 1, x: 17, y: 23, route: "tx2_32_acid" },
     maps::PointDef { id: "tx2_p_egg5", name: "异形卵 · 巢室甲", floor: 1, x: 8, y: 8, route: "tx2_21_egg" },
     maps::PointDef { id: "tx2_p_egg6", name: "异形卵 · 巢室乙", floor: 1, x: 10, y: 8, route: "tx2_21_egg" },

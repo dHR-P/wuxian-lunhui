@@ -308,7 +308,7 @@ pub static TIEXUE_SCENES: &[SceneDef] = &[
 
 /* ================= 第一幕 · 开场：雪与猎场（L1） ================= */
 SceneDef {
-    id: "tx_00_open", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 铁血金字塔 · 裂谷入口"),
+    id: "tx_00_open", bg: Some("tiexue_bg.png"), loc: Some("L1 · 铁血金字塔 · 裂谷入口"),
     mood: "cold", speaker: Some("楚浩"), voice: Some("vo_tx_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>深入南极冰盖下三千米的铁血祭坛金字塔，击杀异形皇后，夺取死亡神性颗粒。",

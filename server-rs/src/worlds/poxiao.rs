@@ -158,7 +158,7 @@ pub static NPCS: &[maps::NpcDef] = &[
     maps::NpcDef { id: "px_n_dalton", name: "爱德华·道尔顿", floor: 0, x: 6, y: 5, talk: "px_dalton" },
     maps::NpcDef { id: "px_n_audrey", name: "奥黛丽·班尼特", floor: 1, x: 9, y: 7, talk: "px_rebels" },
     maps::NpcDef { id: "px_n_elvis", name: "埃尔维斯", floor: 1, x: 5, y: 5, talk: "px_elvis" },
-    maps::NpcDef { id: "px_n_edgar", name: "埃德加·冯·豪森", floor: 2, x: 30, y: 5, talk: "px_edgar" },
+    maps::NpcDef { id: "px_n_edgar", name: "埃德加·冯·豪森", floor: 2, x: 30, y: 5, talk: "px_edgar_deal" },
 ];
 
 /// 特殊区域：L1 十字路口沉沦者群 Zone + L3 实验笼挣脱沉沦者 Zone。

@@ -163,7 +163,7 @@ pub static TONGQU_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 夜雨投镇（tq_00）================= */
 SceneDef {
-    id: "tq_00", bg: Some("img_zhuyuan_book.png"), loc: Some("通衢古镇 · 镇口"),
+    id: "tq_00", bg: Some("tongqu_bg.png"), loc: Some("通衢古镇 · 镇口"),
     mood: "mystery", speaker: Some("更夫梆声"), voice: Some("vo_tq_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>夜投通衢古镇，就一身镖局侠义——追凶、护卫、识破黑店，直指雪夜劫镖。失败代价：被扣 300 点复活。",

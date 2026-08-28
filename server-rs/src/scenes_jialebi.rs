@@ -141,7 +141,7 @@ pub static JIALEBI_SCENES: &[SceneDef] = &[
 
 /* ================= 开场钩子 ================= */
 SceneDef {
-    id: "jb_00", bg: Some("img_zhuyuan_book.png"), loc: Some("主神空间 · 任务发布 ≪黑珍珠≫"),
+    id: "jb_00", bg: Some("jialebi_bg.png"), loc: Some("主神空间 · 任务发布 ≪黑珍珠≫"),
     mood: "mystery", speaker: Some("主神·任务发布"), voice: None,
     text: TextSpec::Static(&[
         "<b>【支线任务 · 黑珍珠宝藏】</b>登上黑珍珠号，穿过沉船湾，潜入财宝洞，取回传说中的呼吸之银。<i>「这是一方等着被写进传说的海。」</i>",

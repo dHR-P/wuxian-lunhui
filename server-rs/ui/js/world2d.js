@@ -222,6 +222,43 @@ const World2D = (() => {
           c.fillRect(ox + 6 + gx * (TILE / 3), 6 + gy * (TILE / 3), 1.4, 1.4);
         }
       }
+      // —— 画质细化：更丰富的地格随机会划痕/裂纹/角污自行生长（仅观感，地格 `.`/`#`/`I` 与探索逻辑不变）——
+      // 6) 细划痕簇（朝随机方向的 2-4 道 1px 短线，金属格密集、走廊稀疏）
+      c.strokeStyle = "rgba(0,0,0,.22)";
+      c.lineWidth = 1;
+      for (let ci = 0; ci < (vt === 0 ? 6 : vt === 1 ? 3 : 2); ci++) {
+        const cx0 = ox + rnd(2, TILE - 4, 9001 + vt * 131 + ci * 7);
+        const cy0 = rnd(2, TILE - 4, 9101 + ci * 11);
+        const ca = rnd(0, 3.14, 9201 + ci * 13);                 // 簇主方向
+        const clen = rnd(2, 5, 9301 + ci * 17);
+        for (let sc = 0; sc < 3; sc++) {                          // 簇内 2~3 道
+          c.beginPath();
+          c.moveTo(cx0 + rnd(-1, 1, 9401 + sc * 3), cy0 + rnd(-1, 1, 9501 + sc * 5));
+          c.lineTo(cx0 + Math.cos(ca) * clen * sc * 0.9 + rnd(-1, 2, 9601 + sc * 7),
+                   cy0 + Math.sin(ca) * clen * sc * 0.9 + rnd(-1, 2, 9701 + sc * 9));
+          c.stroke();
+        }
+      }
+      // 7) 随机裂纹（1 条折线断裂，材质「受力碎裂」感，金属/混凝土都有）
+      if ((rnd(0, 1, 9801 + vt * 17)) < 0.7) {
+        c.strokeStyle = "rgba(5,8,14,.30)";
+        const kx0 = ox + rnd(3, TILE - 3, 9901 + vt * 19), ky0 = rnd(3, TILE - 3, 10001 + vt * 23);
+        const kdir = rnd(0, 6.28, 10101 + vt * 29);
+        let kx = kx0, ky = ky0;
+        c.beginPath(); c.moveTo(kx, ky);
+        for (let kg = 0; kg < 4; kg++) {
+          kx += Math.cos(kdir + rnd(-0.8, 0.8, 10201 + kg * 5)) * rnd(3, 6, 10301 + kg * 7);
+          ky += Math.sin(kdir + rnd(-0.8, 0.8, 10401 + kg * 11)) * rnd(3, 6, 10501 + kg * 13);
+          c.lineTo(kx, ky);
+        }
+        c.stroke();
+      }
+      // 8) 边角污渍（脏水/油污聚在右下角——受 AO 方向暗示，环状暗渍）
+      c.fillStyle = "rgba(30,26,18,.16)";
+      c.beginPath();
+      c.arc(ox + TILE - rnd(3, 8, 10601 + vt * 31), TILE - rnd(3, 8, 10701 + vt * 37),
+            rnd(3, 6, 10801 + vt * 41), 0, 6.28);
+      c.fill();
     }
 
     tileCache = bt;

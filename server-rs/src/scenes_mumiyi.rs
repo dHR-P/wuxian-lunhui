@@ -293,7 +293,7 @@ pub fn mumiyi_fight(id: &str) -> Option<&'static FightCfg> {
 pub static MUMIYI_SCENES: &[SceneDef] = &[
     // ================= 考古营地 · 主神交付 =================
     SceneDef {
-        id: "mm_00_camp", bg: Some("img_zhuyuan_book.png"),
+        id: "mm_00_camp", bg: Some("mumiyi_bg.png"),
         loc: Some("哈姆纳塔 · 考古营地"), mood: "黄沙夜色，篝火明灭",
         speaker: Some("主神提示"), voice: None,
         text: TextSpec::Static(&[

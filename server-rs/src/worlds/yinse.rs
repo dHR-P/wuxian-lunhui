@@ -141,7 +141,7 @@ pub static YINSE_FLOOR_NAMES: &[&str] = &[
 pub static POINTS: &[maps::PointDef] = &[
     // ---- L1 ----
     maps::PointDef { id: "ys_pt_drop", name: "撤离信标", floor: 0, x: 2, y: 13, route: "ys_evac_beacon" },
-    maps::PointDef { id: "ys_dragon_pit", name: "龙尸坑 · 地灵方解石", floor: 0, x: 30, y: 6, route: "ys_01_dragon_pit" },
+    maps::PointDef { id: "ys_dragon_pit", name: "龙尸坑 · 地灵方解石", floor: 0, x: 30, y: 6, route: "ys_01_drop" },
     maps::PointDef { id: "ys_war_flags", name: "北废墟 · 战旗与情报", floor: 0, x: 17, y: 15, route: "ys_02_war_flags" },
     // ---- L2 ----
     maps::PointDef { id: "ys_power_master", name: "配电塔总控", floor: 1, x: 4, y: 7, route: "ys_06_power_master" },
@@ -160,33 +160,33 @@ pub static POINTS: &[maps::PointDef] = &[
 /// 圣位红线：龙族高圣 / 东天二皇 / 瓦罗论本体一律不入此表（只做演出场景）。
 pub static ENEMIES: &[maps::EnemyDef] = &[
     // ---- L1 白银荒原 ----
-    maps::EnemyDef { id: "ys_e_scav1", name: "古兽人拾荒者", floor: 0, x: 6, y: 8, radius: 3, fight: "ys_scav" },
-    maps::EnemyDef { id: "ys_e_scav2", name: "古兽人拾荒者", floor: 0, x: 14, y: 21, radius: 3, fight: "ys_scav" },
-    maps::EnemyDef { id: "ys_e_brute", name: "战潮碎骨者", floor: 0, x: 26, y: 3, radius: 3, fight: "ys_brute" },
-    maps::EnemyDef { id: "ys_e_worm1", name: "银色机械蠕虫", floor: 0, x: 32, y: 14, radius: 2, fight: "ys_worm" },
-    maps::EnemyDef { id: "ys_e_worm2", name: "银色机械蠕虫", floor: 0, x: 11, y: 23, radius: 2, fight: "ys_worm" },
-    maps::EnemyDef { id: "ys_e_worm3", name: "银色机械蠕虫", floor: 0, x: 24, y: 20, radius: 2, fight: "ys_worm" },
+    maps::EnemyDef { id: "ys_e_scav1", name: "古兽人拾荒者", floor: 0, x: 6, y: 8, radius: 3, fight: "ws_scav" },
+    maps::EnemyDef { id: "ys_e_scav2", name: "古兽人拾荒者", floor: 0, x: 14, y: 21, radius: 3, fight: "ws_scav" },
+    maps::EnemyDef { id: "ys_e_brute", name: "战潮碎骨者", floor: 0, x: 26, y: 3, radius: 3, fight: "ws_brute" },
+    maps::EnemyDef { id: "ys_e_worm1", name: "银色机械蠕虫", floor: 0, x: 32, y: 14, radius: 2, fight: "ws_worm" },
+    maps::EnemyDef { id: "ys_e_worm2", name: "银色机械蠕虫", floor: 0, x: 11, y: 23, radius: 2, fight: "ws_worm" },
+    maps::EnemyDef { id: "ys_e_worm3", name: "银色机械蠕虫", floor: 0, x: 24, y: 20, radius: 2, fight: "ws_worm" },
     // ---- L2 都市遗迹 ----
-    maps::EnemyDef { id: "ys_e_servant1", name: "失控地灵机仆", floor: 1, x: 14, y: 3, radius: 3, fight: "ys_servant" },
-    maps::EnemyDef { id: "ys_e_servant2", name: "失控地灵机仆", floor: 1, x: 30, y: 8, radius: 3, fight: "ys_servant" },
-    maps::EnemyDef { id: "ys_e_servant3", name: "失控地灵机仆", floor: 1, x: 8, y: 20, radius: 3, fight: "ys_servant" },
-    maps::EnemyDef { id: "ys_e_servant4", name: "失控地灵机仆", floor: 1, x: 26, y: 19, radius: 3, fight: "ys_servant" },
-    maps::EnemyDef { id: "ys_e_golem1", name: "符文电偶", floor: 1, x: 21, y: 4, radius: 3, fight: "ys_golem" },
-    maps::EnemyDef { id: "ys_e_golem2", name: "符文电偶", floor: 1, x: 12, y: 18, radius: 3, fight: "ys_golem" },
-    maps::EnemyDef { id: "ys_e_fused1", name: "机械缝合体", floor: 1, x: 19, y: 16, radius: 3, fight: "ys_fused" },
-    maps::EnemyDef { id: "ys_e_fused2", name: "机械缝合体", floor: 1, x: 7, y: 13, radius: 3, fight: "ys_fused" },
+    maps::EnemyDef { id: "ys_e_servant1", name: "失控地灵机仆", floor: 1, x: 14, y: 3, radius: 3, fight: "ws_servant" },
+    maps::EnemyDef { id: "ys_e_servant2", name: "失控地灵机仆", floor: 1, x: 30, y: 8, radius: 3, fight: "ws_servant" },
+    maps::EnemyDef { id: "ys_e_servant3", name: "失控地灵机仆", floor: 1, x: 8, y: 20, radius: 3, fight: "ws_servant" },
+    maps::EnemyDef { id: "ys_e_servant4", name: "失控地灵机仆", floor: 1, x: 26, y: 19, radius: 3, fight: "ws_servant" },
+    maps::EnemyDef { id: "ys_e_golem1", name: "符文电偶", floor: 1, x: 21, y: 4, radius: 3, fight: "ws_golem" },
+    maps::EnemyDef { id: "ys_e_golem2", name: "符文电偶", floor: 1, x: 12, y: 18, radius: 3, fight: "ws_golem" },
+    maps::EnemyDef { id: "ys_e_fused1", name: "机械缝合体", floor: 1, x: 19, y: 16, radius: 3, fight: "ws_fused" },
+    maps::EnemyDef { id: "ys_e_fused2", name: "机械缝合体", floor: 1, x: 7, y: 13, radius: 3, fight: "ws_fused" },
     // ---- L3 升华工厂 ----
-    maps::EnemyDef { id: "ys_e_guard1", name: "生产线守卫机仆", floor: 2, x: 10, y: 8, radius: 3, fight: "ys_guardline" },
-    maps::EnemyDef { id: "ys_e_guard2", name: "生产线守卫机仆", floor: 2, x: 20, y: 15, radius: 3, fight: "ys_guardline" },
-    maps::EnemyDef { id: "ys_e_guard3", name: "生产线守卫机仆", floor: 2, x: 29, y: 18, radius: 3, fight: "ys_guardline" },
-    maps::EnemyDef { id: "ys_e_pupa", name: "低纬度灾厄之蛹", floor: 2, x: 33, y: 6, radius: 2, fight: "ys_pupa" },
-    maps::EnemyDef { id: "ys_e_snake1", name: "裂缝银蛇", floor: 2, x: 30, y: 5, radius: 2, fight: "ys_abyss_snake" },
-    maps::EnemyDef { id: "ys_e_snake2", name: "裂缝银蛇", floor: 2, x: 35, y: 7, radius: 2, fight: "ys_abyss_snake" },
+    maps::EnemyDef { id: "ys_e_guard1", name: "生产线守卫机仆", floor: 2, x: 10, y: 8, radius: 3, fight: "ws_guardline" },
+    maps::EnemyDef { id: "ys_e_guard2", name: "生产线守卫机仆", floor: 2, x: 20, y: 15, radius: 3, fight: "ws_guardline" },
+    maps::EnemyDef { id: "ys_e_guard3", name: "生产线守卫机仆", floor: 2, x: 29, y: 18, radius: 3, fight: "ws_guardline" },
+    maps::EnemyDef { id: "ys_e_pupa", name: "低纬度灾厄之蛹", floor: 2, x: 33, y: 6, radius: 2, fight: "ws_pupa" },
+    maps::EnemyDef { id: "ys_e_snake1", name: "裂缝银蛇", floor: 2, x: 30, y: 5, radius: 2, fight: "ws_abyss_snake" },
+    maps::EnemyDef { id: "ys_e_snake2", name: "裂缝银蛇", floor: 2, x: 35, y: 7, radius: 2, fight: "ws_abyss_snake" },
     // ---- L4 瓦罗之墓 ----
-    maps::EnemyDef { id: "ys_e_warden1", name: "机界守墓枢机", floor: 3, x: 12, y: 8, radius: 3, fight: "ys_warden" },
-    maps::EnemyDef { id: "ys_e_warden2", name: "机界守墓枢机", floor: 3, x: 30, y: 15, radius: 3, fight: "ys_warden" },
-    maps::EnemyDef { id: "ys_e_worm_r1", name: "银蚴残余", floor: 3, x: 7, y: 21, radius: 2, fight: "ys_worm" },
-    maps::EnemyDef { id: "ys_e_worm_r2", name: "银蚴残余", floor: 3, x: 33, y: 19, radius: 2, fight: "ys_worm" },
+    maps::EnemyDef { id: "ys_e_warden1", name: "机界守墓枢机", floor: 3, x: 12, y: 8, radius: 3, fight: "ws_warden" },
+    maps::EnemyDef { id: "ys_e_warden2", name: "机界守墓枢机", floor: 3, x: 30, y: 15, radius: 3, fight: "ws_warden" },
+    maps::EnemyDef { id: "ys_e_worm_r1", name: "银蚴残余", floor: 3, x: 7, y: 21, radius: 2, fight: "ws_worm" },
+    maps::EnemyDef { id: "ys_e_worm_r2", name: "银蚴残余", floor: 3, x: 33, y: 19, radius: 2, fight: "ws_worm" },
 ];
 
 /// NPC：阿桑（人族劫掠队遗孤）+ 小枢（友善地灵族遗民）。talk 引用 scenes_yinse.rs 场景。
@@ -199,17 +199,17 @@ pub static NPCS: &[maps::NpcDef] = &[
 /// kind: "fight"=BOSS/战斗区；"puzzle"=机关；"overlay"=演出（不可战）。
 pub static ZONES: &[maps::ZoneDef] = &[
     // L1 战潮王·髅 miniboss（条件触发）
-    maps::ZoneDef { id: "ys_z_mini_lou", name: "战潮王 · 髅战场", floor: 0, x: 21, y: 9, kind: "fight", ref_id: "ys_lou" },
+    maps::ZoneDef { id: "ys_z_mini_lou", name: "战潮王 · 髅战场", floor: 0, x: 21, y: 9, kind: "fight", ref_id: "ws_lou" },
     // L2 配电机关链（master→B→C 顺序）
     maps::ZoneDef { id: "ys_z_powerchain", name: "三配电点机关链", floor: 1, x: 4, y: 7, kind: "puzzle", ref_id: "ys_06_power_master" },
     // L2 银蚴巢群（南区污水渠）
-    maps::ZoneDef { id: "ys_z_nest", name: "银蚴巢群", floor: 1, x: 31, y: 21, kind: "fight", ref_id: "ys_nest" },
+    maps::ZoneDef { id: "ys_z_nest", name: "银蚴巢群", floor: 1, x: 31, y: 21, kind: "fight", ref_id: "ws_nest" },
     // L3 升华装置启动间（真相回放 / G3 门禁内）
     maps::ZoneDef { id: "ys_z_sublime", name: "升华装置启动间", floor: 2, x: 13, y: 13, kind: "puzzle", ref_id: "ys_10_sublime" },
     // L3 低纬度裂缝（灾厄区 / 机关链末端拉杆）
     maps::ZoneDef { id: "ys_z_rift", name: "低纬度裂缝", floor: 2, x: 32, y: 6, kind: "puzzle", ref_id: "ys_11_rift_lever" },
     // L4 BOSS 决战祭坛（进场触发两段式）
-    maps::ZoneDef { id: "ys_z_waro", name: "决战祭坛 · 瓦罗残响", floor: 3, x: 20, y: 12, kind: "fight", ref_id: "ys_waR0_r1" },
+    maps::ZoneDef { id: "ys_z_waro", name: "决战祭坛 · 瓦罗残响", floor: 3, x: 20, y: 12, kind: "fight", ref_id: "ws_waro_r1" },
     // L4 东天二皇投影（演出，不可战）
     maps::ZoneDef { id: "ys_z_huang", name: "东天二皇投影（演出）", floor: 3, x: 20, y: 5, kind: "overlay", ref_id: "ys_waR0_cast" },
 ];
@@ -229,7 +229,7 @@ pub static PORTALS: &[maps::PortalDef] = &[
     // 低纬度裂缝传送：L3(32,12) → L4(33,7)，单向（需 flag rift_open，san-15 走此路）
     maps::PortalDef { id: "ys_pt_rift", floor: 2, x: 32, y: 12, to_floor: 3, tx: 33, ty: 7 },
     // 撤离传送门：L4(20,23) → 主神空间（BOSS 胜利后激活；Route 由 scenes 处理）
-    maps::PortalDef { id: "ys_pt_exit", floor: 3, x: 20, y: 23, to_floor: 0, tx: 20, ty: 23 },
+    maps::PortalDef { id: "ys_pt_exit", floor: 3, x: 20, y: 23, to_floor: 0, tx: 2, ty: 13 },
 ];
 
 /// 门禁（§3.6）：G1 电梯井 / G2 符文闸门 / G3 升华装置启动间 / G4 瓦罗之墓主门。

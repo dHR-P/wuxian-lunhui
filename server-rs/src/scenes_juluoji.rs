@@ -175,7 +175,7 @@ pub static JULUOJI_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 开场（园区断电）================= */
 SceneDef {
-    id: "jl_00", bg: Some("img_zhuyuan_book.png"), loc: Some("侏罗纪公园 · 游客中心"),
+    id: "jl_00", bg: Some("juluoji_bg.png"), loc: Some("侏罗纪公园 · 游客中心"),
     mood: "mystery", speaker: Some("旁白"), voice: Some("vo_jl_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>穿越失序乐园，抵达围栏区撤离台。失败代价：被扣 300 点复活。",

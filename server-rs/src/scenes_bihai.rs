@@ -176,7 +176,7 @@ pub static BIHAI_SCENES: &[SceneDef] = &[
 
 /* ================= 开场 ================= */
 SceneDef {
-    id: "bh_00", bg: Some("img_zhuyuan_book.png"), loc: Some("深海舱 · ≪阴影从海底亮起≫"),
+    id: "bh_00", bg: Some("bihai_bg.png"), loc: Some("深海舱 · ≪阴影从海底亮起≫"),
     mood: "mystery", speaker: Some("主神·任务发布"), voice: Some("vo_bihai_1"),
     text: TextSpec::Static(&[
         "<b>【主线任务 · 深海阴影】</b>下潜至海沟深渊，看清「深渊邪物」——然后，用你的方式为它写下结局。",

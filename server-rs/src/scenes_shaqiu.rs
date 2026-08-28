@@ -333,7 +333,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= 幕1 · 开场：坠落 ================= */
     SceneDef {
-        id: "sq_00_intro", bg: Some("img_laser.png"), loc: Some("坠毁穿梭机残骸 · 西北沙丘"),
+        id: "sq_00_intro", bg: Some("shaqiu_bg.png"), loc: Some("坠毁穿梭机残骸 · 西北沙丘"),
         mood: "fear", speaker: Some("系统播报 → 黑铁"), voice: Some("vo_sq_intro"),
         text: TextSpec::Static(&[
             "主神空间投放完成。穿梭机残骸在身后冒着青烟，黄沙正一寸寸吞没它的轮廓。氧气表开始滴答——你们只剩下压缩空气罐里那点生命。",

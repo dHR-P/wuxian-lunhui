@@ -174,7 +174,7 @@ pub static XJ2_SCENES: &[SceneDef] = &[
 
 /* ================= 开场 ================= */
 SceneDef {
-    id: "xj2_00", bg: Some("img_zhuyuan_book.png"), loc: Some("灰雾之心 ≪寂静岭·任务发布≫"),
+    id: "xj2_00", bg: Some("xingjichuanqi2_bg.png"), loc: Some("灰雾之心 ≪寂静岭·任务发布≫"),
     mood: "mystery", speaker: Some("主神·任务发布"), voice: None,
     text: TextSpec::Static(&[
         "<b>【场景·寂静岭·灰雾之心】</b>你清醒时已站在一条灰雾深处的矿道口。耳边是别人的忏悔、别人的罪、别人的审判。",

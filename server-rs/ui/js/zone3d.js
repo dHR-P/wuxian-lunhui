@@ -24,11 +24,15 @@ const Zone3D = (() => {
   const PX = { x: 0, z: 0 }; // 玩家实时位置
   const EZ = { x: 4, z: 0 }; // 敌人位置
   let attackCd = 0, dodgeCd = 0;
+  let curWeaponStyle = "unarmed"; // 当前武器类型风格（gun/laser/magic/melee/unarmed），由 setData.weapon 下发
+  let victoryT = 0;               // 胜利动作计时（玩家双臂上举），onZoneUpdate(win) 置 1，每帧按 0.04 衰减
   let camDist = 4.6;
   const _camTarget = new THREE.Vector3(); // Bug-10: 相机 lerp 目标复用，避免每帧分配
   let onResize = null;   // 由 init 赋值，dispose 移除
   let afterImages = [];  // 闪避残影
+  let blood = [];        // 命中血粒子（方块飞溅，dispose 释放）
   let dust = null;       // 氛围尘粒（粒子系统，dispose 时释放）
+  let glowTex = null;    // 手写 bloom：additive 径向光晕贴图（Canvas 生成，复用）
 
   // 体素（MC 方块人）敌人开关：true 时敌人用方块拼成的体素人（BoxGeometry 六面明暗）；
   // false 或素材缺失时回退立绘 billboard / 几何体。纯视觉，不影响战斗判定与 Tauri 契约。
@@ -51,6 +55,43 @@ const Zone3D = (() => {
     if (ref === "b_guard") return "guard";
     if (ref === "horde") return "horde";
     return "zombie"; // zombie1_save / zombie1_far / chef_zombie / mut_guard
+  }
+
+  // 武器类型 → 攻击特效风格。输入可为武器 id（wp_*/wpn_*/tr_* 装备格 id）或中文名（hud.weapon）。
+  // 分五类：melee(刀剑斧镰鞭) / gun(枪械弹道) / laser(激光光束) / magic(魔法·修真法术) / unarmed(拳脚无武器)。
+  // 找不到匹配时回退 unarmed（拳脚），刀战默认保留 swingFx 弧形刀光。
+  // 已知武器 id → 特效风格查表（覆盖 items_data::WEAPONS + TRESURE_DEFS 主手/法宝）。按 id 精确归属，
+  // 无法覆盖的再回落按名字关键字正则判别。表内归类依据该武器是枪/激光/法术还是近战刀剑。
+  const WEAPON_STYLE_IDS = {
+    // gun（枪械弹道）：手枪/高斯/银弹/电磁脉冲/引力坍缩炮/轨道狙击
+    wp_gun9: "gun", wp_gauss: "gun", wp_silver_gun: "gun", wp_emi: "gun",
+    wp_gravity_collapse: "gun", wpn_rail_sniper: "gun",
+    // melee（近战刀剑斧镰鞭）
+    wp_axe: "melee", wp_sword: "melee", wp_katana: "melee", wp_holy_sword: "melee",
+    wp_cu_ju: "melee", wp_quantum_core: "melee", wp_scythe_pobing: "melee",
+    wpn_bloodsaber: "melee", wp_quantum_annihil: "melee", wpn_taixu_godsaw: "melee",
+    wpn_nano_whip: "melee", wpn_causality_sword: "melee", cu_bab_benming_fejian: "melee",
+    // magic（修真法术：剑阵/幡/剑意图/法宝）
+    wpn_zhuai_jianpan: "magic", wpn_shihun_fan: "magic", tr_zhuxian_calendar: "magic",
+  };
+  function weaponStyle(weaponId) {
+    const key = String(weaponId || "").toLowerCase();
+    if (WEAPON_STYLE_IDS.hasOwnProperty(key)) return WEAPON_STYLE_IDS[key];
+    if (!key || key === "—" || key === "无" || key === "none") return "unarmed";
+    // —— 激光：laser/photon/beam/光刃/光剑（放枪械前，避免「激光枪」的『枪』误归 gun）
+    if (/(laser|photon|beam|光剑|光刃|光束)/.test(key) || key.includes("激光")) return "laser";
+    // —— 枪械：手枪/高斯/狙击/轨道/银弹/电磁脉冲/引力坍缩炮 · id 'wp_gun9'/'wp_gauss'/'wp_silver_gun'/'wp_emi'/'wpn_rail_sniper'/'wp_gravity_collapse'
+    if (/(gun|pistol|gauss|sniper|rail|gravit|emi|silver|手枪|高斯|狙击|轨道|电磁脉冲|引力|银弹|弹药|枪|shoot)/.test(key)) return "gun";
+    // —— 魔法/修真：法杖/符箓/法宝/法阵/剑阵/剑意/幡/镜/炉/扇/术
+    if (/(magic|spell|staff|wand|soul|sect|法杖|符|法宝|法阵|剑阵|剑意|幡|镜|炉|灵|修真|修仙|术|杖|扇)/.test(key)) return "magic";
+    // —— 近战刀剑：剑/刀/斧/镰/鞭/刃/拳刃
+    if (/(sword|blade|saber|axe|scythe|whip|knife|dagger|katana|剑|刀|斧|镰|鞭|刃)/.test(key)) return "melee";
+    return "unarmed";
+  }
+  // 由 setData 下发的 weapon 字段解析当前风格（入参可能是 style 本身或原始名/id）
+  function resolveWeaponStyle(raw) {
+    if (raw === "gun" || raw === "laser" || raw === "magic" || raw === "melee" || raw === "unarmed") return raw;
+    return weaponStyle(raw);
   }
 
   // 敌人/玩家脚下软阴影（贴地椭圆渐隐）
@@ -174,54 +215,165 @@ const Zone3D = (() => {
     player.userData.sprite = null;
   }
 
-  // 体素方块人敌人（MC 风格）：用 BoxGeometry 拼出头/身/臂/腿，六面用 MeshLambertMaterial 自然受光，
-  // 组内记录随机游走相位。VOXEL_ENEMY=true 时替换立绘 billboard。
-  function buildVoxelEnemy(g, kind, tint) {
-    const box = (w, h, d, col, x, y, z) => {
+  // ---------- 体素方块人（MC 精品化建模）----------
+  // 段数 12：头 + 发顶/帽顶 + 胸 + 腰 + (上臂+前臂)×2 + (大腿+小腿/脚)×2。
+  // 敌我共用 buildVoxelBody 保证同构（仅 cfg 配色/体型不同，脚底 y=0 贴地）。
+  // 肢体均挂在肩/髋枢轴分组(Group)下，rig 记录各枢轴，供 loop() 做呼吸/行走摆动/攻击前摇。
+  function buildVoxelBody(g, cfg) {
+    const c = cfg.colors;
+    const box = (w, h, d, col, gx, x, y, z) => {
       const m = new THREE.Mesh(
         new THREE.BoxGeometry(w, h, d),
         new THREE.MeshLambertMaterial({ color: col })
       );
       m.position.set(x, y, z);
       m.castShadow = true; m.receiveShadow = true;
-      g.add(m);
+      gx.add(m);
       return m;
     };
-    const repaint = tint || (kind === "hunter" ? 0x4a4a52 : kind === "licker" ? 0x8a2a2a : 0x6a5a3a);
-    const dark = 0x3a3430;                      // 裤装深色
-    box(0.9, 1.1, 0.5, repaint, 0, 1.15, 0);    // 躯干
-    box(0.6, 0.6, 0.6, kind === "licker" ? 0x6a1f1f : repaint, 0, 2.05, 0); // 头（加大至 MC 大头观感：0.5→0.6，y 上移 2.0→2.05）
-    box(0.28, 0.95, 0.28, repaint, -0.62, 1.0, 0); // 左臂
-    box(0.28, 0.95, 0.28, repaint, 0.62, 1.0, 0);  // 右臂
-    box(0.34, 0.9, 0.34, dark, -0.22, 0.45, 0);    // 左腿
-    box(0.34, 0.9, 0.34, dark, 0.22, 0.45, 0);     // 右腿
-    g.scale.setScalar(1.15);
-    g.userData.voxel = { phase: Math.random() * 6.28 };
+    const pivot = (x, y, z) => { const p = new THREE.Group(); p.position.set(x, y, z); g.add(p); return p; };
+
+    // 双腿枢轴（髋）——大腿+小腿(脚)
+    const legL = pivot(-0.22, 0.62, 0);
+    const legR = pivot(0.22, 0.62, 0);
+    box(0.34, 0.34, 0.36, c.pants, legL, 0, -0.17, 0);      // 左大腿
+    box(0.30, 0.52, 0.32, c.shoe, legL, 0, -0.56, 0.02);     // 左小腿/脚
+    box(0.34, 0.34, 0.36, c.pants, legR, 0, -0.17, 0);      // 右大腿
+    box(0.30, 0.52, 0.32, c.shoe, legR, 0, -0.56, 0.02);     // 右小腿/脚
+
+    // 上部体（腰+胸+两肩臂+头），枢轴在腰(0.98)——cfg.lean 使其整体前倾（驼背/俯身）
+    const upper = pivot(0, 0.98, 0);
+    box(c.waistW, 0.42, c.torsoD, c.shirt, upper, 0, -0.05, 0);   // 腰
+    box(c.chestW, 0.62, c.torsoD, c.shirt, upper, 0, 0.5, 0);     // 胸
+    // 双肩（臂）枢轴
+    const armL = new THREE.Group(); armL.position.set(-0.56, 0.56, 0); upper.add(armL);
+    const armR = new THREE.Group(); armR.position.set(0.56, 0.56, 0); upper.add(armR);
+    box(0.26, 0.40, 0.26, c.shirt, armL, 0, -0.30, 0);            // 左上臂
+    box(0.24, 0.44, 0.24, c.hand,  armL, 0, -0.72, c.foreZ);      // 左前臂(手)
+    box(0.26, 0.40, 0.26, c.shirt, armR, 0, -0.30, 0);            // 右上臂
+    box(0.24, 0.44, 0.24, c.hand,  armR, 0, -0.72, c.foreZ);      // 右前臂(手)
+    // 头 + 发顶/帽顶（矮扁方块，MC「顶上一块」观感）
+    box(c.headW, 0.62, c.headW, c.skin, upper, 0, 1.12, 0);
+    box(c.headW * 0.92, 0.12, c.headW * 0.92, c.hair, upper, 0, 1.49, 0);
+    upper.rotation.x = cfg.lean || 0;
+    g.userData.rig = { legL, legR, armL, armR, upper };
   }
 
-  // 体素方块人玩家（MC 史蒂夫风）：与 buildVoxelEnemy 同构同比例（脚底 y=0，scale 1.15），
-  // 蓝衣 Steve 配色：0x3a5ba0 主色(衣) + 0x2a3450 裤装(深蓝) + 0xd8a878 肤色(头)。VOXEL_PLAYER=true 时替换立绘。
+  // 体素方块人敌人（MC 风格）：按 kind 区分体型——hunter 更高大(upright)、licker 俯身贴地、
+  // zombie 驼背前倾、guard/horde 标准。VOXEL_ENEMY=true 时替换立绘 billboard。
+  function buildVoxelEnemy(g, kind, tint) {
+    const repaint = tint || (kind === "hunter" ? 0x4a4a52 : kind === "licker" ? 0x8a2a2a : 0x6a5a3a);
+    const V = {
+      hunter: { sc: 1.32, lean: -0.10, shirt: 0x4a4a52, skin: 0x5f5f6a, hair: 0x8f96a3, pants: 0x2a2a30, foreZ: 0.0, bob: 0.05 },
+      licker: { sc: 0.86, lean: 0.58, shirt: 0x8a2a2a, skin: 0x6a1f1f, hair: 0x3f1010, pants: 0x2a1818, foreZ: 0.34, bob: 0.02 },
+      zombie: { sc: 1.02, lean: 0.34, shirt: 0x6a5a3a, skin: 0x7d8a6a, hair: 0x3a3f2c, pants: 0x3a3430, foreZ: 0.16, bob: 0.04 },
+    }[kind] || { sc: 1.15, lean: 0.16, shirt: repaint, skin: repaint, hair: 0x8a7a5a, pants: 0x3a3430, foreZ: 0.06, bob: 0.05 }; // guard/horde 标准
+    buildVoxelBody(g, {
+      lean: V.lean,
+      colors: {
+        shirt: V.shirt, pants: V.pants, skin: V.skin, hair: V.hair,
+        shoe: 0x1c1a1a, hand: V.skin, foreZ: V.foreZ,
+        waistW: 0.84, chestW: 0.92, headW: 0.6, torsoD: 0.5,
+      },
+    });
+    g.scale.setScalar(V.sc);
+    g.userData.voxel = { phase: Math.random() * 6.28, kind, bob: V.bob, armBoost: kind === "hunter" ? 1.2 : kind === "licker" ? 0.7 : 1 };
+  }
+
+  // 体素方块人玩家（MC 史蒂夫风）：与 buildVoxelEnemy 同构（buildVoxelBody），蓝衣 Steve 配色。
+  // VOXEL_PLAYER=true 时替换立绘。直立 lean=0，肩髋枢轴同敌，供同套动画。
   function buildVoxelPlayer(g) {
-    const box = (w, h, d, col, x, y, z) => {
+    buildVoxelBody(g, {
+      lean: 0.0,
+      colors: {
+        shirt: 0x3a5ba0, pants: 0x2a3450, skin: 0xd8a878, hair: 0x2a1f16,
+        shoe: 0x1c1a1a, hand: 0xd8a878, foreZ: 0.0,
+        waistW: 0.84, chestW: 0.92, headW: 0.6, torsoD: 0.5,
+      },
+    });
+    g.scale.setScalar(1.15);   // 与敌人体素人同比例
+    g.userData.voxel = { phase: Math.random() * 6.28, bob: 0.05, armBoost: 1 };
+  }
+
+  // 命中血粒子（方块飞溅，MC 风格）：数量~20，重力下落 + 落地轻弹 + 自旋 + 淡出，结束即 dispose 释放
+  function spawnBlood(pos) {
+    for (let i = 0; i < 20; i++) {
+      const s = 0.09 + Math.random() * 0.13;
       const m = new THREE.Mesh(
-        new THREE.BoxGeometry(w, h, d),
-        new THREE.MeshLambertMaterial({ color: col })
+        new THREE.BoxGeometry(s, s, s),
+        new THREE.MeshBasicMaterial({ color: Math.random() < 0.6 ? 0x8a1414 : 0x5e0d0d, transparent: true })
       );
-      m.position.set(x, y, z);
-      m.castShadow = true; m.receiveShadow = true;
-      g.add(m);
-      return m;
-    };
-    const shirt = 0x3a5ba0;  // 蓝衣主色（躯干+臂）
-    const pants = 0x2a3450;  // 深蓝裤装
-    const skin  = 0xd8a878;  // 肤色（头部）
-    box(0.9, 1.1, 0.5, shirt, 0, 1.15, 0);        // 躯干
-    box(0.6, 0.6, 0.6, skin, 0, 2.05, 0);          // 头（加大至 MC 大头观感：0.5→0.6，y 上移 2.0→2.05）
-    box(0.28, 0.95, 0.28, shirt, -0.62, 1.0, 0);  // 左臂
-    box(0.28, 0.95, 0.28, shirt, 0.62, 1.0, 0);   // 右臂
-    box(0.34, 0.9, 0.34, pants, -0.22, 0.45, 0);  // 左腿
-    box(0.34, 0.9, 0.34, pants, 0.22, 0.45, 0);   // 右腿
-    g.scale.setScalar(1.15);   // 与敌人体素人同比例（同 buildVoxelEnemy）
+      m.position.set(pos.x, pos.y + Math.random() * 0.3, pos.z);
+      scene.add(m);
+      blood.push({
+        m,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: 0.35 + Math.random() * 0.45,
+        vz: (Math.random() - 0.5) * 0.3,
+        spin: (Math.random() - 0.5) * 0.5,
+        life: 0, max: 0.5 + Math.random() * 0.45,
+      });
+    }
+  }
+  function updateBlood(dt) {
+    const scl = dt * 60;
+    blood = blood.filter(b => {
+      b.life += dt;
+      const k = b.life / b.max;
+      b.vy -= dt * 1.15;
+      b.m.position.x += b.vx * scl;
+      b.m.position.y += b.vy * scl;
+      b.m.position.z += b.vz * scl;
+      if (b.m.position.y < 0.03) { b.m.position.y = 0.03; b.vy *= -0.35; b.vx *= 0.7; b.vz *= 0.7; } // 落地轻弹即停
+      b.m.rotation.x += b.spin * scl; b.m.rotation.z += b.spin * scl;
+      b.m.scale.setScalar(Math.max(0.08, 1 - k * 0.7));
+      b.m.material.opacity = Math.max(0, 1 - k * 1.5);
+      if (k >= 1) { scene.remove(b.m); b.m.geometry.dispose(); b.m.material.dispose(); return false; }
+      return true;
+    });
+  }
+
+  // ---------- 手写 bloom（不引外部库）：additive 光晕精灵，给自发光体（刀光/能量）营造泛光 ----------
+  function getGlowTex() {
+    if (glowTex) return glowTex;
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const cx = c.getContext("2d");
+    const g = cx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.35, "rgba(255,255,255,.55)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    cx.fillStyle = g; cx.fillRect(0, 0, 64, 64);
+    glowTex = new THREE.CanvasTexture(c);
+    return glowTex;
+  }
+  function glowSprite(color, size) {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: getGlowTex(), color, transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }));
+    s.scale.set(size, size, 1);
+    return s;
+  }
+
+  // 体素人程序化动画（敌我同套；onAction 语义不变，纯视觉）：
+  //   呼吸——upper 上下轻浮（分组起伏）；行走——四肢对侧摆动（相位随移动加速）；
+  //   攻击前摇——右手臂快速前挥（attack 强度驱动）。rig 由 buildVoxelBody 提供。
+  function animateRig(rig, t, walk, attack) {
+    const sp = t * 0.018 * walk;
+    // 呼吸：上半体起伏 + 极细微前倾摆动
+    rig.upper.position.y = Math.sin(t * 0.0017) * 0.035;
+    rig.upper.rotation.z = Math.sin(sp) * 0.03;
+    // 行走摆动：对侧手脚同步，幅度随移动速度爬升
+    const ls = walk > 0.8 ? Math.sin(sp) * 0.42 : Math.sin(sp) * 0.10;
+    rig.legL.rotation.x = ls;
+    rig.legR.rotation.x = -ls;
+    rig.armL.rotation.x = -ls * 0.85;
+    rig.armR.rotation.x = ls * 0.85;
+    // 攻击前摇：右手前挥 + 左臂略微后摆平衡
+    if (attack > 0) {
+      rig.armR.rotation.x = -1.4 * attack;
+      rig.armL.rotation.x = 0.25 * attack;
+    }
   }
 
   // 攻击挥砍刀光（弧形渐变）
@@ -246,6 +398,10 @@ const Zone3D = (() => {
     arc.position.set(PX.x + dir.x * 1.4, 1.6, PX.z + dir.z * 1.4);
     arc.rotation.y = -yaw;
     scene.add(arc);
+    // 手写 bloom：刀光中心叠加 additive 光晕（泛光感，帧率友好）
+    const glow = glowSprite(0xaaddff, 2.4);
+    glow.position.copy(arc.position);
+    scene.add(glow);
     let t = 0;
     const anim = () => {
       t += 0.08;
@@ -253,15 +409,232 @@ const Zone3D = (() => {
       arc.material.opacity = Math.max(0, 1 - t * 2.2);
       arc.position.x += dir.x * 0.16;
       arc.position.z += dir.z * 0.16;
+      glow.position.set(arc.position.x, arc.position.y, arc.position.z);
+      glow.material.opacity = Math.max(0.12, 1 - t * 1.8);
+      glow.scale.setScalar(1 + t * 1.9);
       if (t < 0.55) requestAnimationFrame(anim);
-      else { scene.remove(arc); arc.material.dispose(); tex.dispose(); }
+      else {
+        scene.remove(arc); arc.material.dispose(); tex.dispose();
+        scene.remove(glow); glow.material.dispose();
+      }
     };
     anim();
   }
 
-  // 受击闪白（玩家攻击命中时敌人白闪）
+  // 弹道（枪战）：从玩家朝向射出细长光束/子弹拖尾 + 枪口闪光 + 命中火花。
+  function shootFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const start = { x: PX.x + dir.x * 0.6, y: 1.5, z: PX.z + dir.z * 0.6 };
+    // 枪口闪光（additive 光晕）
+    const muzzle = glowSprite(0xffd27a, 0.5);
+    muzzle.position.set(start.x, start.y, start.z);
+    scene.add(muzzle);
+    // 弹道主体：细长胶囊（沿朝向），兼具子弹拖尾
+    const len = 1.6;
+    const bullet = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.045, len, 4, 8),
+      new THREE.MeshBasicMaterial({ color: 0xffd98a, transparent: true, depthWrite: false })
+    );
+    bullet.rotation.x = Math.PI / 2;
+    bullet.rotation.z = yaw - Math.PI / 2;
+    scene.add(bullet);
+    // 命中火花：目标敌人身上 pos 起爆一次
+    let hitPos = null;
+    if (enemy) hitPos = { x: enemy.position.x, y: 1.4, z: enemy.position.z };
+    spawnSpark(hitPos || { x: PX.x + dir.x * 2.4, y: 1.4, z: PX.z + dir.z * 2.4 }, 0xffb066, 10);
+    let t = 0;
+    const anim = () => {
+      t += 0.06;
+      bullet.position.set(start.x + dir.x * t * 4.2, start.y, start.z + dir.z * t * 4.2);
+      bullet.material.opacity = Math.max(0, 1 - t * 2.6);
+      bullet.scale.y = Math.max(0.4, 1 - t * 6);
+      muzzle.material.opacity = Math.max(0, 1 - t * 5);
+      muzzle.scale.setScalar(1 + t * 5);
+      if (t < 0.4) requestAnimationFrame(anim);
+      else {
+        scene.remove(bullet); bullet.geometry.dispose(); bullet.material.dispose();
+        scene.remove(muzzle); muzzle.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 命中火花（小型喷射粒子，供 shootFx/beamFx 命中复用）
+  function spawnSpark(pos, color, n) {
+    for (let i = 0; i < (n || 8); i++) {
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.06 + Math.random() * 0.06, 0.06 + Math.random() * 0.06, 0.06 + Math.random() * 0.06),
+        new THREE.MeshBasicMaterial({ color, transparent: true, depthWrite: false })
+      );
+      m.position.set(pos.x, pos.y, pos.z);
+      const a = Math.random() * 6.28, e = 0.4 + Math.random() * 0.6;
+      scene.add(m);
+      blood.push({
+        m,
+        vx: Math.cos(a) * e, vy: 0.5 + Math.random() * 0.9, vz: Math.sin(a) * e,
+        spin: (Math.random() - 0.5) * 0.9,
+        life: 0, max: 0.3 + Math.random() * 0.2,
+      });
+    }
+  }
+
+  // 激光（beamFx）：从玩家射向敌人方向的粗亮光柱 + 边缘辉光，持续约 0.3s 后淡出。
+  function beamFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x, y: 1.55, z: PX.z };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.4, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.5, z: PX.z + dir.z * 4 };
+    const dx = to.x - from.x, dy = to.y - from.y, dz = to.z - from.z;
+    const dist = Math.max(0.5, Math.hypot(dx, dy, dz));
+    const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2, z: (from.z + to.z) / 2 };
+    const beacon = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.07, 0.07, dist, 10),
+      new THREE.MeshBasicMaterial({ color: 0x66e0ff, transparent: true, depthWrite: false })
+    );
+    beacon.position.set(mid.x, mid.y, mid.z);
+    beacon.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx, dy, dz).normalize());
+    scene.add(beacon);
+    // 边缘辉光：外圈稍粗的淡蓝色半透明柱体包裹核心光柱
+    const halo = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.16, dist, 10),
+      new THREE.MeshBasicMaterial({ color: 0x9af0ff, transparent: true, opacity: 0.32, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    halo.position.copy(beacon.position);
+    halo.quaternion.copy(beacon.quaternion);
+    scene.add(halo);
+    // 命中火花（过热灼点）
+    spawnSpark(to, 0x9ae8ff, 12);
+    let t = 0;
+    const anim = () => {
+      t += 0.016;
+      const hold = Math.min(1, t / 0.3);      // 前 0.3s 持续亮起
+      const fade = Math.max(0, 1 - (t - 0.3) * 2.4); // 之后淡出
+      const op = Math.min(hold, fade);
+      beacon.material.opacity = op;
+      halo.material.opacity = 0.32 * op;
+      if (t < 0.75) requestAnimationFrame(anim);
+      else {
+        scene.remove(beacon); beacon.geometry.dispose(); beacon.material.dispose();
+        scene.remove(halo); halo.geometry.dispose(); halo.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 法术球（魔法/修真）：从玩家飞向敌人的发光球体 + 符文环 + 命中爆炸粒子。
+  function magicFx() {
+    if (!player) return;
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const from = { x: PX.x + dir.x * 0.8, y: 1.6, z: PX.z + dir.z * 0.8 };
+    const to = enemy
+      ? { x: enemy.position.x, y: 1.3, z: enemy.position.z }
+      : { x: PX.x + dir.x * 4, y: 1.4, z: PX.z + dir.z * 4 };
+    const orb = glowSprite(0xc79bff, 0.9);
+    orb.position.set(from.x, from.y, from.z);
+    scene.add(orb);
+    // 符文环：围绕法术球的一道旋转发光环
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.42, 0.02, 8, 24),
+      new THREE.MeshBasicMaterial({ color: 0xe0c9ff, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending })
+    );
+    ring.position.copy(orb.position);
+    scene.add(ring);
+    // 命中爆炸粒子（法阵爆散）
+    const burst = () => {
+      for (let i = 0; i < 16; i++) {
+        const m = new THREE.Mesh(
+          new THREE.BoxGeometry(0.07 + Math.random() * 0.05, 0.07 + Math.random() * 0.05, 0.07 + Math.random() * 0.05),
+          new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0xffe9a0 : 0xc79bff, transparent: true, depthWrite: false })
+        );
+        m.position.set(to.x, to.y, to.z);
+        const a = Math.random() * 6.28, e = 0.7 + Math.random() * 0.9;
+        scene.add(m);
+        blood.push({
+          m,
+          vx: Math.cos(a) * e, vy: 0.4 + Math.random() * 1.2, vz: Math.sin(a) * e,
+          spin: (Math.random() - 0.5) * 1.2,
+          life: 0, max: 0.35 + Math.random() * 0.25,
+        });
+      }
+    };
+    let t = 0, exploded = false;
+    const ox = to.x - from.x, oy = to.y - from.y, oz = to.z - from.z;
+    const anim = () => {
+      t += 0.04;
+      const k = Math.min(1, t * 1.6);
+      orb.position.set(from.x + ox * k, from.y + oy * k, from.z + oz * k);
+      ring.position.copy(orb.position);
+      ring.rotation.y += 0.2;
+      ring.rotation.x += 0.08;
+      if (k >= 1 && !exploded) { exploded = true; burst(); }
+      orb.material.opacity = Math.max(0, 1 - Math.max(0, t - 0.55) * 3);
+      ring.material.opacity = Math.max(0, 0.9 - Math.max(0, t - 0.55) * 3);
+      if (t < 0.75) requestAnimationFrame(anim);
+      else {
+        scene.remove(orb); orb.material.dispose();
+        scene.remove(ring); ring.geometry.dispose(); ring.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 拳击（无武器）：近身短促冲击波 + 手臂前挥残影。玩家动画由 animateRig 的 attack 驱动自然完成前挥。
+  function punchFx() {
+    if (!player) return;
+    // 短促冲击波：贴地快速扩张的光圈
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.4, 0.7, 28),
+      new THREE.MeshBasicMaterial({ color: 0xffd9a0, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(PX.x, 0.12, PX.z);
+    scene.add(ring);
+    // 拳风拖尾：一束由肢体方向泛开的气流残影（体素人肩高附近）
+    const dir = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    const streak = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.1, 0.5),
+      new THREE.MeshBasicMaterial({ color: 0xffe6b0, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    streak.position.set(PX.x + dir.x * 1.1, 1.5, PX.z + dir.z * 1.1);
+    streak.rotation.y = -yaw;
+    scene.add(streak);
+    let t = 0;
+    const anim = () => {
+      t += 0.05;
+      ring.scale.setScalar(1 + t * 3.2);
+      ring.material.opacity = Math.max(0, 1 - t * 2.6);
+      streak.scale.setScalar(1 + t * 1.4);
+      streak.material.opacity = Math.max(0, 1 - t * 3);
+      streak.position.x += dir.x * 0.1;
+      streak.position.z += dir.z * 0.1;
+      if (t < 0.4) requestAnimationFrame(anim);
+      else {
+        scene.remove(ring); ring.geometry.dispose(); ring.material.dispose();
+        scene.remove(streak); streak.geometry.dispose(); streak.material.dispose();
+      }
+    };
+    anim();
+  }
+
+  // 攻击特效分发：按当前武器类型风格路由到对应特效（onAction 语义不变，attack 仍触发）。
+  function runAttackFx() {
+    switch (curWeaponStyle) {
+      case "gun":   shootFx(); break;
+      case "laser": beamFx();  break;
+      case "magic": magicFx(); break;
+      case "melee": swingFx(); break;   // 刀战/剑/斧/镰/鞭 → 保留 swingFx 弧形刀光
+      default:      punchFx(); break;   // unarmed → 拳击
+    }
+  }
+
   function enemyHitFx() {
     if (!enemy) return;
+    // 受击后仰：躯干后倾计时（体素敌人由 loop 里的 animateRig 读取，约 0.2s 内 upper 后仰回落）
+    if (enemy.userData.hurtT !== undefined) enemy.userData.hurtT = 1;
+    if (!enemy.userData.dying) spawnBlood({ x: enemy.position.x, y: 1.1, z: enemy.position.z });
     if (enemy.userData.sprite) {
       const spr = enemy.userData.sprite;
       spr.scale.set(1.22, 0.88, 1);
@@ -328,10 +701,13 @@ const Zone3D = (() => {
     window.addEventListener("resize", onResize);
     setTimeout(onResize, 50);
 
-    // 灯光（二游冷主光 + 暖补光）
-    const amb = new THREE.AmbientLight(0x6a7a92, 0.55);
+    // 灯光（二游冷主光 + 暖补光 + 半球环境）
+    const amb = new THREE.AmbientLight(0x6a7a92, 0.4);
     scene.add(amb);
-    const dir = new THREE.DirectionalLight(0xe8f2ff, 1.25);
+    // 半球光：天青→地红的环境反射，让体素方块的暗面仍可见环境轮廓（省显存、纯数学）
+    const hemi = new THREE.HemisphereLight(0xbfd6ff, 0x241d28, 0.55);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xe8f2ff, 1.1);
     dir.position.set(6, 14, 5);
     dir.castShadow = true;
     // 8G 显存充足:升高阴影贴图到 2048 + 收紧阴影相机近/边界，PCFSoft 更锐利少锯齿
@@ -342,7 +718,8 @@ const Zone3D = (() => {
     dir.shadow.camera.right = 16;
     dir.shadow.camera.top = 16;
     dir.shadow.camera.bottom = -16;
-    dir.shadow.bias = -0.0005;      // 避免平面接缝阴影痤疮
+    dir.shadow.bias = -0.0004;      // 微调使平面接缝更干净（normalBias 亦设：减少痤疮又不至漏光）
+    dir.shadow.normalBias = 0.04;
     scene.add(dir);
     const warm = new THREE.PointLight(0xffb066, 0.8, 22);
     warm.position.set(-6, 4, -4);
@@ -490,6 +867,7 @@ const Zone3D = (() => {
 
   function setData(data) {
     zoneData = data;
+    if (data && data.weapon !== undefined) curWeaponStyle = resolveWeaponStyle(data.weapon);
     // 敌人模型
     if (enemy) scene.remove(enemy);
     if (data.kind === "fight" && data.enemy) {
@@ -503,7 +881,7 @@ const Zone3D = (() => {
         g.position.set(EZ.x, 0, EZ.z);
         scene.add(g);
         enemy = g;
-        enemy.userData = { kind, spec, sprite: null, dying: false, dyingT: 0 };
+        enemy.userData = { kind, spec, sprite: null, dying: false, dyingT: 0, hurtT: 0 };
       } else {
         // 立绘 billboard（ENEMY_SPRITES 素材；贴图失败回退几何体）——始终保留的 fallback
         const tex = new THREE.TextureLoader().load(spec.img, t => {
@@ -521,7 +899,7 @@ const Zone3D = (() => {
         g.position.set(EZ.x, 0, EZ.z);
         scene.add(g);
         enemy = g;
-        enemy.userData = { kind, spec, sprite: spr, dying: false, dyingT: 0 };
+        enemy.userData = { kind, spec, sprite: spr, dying: false, dyingT: 0, hurtT: 0 };
         enemy.scale.setScalar(1.15);
       }
     }
@@ -532,7 +910,8 @@ const Zone3D = (() => {
     PX.x = -4; PX.z = 0;
     if (player) { player.position.set(PX.x, 0, PX.z); }
     yaw = 0;
-    attackCd = 0; dodgeCd = 0;
+    attackCd = 0; dodgeCd = 0; if (player) player.userData.attackT = 0;
+    victoryT = 0;
     afterImages.forEach(ai => { scene.remove(ai.m); ai.m.material.dispose(); });
     afterImages = [];
   }
@@ -545,7 +924,7 @@ const Zone3D = (() => {
       keys[k] = true;
     }
     if (k === "j" || k === "enter") {
-      if (attackCd <= 0 && onAction) { attackCd = 0.7; onAction("attack", 0); swingFx(); enemyHitFx(); }
+      if (attackCd <= 0 && onAction) { attackCd = 0.7; onAction("attack", 0); runAttackFx(); enemyHitFx(); if (player) player.userData.attackT = 1; }
     }
     if (k === "k" || k === "shift") {
       if (dodgeCd <= 0 && onAction) {
@@ -580,6 +959,9 @@ const Zone3D = (() => {
     window.removeEventListener("resize", onResize);
     afterImages.forEach(ai => { try { scene.remove(ai.m); ai.m.material.dispose(); } catch (e) {} });
     afterImages = [];
+    blood.forEach(b => { try { scene.remove(b.m); b.m.geometry.dispose(); b.m.material.dispose(); } catch (e) {} });
+    blood = [];
+    if (glowTex) { try { glowTex.dispose(); } catch (e) {} glowTex = null; }
     if (dust) { try { scene.remove(dust); dust.geometry.dispose(); dust.material.dispose(); } catch (e) {} dust = null; }
     // Bug-07:释放场景内全部 geometry/material/纹理,避免 GPU 内存与 WebGL 上下文随副本进出泄漏
     try {
@@ -639,6 +1021,18 @@ const Zone3D = (() => {
       sprP.quaternion.copy(camera.quaternion);
       sprP.position.y = PLAYER_SPRITE.y + Math.sin(performance.now() / 520) * 0.05;
     }
+    // 体素玩家程序化动画：呼吸 + 行走摆动 + 攻击前摇（onAction 语义不变）
+    if (player && player.userData.rig) {
+      if (player.userData.attackT > 0) player.userData.attackT = Math.max(0, player.userData.attackT - 0.04);
+      if (victoryT > 0) victoryT = Math.max(0, victoryT - 0.02); // 胜利动作：双臂上举持续约 0.5s
+      animateRig(player.userData.rig, performance.now() / 1000, (dx || dz) ? 5.5 : 0.7, player.userData.attackT || 0);
+      // 胜利双手高举（上臂枢轴 rotation.x 负向抬举），victoryT 递减淡出
+      if (victoryT > 0) {
+        player.userData.rig.armL.rotation.x = -2.4 * victoryT;
+        player.userData.rig.armR.rotation.x = -2.4 * victoryT;
+        player.userData.rig.upper.rotation.z = 0;
+      }
+    }
     // 敌人 AI：追踪玩家（战斗副本）
     if (enemy && zoneData && zoneData.kind === "fight") {
       const dxE = PX.x - EZ.x, dzE = PX.z - EZ.z;
@@ -665,15 +1059,32 @@ const Zone3D = (() => {
           if (k >= 1 && scene) { scene.remove(enemy); enemy = null; }
         }
       } else {
-        // 体素方块人：朝向玩家 + 待机轻微起伏；死亡后下沉并移除
+        // 体素方块人：朝向玩家 + 行走/待机程序化动画；死亡后下沉并移除
         enemy.rotation.y = Math.atan2(PX.x - EZ.x, PX.z - EZ.z);
+        const vx = enemy.userData.voxel;
         if (enemy.userData.dying) {
           enemy.userData.dyingT += 0.016;
           const k = Math.min(1, enemy.userData.dyingT / 0.7);
-          enemy.position.y = -0.6 * k;
+          enemy.position.y = -0.5 * k;
+          // 死亡倒地：整体侧倾（rotation.z 向一侧倒）+ 略带前仰（rotation.x），配合下沉，视觉更「真倒地」
+          enemy.rotation.z = 0.62 * k;
+          enemy.rotation.x = 0.28 * k;
           if (k >= 1 && scene) { scene.remove(enemy); enemy = null; }
-        } else if (enemy.userData.voxel) {
-          enemy.position.y = Math.sin(performance.now() / 450 + enemy.userData.voxel.phase) * 0.04;
+        } else if (vx) {
+          enemy.position.y = Math.sin(performance.now() / 450 + vx.phase) * 0.04; // 待机微浮
+          if (enemy.userData.rig) {
+            // 追踪时=行走摆动加速；静止时缓慢跛行/待机摆（较玩家更低频，敌人更「沉重」）
+            const walk = distE > 2.2 ? 3.2 : 0.5;
+            // 受击后仰：hurtT 约 0.25s 内经 upper 后仰（rotation.x 正向仰）并线性回弹，短促带顿挫感
+            const h = enemy.userData.hurtT || 0;
+            let hurtLean = 0;
+            if (h > 0) {
+              enemy.userData.hurtT = Math.max(0, h - 0.06);
+              hurtLean = 0.4 * h; // 峰值 0.4，随 h 线性回弹到 0
+            }
+            animateRig(enemy.userData.rig, performance.now() / 1000, walk * (vx.armBoost || 1), 0);
+            enemy.userData.rig.upper.rotation.x += hurtLean;
+          }
         }
       }
       const dist = Math.hypot(PX.x - EZ.x, PX.z - EZ.z);
@@ -698,6 +1109,8 @@ const Zone3D = (() => {
       }
       arr.needsUpdate = true;
     }
+    // 命中血粒子衰减（方块飞溅，含落点弹停）
+    if (blood.length) updateBlood(0.016);
     renderer.render(scene, camera);
   }
 
@@ -707,6 +1120,7 @@ const Zone3D = (() => {
     if (data && data.kind === "fight") {
       if (data.win) {
         if (enemy) { enemy.userData.dying = true; enemy.userData.dyingT = 0; }
+        victoryT = 1;   // 胜利动作：玩家双臂上举（loop 驱动）
         if (onWin) onWin();
       }
     }

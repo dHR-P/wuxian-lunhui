@@ -216,12 +216,12 @@ pub static ZONES: &[maps::ZoneDef] = &[
 pub static PORTALS: &[maps::PortalDef] = &[
     // F1 偷渡捷径（单向下行）
     maps::PortalDef { id: "yz_pt_x1", floor: 0, x: 4, y: 23, to_floor: 1, tx: 36, ty: 12 },
-    maps::PortalDef { id: "yz_pt_x2", floor: 0, x: 36, y: 23, to_floor: 1, tx: 3, ty: 5 },
+    maps::PortalDef { id: "yz_pt_x2", floor: 0, x: 36, y: 23, to_floor: 1, tx: 4, ty: 5 },
     // F2 闭环 / 主推进
     maps::PortalDef { id: "yz_pt_x3", floor: 1, x: 5, y: 20, to_floor: 0, tx: 37, ty: 10 },
     maps::PortalDef { id: "yz_pt_x4", floor: 1, x: 19, y: 3, to_floor: 2, tx: 6, ty: 22 },
     // F3 捷径 / 主推进
-    maps::PortalDef { id: "yz_pt_x5", floor: 2, x: 31, y: 3, to_floor: 3, tx: 6, ty: 10 },
+    maps::PortalDef { id: "yz_pt_x5", floor: 2, x: 31, y: 3, to_floor: 3, tx: 7, ty: 10 },
     maps::PortalDef { id: "yz_pt_x6", floor: 2, x: 6, y: 4, to_floor: 1, tx: 35, ty: 5 },
     maps::PortalDef { id: "yz_pt_nlift", floor: 2, x: 19, y: 3, to_floor: 3, tx: 19, ty: 21 },
     // F4 撤退捷径（单向下行）

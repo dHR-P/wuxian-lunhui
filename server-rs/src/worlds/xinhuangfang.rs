@@ -128,7 +128,7 @@ pub static POINTS: &[PointDef] = &[
     PointDef { id: "p_xf_f3_left", name: "出口之室", floor: 2, x: 7, y: 12, route: "xf_30_room" },
     PointDef { id: "p_xf_f3_mid", name: "中心暗房", floor: 2, x: 26, y: 12, route: "xf_31_mid" },
     PointDef { id: "p_xf_f3_right", name: "编号墙", floor: 2, x: 35, y: 12, route: "xf_32_num" },
-    PointDef { id: "p_xf_f3_light", name: "尽头的门", floor: 2, x: 23, y: 23, route: "xf_33_light" },
+    PointDef { id: "p_xf_f3_light", name: "尽头的门", floor: 2, x: 23, y: 23, route: "xf_33_gate" },
 ];
 
 pub static ENEMIES: &[EnemyDef] = &[
@@ -140,11 +140,11 @@ pub static ENEMIES: &[EnemyDef] = &[
 ];
 
 pub static NPCS: &[NpcDef] = &[
-    NpcDef { id: "n_xf_kanshizhe", name: "幸存的考验者", floor: 2, x: 24, y: 12, talk: "xf_npc_kanshi" },
+    NpcDef { id: "n_xf_kanshizhe", name: "幸存的考验者", floor: 2, x: 24, y: 12, talk: "xf_40_kanshi" },
 ];
 
 pub static ZONES: &[ZoneDef] = &[
-    ZoneDef { id: "z_xf_f2_center", name: "生存者营地", floor: 1, x: 8, y: 12, kind: "zone", ref_id: "xf_zone_camp" },
+    ZoneDef { id: "z_xf_f2_center", name: "生存者营地", floor: 1, x: 8, y: 12, kind: "zone", ref_id: "xf_20_center" },
     ZoneDef { id: "z_xf_f3_kanshi", name: "考验者（可选战）", floor: 2, x: 22, y: 12, kind: "fight", ref_id: "xf_kanshi" },
 ];
 

@@ -527,6 +527,9 @@ async function enterZone(zoneInfo, enemyData) {
   const container = $("zone3dContainer");
   container.innerHTML = "";
   $("zoneTitle").textContent = zoneInfo.name || zoneInfo.ref || "副本";
+  // 传递当前武器类型：从 HUD 读武器名（hud.weapon，如 "9mm手枪"/"军刀"/"消防斧"），随 setData 交给 Zone3D，
+  // 由 Zone3D.weaponStyle() 映射为 gun/laser/magic/melee/unarmed 决定攻击特效。未读到则默认 unarmed。
+  const zoneWpn = (currentHud && currentHud.weapon) || "—";
   Zone3D.init(container, {
     onAction: async (action, arg) => {
       if (action === "move") {
@@ -568,13 +571,13 @@ async function enterZone(zoneInfo, enemyData) {
     const z = await TAURI_INVOKE()("api_world_interact", { objId: zoneInfo.id });
     if (token !== zoneToken) return; // Bug-02:等待期间已退出,作废在途初始化
     if (z && z.zone) {
-      Zone3D.setData({ id: z.zone.id, kind: z.zone.kind, ref: z.zone.ref, enemy: z.enemy || null });
+      Zone3D.setData({ id: z.zone.id, kind: z.zone.kind, ref: z.zone.ref, enemy: z.enemy || null, weapon: zoneWpn });
       Zone3D.start();
     }
   } catch (e) {
     // 副本数据失败也用基础数据
     if (token !== zoneToken) return; // Bug-02
-    Zone3D.setData({ id: zoneInfo.id, kind: zoneInfo.kind, ref: zoneInfo.ref, enemy: enemyData || null });
+    Zone3D.setData({ id: zoneInfo.id, kind: zoneInfo.kind, ref: zoneInfo.ref, enemy: enemyData || null, weapon: zoneWpn });
     Zone3D.start();
   }
 }

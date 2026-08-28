@@ -106,6 +106,7 @@ pub const ITEMS: &[ItemDef] = &[
     ItemDef { id: "it_em_core", name: "电磁炮核心", kind: ItemSub::Reliquary, stack: false, usable_in_fight: false, effect: ItemEffect::None, price: 5000, need_grade: Some('B') },
     ItemDef { id: "it_blood_essence", name: "血族精血", kind: ItemSub::Reliquary, stack: false, usable_in_fight: false, effect: ItemEffect::None, price: 4200, need_grade: Some('B') },
     ItemDef { id: "it_treasure_frag", name: "法宝碎片", kind: ItemSub::Reliquary, stack: false, usable_in_fight: false, effect: ItemEffect::None, price: 2600, need_grade: Some('B') },
+    ItemDef { id: "it_core_crystal", name: "核心晶石", kind: ItemSub::Reliquary, stack: true, usable_in_fight: false, effect: ItemEffect::None, price: 2400, need_grade: Some('C') },
     // ---- 圣物凭证：防御型（复用现 engine 掉落 id + 自创兑换券）----
     ItemDef { id: "it_soul_shard", name: "灵魂碎片", kind: ItemSub::Reliquary, stack: true, usable_in_fight: false, effect: ItemEffect::None, price: 500, need_grade: Some('D') },
     ItemDef { id: "it_genome_alpha", name: "基因样本·α", kind: ItemSub::Reliquary, stack: false, usable_in_fight: false, effect: ItemEffect::None, price: 2000, need_grade: Some('C') },

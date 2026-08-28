@@ -89,8 +89,8 @@ pub static PANBU_FLOOR_NAMES: &[&str] = &["一层", "二层", "三层"];
 
 pub static POINTS: &[PointDef] = &[
     PointDef { id: "pb_pt_1", name: "蛇牙祭坛", floor: 0, x: 26, y: 10, route: "pb_01" },
-    PointDef { id: "pb_pt_2", name: "图腾刻痕", floor: 1, x: 22, y: 8, route: "pb_12" },
-    PointDef { id: "pb_pt_3", name: "圣骨窖", floor: 2, x: 12, y: 16, route: "pb_20" },
+    PointDef { id: "pb_pt_2", name: "图腾刻痕", floor: 1, x: 22, y: 8, route: "pb_01" },
+    PointDef { id: "pb_pt_3", name: "圣骨窖", floor: 2, x: 12, y: 16, route: "pb_01" },
 ];
 pub static ENEMIES: &[EnemyDef] = &[
     EnemyDef { id: "pb_e_1", name: "灵蛇幼体", floor: 0, x: 10, y: 5, radius: 3, fight: "pb_boss" },

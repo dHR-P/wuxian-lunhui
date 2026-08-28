@@ -119,7 +119,7 @@ pub static POINTS: &[maps::PointDef] = &[
     maps::PointDef { id: "p_hx_f2_cafe", name: "废弃咖啡馆", floor: 1, x: 5, y: 11, route: "hx_f2_cafe" },
     maps::PointDef { id: "p_hx_f2_barricade", name: "路障 & 广播", floor: 1, x: 18, y: 19, route: "hx_f2_barricade" },
     maps::PointDef { id: "p_hx_f3_shelter", name: "郊区避难屋", floor: 2, x: 11, y: 7, route: "hx_f3_shelter" },
-    maps::PointDef { id: "p_hx_f3_heli", name: "直升机坪", floor: 2, x: 11, y: 14, route: "hx_f3_heli" },
+    maps::PointDef { id: "p_hx_f3_heli", name: "直升机坪", floor: 2, x: 11, y: 14, route: "hx_n_pilot" },
     maps::PointDef { id: "p_hx_f3_gate", name: "城郊哨所", floor: 2, x: 33, y: 8, route: "hx_f3_gate" },
 ];
 

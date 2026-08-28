@@ -229,7 +229,7 @@ pub static XINGHE_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 开场 & 登陆场（xh_00） ================= */
 SceneDef {
-    id: "xh_00", bg: Some("img_horde.png"), loc: Some("L1 · 登陆场"),
+    id: "xh_00", bg: Some("xinghe_bg.png"), loc: Some("L1 · 登陆场"),
     mood: "danger", speaker: Some("特战队口令"), voice: Some("vo_xinghe_1"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>虫族军团入侵 P 星。特种小队偷入脑虫巢，摧毁虫族指挥中枢。失败代价：被扣 500 点复活。",

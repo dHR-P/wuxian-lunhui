@@ -232,7 +232,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕 0 · 开场「进入！嗜血破晓！」 ================= */
     SceneDef {
-        id: "px_00_open", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 封锁区午夜街道"),
+        id: "px_00_open", bg: Some("poxiao_bg.png"), loc: Some("L1 · 封锁区午夜街道"),
         mood: "cold", speaker: Some("主神系统 · 白光"), voice: Some("vo_px_open"),
         text: TextSpec::Static(&[
             "任务发布——Ｄ级绝境任务：破晓封锁区。目标：找到研究员爱德华·道尔顿，在黎明前将他护送至黎明尖塔顶层，校准日光镜阵。",

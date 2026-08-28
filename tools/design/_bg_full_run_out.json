@@ -1,0 +1,15 @@
+{
+  "total_cost_est": 0.2,
+  "results": {
+    "poxiao": {
+      "pass": true,
+      "cost": 0.2,
+      "attempts": [
+        "PASS@1"
+      ],
+      "raw": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\tools\\design\\raw_bg_full\\poxiao_bg.png",
+      "deployed": "C:\\Users\\GWL\\Desktop\\itwillclaude\\games\\wuxian-horror-ch1\\server-rs\\ui\\assets\\img\\poxiao_bg.png",
+      "edit": "bg: Some(\"img_zhuyuan_book.png\") -> bg: Some(\"poxiao_bg.png\")"
+    }
+  }
+}

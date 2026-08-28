@@ -326,7 +326,7 @@ static ZHOUYUAN: WorldData = WorldData {
     id: WORLD_ZHOUYUAN,
     name: "咒怨 · 佐伯家",
     difficulty: 2,
-    initial_scene: "zy_00",
+    initial_scene: "zy_01",
     floors: &[zhouyuan::ZHOUYUAN_F1_MAP, zhouyuan::ZHOUYUAN_F2_MAP, zhouyuan::ZHOUYUAN_F3_MAP],
     floor_names: zhouyuan::ZHOUYUAN_FLOOR_NAMES,
     points: zhouyuan::POINTS,

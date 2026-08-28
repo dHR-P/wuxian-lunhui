@@ -168,7 +168,7 @@ pub static SH3_SCENES: &[SceneDef] = &[
 
 /* ================= 开场 ================= */
 SceneDef {
-    id: "sh3_00", bg: Some("img_zhuyuan_book.png"), loc: Some("浣熊市地下 ≪生化·任务发布≫"),
+    id: "sh3_00", bg: Some("shenghua3_bg.png"), loc: Some("浣熊市地下 ≪生化·任务发布≫"),
     mood: "mystery", speaker: Some("主神·任务发布"), voice: None,
     text: TextSpec::Static(&[
         "<b>【场景·浣熊市地下】</b>你坠进一条腥臭的下水道，头顶是丧尸抓挠铁栅的嘶声。空气里浮着一股淡淡的药味与尸体味。",

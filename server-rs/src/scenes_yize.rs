@@ -285,7 +285,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
 
     /* ------------------- 幕一 · 踏入神迹（F1） ------------------- */
     SceneDef {
-        id: "yz_01_arrive", bg: Some("img_laser.png"), loc: Some("F1 遗迹外层 · 尘封巨门前厅"),
+        id: "yz_01_arrive", bg: Some("yize_bg.png"), loc: Some("F1 遗迹外层 · 尘封巨门前厅"),
         mood: "awe", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "<b>【主线任务】</b>追踪高等文明信号进入远古遗迹，破解 4 层机关迷城，击败自律兵器「遗迹仲裁者」，在圣所作出最后抉择。",

@@ -146,8 +146,8 @@ pub static POINTS: &[maps::PointDef] = &[
     maps::PointDef { id: "ms_p_siren", name: "防空警报塔", floor: 0, x: 10, y: 13, route: "ms_siren" },
     maps::PointDef { id: "ms_p_bus", name: "废弃巴士（撬棍①）", floor: 0, x: 29, y: 15, route: "ms_bus" },
     maps::PointDef { id: "ms_p_supply", name: "军需配给站", floor: 0, x: 6, y: 22, route: "ms_supply" },
-    maps::PointDef { id: "ms_p_gunpost_a", name: "城墙机枪阵地·东", floor: 0, x: 12, y: 6, route: "ms_gunpost" },
-    maps::PointDef { id: "ms_p_gunpost_b", name: "城墙机枪阵地·西", floor: 0, x: 28, y: 6, route: "ms_gunpost" },
+    maps::PointDef { id: "ms_p_gunpost_a", name: "城墙机枪阵地·东", floor: 0, x: 12, y: 6, route: "ms_00" },
+    maps::PointDef { id: "ms_p_gunpost_b", name: "城墙机枪阵地·西", floor: 0, x: 28, y: 6, route: "ms_00" },
     // ---- F2 城内医院与军火库 ----
     maps::PointDef { id: "ms_p_ward", name: "病房（office_key ①）", floor: 1, x: 20, y: 6, route: "ms_ward" },
     maps::PointDef { id: "ms_p_linen", name: "医院杂物间（撬棍②）", floor: 1, x: 8, y: 12, route: "ms_linen" },
@@ -158,8 +158,8 @@ pub static POINTS: &[maps::PointDef] = &[
     maps::PointDef { id: "ms_p_comms", name: "通讯阵列", floor: 2, x: 24, y: 7, route: "ms_comms" },
     maps::PointDef { id: "ms_p_reactor", name: "反应堆配电室", floor: 2, x: 14, y: 16, route: "ms_reactor" },
     // ---- F4 炮台观测台 ----
-    maps::PointDef { id: "ms_p_ammo_lift", name: "弹药升降井（补弹药）", floor: 3, x: 6, y: 20, route: "ms_ammo_lift" },
-    maps::PointDef { id: "ms_p_howitzer", name: "巨型主炮残件", floor: 3, x: 16, y: 16, route: "ms_howitzer" },
+    maps::PointDef { id: "ms_p_ammo_lift", name: "弹药升降井（补弹药）", floor: 3, x: 6, y: 20, route: "ms_f4_arrive" },
+    maps::PointDef { id: "ms_p_howitzer", name: "巨型主炮残件", floor: 3, x: 16, y: 16, route: "ms_f4_arrive" },
     maps::PointDef { id: "ms_p_scope", name: "观测镜", floor: 3, x: 17, y: 11, route: "ms_scope" },
     maps::PointDef { id: "ms_p_beacon", name: "轨道信标塔", floor: 3, x: 26, y: 6, route: "ms_beacon" },
 ];
@@ -197,7 +197,7 @@ pub static ENEMIES: &[maps::EnemyDef] = &[
 /// NPC：守军/医师/指挥官引导线索。
 pub static NPCS: &[maps::NpcDef] = &[
     maps::NpcDef { id: "ms_n_minuteman", name: "民兵队长", floor: 0, x: 16, y: 6, talk: "ms_00_minuteman" },
-    maps::NpcDef { id: "ms_n_medic", name: "军医", floor: 1, x: 12, y: 9, talk: "ms_medic" },
+    maps::NpcDef { id: "ms_n_medic", name: "军医", floor: 1, x: 12, y: 9, talk: "ms_medic_win" },
     maps::NpcDef { id: "ms_n_comander", name: "老指挥官", floor: 2, x: 20, y: 9, talk: "ms_comander" },
 ];
 

@@ -208,7 +208,7 @@ pub static WULIN_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 山门坊市（开场 hub） ================= */
 SceneDef {
-    id: "wl_00", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 山门会场坊市"),
+    id: "wl_00", bg: Some("wulin_bg.png"), loc: Some("L1 · 山门会场坊市"),
     mood: "excitement", speaker: Some("大会执事 · 擂鼓鸣锣"), voice: Some("vo_wl_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>签到场会 → 登台夺擂 → 揭穿大会背后阴谋 → 讨伐黑化盟主。失败代价：被扣 400 点复活。",

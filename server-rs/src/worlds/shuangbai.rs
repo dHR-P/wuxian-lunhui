@@ -80,7 +80,7 @@ pub static ENEMIES: &[EnemyDef] = &[
 ];
 
 pub static NPCS: &[NpcDef] = &[
-    NpcDef { id: "sb_n_oldwen", name: "守井的老温", floor: 0, x: 9, y: 12, talk: "sb_npc_talk" },
+    NpcDef { id: "sb_n_oldwen", name: "守井的老温", floor: 0, x: 9, y: 12, talk: "sb_05" },
 ];
 
 pub static ZONES: &[ZoneDef] = &[

@@ -199,7 +199,7 @@ pub static YIYING_SCENES: &[SceneDef] = &[
 
 /* ---- 幕 0 · 开场：「奥瑞迦号的任务」 ---- */
 SceneDef {
-    id: "yiy_s0_arrive", bg: Some("img_train.png"), loc: Some("贝蒂号登陆坞 · 主神光柱"),
+    id: "yiy_s0_arrive", bg: Some("yiying_bg.png"), loc: Some("贝蒂号登陆坞 · 主神光柱"),
     mood: "cold", speaker: Some("主神"), voice: Some("vo_yiying_missiongod"),
     text: TextSpec::Static(&[
         "<b>【主线任务发布】</b>任务世界·异形4（奥瑞迦号）。主线：①关闭船载 AI「Father」→ ②引爆反应堆 → ③生还撤离。奖励点数 <b>400</b>。",

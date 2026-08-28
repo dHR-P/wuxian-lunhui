@@ -138,8 +138,8 @@ pub static ENEMIES: &[maps::EnemyDef] = &[
 
 /// NPC：特种步兵小队（引导 + 波次增员触发锚点）。
 pub static NPCS: &[maps::NpcDef] = &[
-    maps::NpcDef { id: "xh_n_commander", name: "特战队口令", floor: 0, x: 5, y: 8, talk: "xh_00_open" },
-    maps::NpcDef { id: "xh_n_veteran", name: "老兵 · 里科", floor: 1, x: 6, y: 5, talk: "xh_10_veteran" },
+    maps::NpcDef { id: "xh_n_commander", name: "特战队口令", floor: 0, x: 5, y: 8, talk: "xh_00" },
+    maps::NpcDef { id: "xh_n_veteran", name: "老兵 · 里科", floor: 1, x: 6, y: 5, talk: "xh_10_arrive_tunnel" },
 ];
 
 /// 特殊区域（ZoneDef）：波次战场（增员）+ BOSS 脑虫战区。
@@ -157,7 +157,7 @@ pub static ZONES: &[maps::ZoneDef] = &[
 /// p_xh_exit 撤离阵（胜利后经结局幕路由到主神）。
 pub static PORTALS: &[maps::PortalDef] = &[
     // p_xh_1 L1 坠洞 → L2 地洞（单向坠入）
-    maps::PortalDef { id: "p_xh_1", floor: 0, x: 36, y: 18, to_floor: 1, tx: 4, ty: 5 },
+    maps::PortalDef { id: "p_xh_1", floor: 0, x: 36, y: 18, to_floor: 1, tx: 6, ty: 5 },
     // p_xh_2 L2 深坑垂降 → L3 脑虫巢（单向进深，主线）
     maps::PortalDef { id: "p_xh_2", floor: 1, x: 28, y: 20, to_floor: 2, tx: 8, ty: 21 },
     // p_xh_3 L2 地沟潜行 → L3 脑虫巢侧廊（单向，险路）

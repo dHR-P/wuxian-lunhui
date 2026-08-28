@@ -217,7 +217,7 @@ pub static PORTALS: &[maps::PortalDef] = &[
     // 主升降井下行：L3(24,23) → L4(24,22)，单向（G4 判定）
     maps::PortalDef { id: "tt_pt_down3", floor: 2, x: 24, y: 23, to_floor: 3, tx: 24, ty: 22 },
     // 撤离传送门：L4(20,23) → 主神空间（BOSS 结局后激活；Route 由 scenes 处理）
-    maps::PortalDef { id: "tt_pt_exit", floor: 3, x: 20, y: 23, to_floor: 0, tx: 20, ty: 23 },
+    maps::PortalDef { id: "tt_pt_exit", floor: 3, x: 20, y: 23, to_floor: 0, tx: 2, ty: 13 },
 ];
 
 /// 门禁：G1 南天门残门（需封神榜残页第一张） / G2 星宿阵眼（需 flag tt_stars_lit） /

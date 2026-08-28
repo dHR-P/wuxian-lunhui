@@ -129,7 +129,7 @@ pub static POINTS: &[maps::PointDef] = &[
 /// 敌人：极少「机关形」象征物。满共识——死神无实体，不主动袭击；
 /// 仅 L3 车库保留 1 尊「搬家的执法者（异样）」作使者象征战的一次性代理（guard 执法者形立绘）。
 pub static ENEMIES: &[maps::EnemyDef] = &[
-    maps::EnemyDef { id: "ss_e_l3_enforcer", name: "搬家的执法者（异样）", floor: 2, x: 34, y: 22, radius: 3, fight: "ss_enforcer" },
+    maps::EnemyDef { id: "ss_e_l3_enforcer", name: "搬家的执法者（异样）", floor: 2, x: 34, y: 22, radius: 3, fight: "ss_emissary" },
 ];
 
 /// 同伴 NPC：机场广播员 / 公路巡警 / 隔壁邻居。——玩家预判征兆、改命的「证人与提示」。

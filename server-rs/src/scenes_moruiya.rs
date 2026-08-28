@@ -289,7 +289,7 @@ pub static MORUIYA_SCENES: &[SceneDef] = &[
 
 /* ---- 幕 1 · 西闸门·湖中监视者（开场） ---- */
 SceneDef {
-    id: "mo_01_gate", bg: Some("img_zhuyuan_book.png"), loc: Some("摩瑞亚 · 西闸门湖景"),
+    id: "mo_01_gate", bg: Some("moruiya_bg.png"), loc: Some("摩瑞亚 · 西闸门湖景"),
     mood: "danger", speaker: Some("甘道夫"), voice: None,
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>穿过摩瑞亚——从西闸门抵达东门，击败深渊之下苏醒的炎魔·都灵的克星。任务完成前无法离开矿坑。",

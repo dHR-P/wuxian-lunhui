@@ -112,16 +112,16 @@ pub static SHENMIAO_FLOOR_NAMES: &[&str] = &[
 ];
 
 pub static POINTS: &[maps::PointDef] = &[
-    maps::PointDef { id: "p_sm_f1_vortex", name: "倒流涡心", floor: 0, x: 20, y: 9, route: "sm_01_vortex" },
-    maps::PointDef { id: "p_sm_f1_pillar", name: "倒垂神柱", floor: 0, x: 6, y: 16, route: "sm_02_pillar" },
-    maps::PointDef { id: "p_sm_f1_whisper", name: "上层低语", floor: 0, x: 31, y: 15, route: "sm_03_whisper" },
-    maps::PointDef { id: "p_sm_f1_pool", name: "逆泳之池", floor: 0, x: 23, y: 3, route: "sm_04_pool" },
-    maps::PointDef { id: "p_sm_f2_ceiling", name: "天顶圣坛", floor: 1, x: 15, y: 12, route: "sm_11_ceiling" },
-    maps::PointDef { id: "p_sm_f2_echo", name: "颠倒回廊", floor: 1, x: 25, y: 12, route: "sm_12_echo" },
-    maps::PointDef { id: "p_sm_f2_fall", name: "倒悬龙柱", floor: 1, x: 34, y: 15, route: "sm_13_fall" },
-    maps::PointDef { id: "p_sm_f3_basilica", name: "空神龛", floor: 2, x: 15, y: 9, route: "sm_21_basilica" },
-    maps::PointDef { id: "p_sm_f3_eye", name: "穹顶之眼", floor: 2, x: 26, y: 6, route: "sm_22_eye" },
-    maps::PointDef { id: "p_sm_f3_bones", name: "旧神残骨", floor: 2, x: 12, y: 17, route: "sm_23_bones" },
+    maps::PointDef { id: "p_sm_f1_vortex", name: "倒流涡心", floor: 0, x: 20, y: 9, route: "sm_11_vortex" },
+    maps::PointDef { id: "p_sm_f1_pillar", name: "倒垂神柱", floor: 0, x: 6, y: 16, route: "sm_12_pillar" },
+    maps::PointDef { id: "p_sm_f1_whisper", name: "上层低语", floor: 0, x: 31, y: 15, route: "sm_13_whisper" },
+    maps::PointDef { id: "p_sm_f1_pool", name: "逆泳之池", floor: 0, x: 23, y: 3, route: "sm_14_pool" },
+    maps::PointDef { id: "p_sm_f2_ceiling", name: "天顶圣坛", floor: 1, x: 15, y: 12, route: "sm_21_ceiling" },
+    maps::PointDef { id: "p_sm_f2_echo", name: "颠倒回廊", floor: 1, x: 25, y: 12, route: "sm_22_echo" },
+    maps::PointDef { id: "p_sm_f2_fall", name: "倒悬龙柱", floor: 1, x: 34, y: 15, route: "sm_23_fall" },
+    maps::PointDef { id: "p_sm_f3_basilica", name: "空神龛", floor: 2, x: 15, y: 9, route: "sm_31_basilica" },
+    maps::PointDef { id: "p_sm_f3_eye", name: "穹顶之眼", floor: 2, x: 26, y: 6, route: "sm_32_eye" },
+    maps::PointDef { id: "p_sm_f3_bones", name: "旧神残骨", floor: 2, x: 12, y: 17, route: "sm_33_bones" },
 ];
 
 /// 眷属与原住民（原生敌：神殿里的「居民」，非阴谋哨兵）。
@@ -135,7 +135,7 @@ pub static ENEMIES: &[maps::EnemyDef] = &[
 
 /// NPC：F2 颠倒回廊里唯一还「醒着」的存在——一个倒悬的活祭司。
 pub static NPCS: &[maps::NpcDef] = &[
-    maps::NpcDef { id: "n_sm_f2_priest", name: "倒悬祭司", floor: 1, x: 30, y: 23, talk: "sm_npc_priest" },
+    maps::NpcDef { id: "n_sm_f2_priest", name: "倒悬祭司", floor: 1, x: 30, y: 23, talk: "sm_25_npc" },
 ];
 
 /// 区域：F3 旧神祭窟的「水面」，BOSS 旧神眷属在此行走。

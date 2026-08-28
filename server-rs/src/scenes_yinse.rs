@@ -295,7 +295,7 @@ SceneDef {
 
 /* ---- 幕 1 ・ 降落白银荒原（L1）：阿桑遇伏 ---- */
 SceneDef {
-    id: "ys_01_drop", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 白银荒原 · 降落点"),
+    id: "ys_01_drop", bg: Some("yinse_bg.png"), loc: Some("L1 白银荒原 · 降落点"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "脚下是不再反光的白银。风里有铁锈、尸脂，和某种仍然通电的嗡鸣。",

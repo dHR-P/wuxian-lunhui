@@ -1,0 +1,41 @@
+{
+  "style_suffix": "Clean empty scene environment background, absolutely no people, no characters, no humanoid figures, no animal, no corpse. Absolutely NO text, NO letters, NO numbers, NO signs with writing, NO logos, NO watermark, DEAD surfaces with plain materials only. Cinematic single wide shot, vertical 768x1024 composition, high detail, film grain.",
+  "jobs": [
+    {
+      "slug": "shaqiu",
+      "new_bg": "shaqiu_bg.png",
+      "scenes_file": "scenes_shaqiu.rs",
+      "scene_id": "sq_00_intro",
+      "old_bg": "img_laser.png",
+      "qdesc": "沙丘魔海 绿潮荒漠：红色沙丘间漫布的绿色发光毒潮与半埋飞船残骸，无任何文字",
+      "prompt": "A pure empty desert scene: red sand dunes with an eerie shallow green glowing toxic tide pooling between them, a half-buried rusty crashed spaceship hull in the middle distance, greenish haze on the horizon at dusk. The ship hull is smooth and unmarked with no letters, no serial numbers, no logos. Smooth clean dunes, no objects with writing, no signs, no text anywhere."
+    },
+    {
+      "slug": "poxiao",
+      "new_bg": "poxiao_bg.png",
+      "scenes_file": "scenes_poxiao.rs",
+      "scene_id": "px_00_open",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "破晓 黎明之城清晨：中世纪欧洲城镇清晨广场、教堂尖塔、剥落的石墙与碎石路；全图不得出现任何文字、字母、数字、路牌、横幅、标识文字",
+      "prompt": "A quiet empty medieval European town plaza at pale dawn, seen from far enough that all surfaces blur, an old stone cathedral tower in the background, rough weathered plaster walls and cobblestone with heavy film grain and soft atmospheric haze. There are NO signs, NO street names, NO banners, NO lettering, NO text, NO alphabet characters anywhere in the whole frame — every wall, board and surface is plain, worn, and featureless. Soft blurry dawn mist, cool pale light, silence."
+    },
+    {
+      "slug": "sishen",
+      "new_bg": "sishen_bg.png",
+      "scenes_file": "scenes_sishen.rs",
+      "scene_id": "ss_00",
+      "old_bg": "img_train.png",
+      "qdesc": "死神来了 机场候机厅：空旷候机大厅、成排空座椅、落地玻璃幕墙、平滑的空白航班屏（无任何可读文字）",
+      "prompt": "A vast empty modern airport departures hall, long rows of empty grey seats, huge glass windows facing an empty runway, a smooth unlit blank departure board with NO readable letters or numbers, polished reflective floor, cold fluorescent light, quiet ominous atmosphere. Smooth blank screens, no text, no letters, no logos, no signage anywhere."
+    },
+    {
+      "slug": "mumiyi",
+      "new_bg": "mumiyi_bg.png",
+      "scenes_file": "scenes_mumiyi.rs",
+      "scene_id": "mm_00_camp",
+      "old_bg": "img_zhuyuan_book.png",
+      "qdesc": "木乃伊 埃及地宫圣甲虫厅：地宫石室中成排巨大的圣甲虫雕像为主视觉，砂岩浮雕墙、光线从高处射入",
+      "prompt": "An ancient Egyptian underground crypt chamber, the main view filled with a long row of large black scarab beetle statues standing tall on carved stone pedestals, weathered sandstone walls with faded hieroglyph reliefs, a warm beam of torchlight from a high opening casting clean light into the sandy floor, clean composition with no corner smudges, dark ominous tomb atmosphere."
+    }
+  ]
+}

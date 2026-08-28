@@ -269,6 +269,22 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
+/* ---- 玄关调查点 · 儿童雨鞋（调查点 zy_p_rainboots → zy_02_shoe） ---- */
+SceneDef {
+    id: "zy_02_shoe", bg: Some("scene_zy_house_exterior.png"), loc: Some("佐伯家 · 玄关 · 儿童雨鞋"),
+    mood: "cold", speaker: None, voice: None,
+    text: TextSpec::Static(&[
+        "玄关木阶上那双小小的儿童雨鞋，鞋口朝里，已经干透。你蹲下把它拎起来——鞋底还夹着一片干枯的枫叶，像从深秋的庭院里带进来的。",
+        "雨鞋内衬有一道深深的抓痕，从脚踝连到鞋口，像是有什么东西硬生生拽住过它。",
+    ]),
+    choices: &[
+        ChoiceDef { label: "记住这双鞋（支线 zy_shoe_checked · San-5 · 点数+10）", sub: "调查雨鞋", cond: None,
+            effects: &[Eff::SetFlag("zy_shoe_checked"), Eff::San(-5), Eff::Points(10)], route: Route::To("zy_02") },
+        ChoiceDef { label: "放回原处，返回玄关", sub: "", cond: None, effects: &NO_EFF, route: Route::To("zy_02") },
+    ],
+    fight_id: None, video: None, cine_label: None, overlay: None,
+},
+
 /* ---- F1 调查点 ---- */
 SceneDef {
     id: "zy_03_butsudan", bg: Some("scene_zy_house_exterior.png"), loc: Some("F1 · 佛龛·储物间"),
@@ -469,6 +485,20 @@ SceneDef {
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你用尽全力推开主卧门，门缝里涌出一股寒意——怨灵亡影从门内扑出！"]),
     choices: &[ChoiceDef { label: "迎战", sub: "b_shade2", cond: None, effects: &NO_EFF, route: Route::To("zy_05_encounter") }],
+    fight_id: None, video: None, cine_label: None, overlay: None,
+},
+SceneDef {
+    id: "zy_07_clock", bg: Some("scene_zy_corridor.png"), loc: Some("F2 · 走廊 · 挂钟"),
+    mood: "cold", speaker: None, voice: None,
+    text: TextSpec::Static(&[
+        "走廊尽头的挂钟停在 <b>3:00</b>——不是坏了，是它从来没走过别的数字。秒针悬在 12 的正上方，微微发颤，像被什么攥住了。",
+        "你看清挂钟的瞬间，整座房子安静得像被按了静音，连雨声都停了。（挂钟的停摆，似乎与怨念的苏醒同步。）",
+    ]),
+    choices: &[
+        ChoiceDef { label: "记下这不详的时刻（Points+10）", sub: "调查挂钟", cond: None,
+            effects: &[Eff::Points(10)], route: Route::To("zy_05") },
+        ChoiceDef { label: "退回二楼走廊", sub: "", cond: None, effects: &NO_EFF, route: Route::To("zy_05") },
+    ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {

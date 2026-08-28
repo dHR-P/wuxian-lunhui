@@ -263,7 +263,7 @@ fn lord_act(st: &mut GameState, dmg: i32, guard: bool) -> String {
 pub static MOJIAO_SCENES: &[SceneDef] = &[
 
     SceneDef {
-        id: "mj_00", bg: Some("img_zhuyuan_book.png"), loc: Some("血月山道 · 山脚"),
+        id: "mj_00", bg: Some("mojiao_bg.png"), loc: Some("血月山道 · 山脚"),
         mood: "mystery", speaker: Some("旁白"), voice: Some("vo_mj_open"),
         text: TextSpec::Static(&[
             "<b>【主线任务】</b>追踪红衣使者深入魔教总坛，闯血池殿，闯过血池试炼，直面魔教教主。失败代价：被扣 300 点复活。",

@@ -301,7 +301,7 @@ pub static TIANSHE_SCENES: &[SceneDef] = &[
 
 /* ---- 幕 1 · 开场「血池倒影」 ---- */
 SceneDef {
-    id: "ts_open", bg: Some("img_corridor.png"), loc: Some("L1 · 牢房"), mood: "danger",
+    id: "ts_open", bg: Some("tianshe_bg.png"), loc: Some("L1 · 牢房"), mood: "danger",
     speaker: Some("内心"), voice: None,
     text: TextSpec::Static(&[
         "你在腥甜的气味里醒来。铁栏外是暗绿的荧光，远处有滴答的水声——那不是水，是某种粘稠的液体。",

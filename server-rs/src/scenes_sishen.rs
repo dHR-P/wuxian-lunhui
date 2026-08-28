@@ -131,7 +131,7 @@ pub static SISHEN_SCENES: &[SceneDef] = &[
 
 /* ================= 开场 ================= */
 SceneDef {
-    id: "ss_00", bg: Some("img_train.png"), loc: Some("机场候机大厅 ≪警报到计时≫"),
+    id: "ss_00", bg: Some("sishen_bg.png"), loc: Some("机场候机大厅 ≪警报到计时≫"),
     mood: "mystery", speaker: Some("主神·任务发布"), voice: Some("vo_sishen_1"),
     text: TextSpec::Static(&[
         "<b>【主线任务·命运清单】</b>预判「死亡征兆」，改写死神给你排下的死亡名单。失败代价：被扣 300 点复活。",

@@ -254,7 +254,7 @@ pub static CANGJING_SCENES: &[SceneDef] = &[
 
 /* ================= 幕一 · 开场（山门）================= */
 SceneDef {
-    id: "cj_00", bg: Some("img_zhuyuan_book.png"), loc: Some("藏经阁 · 山门"),
+    id: "cj_00", bg: Some("cangjingge_bg.png"), loc: Some("藏经阁 · 山门"),
     mood: "mystery", speaker: Some("旁侍老僧"), voice: Some("vo_cj_open"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>追查一部失传绝学的下落，摸清守阁老僧的立场。失败代价：被扣 300 点复活。",

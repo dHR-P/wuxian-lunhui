@@ -145,13 +145,13 @@ pub static POINTS: &[maps::PointDef] = &[
     maps::PointDef { id: "mj_p_l2_2", name: "铜鼎机关", floor: 1, x: 24, y: 11, route: "mj_05_ding" },
     maps::PointDef { id: "mj_p_l2_3", name: "殿门锁孔", floor: 1, x: 17, y: 16, route: "mj_06_gate" },
     // ---- L3 血池殿 ----
-    maps::PointDef { id: "mj_p_l3_1", name: "血池祭坛", floor: 2, x: 14, y: 15, route: "mj_11_pool_altar" },
+    maps::PointDef { id: "mj_p_l3_1", name: "血池祭坛", floor: 2, x: 14, y: 15, route: "mj_10_arrive_pool" },
     maps::PointDef { id: "mj_p_l3_2", name: "试炼碑", floor: 2, x: 4, y: 19, route: "mj_12_trial_stele" },
     maps::PointDef { id: "mj_p_l3_3", name: "四方傀儡关节", floor: 2, x: 13, y: 20, route: "mj_13_puppet" },
     // ---- L4 教主密室 ----
     maps::PointDef { id: "mj_p_l4_1", name: "教主宝座", floor: 3, x: 16, y: 16, route: "mj_21_throne" },
     maps::PointDef { id: "mj_p_l4_2", name: "秘术书", floor: 3, x: 6, y: 11, route: "mj_21_tome" },
-    maps::PointDef { id: "mj_p_l4_3", name: "玉简匣", floor: 3, x: 30, y: 11, route: "mj_24_jade" },
+    maps::PointDef { id: "mj_p_l4_3", name: "玉简匣", floor: 3, x: 30, y: 11, route: "mj_21_tome" },
 ];
 
 /// 敌人：fight 引用 mojiao_figths() 表里的 id（立绘复用：guard→魔教教众/影卫、hunter→红衣护法、horde→血池傀儡）。

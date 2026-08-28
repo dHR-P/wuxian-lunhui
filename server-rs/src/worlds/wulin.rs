@@ -144,10 +144,10 @@ pub static POINTS: &[maps::PointDef] = &[
     maps::PointDef { id: "wl_p_l1_herb", name: "药摊 · 伤药", floor: 0, x: 37, y: 14, route: "wl_herb" },
     maps::PointDef { id: "wl_p_l1_dark_door", name: "西隅暗门", floor: 0, x: 1, y: 14, route: "wl_dark_door" },
     // ---- L2 擂台广场 ----
-    maps::PointDef { id: "wl_p_l2_referee", name: "擂台执事", floor: 1, x: 9, y: 8, route: "wl_arena_referee" },
-    maps::PointDef { id: "wl_p_l2_tribune", name: "观礼台 · 掌门席", floor: 1, x: 36, y: 10, route: "wl_tribune" },
-    maps::PointDef { id: "wl_p_l2_west_stand", name: "西看台留言", floor: 1, x: 3, y: 16, route: "wl_west_stand" },
-    maps::PointDef { id: "wl_p_l2_roster", name: "比武名册", floor: 1, x: 14, y: 8, route: "wl_roster" },
+    maps::PointDef { id: "wl_p_l2_referee", name: "擂台执事", floor: 1, x: 9, y: 8, route: "wl_arena" },
+    maps::PointDef { id: "wl_p_l2_tribune", name: "观礼台 · 掌门席", floor: 1, x: 36, y: 10, route: "wl_arena" },
+    maps::PointDef { id: "wl_p_l2_west_stand", name: "西看台留言", floor: 1, x: 3, y: 16, route: "wl_arena" },
+    maps::PointDef { id: "wl_p_l2_roster", name: "比武名册", floor: 1, x: 14, y: 8, route: "wl_arena" },
     // ---- L3 后台 · 盟主府前堂 ----
     maps::PointDef { id: "wl_p_l3_mi_ling", name: "密令夹层", floor: 2, x: 24, y: 9, route: "wl_mi_ling" },
     maps::PointDef { id: "wl_p_l3_old_case", name: "盟主旧案宗卷", floor: 2, x: 16, y: 15, route: "wl_old_case" },
@@ -181,16 +181,16 @@ pub static ENEMIES: &[maps::EnemyDef] = &[
 /// NPC：各门派掌门 / 关键江湖客（talk 走 wl_* 剧情线；阴谋线索密集在后台/密道）。
 pub static NPCS: &[maps::NpcDef] = &[
     maps::NpcDef { id: "wl_n_zhi_shi", name: "大会执事", floor: 0, x: 31, y: 3, talk: "wl_signin" },
-    maps::NpcDef { id: "wl_n_zhangmen_e", name: "净空掌师太", floor: 1, x: 8, y: 10, talk: "wl_tribune" },
-    maps::NpcDef { id: "wl_n_zhangmen_jin", name: "金狮拳掌门 · 铁砂", floor: 1, x: 34, y: 10, talk: "wl_tribune" },
+    maps::NpcDef { id: "wl_n_zhangmen_e", name: "净空掌师太", floor: 1, x: 8, y: 10, talk: "wl_arena" },
+    maps::NpcDef { id: "wl_n_zhangmen_jin", name: "金狮拳掌门 · 铁砂", floor: 1, x: 34, y: 10, talk: "wl_arena" },
     maps::NpcDef { id: "wl_n_wo_di", name: "摩云舵主", floor: 3, x: 16, y: 16, talk: "wl_wo_di" },
 ];
 
 /// 特殊区域（ZoneDef）：L2 擂台战 + L4 BOSS 战 + 密道入口。
 pub static ZONES: &[maps::ZoneDef] = &[
-    maps::ZoneDef { id: "wl_z_l2_arena", name: "英雄擂 · 擂台战", floor: 1, x: 19, y: 12, kind: "fight", ref_id: "wc_arena_door" },
+    maps::ZoneDef { id: "wl_z_l2_arena", name: "英雄擂 · 擂台战", floor: 1, x: 19, y: 12, kind: "fight", ref_id: "wc_fight_1" },
     maps::ZoneDef { id: "wl_z_l4_boss", name: "黑化盟主 · 暗厅", floor: 3, x: 15, y: 16, kind: "fight", ref_id: "wc_menzhu" },
-    maps::ZoneDef { id: "wl_z_l4_secret", name: "卧底密室 · 密道口", floor: 3, x: 18, y: 12, kind: "fight", ref_id: "wc_wo_di_door" },
+    maps::ZoneDef { id: "wl_z_l4_secret", name: "卧底密室 · 密道口", floor: 3, x: 18, y: 12, kind: "fight", ref_id: "wc_jiao_zhong" },
 ];
 
 /// 传送门（物理单向：PortalDef 仅在起点侧定义，反向无门即单向）。

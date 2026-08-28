@@ -122,16 +122,16 @@ pub static POINTS: &[maps::PointDef] = &[
     maps::PointDef { id: "mo_p_slab", name: "柱厅 · 刻字石板", floor: 0, x: 26, y: 10, route: "mo_rune" },
     maps::PointDef { id: "mo_p_collapse", name: "北廊 · 塌方", floor: 0, x: 11, y: 9, route: "mo_collapse" },
     maps::PointDef { id: "mo_p_cart", name: "月台 · 矿车补给箱", floor: 0, x: 21, y: 20, route: "mo_cart" },
-    maps::PointDef { id: "mo_p_stairs", name: "楼梯口 · 下 F2", floor: 0, x: 34, y: 14, route: "mo_goto_f2" },
+    maps::PointDef { id: "mo_p_stairs", name: "楼梯口 · 下 F2", floor: 0, x: 34, y: 14, route: "mo_02_hall" },
     // ---- F2 ----
     maps::PointDef { id: "mo_p_book", name: "书库 · 石棺/《马扎布尔之书》", floor: 1, x: 20, y: 10, route: "mo_book" },
     maps::PointDef { id: "mo_p_trap1", name: "无底阶梯 · 一步踏空·一", floor: 1, x: 10, y: 20, route: "mo_stair" },
     maps::PointDef { id: "mo_p_trap2", name: "无底阶梯 · 一步踏空·二", floor: 1, x: 22, y: 22, route: "mo_stair" },
     maps::PointDef { id: "mo_p_trap3", name: "无底阶梯 · 一步踏空·三", floor: 1, x: 34, y: 20, route: "mo_stair" },
     maps::PointDef { id: "mo_p_chest", name: "密室 · 秘银钥匙石宝箱", floor: 1, x: 4, y: 24, route: "mo_chest" },
-    maps::PointDef { id: "mo_p_stairs2", name: "楼梯口 · 下 F3", floor: 1, x: 31, y: 23, route: "mo_goto_f3" },
+    maps::PointDef { id: "mo_p_stairs2", name: "楼梯口 · 下 F3", floor: 1, x: 31, y: 23, route: "mo_book" },
     // ---- F3 ----
-    maps::PointDef { id: "mo_p_crack", name: "桥中段 · 裂隙", floor: 2, x: 22, y: 13, route: "mo_bridge" },
+    maps::PointDef { id: "mo_p_crack", name: "桥中段 · 裂隙", floor: 2, x: 22, y: 13, route: "mo_bridge_desc" },
     maps::PointDef { id: "mo_p_vault_chest", name: "王厅宝库 · 秘银宝箱", floor: 2, x: 33, y: 21, route: "mo_vault" },
 ];
 
@@ -161,7 +161,7 @@ pub static NPCS: &[maps::NpcDef] = &[
 pub static ZONES: &[maps::ZoneDef] = &[
     maps::ZoneDef { id: "mo_z_watcher", name: "水中监视者 · 湖池", floor: 0, x: 13, y: 21, kind: "fight", ref_id: "mo_lake" },
     maps::ZoneDef { id: "mo_z_troll", name: "无底阶梯口 · 巨魔", floor: 1, x: 7, y: 18, kind: "fight", ref_id: "mo_npc_troll" },
-    maps::ZoneDef { id: "mo_z_bridge", name: "卡扎督姆桥 · 中段", floor: 2, x: 22, y: 13, kind: "fight", ref_id: "mo_bridge" },
+    maps::ZoneDef { id: "mo_z_bridge", name: "卡扎督姆桥 · 中段", floor: 2, x: 22, y: 13, kind: "fight", ref_id: "b_balrog" },
 ];
 
 /// 传送门（§3.5，物理单向：PortalDef 仅在起点侧定义，反向无门即单向）。
