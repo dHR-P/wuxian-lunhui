@@ -158,7 +158,7 @@ pub static POXU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "pv_prelude", bg: Some("img_laser.png"), loc: Some("武极高地 · 破虚台前"),
+        id: "pv_prelude", bg: Some("poxu_bg.png"), loc: Some("武极高地 · 破虚台前"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "天缝裂到最大，一道身影从光里缓步走出——它通体覆盖着像另一种武极练就的甲壳，脚不沾尘，周身气息沉沉压着整片高地。",
@@ -170,7 +170,7 @@ pub static POXU_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "pv_01", bg: Some("img_zhuyuan_book.png"), loc: Some("破虚台 · 两界之界"), mood: "danger",
+        id: "pv_01", bg: Some("poxu_bg.png"), loc: Some("破虚台 · 两界之界"), mood: "danger",
         speaker: Some("异界来者"), voice: None,
         text: TextSpec::Static(&["异界来者 挡在出口，气息锁着你周身八门。武的尽头，是另一个世界的开始——它正是那个世界的来者。" ]),
         choices: &[
@@ -180,7 +180,7 @@ pub static POXU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "pv_round", bg: Some("img_laser.png"), loc: Some("决战 · 两界之界"), mood: "danger",
+        id: "pv_round", bg: Some("poxu_bg.png"), loc: Some("决战 · 两界之界"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("异界来者 尚余 {} 气力，你 HP {}。每破它一招一式，两界的门就松动一分。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

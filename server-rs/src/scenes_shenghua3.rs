@@ -185,7 +185,7 @@ SceneDef {
 
 /* ================= L1 地下水质 hub ================= */
 SceneDef {
-    id: "sh3_01_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 浣熊市地下水道"),
+    id: "sh3_01_l1_hub", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 浣熊市地下水道"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("sh3_ev_sample") {
@@ -206,7 +206,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_02_gate", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 地下水闸门"),
+    id: "sh3_02_gate", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 地下水闸门"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["闸门边的污水泛着奇异的荧光，水里漂着一管冷却剂密封的水样瓶。你认得那种绿——那是伞公司用来培育亲卫的培养基。"]),
     choices: &[ChoiceDef { label: "【取走水样·样本】", sub: "sh3_ev_sample · 证据+1", cond: None,
@@ -214,7 +214,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_02_valve", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 生锈控制阀"),
+    id: "sh3_02_valve", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 生锈控制阀"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["生锈的控制阀封着一个压力表，表针停在一个不该停的刻度。你拧不动它，却在表盘背面看见一行刻字：「样本在疫苗前，生命在数据后。」"]),
     choices: &[ChoiceDef { label: "记下控制阀刻字", sub: "伏笔", cond: None,
@@ -222,7 +222,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_02_machine", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 废弃抽水泵"),
+    id: "sh3_02_machine", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 废弃抽水泵"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["抽水泵卡着一只防化手套，袖口绣着半枚伞公司 logo。机器转不动，但你闻到培养液那股熟悉的药味——它就是从孵化室排下来的。"]),
     choices: &[ChoiceDef { label: "记下排水路径", sub: "罪证/样本线索", cond: None,
@@ -230,7 +230,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_02_corpse", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 道边尸体"),
+    id: "sh3_02_corpse", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 道边尸体"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["那句没写完的字碑被泡开，露出一半：「……他们喂的不是疫苗，是……」。你把它扶正，读到了那个没说完的名字。"]),
     choices: &[ChoiceDef { label: "收好字碑碎片", sub: "样本线索 · San-2", cond: None,
@@ -238,7 +238,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_10_sewage", bg: Some("img_laser.png"), loc: Some("L1 · 污水渠漫水区"),
+    id: "sh3_10_sewage", bg: Some("shenghua3_bg.png"), loc: Some("L1 · 污水渠漫水区"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["污水没过脚踝，荧光随水波漾开，覆盖在每一寸水下皮肤上。你还没有查过水质——那些发绿的培养液，正在往你身体里钻。"]),
     choices: &[ChoiceDef { label: "【污染防治】", sub: "查水质则免感染，否则 San-10 · 生化感染", cond: None,
@@ -247,7 +247,7 @@ SceneDef {
 },
 /* 查水质后安然返回 */
 SceneDef {
-    id: "sh3_10_sewage_ok", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 净水取样点"),
+    id: "sh3_10_sewage_ok", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 净水取样点"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["你已在闸门取过水样，水质你心里有数。你踩过漫水区，污染在你脚下退了半步——样本在手，生化威胁翻不了天。"]),
     choices: &[ChoiceDef { label: "回到闸门水道", sub: "→ L1 hub", cond: None,
@@ -255,7 +255,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_05_survive", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 幸存者据点"),
+    id: "sh3_05_survive", bg: Some("shenghua3_bg_underground.png"), loc: Some("L1 · 幸存者据点"),
     mood: "cold", speaker: Some("地下幸存者·蕾吉"), voice: None,
     text: TextSpec::Static(&["蕾吉把半支抗生素塞给你：「地下毒水熬不过我这种幸存者，可它会熬透你。闸门下去就是井道——酒席底下那点票子，都在孵化室。」"]),
     choices: &[ChoiceDef { label: "「带我去井道。」", sub: "拿抗生素 sh3_antibiotic · San+2", cond: None,
@@ -263,7 +263,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_02_gateway", bg: Some("img_laser.png"), loc: Some("L1 · 地下水闸口"),
+    id: "sh3_02_gateway", bg: Some("shenghua3_bg.png"), loc: Some("L1 · 地下水闸口"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("sh3_ev_sample") {
@@ -282,7 +282,7 @@ SceneDef {
 
 /* ================= L2 警察局地下 hub ================= */
 SceneDef {
-    id: "sh3_03_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 警察局地下"),
+    id: "sh3_03_l2_hub", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 警察局地下"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("sh3_ev_creed") {
@@ -302,7 +302,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_03_cell", bg: Some("img_corridor.png"), loc: Some("L2 · 审讯室门"),
+    id: "sh3_03_cell", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 审讯室门"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["审讯室木门后贴着一张纸条：「革命需要代价，代价总是最穷的人先付。」下面压着一枚伞公司信封——那是「信条」的钥匙。"]),
     choices: &[ChoiceDef { label: "【取走伞公司信条】", sub: "sh3_ev_creed · 证据+1", cond: None,
@@ -310,7 +310,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_03_desk", bg: Some("img_corridor.png"), loc: Some("L2 · 档案桌"),
+    id: "sh3_03_desk", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 档案桌"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["档案桌抽屉弹出半张化验单，患者名录上的人全被划去——只留最底下那个还亮着：S-伊芙琳·RE。你把这个名字收好。"]),
     choices: &[ChoiceDef { label: "记下化验单名单", sub: "信条线索", cond: None,
@@ -318,7 +318,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_03_evidence", bg: Some("img_corridor.png"), loc: Some("L2 · 证据柜"),
+    id: "sh3_03_evidence", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 证据柜"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["证据柜锁着一只沙漏，沙漏底压着一份伞公司「信条」的抄件。你把沙漏翻过来——沙子落下的方向，指向井道更深处的孵化室。"]),
     choices: &[ChoiceDef { label: "收下信条抄件", sub: "信条线索", cond: None,
@@ -326,7 +326,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_03_safe", bg: Some("img_corridor.png"), loc: Some("L2 · 逃生井盖"),
+    id: "sh3_03_safe", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 逃生井盖"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["逃生井盖锈死了，缝里塞着一截防化服的袖口——和下水道那只是同一双。你撬开一角，露出一条通往实验室的通风道。"]),
     choices: &[ChoiceDef { label: "记下逃生井盖", sub: "伏笔", cond: None,
@@ -334,7 +334,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_06_officer", bg: Some("img_corridor.png"), loc: Some("L2 · 警员避难岗"),
+    id: "sh3_06_officer", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 警员避难岗"),
     mood: "cold", speaker: Some("受困警员"), voice: None,
     text: TextSpec::Static(&["警员握着只剩两格的手电，声音发哑：「地下室的人全替它跑了。孵化室那怪物，不杀我，走——别回头看。」他指了指档案桌。"]),
     choices: &[ChoiceDef { label: "「我去读那份信条。」", sub: "San+2 · → 档案桌", cond: None,
@@ -342,7 +342,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_03_gateway", bg: Some("img_laser.png"), loc: Some("L2 · 井道底层"),
+    id: "sh3_03_gateway", bg: Some("shenghua3_bg.png"), loc: Some("L2 · 井道底层"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("sh3_ev_creed") {
@@ -361,7 +361,7 @@ SceneDef {
 
 /* ================= L3 实验室 hub ================= */
 SceneDef {
-    id: "sh3_04_l3_hub", bg: Some("img_corridor.png"), loc: Some("L3 · 实验室·孵化室"),
+    id: "sh3_04_l3_hub", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 实验室·孵化室"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("sh3_ev_log") {
@@ -381,7 +381,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_04_morgue", bg: Some("img_laser.png"), loc: Some("L3 · 停尸间"),
+    id: "sh3_04_morgue", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 停尸间"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["停尸间最里一格躺着个没名字的人，关节处都焊着伞公司的「S」标签。你在他胸口压着的那页纸上，读到孵化日志的开头。"]),
     choices: &[ChoiceDef { label: "【取走孵化日志】", sub: "sh3_ev_log · 证据+1", cond: None,
@@ -389,7 +389,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_04_console", bg: Some("img_laser.png"), loc: Some("L3 · 主控台"),
+    id: "sh3_04_console", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 主控台"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["主控台弹出一段孵化日志：「复仇女神会服从携带『第二个选择』的操控者——一旦启动，它只认你一个人。」你把代码抄下来。"]),
     choices: &[ChoiceDef { label: "抄下神经干扰代码", sub: "孵化日志线索", cond: None,
@@ -397,7 +397,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_04_vat", bg: Some("img_laser.png"), loc: Some("L3 · 菌株容器"),
+    id: "sh3_04_vat", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 菌株容器"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["菌株容器里游着一条发光的绿线，标签写着「EVE-RE 样本」。你一靠近它，容器上的红灯就闪成心跳的节拍——它认得你。"]),
     choices: &[ChoiceDef { label: "记录菌株心跳", sub: "伏笔", cond: None,
@@ -405,7 +405,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_04_data", bg: Some("img_laser.png"), loc: Some("L3 · 数据终端"),
+    id: "sh3_04_data", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 数据终端"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["数据终端存着孵化室的地形图——复仇女神的出生槽位、通风口、还有那个标着「第二选择」的红色按钮。你全记下了。"]),
     choices: &[ChoiceDef { label: "拉取孵花室地形", sub: "+5 点 · 孵化日志链", cond: None,
@@ -413,7 +413,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_07_doctor", bg: Some("img_corridor.png"), loc: Some("L3 · 医生值守台"),
+    id: "sh3_07_doctor", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 医生值守台"),
     mood: "cold", speaker: Some("卧底医生·韩"), voice: None,
     text: TextSpec::Static(&["医生摘下手套，露出一枚伞公司的士官戒：「它不叫追踪者，它叫『复仇女神』。你要么给它『第二个选择』，要么，别让它替你选。」"]),
     choices: &[ChoiceDef { label: "「我去读孵化日志。」", sub: "San+2 · →主控台", cond: None,
@@ -423,7 +423,7 @@ SceneDef {
 
 /* ================= BOSS：追踪者·复仇女神（选择驱动） ================= */
 SceneDef {
-    id: "sh3_09_boss_round", bg: Some("img_laser.png"), loc: Some("L3 · 孵化室"), mood: "danger",
+    id: "sh3_09_boss_round", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 孵化室"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Dyn(|st| format!("孵化室的灭菌灯在复仇女神背后亮成一行红影。它在陪你打这场「第二选择」的仗——证据 {}，神经干扰披甲。BOSS 剩余 {} 血，你 HP {}", if st.flag("sh3_evidence_full") { "已集齐，干扰代码在手" } else { "未集齐，它只压你七分" }, st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
     choices: &[
@@ -435,7 +435,7 @@ SceneDef {
 
 /* ---- 胜利 · 第二个选择（开放结局三分支） ---- */
 SceneDef {
-    id: "sh3_30_final_choice", bg: Some("img_laser.png"), loc: Some("L3 · 孵化室 · 神经干扰终端"), mood: "choice",
+    id: "sh3_30_final_choice", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 孵化室 · 神经干扰终端"), mood: "choice",
     speaker: Some("追踪者·复仇女神"), voice: None,
     text: TextSpec::Static(&[
         "复仇女神的火箭筒缓缓垂下。它把枪口对准自己胸口那个闪烁的孵化器，看着你：「第二个选择，只有你能下。」",
@@ -449,7 +449,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_31_spare", bg: Some("img_laser.png"), loc: Some("L3 · 孵化室（宽赦之径）"), mood: "awe",
+    id: "sh3_31_spare", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 孵化室（宽赦之径）"), mood: "awe",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你按下「宽赦」。孵化器的培养液缓缓排空，复仇女神那只闪烁的红灯，第一次倒转为平和的蓝。",
@@ -460,7 +460,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_32_feed", bg: Some("img_laser.png"), loc: Some("L3 · 孵化室（喂给之径）"), mood: "danger",
+    id: "sh3_32_feed", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 孵化室（喂给之径）"), mood: "danger",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你把 EVE-RE 样本倒进复仇女神胸口的容器。它吸收后，红灯取代蓝灯，却没再对你举起武器。",
@@ -471,7 +471,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "sh3_33_blowup", bg: Some("img_laser.png"), loc: Some("L3 · 孵化室（引爆之径）"), mood: "mystery",
+    id: "sh3_33_blowup", bg: Some("shenghua3_bg_lab.png"), loc: Some("L3 · 孵化室（引爆之径）"), mood: "mystery",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你按下了引爆。孵化室的玻璃在掌心里炸成白光，复仇女神没有后退，它用身体替你挡掉了第一波冲击。",
@@ -483,7 +483,7 @@ SceneDef {
 },
 /* 普通战斗胜利中转 */
 SceneDef {
-    id: "sh3_05_win", bg: Some("img_laser.png"), loc: Some("浣熊市地下 · 威胁清除"), mood: "calm",
+    id: "sh3_05_win", bg: Some("shenghua3_bg_lab.png"), loc: Some("浣熊市地下 · 威胁清除"), mood: "calm",
     speaker: None, voice: None,
     text: TextSpec::Static(&["生化威胁在你脚下散成一滩腥水，被下水道的风卷走。你获得一份幸存者的谢礼。" ]),
     choices: &[

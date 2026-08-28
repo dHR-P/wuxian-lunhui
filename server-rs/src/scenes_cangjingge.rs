@@ -273,7 +273,7 @@ SceneDef {
 
 /* ---- L0 经堂 hub ---- */
 SceneDef {
-    id: "cj_01", bg: Some("img_zhuyuan_book.png"), loc: Some("L0 · 山门与经堂"),
+    id: "cj_01", bg: Some("cangjingge_bg.png"), loc: Some("L0 · 山门与经堂"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_tongling") {
@@ -294,7 +294,7 @@ SceneDef {
 
 /* ---- L0 调查点场景 ---- */
 SceneDef {
-    id: "cj_05_stele", bg: Some("img_zhuyuan_book.png"), loc: Some("L0 · 山门石经幢"),
+    id: "cj_05_stele", bg: Some("cangjingge_bg.png"), loc: Some("L0 · 山门石经幢"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["石经幢上刻着经偈：「藏经如藏火，翻书如纵己。一字掀起万卷浪，卷尽江湖是非心。」"]),
     choices: &[ChoiceDef { label: "默记经偈", sub: "+5 点", cond: None,
@@ -302,7 +302,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_03_laoseng", bg: Some("img_zhuyuan_book.png"), loc: Some("L0 · 檐下 · 旁侍老僧"),
+    id: "cj_03_laoseng", bg: Some("cangjingge_bg.png"), loc: Some("L0 · 檐下 · 旁侍老僧"),
     mood: "cold", speaker: Some("旁侍老僧"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("keeper_clue_1") {
@@ -316,7 +316,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_04_sign", bg: Some("img_zhuyuan_book.png"), loc: Some("L0 · 解签炉"),
+    id: "cj_04_sign", bg: Some("cangjingge_bg.png"), loc: Some("L0 · 解签炉"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["你从解签炉里抽出一根签，签文：『字多则魔生，阅尽乃得安』。炉底压着一页泛黄的武学残卷——跳进了你的行囊。"]),
     choices: &[ChoiceDef { label: "取走残卷·乙", sub: "Item it_miju_b", cond: None,
@@ -324,7 +324,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_06_bell", bg: Some("img_zhuyuan_book.png"), loc: Some("L0 · 铜铃法台"),
+    id: "cj_06_bell", bg: Some("cangjingge_bg.png"), loc: Some("L0 · 铜铃法台"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["铜铃法台上一枚巴掌大的铜铃泛着温润的铜光，铃身铸着小字：「鸣一声，藏经开。」"]),
     choices: &[ChoiceDef { label: "取下铜铃", sub: "Item it_tongling · 开 G1", cond: None,
@@ -332,7 +332,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_05_plaque", bg: Some("img_zhuyuan_book.png"), loc: Some("L0 · 藏经阁匾额"),
+    id: "cj_05_plaque", bg: Some("cangjingge_bg.png"), loc: Some("L0 · 藏经阁匾额"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["匾上四个大字「藏经在望」，木边刻着一行小字：『经在楼台，人在楼台之下』。"]),
     choices: &[ChoiceDef { label: "微忖匾意", sub: "+5 点", cond: None,
@@ -342,7 +342,7 @@ SceneDef {
 
 /* ================= L1 一楼 · 书架丛林 ================= */
 SceneDef {
-    id: "cj_10_arrive_floor1", bg: Some("img_laser.png"), loc: Some("L1 · 藏经阁一楼"),
+    id: "cj_10_arrive_floor1", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 藏经阁一楼"),
     mood: "cold", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("keeper_clue_2") {
@@ -362,7 +362,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_11_scroll_a", bg: Some("img_laser.png"), loc: Some("L1 · 书架 · 武学残卷·甲"),
+    id: "cj_11_scroll_a", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 书架 · 武学残卷·甲"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["书架深处的暗格里躺着一卷发黄的武学残卷，扉页缺了一角，内文是一种说不出名字的掌法。"]),
     choices: &[ChoiceDef { label: "取走残卷·甲", sub: "Item it_miju_a", cond: None,
@@ -370,7 +370,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_11_scroll_b", bg: Some("img_laser.png"), loc: Some("L1 · 书架 · 武学残卷·乙"),
+    id: "cj_11_scroll_b", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 书架 · 武学残卷·乙"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["书页夹层里抖落出一页残卷，墨迹新得反常——像才被人从某部经书里撕下。"]),
     choices: &[ChoiceDef { label: "取走残卷·乙", sub: "Item it_miju_b", cond: None,
@@ -378,7 +378,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_11_scroll_c", bg: Some("img_laser.png"), loc: Some("L1 · 书架 · 武学残卷·丙"),
+    id: "cj_11_scroll_c", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 书架 · 武学残卷·丙"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["最底层的书箱压着一卷残页，油布裹着，扉页血字一行：「此卷不假之人，因果自背。」"]),
     choices: &[ChoiceDef { label: "取走残卷·丙", sub: "Item it_miju_c", cond: None,
@@ -386,7 +386,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_13_keeper_note", bg: Some("img_laser.png"), loc: Some("L1 · 守经人手札"),
+    id: "cj_13_keeper_note", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 守经人手札"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_miju_full") {
@@ -400,20 +400,20 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_20_shuling", bg: Some("img_laser.png"), loc: Some("L1 · 经阁书灵封印台"),
+    id: "cj_20_shuling", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 经阁书灵封印台"),
     mood: "danger", speaker: Some("经阁书灵"), voice: Some("vo_cj_shuling"),
     text: TextSpec::Static(&["封印台上那册无字经书自空中盘旋翻页，字迹潮涌之上凝成一团人烟——经阁书灵睁目，满楼纸页狂舞。"]),
     choices: &[ChoiceDef { label: "【迎战书灵】", sub: "cj_shuling", cond: None, effects: &NO_EFF, route: Route::To("cj_20_shuling_fight") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_20_shuling_fight", bg: Some("img_laser.png"), loc: Some("L1 · 经阁书灵封印台"),
+    id: "cj_20_shuling_fight", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 经阁书灵封印台"),
     mood: "danger", speaker: None, voice: Some("vo_cj_shuling"),
     text: TextSpec::Static(&["书页如刃卷成风暴，朝你当面削来。（战斗）"]),
     choices: &[], fight_id: Some("cj_shuling"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_20_shuling_win", bg: Some("img_laser.png"), loc: Some("L1 · 经阁书灵封印台"),
+    id: "cj_20_shuling_win", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 经阁书灵封印台"),
     mood: "calm", speaker: Some("经阁书灵残响"), voice: None,
     text: TextSpec::Static(&["书页散落一地，那册无字经书缓缓合上，落入你手中成为一部「内容真解」。你揭开了残卷扉页的封印。"]),
     choices: &[ChoiceDef { label: "拾起真解批注", sub: "Item it_miju_full · 触发守经人指引", cond: None,
@@ -421,21 +421,21 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_10_guard2_win", bg: Some("img_laser.png"), loc: Some("L1 · 书梯口"),
+    id: "cj_10_guard2_win", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 书梯口"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["持棍武僧拄棍倒下，一楼归于沉寂。书梯口的铜闸仍横着戒律。"]),
     choices: &[ChoiceDef { label: "（回一楼继续）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("cj_10_arrive_floor1") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_10_slip", bg: Some("img_laser.png"), loc: Some("L1 · 屋脊滑道"),
+    id: "cj_10_slip", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 屋脊滑道"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["无铃也行。你顺着屋脊滑道一坠，重重落进一楼的一堆草蒲团里——险路无门禁，但一路纸傀惊醒。"]),
     choices: &[ChoiceDef { label: "（落地 · 一楼）", sub: "p_cj_1 单向 · 纸傀", cond: None, effects: &NO_EFF, route: Route::To("cj_10_arrive_floor1") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_14_lift", bg: Some("img_laser.png"), loc: Some("L1 · 中央书梯（G2 已开）"),
+    id: "cj_14_lift", bg: Some("cangjingge_bg.png"), loc: Some("L1 · 中央书梯（G2 已开）"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["念出戒律暗语，铜闸沉入地板。你踏入书梯的木笼——绳缆吱呀上行，身后尖叫着断裂，木笼坠回黑暗。"]),
     choices: &[ChoiceDef { label: "（升梯至二楼禁书库）", sub: "p_cj_2 单向 · 缆断", cond: None, effects: &NO_EFF, route: Route::To("cj_14_arrive_floor2") }],
@@ -444,7 +444,7 @@ SceneDef {
 
 /* ================= L2 二楼 · 禁书库 ================= */
 SceneDef {
-    id: "cj_14_arrive_floor2", bg: Some("img_corridor.png"), loc: Some("L2 · 禁书库"),
+    id: "cj_14_arrive_floor2", bg: Some("cangjingge_bg.png"), loc: Some("L2 · 禁书库"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_tan_key") {
@@ -463,7 +463,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_15_forbidden", bg: Some("img_corridor.png"), loc: Some("L2 · 禁书卷题"),
+    id: "cj_15_forbidden", bg: Some("cangjingge_bg.png"), loc: Some("L2 · 禁书卷题"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["禁书以铁页封皮锁着，卷题晦涩：「绝学一念，可遁入势；勘破者，天地之巅亦只是一阁。」守经人游魂立在你身侧。"]),
     choices: &[ChoiceDef { label: "听守经人解说", sub: "剧情", cond: None,
@@ -471,7 +471,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_16_chanfang", bg: Some("img_corridor.png"), loc: Some("L2 · 守阁僧禅房 · 闭户"),
+    id: "cj_16_chanfang", bg: Some("cangjingge_bg.png"), loc: Some("L2 · 守阁僧禅房 · 闭户"),
     mood: "cold", speaker: Some("守经人游魂"), voice: None,
     text: TextSpec::Static(&["禅房紧闭，门缝里漏出昏黄烛火。守经人游魂低声道：「守了它一辈子的老人，如今把自己也锁了进去——你若能让他放下那部禁书，他或肯解脱。」"]),
     choices: &[ChoiceDef { label: "记下守经人嘱托", sub: "守经人线索 · 2/2", cond: None,
@@ -479,7 +479,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_17_tan_key", bg: Some("img_corridor.png"), loc: Some("L2 · 锁钥架 · 檀木匣"),
+    id: "cj_17_tan_key", bg: Some("cangjingge_bg.png"), loc: Some("L2 · 锁钥架 · 檀木匣"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["藏稿阁的锁钥架上悬着众多钥匙，其中一枚檀木匙放置在匣中，傍着一枚贯孔的木牌——那便是檀木信物，熏过佛前香。"]),
     choices: &[ChoiceDef { label: "取走檀木秘钥", sub: "Item it_tan_key · 开 G3", cond: None,
@@ -491,7 +491,7 @@ SceneDef {
 
 /* ================= L3 顶层秘籍塔 ================= */
 SceneDef {
-    id: "cj_19_arrive_tower", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 秘籍塔顶"),
+    id: "cj_19_arrive_tower", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 秘籍塔顶"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "塔顶四壁画着天地山川与一门门失传的武功。中央塔台之上，一人枯坐，袈裟沾灰——入魔守阁僧。",
@@ -505,7 +505,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_18_juexue", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 绝学密室 · 心法刻壁"),
+    id: "cj_18_juexue", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 绝学密室 · 心法刻壁"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["檀木钥开青铜门，密室四壁刻着一门古奥心法。你盘膝默悟，一道明悟透体而至——你把绝学记在了心里。"]),
     choices: &[ChoiceDef { label: "默记绝学", sub: "Item it_juexue · +30 点", cond: None,
@@ -514,7 +514,7 @@ SceneDef {
 },
 /* ---- BOSS · 入魔守阁僧（选择驱动）---- */
 SceneDef {
-    id: "cj_22_shouge", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 秘籍塔 · 决战"),
+    id: "cj_22_shouge", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 秘籍塔 · 决战"),
     mood: "danger", speaker: Some("入魔守阁僧"), voice: Some("vo_cj_shouge"),
     text: TextSpec::Static(&[
         "你踏上塔台，枯坐的老僧缓缓抬头，双目赤红如炭。「你……也想取那部禁书？」他的声音像翻破的书页。",
@@ -524,7 +524,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_shouge_round", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 秘籍塔 · 激战"),
+    id: "cj_shouge_round", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 秘籍塔 · 激战"),
     mood: "danger", speaker: Some("入魔守阁僧"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("守阁僧 HP {} / {}", f.hp.max(0), 150)).unwrap_or_else(|| "守阁僧 HP --".to_string());
@@ -546,14 +546,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_23_shouge_down", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 秘籍塔"),
+    id: "cj_23_shouge_down", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 秘籍塔"),
     mood: "calm", speaker: Some("守阁僧残响"), voice: Some("vo_cj_shouge_down"),
     text: TextSpec::Static(&["那缕执念与你的拳风一同溃散。老僧的袈裟垂落，静坐如涅槃，檀香气味漫开来——一部绝学心法钞落在他膝前。"]),
     choices: &[ChoiceDef { label: "（走向经匣石台）", sub: "经匣之择", cond: None, effects: &NO_EFF, route: Route::To("cj_30_box") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_24_shouge_freed", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 秘籍塔 · 解脱"),
+    id: "cj_24_shouge_freed", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 秘籍塔 · 解脱"),
     mood: "calm", speaker: Some("守阁僧"), voice: Some("vo_cj_shouge_freed"),
     text: TextSpec::Static(&["檀木信物贴上他的掌心，纸链寸寸断裂。「……守了一辈子，原来只因一句放不下。」老僧阖目敛心，袈裟落座，如一枚熄灭的灯，却又有一缕清净之气渡你全身。"]),
     choices: &[ChoiceDef { label: "（走向经匣石台）", sub: "经匣之择", cond: None, effects: &NO_EFF, route: Route::To("cj_30_box") }],
@@ -562,7 +562,7 @@ SceneDef {
 
 /* ---- 隐藏 · 心魔（选择驱动）---- */
 SceneDef {
-    id: "cj_26_xinmo_door", bg: Some("img_laser.png"), loc: Some("L3 · 心魔洞口"),
+    id: "cj_26_xinmo_door", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 心魔洞口"),
     mood: "danger", speaker: Some("内心之声"), voice: None,
     text: TextSpec::Static(&["说出禁书字缝里的真谛，石壁幕帘般裂开。洞中涌出彻骨寒意，一个与你一模一样的人影在水镜里立起。"]),
     choices: &[
@@ -571,7 +571,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_xinmo_round", bg: Some("img_laser.png"), loc: Some("L3 · 心魔洞 · 激战"),
+    id: "cj_xinmo_round", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 心魔洞 · 激战"),
     mood: "danger", speaker: Some("心魔"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("心魔 HP {} / {}", f.hp.max(0), 90)).unwrap_or_else(|| "心魔 HP --".to_string());
@@ -588,7 +588,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_27_xinmo_win", bg: Some("img_laser.png"), loc: Some("L3 · 心魔洞"),
+    id: "cj_27_xinmo_win", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 心魔洞"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["倒影碎裂成水沫，洞中只余一册破障心法。你将它收入怀中，那道裂隙悄然合拢。"]),
     choices: &[ChoiceDef { label: "（回秘籍塔顶）", sub: "xinmo_down", cond: None,
@@ -598,7 +598,7 @@ SceneDef {
 
 /* ================= 结局分支 · 经匣之择（禁书取舍） ================= */
 SceneDef {
-    id: "cj_30_box", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 经匣石台"),
+    id: "cj_30_box", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 经匣石台"),
     mood: "mystery", speaker: Some("守阁僧残响"), voice: Some("vo_cj_box"),
     text: TextSpec::Static(&[
         "塔顶石台中央，那部被铁页封着的禁书静静躺着，封皮爬满经年守护的墨印。",
@@ -617,7 +617,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "cj_31_exit", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 撤离阵"),
+    id: "cj_31_exit", bg: Some("cangjingge_bg.png"), loc: Some("L3 · 撤离阵"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Dyn(|st| {
         match (st.flag("cj_book_read"), st.flag("cj_book_seal"), st.flag("cj_book_burn")) {

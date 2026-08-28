@@ -23,7 +23,8 @@ from gen_wan import gen  # noqa: E402
 STAGE_DIR = os.path.join(HERE, "gear_tr_bl_stages")
 os.makedirs(STAGE_DIR, exist_ok=True)
 
-DEPLOY_DIR = os.path.join(os.path.dirname(HERE), "server-rs", "ui", "assets", "img")
+# 真实资源目录是仓库根下 server-rs/ui/assets/img (tools/server-rs 是历史镜像, 勿写)
+DEPLOY_DIR = os.path.join(os.path.dirname(os.path.dirname(HERE)), "server-rs", "ui", "assets", "img")
 os.makedirs(DEPLOY_DIR, exist_ok=True)
 
 LOG_PATH = os.path.join(HERE, "gear_tr_bl_icons_log.md")

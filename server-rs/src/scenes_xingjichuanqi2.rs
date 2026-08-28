@@ -191,7 +191,7 @@ SceneDef {
 
 /* ================= L1 迷雾矿洞 hub ================= */
 SceneDef {
-    id: "xj2_01_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 迷雾矿洞"),
+    id: "xj2_01_l1_hub", bg: Some("xingjichuanqi2_bg_mine.png"), loc: Some("L1 · 迷雾矿洞"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("xj2_ev_mine") {
@@ -214,7 +214,7 @@ SceneDef {
 
 /* ---- L1 罪证观测点 ---- */
 SceneDef {
-    id: "xj2_02_rail", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 废弃矿车轨道"),
+    id: "xj2_02_rail", bg: Some("xingjichuanqi2_bg_mine.png"), loc: Some("L1 · 废弃矿车轨道"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["矿车在轨道尽头侧翻，车斗里压着一件矿工服——名牌上写着「失踪名单」第二行。你认出同一种被埋没的罪。"]),
     choices: &[ChoiceDef { label: "【收下矿洞罪证】", sub: "xj2_ev_mine · 罪证+1", cond: None,
@@ -222,7 +222,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_02_shaft", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 塌方竖井"),
+    id: "xj2_02_shaft", bg: Some("xingjichuanqi2_bg_mine.png"), loc: Some("L1 · 塌方竖井"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["竖井口被塌下的碎石封住，井壁上用旧凿子刻满同一个名字。别人的罪，压在谁的肩上。"]),
     choices: &[ChoiceDef { label: "【记下竖井铭文】", sub: "罪证链条线索", cond: None,
@@ -230,7 +230,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_02_well", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 积水坑"),
+    id: "xj2_02_well", bg: Some("xingjichuanqi2_bg_mine.png"), loc: Some("L1 · 积水坑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["水面漂着一截烧焦的蜡烛——教堂里点的那种。蜡烛芯上钉着半枚名牌，你把它起出来，收好。"]),
     choices: &[ChoiceDef { label: "【收下积水线索】", sub: "罪证链条线索", cond: None,
@@ -238,7 +238,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_02_cage", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 锈蚀铁笼"),
+    id: "xj2_02_cage", bg: Some("xingjichuanqi2_bg_mine.png"), loc: Some("L1 · 锈蚀铁笼"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["铁笼笼口敞着，里面躺着半截矿工铁撬。它压住了那桩罪的名字——用它撬开教堂侧门，罪证就在门后。"]),
     choices: &[ChoiceDef { label: "取走矿工铁撬", sub: "Item xj2_item_pick · 开 G1", cond: None,
@@ -246,7 +246,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_10_cavein", bg: Some("img_laser.png"), loc: Some("L1 · 塌方竖井口"),
+    id: "xj2_10_cavein", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L1 · 塌方竖井口"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["灰雾从竖井口倒灌上来，裹着矿工服上那股陈旧的血锈味。有什么在暗处替你回味那桩罪——你该先拿起铁撬。"]),
     choices: &[ChoiceDef { label: "【直面竖井口】", sub: "破矿洞罪证则免死，否则 San-10 · 罪念压身", cond: None,
@@ -254,7 +254,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_05_lamp", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 守灯老人的灯下"),
+    id: "xj2_05_lamp", bg: Some("xingjichuanqi2_bg_mine.png"), loc: Some("L1 · 守灯老人的灯下"),
     mood: "cold", speaker: Some("守灯老人"), voice: None,
     text: TextSpec::Static(&["老人盯着你腰间的铁撬：「矿洞那桩，你是要替他枕着，还是替他挖出来？教堂的烛……点得比这儿还近。」"]),
     choices: &[ChoiceDef { label: "「把罪证挖出来。」", sub: "San+2 · → 教堂", cond: None,
@@ -262,7 +262,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_02_gate", bg: Some("img_laser.png"), loc: Some("L1 · 矿道斜井出口"),
+    id: "xj2_02_gate", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L1 · 矿道斜井出口"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("xj2_ev_mine") {
@@ -281,7 +281,7 @@ SceneDef {
 
 /* ================= L2 废墟教堂 hub ================= */
 SceneDef {
-    id: "xj2_03_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 废墟教堂"),
+    id: "xj2_03_l2_hub", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 废墟教堂"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("xj2_ev_church") {
@@ -301,7 +301,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_03_altar", bg: Some("img_corridor.png"), loc: Some("L2 · 圣坛"),
+    id: "xj2_03_altar", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 圣坛"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["圣坛执照前压着一卷烧焦的旧卷宗，封皮上的人名被人一遍遍划掉。你把它抽出来——那桩旧罪的名字，在灰烬边现了形。"]),
     choices: &[ChoiceDef { label: "【收下教堂罪证】", sub: "xj2_ev_church · 罪证+1", cond: None,
@@ -309,7 +309,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_03_conf", bg: Some("img_corridor.png"), loc: Some("L2 · 忏悔室"),
+    id: "xj2_03_conf", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 忏悔室"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["木帘后静得可疑。你能听见自己心跳的回响——那是谁把「认罪」两个字压在舌底，没敢说出来。铁撬能撬开帘后的旧档案。"]),
     choices: &[ChoiceDef { label: "【撬开忏悔木帘】", sub: "需铁撬 · 罪证线索", cond: Some(cond_has_pick),
@@ -318,7 +318,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_03_pew", bg: Some("img_corridor.png"), loc: Some("L2 · 长椅刻字"),
+    id: "xj2_03_pew", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 长椅刻字"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["长椅靠背被人用指甲刻下：「凶手是他们，替罪的是我。」你认得那种被牺牲的笔迹——它在朝教堂的罪证名字靠拢。"]),
     choices: &[ChoiceDef { label: "记下长椅刻字", sub: "伏笔", cond: None,
@@ -326,7 +326,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_03_catacomb", bg: Some("img_laser.png"), loc: Some("L2 · 地下墓穴入口"),
+    id: "xj2_03_catacomb", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 地下墓穴入口"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["墓穴深处传来旧纸燃烧的噼啪，还有一声含糊的「认罪」。你还没有读透教堂那桩罪的名字——下去只会被它吞掉。"]),
     choices: &[ChoiceDef { label: "【踏入墓穴回声】", sub: "破教堂罪证则免死，否则 San-10 · 罪念回声", cond: None,
@@ -334,7 +334,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_06_bell", bg: Some("img_corridor.png"), loc: Some("L2 · 钟楼底"),
+    id: "xj2_06_bell", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 钟楼底"),
     mood: "cold", speaker: Some("敲钟人"), voice: None,
     text: TextSpec::Static(&["敲钟人把半截蜡烛塞给你：「教堂这桩，最要命的是谁替谁背黑锅。读透圣坛那份卷宗，你就知道该不该替他认。」"]),
     choices: &[ChoiceDef { label: "「我去读圣坛卷宗。」", sub: "San+2 · → 圣坛", cond: None,
@@ -342,7 +342,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_03_gate", bg: Some("img_laser.png"), loc: Some("L2 · 教堂侧门"),
+    id: "xj2_03_gate", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L2 · 教堂侧门"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("xj2_ev_church") {
@@ -361,7 +361,7 @@ SceneDef {
 
 /* ================= L3 灰雾医院 hub ================= */
 SceneDef {
-    id: "xj2_04_l3_hub", bg: Some("img_corridor.png"), loc: Some("L3 · 灰雾医院"),
+    id: "xj2_04_l3_hub", bg: Some("xingjichuanqi2_bg_hospital.png"), loc: Some("L3 · 灰雾医院"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("xj2_ev_hospital") {
@@ -381,7 +381,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_04_reg", bg: Some("img_corridor.png"), loc: Some("L3 · 挂号台"),
+    id: "xj2_04_reg", bg: Some("xingjichuanqi2_bg_hospital.png"), loc: Some("L3 · 挂号台"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["挂号台后散落一摞病历，每张的名字都被血改写过。最后一页的名字，正好压在你「判罪」的名单上。"]),
     choices: &[ChoiceDef { label: "【收下医院罪证】", sub: "xj2_ev_hospital · 罪证+1", cond: None,
@@ -389,7 +389,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_04_ward", bg: Some("img_corridor.png"), loc: Some("L3 · 303 病房"),
+    id: "xj2_04_ward", bg: Some("xingjichuanqi2_bg_hospital.png"), loc: Some("L3 · 303 病房"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["床褥凹陷成一个人形，床头贴着一张没署名的监护单。你在枕下摸到半张写满「该谁认罪」的便签。"]),
     choices: &[ChoiceDef { label: "收好监护单", sub: "罪证链条线索", cond: None,
@@ -397,7 +397,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_04_morgue", bg: Some("img_laser.png"), loc: Some("L3 · 停尸房"),
+    id: "xj2_04_morgue", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L3 · 停尸房"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["不锈钢抽屉缝着一根针线，线头连向手术室。你拉开一格——里面躺着的，是那桩连锁旧罪的最后一个名字。"]),
     choices: &[ChoiceDef { label: "记下停尸名录", sub: "罪证链条线索 · San-2", cond: None,
@@ -405,7 +405,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_04_roof", bg: Some("img_corridor.png"), loc: Some("L3 · 雾中天台"),
+    id: "xj2_04_roof", bg: Some("xingjichuanqi2_bg_hospital.png"), loc: Some("L3 · 雾中天台"),
     mood: "awe", speaker: None, voice: None,
     text: TextSpec::Static(&["天台被灰雾围成一口井。雾的中央，那座「深红手术室」黑魆魆地站着，像一个借了教堂与矿洞全部罪念的铡刀。"]),
     choices: &[ChoiceDef { label: "俯瞰深红手术室", sub: "+5 点 · San+2 · 看清审判之地", cond: None,
@@ -413,7 +413,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_07_night", bg: Some("img_corridor.png"), loc: Some("L3 · 医院守夜岗"),
+    id: "xj2_07_night", bg: Some("xingjichuanqi2_bg_hospital.png"), loc: Some("L3 · 医院守夜岗"),
     mood: "cold", speaker: Some("医院守夜人"), voice: None,
     text: TextSpec::Static(&["守夜人攥着半瓶水，声音压得极低：「三角头选定你做那个『判罪的』。它不杀你——它要你说出，矿洞、教堂、医院这三桩罪，到底该谁扛。」"]),
     choices: &[ChoiceDef { label: "「我去见它。」", sub: "→ 深红手术室", cond: None,
@@ -423,7 +423,7 @@ SceneDef {
 
 /* ================= BOSS：三角头·深红审判（选择驱动） ================= */
 SceneDef {
-    id: "xj2_09_boss_round", bg: Some("img_laser.png"), loc: Some("L3 · 深红手术室"), mood: "danger",
+    id: "xj2_09_boss_round", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L3 · 深红手术室"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Dyn(|st| format!("深红手术室里，巨剑的锈水在两侧淌成血沟。三角头在雾中低垂着头——它还在等。罪证 {} 罪念攻你。BOSS 剩余 {} 血，你 HP {}", if st.flag("xj2_evidence_full") { "已集齐，它的审判架在你颈后" } else { "未集齐，它把铡刀压得更近" }, st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
     choices: &[
@@ -435,7 +435,7 @@ SceneDef {
 
 /* ---- 胜利 · 最后的审判（选择驱动开放结局） ---- */
 SceneDef {
-    id: "xj2_30_judgement", bg: Some("img_laser.png"), loc: Some("L3 · 深红手术室 · 审判台"), mood: "choice",
+    id: "xj2_30_judgement", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L3 · 深红手术室 · 审判台"), mood: "choice",
     speaker: Some("三角头·深红审判"), voice: None,
     text: TextSpec::Static(&[
         "巨剑插进手术台，深红锈水慢慢凝固。三桩罪——矿洞、教堂、医院——现在全由你一个人来定夺。",
@@ -449,7 +449,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_31_forgive", bg: Some("img_laser.png"), loc: Some("L3 · 审判台（宽恕之径）"), mood: "awe",
+    id: "xj2_31_forgive", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L3 · 审判台（宽恕之径）"), mood: "awe",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你松开了铡刀。灰雾缓缓落定，矿洞的灯、教堂的烛、医院的白灯，一格格地熄灭成安稳的灰。",
@@ -460,7 +460,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_32_revenge", bg: Some("img_laser.png"), loc: Some("L3 · 审判台（复仇之径）"), mood: "danger",
+    id: "xj2_32_revenge", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L3 · 审判台（复仇之径）"), mood: "danger",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你举起了铡刀。深红锈水被你的手溅起，泼进雾里——那三桩罪的仇人，一个个在静默里倒伏下去。",
@@ -471,7 +471,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "xj2_33_carry", bg: Some("img_laser.png"), loc: Some("L3 · 审判台（背负之径）"), mood: "mystery",
+    id: "xj2_33_carry", bg: Some("xingjichuanqi2_bg.png"), loc: Some("L3 · 审判台（背负之径）"), mood: "mystery",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你没有让任何人认罪。你替三桩罪背起了它们的重量，一步一步，走进雾最浓的深处。",
@@ -483,7 +483,7 @@ SceneDef {
 },
 /* 普通战斗胜利中转：给你选择回落对应楼层 hub（保持确定性） */
 SceneDef {
-    id: "xj2_gwin", bg: Some("img_laser.png"), loc: Some("罪念守卫 · 消散"), mood: "calm",
+    id: "xj2_gwin", bg: Some("xingjichuanqi2_bg.png"), loc: Some("罪念守卫 · 消散"), mood: "calm",
     speaker: None, voice: None,
     text: TextSpec::Dyn(|st| format!("罪念守卫在你足下塌成一堆灰烬，被雾卷走。战利点入账 {}{}。", 30, "")),
     choices: &[

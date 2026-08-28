@@ -51,7 +51,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
 
     /* ================= 幕一 · 开场扩充（钩子 + 氛围） ================= */
     SceneDef {
-        id: "ny_open_1", bg: Some("img_laser.png"), loc: Some("登舰甲板 · 白昼如盖"), mood: "awe",
+        id: "ny_open_1", bg: Some("nuoya_bg.png"), loc: Some("登舰甲板 · 白昼如盖"), mood: "awe",
         speaker: Some("广播（沙哑）"), voice: None,
         text: TextSpec::Static(&[
             "方舟甲板上横七竖八躺着一批无法再登上内舱的『过期旅客』——老人、病者、抱着已无呼吸的孩子的人。他们被白昼晒着，却没一个人喊痛。",
@@ -67,7 +67,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_open_2", bg: Some("img_zhuyuan_book.png"), loc: Some("门厅 · 白昼中没有黑夜的等待"), mood: "revelation",
+        id: "ny_open_2", bg: Some("nuoya_bg.png"), loc: Some("门厅 · 白昼中没有黑夜的等待"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "门厅里的白昼永久地亮着，像一盏不会熄灭的灯。有人把所有人生活的痕迹都堆在窗边：一只旧鞋、一枚铁徽章、半张有折痕的照片。",
@@ -82,7 +82,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
 
     /* ================= 幕二 · 世界展示（奇观调查点 + 居民对话） ================= */
     SceneDef {
-        id: "ny_hub", bg: Some("img_redqueen.png"), loc: Some("登舰大厅 · 白昼的回廊"), mood: "calm",
+        id: "ny_hub", bg: Some("nuoya_bg.png"), loc: Some("登舰大厅 · 白昼的回廊"), mood: "calm",
         speaker: Some("引渡官（远处）"), voice: None,
         text: TextSpec::Static(&[
             "登舰大厅的穹顶开着扇扇天窗，刺眼的白光切过人群，把每个人都染成半透明的剪影。有人在低泣，有人攥着不松手的旧信，空气里全是肥皂与铁锈混着的味道。",
@@ -99,7 +99,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_pt_sky", bg: Some("img_laser.png"), loc: Some("观测层 · 白昼之顶"), mood: "awe",
+        id: "ny_pt_sky", bg: Some("nuoya_bg.png"), loc: Some("观测层 · 白昼之顶"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你爬上观测层最顶层。在这里，整座干涸的大地被白昼照得纤毫毕现——裂开的河道、废弃的村庄、以及一条条蜿蜒向远方的、灰白的队伍。",
@@ -113,7 +113,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_pt_mem", bg: Some("img_zhuyuan_book.png"), loc: Some("遗物舱 · 未寄出的信"), mood: "revelation",
+        id: "ny_pt_mem", bg: Some("nuoya_bg.png"), loc: Some("遗物舱 · 未寄出的信"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "铁橱的格子里，每一封没有寄出的信都被小心地折好、系上铁线，仿佛写信的人即使明知对方永远收不到了，也还是把每个字写了整整一生。",
@@ -127,7 +127,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_pt_roster", bg: Some("img_redqueen.png"), loc: Some("名单舱 · 谁将留下"), mood: "tension",
+        id: "ny_pt_roster", bg: Some("nuoya_bg.png"), loc: Some("名单舱 · 谁将留下"), mood: "tension",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "名单舱的整面墙贴满舱单，名字一行行被红笔划过——划掉的不是登舰的人，而是『留下的人』。越往最后，名字越密，字迹越急。",
@@ -141,7 +141,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_n_officer", bg: Some("img_zhuyuan_book.png"), loc: Some("登舰大厅 · 与引渡官对谈"), mood: "tension",
+        id: "ny_n_officer", bg: Some("nuoya_bg.png"), loc: Some("登舰大厅 · 与引渡官对谈"), mood: "tension",
         speaker: Some("引渡官"), voice: None,
         text: TextSpec::Static(&[
             "你走到那名叫『引渡官』的男人身边。他抬头看你，眼窝深陷，手却稳——那只手正把最后一个上不了船的名字，一笔一划签进随身的名册。",
@@ -157,7 +157,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_n_officer2", bg: Some("img_zhuyuan_book.png"), loc: Some("引渡官 · 一句未说尽的执念"), mood: "choice",
+        id: "ny_n_officer2", bg: Some("nuoya_bg.png"), loc: Some("引渡官 · 一句未说尽的执念"), mood: "choice",
         speaker: Some("引渡官"), voice: None,
         text: TextSpec::Static(&[
             "「被真正带走的，从来不是尸体。」他望着白昼，「是没人记得焉会发生过的那件事。」",
@@ -173,7 +173,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
 
     /* ================= 幕三 · BOSS 战前铺垫 ================= */
     SceneDef {
-        id: "ny_pre_1", bg: Some("img_zhuyuan_book.png"), loc: Some("通往机舱的闸口"), mood: "fear",
+        id: "ny_pre_1", bg: Some("nuoya_bg.png"), loc: Some("通往机舱的闸口"), mood: "fear",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "机舱闸口被人从内侧锁死，铰链上一串舱单编号被反复用指甲划出凹痕。闸门下压着一张纸，字迹用力得穿透了纸背：",
@@ -186,7 +186,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_pre_2", bg: Some("img_redqueen.png"), loc: Some("机舱 · 失控武装头目的最后防线"), mood: "danger",
+        id: "ny_pre_2", bg: Some("nuoya_bg.png"), loc: Some("机舱 · 失控武装头目的最后防线"), mood: "danger",
         speaker: Some("失控武装头目"), voice: None,
         text: TextSpec::Static(&[
             "机舱正中央，失控武装头目背靠舱壁，枪口朝下抵着地板，一双眼睛却死死锁着你。他面前的餐盒里，饭早已凉透。",
@@ -204,7 +204,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
 
     /* ================= 原场景 ny_01 / ny_round / ny_card / ny_death（保留不动） ================= */
     SceneDef {
-        id: "ny_01", bg: Some("img_zhuyuan_book.png"), loc: Some("机舱 · 决战处"), mood: "danger",
+        id: "ny_01", bg: Some("nuoya_bg.png"), loc: Some("机舱 · 决战处"), mood: "danger",
         speaker: Some("失控武装头目"), voice: None,
         text: TextSpec::Static(&["失控武装头目 拔枪挡在出口。有些救不了的人，也要去救——他是为这句活到现在的，谁都不能在他面前偷走一个。"]),
         choices: &[
@@ -214,7 +214,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_round", bg: Some("img_laser.png"), loc: Some("决战处"), mood: "danger",
+        id: "ny_round", bg: Some("nuoya_bg.png"), loc: Some("决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("失控武装头目 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -252,7 +252,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局三分支（看景 / 带纪念 / 停留，route 到原结算卡 ny_card） ================= */
     SceneDef {
-        id: "ny_end_view", bg: Some("img_laser.png"), loc: Some("观测层 · 结局 · 再看一次白昼"), mood: "calm",
+        id: "ny_end_view", bg: Some("nuoya_bg.png"), loc: Some("观测层 · 结局 · 再看一次白昼"), mood: "calm",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你没有和他动手，只是最后爬回观测层，把这一枚不落的白昼完完整整地看进眼底。风掠过干涸的大地，把最后一条灰白的队伍吹散在远方。",
@@ -266,7 +266,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_end_souv", bg: Some("img_zhuyuan_book.png"), loc: Some("遗物舱 · 结局 · 带走纪念"), mood: "choice",
+        id: "ny_end_souv", bg: Some("nuoya_bg.png"), loc: Some("遗物舱 · 结局 · 带走纪念"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你在遗物舱最深的格子里，小心取下一枚锈成一坨的铁花——那是最早一批『没上船的人』互相道别时，别在衣襟上唯一没能烧去的东西。",
@@ -280,7 +280,7 @@ pub static NUOYA_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ny_end_stay", bg: Some("img_redqueen.png"), loc: Some("机舱 · 结局 · 留下来守闸"), mood: "fear",
+        id: "ny_end_stay", bg: Some("nuoya_bg.png"), loc: Some("机舱 · 结局 · 留下来守闸"), mood: "fear",
         speaker: Some("失控武装头目"), voice: None,
         text: TextSpec::Static(&[
             "你在他面前放下枪，没有走，在机舱里坐下来，陪他一起把那些早已凉透的空座位，一遍遍地数。",

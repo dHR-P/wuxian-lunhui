@@ -193,7 +193,7 @@ SceneDef {
 
 /* ================= L1 深海潜水器舱 hub ================= */
 SceneDef {
-    id: "bh_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 深海潜水器舱"),
+    id: "bh_l1_hub", bg: Some("bihai_bg.png"), loc: Some("L1 · 深海潜水器舱"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bh_p_l1_sonar_seen") {
@@ -216,7 +216,7 @@ SceneDef {
 
 /* ---- L1 调查点 ---- */
 SceneDef {
-    id: "bh_01_sonar", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 声呐室"),
+    id: "bh_01_sonar", bg: Some("bihai_bg.png"), loc: Some("L1 · 声呐室"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bh_p_l1_sonar_seen") {
@@ -230,7 +230,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_01_view", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 观察舷窗"),
+    id: "bh_01_view", bg: Some("bihai_bg.png"), loc: Some("L1 · 观察舷窗"),
     mood: "awe", speaker: None, voice: None,
     text: TextSpec::Static(&["舷窗外只有一盏探照灯的光柱，被黑暗吞进去又吐出来。在那光柱的尽头，有什么巨大的东西，正在极慢地翻了个身——它的体量，比整艘潜水器都宽。"]),
     choices: &[ChoiceDef { label: "移开视线", sub: "San-4 · 你明白了「大小」", cond: None,
@@ -238,7 +238,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_01_hull", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 舱壁裂缝"),
+    id: "bh_01_hull", bg: Some("bihai_bg.png"), loc: Some("L1 · 舱壁裂缝"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["缝隙里不是海水——是一截湿滑、泛着荧光的触手末端，正有节奏地缩进缩出。它不急着进来，仿佛只是在试探：这里，值不值得进去。"]),
     choices: &[ChoiceDef { label: "撬开裂缝", sub: "看看里面", cond: None,
@@ -246,7 +246,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_01_air", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 氧气管路"),
+    id: "bh_01_air", bg: Some("bihai_bg.png"), loc: Some("L1 · 氧气管路"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["氧气管有规律的滴答声来自管壁上一枚开凿的钉子——不是意外。有人在氧气里「标」过什么，像在它的供氧里先钉下一枚眼。"]),
     choices: &[ChoiceDef { label: "拔出那枚钉子", sub: "San+2 · 但滴答声没停", cond: None,
@@ -254,7 +254,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_01_store", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 储物舱"),
+    id: "bh_01_store", bg: Some("bihai_bg.png"), loc: Some("L1 · 储物舱"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["储物柜最深处压着一张手写的海图。最下方标注着红线：「那里没有该存在的东西。若你读到这句——它已经知道你在读了。」"]),
     choices: &[ChoiceDef { label: "收好这张海图", sub: "线索 · MarkPoint", cond: None,
@@ -262,7 +262,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_n1_diver", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 潜水员舱"),
+    id: "bh_n1_diver", bg: Some("bihai_bg.png"), loc: Some("L1 · 潜水员舱"),
     mood: "cold", speaker: Some("幸存潜水员"), voice: None,
     text: TextSpec::Static(&["潜水员蜷在舱角，喘着气：「下面……下面那些不该在这儿的东西，它不吃我们，它只是在『认』我们。你要是想活，就别再看它了。」"]),
     choices: &[ChoiceDef { label: "「可我已经看见了。」", sub: "San+2 · 潜水员沉默", cond: None,
@@ -270,7 +270,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_01_gate", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 中央水密舱门"),
+    id: "bh_01_gate", bg: Some("bihai_bg.png"), loc: Some("L1 · 中央水密舱门"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if cond_has_deep_key(st) {
@@ -289,7 +289,7 @@ SceneDef {
 
 /* ================= L2 沉船残骸 hub ================= */
 SceneDef {
-    id: "bh_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 沉船残骸"),
+    id: "bh_l2_hub", bg: Some("bihai_bg.png"), loc: Some("L2 · 沉船残骸"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if cond_has_deep_key(st) {
@@ -311,7 +311,7 @@ SceneDef {
 
 /* ---- L2 调查点 ---- */
 SceneDef {
-    id: "bh_02_captain", bg: Some("img_corridor.png"), loc: Some("L2 · 船长室"),
+    id: "bh_02_captain", bg: Some("bihai_bg.png"), loc: Some("L2 · 船长室"),
     mood: "cold", speaker: Some("船长日记"), voice: None,
     text: TextSpec::Static(&["桌上摊着船长的航海日志，最后一页只写一句：「它不是敌人。它是这片海照出我们的样子。钥匙……我把它放进抽屉，等敢直视它的人来取。」抽屉里，静静躺着一枚海渊钥匙。"]),
     choices: &[ChoiceDef { label: "取走海渊钥匙", sub: "Item it_deep_key · 开G1", cond: None,
@@ -319,7 +319,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_02_cargo", bg: Some("img_corridor.png"), loc: Some("L2 · 货舱"),
+    id: "bh_02_cargo", bg: Some("bihai_bg.png"), loc: Some("L2 · 货舱"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["货舱的板条箱全被某种液体浸透，像被一只巨手从里面捂过。箱面凹进一个又一个手指印——不是人的，是指节太多、太密的那种。"]),
     choices: &[ChoiceDef { label: "避开货舱深处", sub: "San-2 · 那里面有东西", cond: None,
@@ -327,7 +327,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_02_machine", bg: Some("img_corridor.png"), loc: Some("L2 · 底舱机房"),
+    id: "bh_02_machine", bg: Some("bihai_bg.png"), loc: Some("L2 · 底舱机房"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["底舱的机器早已锈死，可一台老式发报机还在自己嗒嗒地发着莫尔斯电码。你数了好一会儿，它翻来覆去只发同一串：'不要带着答案上来。'"]),
     choices: &[ChoiceDef { label: "拍下发报声", sub: "线索 · MarkPoint", cond: None,
@@ -335,7 +335,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_02_artifact", bg: Some("img_corridor.png"), loc: Some("L2 · 邪神石碑残片"),
+    id: "bh_02_artifact", bg: Some("bihai_bg.png"), loc: Some("L2 · 邪神石碑残片"),
     mood: "awe", speaker: None, voice: None,
     text: TextSpec::Static(&["石碑残片上刻着一只同心圆大眼，圆周密布着蜷缩的人形。你读懂一句古文字：「祂在海沟的最深处，等一个愿意与祂『相认』的人。」——你终于知道，海图上的光点是什么了。（线索：bh_know_truth）"]),
     choices: &[ChoiceDef { label: "直视石碑上的巨眼", sub: "San-6 · 你记住了它的形状", cond: None,
@@ -343,7 +343,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_n2_survivor", bg: Some("img_corridor.png"), loc: Some("L2 · 底舱角落"),
+    id: "bh_n2_survivor", bg: Some("bihai_bg.png"), loc: Some("L2 · 底舱角落"),
     mood: "cold", speaker: Some("幸存船员"), voice: None,
     text: TextSpec::Static(&["船员抱着膝盖发抖：「我们看到了那颗光点……船长说那是『祂』。祂不吃我们，祂只是把我们『照』进祂的眼睛里。别下去，一旦下去，就再也上不来了。」"]),
     choices: &[ChoiceDef { label: "「可我已经『照』进去了。」", sub: "San+2", cond: None,
@@ -353,7 +353,7 @@ SceneDef {
 
 /* ================= L3 海沟深渊·邪物栖息地 hub ================= */
 SceneDef {
-    id: "bh_l3_hub", bg: Some("img_corridor.png"), loc: Some("L3 · 海沟深渊"),
+    id: "bh_l3_hub", bg: Some("bihai_bg.png"), loc: Some("L3 · 海沟深渊"),
     mood: "awe", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if cond_faced_altar(st) {
@@ -374,7 +374,7 @@ SceneDef {
 
 /* ---- L3 调查点 ---- */
 SceneDef {
-    id: "bh_03_altar", bg: Some("img_laser.png"), loc: Some("L3 · 中央祭坛"),
+    id: "bh_03_altar", bg: Some("bihai_bg.png"), loc: Some("L3 · 中央祭坛"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["祭坛中央的下陷里，盛着漆黑而黏稠的「海水」。你把手指探进去，立即明白：那不是水，是它的一部分。低头的一瞬，深渊在你倒影里睁开了一只眼。"]),
     choices: &[
@@ -386,7 +386,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_03_eye", bg: Some("img_laser.png"), loc: Some("L3 · 深渊巨眼"),
+    id: "bh_03_eye", bg: Some("bihai_bg.png"), loc: Some("L3 · 深渊巨眼"),
     mood: "awe", speaker: None, voice: None,
     text: TextSpec::Static(&["那枚巨眼缓缓转向你。没有恶意，没有食欲——只有一股「相认」的、近乎虔诚的注视。你在它虹膜的最深处，看见自己一行行被它「读到」成一句祷词。"]),
     choices: &[ChoiceDef { label: "回报以注视", sub: "San-6 · 你与它相认了一半", cond: None,
@@ -394,7 +394,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_03_whisper", bg: Some("img_laser.png"), loc: Some("L3 · 低语裂隙"),
+    id: "bh_03_whisper", bg: Some("bihai_bg.png"), loc: Some("L3 · 低语裂隙"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["裂隙里的低语终于拼成一句人话：「把你自己还给我，我让这片海归于宁静。」你不确定那是威胁，还是它唯一会的祈求。"]),
     choices: &[ChoiceDef { label: "听清这句低语", sub: "线索 · 开启「献祭」结局", cond: None,
@@ -402,7 +402,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_n3_cult", bg: Some("img_laser.png"), loc: Some("L3 · 渊边巨石"),
+    id: "bh_n3_cult", bg: Some("bihai_bg.png"), loc: Some("L3 · 渊边巨石"),
     mood: "cold", speaker: Some("邪教遗民"), voice: None,
     text: TextSpec::Static(&["遗民匍匐在渊边，念着：「祂不是为了伤害而来的。祂只是……永远地醒着，等着有人能与祂『一同存在』。献祭自己，或是借走祂的一双眼——都是与祂相认的办法。」"]),
     choices: &[ChoiceDef { label: "「相认……该怎么选？」", sub: "San+2 · 指向 3 条结局", cond: None,
@@ -412,19 +412,19 @@ SceneDef {
 
 /* ---- 深浅异形原生 fight（每层 1 场） ---- */
 SceneDef {
-    id: "bh_06_e1", bg: Some("img_laser.png"), loc: Some("L1 · 潜水器舱 · 遭遇战"),
+    id: "bh_06_e1", bg: Some("bihai_bg.png"), loc: Some("L1 · 潜水器舱 · 遭遇战"),
     mood: "danger", speaker: Some("深海异形"), voice: None,
     text: TextSpec::Static(&["湿漉漉的影子在你身后收拢——那曾是你的一个船员。战斗没有预兆，就像深海从来不必预告它要你「看见」什么。（战斗）"]),
     choices: &[], fight_id: Some("bh_fight_l1"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_06_e2", bg: Some("img_laser.png"), loc: Some("L2 · 货舱 · 遭遇战"),
+    id: "bh_06_e2", bg: Some("bihai_bg.png"), loc: Some("L2 · 货舱 · 遭遇战"),
     mood: "danger", speaker: Some("沉船寄生怪"), voice: None,
     text: TextSpec::Static(&["甲板缝里长出的寄生怪拖着一整段船舷站起来。它挡住你通往石碑的路。（战斗）"]),
     choices: &[], fight_id: Some("bh_fight_l2"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_06_e3", bg: Some("img_laser.png"), loc: Some("L3 · 祭坛影 · 遭遇战"),
+    id: "bh_06_e3", bg: Some("bihai_bg.png"), loc: Some("L3 · 祭坛影 · 遭遇战"),
     mood: "danger", speaker: Some("深渊异形·近侍"), voice: None,
     text: TextSpec::Static(&["祭坛影子里浮出细长的近侍，挡在邪物与你的凝视之间。它「守卫」得近乎虔诚。（战斗）"]),
     choices: &[], fight_id: Some("bh_fight_l3"), video: None, cine_label: None, overlay: None,
@@ -432,7 +432,7 @@ SceneDef {
 
 /* ---- 选择驱动 BOSS「深渊邪物」 ---- */
 SceneDef {
-    id: "bh_boss", bg: Some("img_laser.png"), loc: Some("L3 · 深渊祭坛 · BOSS"),
+    id: "bh_boss", bg: Some("bihai_bg.png"), loc: Some("L3 · 深渊祭坛 · BOSS"),
     mood: "danger", speaker: Some("深渊邪物"), voice: None,
     text: TextSpec::Dyn(|st| {
         if cond_faced_altar(st) {
@@ -449,7 +449,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_boss_round", bg: Some("img_laser.png"), loc: Some("L3 · 深渊祭坛 · 决战"),
+    id: "bh_boss_round", bg: Some("bihai_bg.png"), loc: Some("L3 · 深渊祭坛 · 决战"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| format!("邪物剩余 {} 血，你 HP {}。它不再攻击——它在『读』你在深渊前的姿态。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
     choices: &[
@@ -460,7 +460,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_end_choice", bg: Some("img_laser.png"), loc: Some("L3 · 深渊 · 开放结局"),
+    id: "bh_end_choice", bg: Some("bihai_bg.png"), loc: Some("L3 · 深渊 · 开放结局"),
     mood: "choice", speaker: Some("深渊邪物"), voice: None,
     text: TextSpec::Static(&["邪物在你的重击下坍缩成一片深海。它没有死——它终于「认出了」你。深渊在你脚下裂开三条路：逃离海沟，把自己还给祂，或是……与祂一同存在。结局由你写下。"]),
     choices: &[
@@ -473,21 +473,21 @@ SceneDef {
 
 /* ---- 开放结局场景 ---- */
 SceneDef {
-    id: "bh_win_escape", bg: Some("img_corridor.png"), loc: Some("结局 · 逃离海沟"),
+    id: "bh_win_escape", bg: Some("bihai_bg.png"), loc: Some("结局 · 逃离海沟"),
     mood: "calm", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["你带着那道注视，拼死游上浮标。海面在脚下重新亮起日光。你没能带答案上岸——但你把「看过祂」这件事，永远地带上了岸。这已足够。"]),
     choices: &[ChoiceDef { label: "确认撤离", sub: "结算", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_win_sacrifice", bg: Some("img_laser.png"), loc: Some("结局 · 献祭"),
+    id: "bh_win_sacrifice", bg: Some("bihai_bg.png"), loc: Some("结局 · 献祭"),
     mood: "calm", speaker: Some("深渊邪物"), voice: None,
     text: TextSpec::Static(&["你把曾记下的答案一点点还给它。裂隙的低语终于安静下来——海归于宁静。你不确定自己是否还「在那里」，但你知道，那片海，从今往后不再有阴影。"]),
     choices: &[ChoiceDef { label: "确认牺牲", sub: "结算", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_win_assimilate", bg: Some("img_laser.png"), loc: Some("结局 · 同化"),
+    id: "bh_win_assimilate", bg: Some("bihai_bg.png"), loc: Some("结局 · 同化"),
     mood: "awe", speaker: Some("深渊邪物"), voice: None,
     text: TextSpec::Static(&["你借走了祂的一双眼。睁开——整片海在你眼底清晰得没有阴影，你终于与祂一同存在：不是胜利，是相认。你不再是「岸上的人」。"]),
     choices: &[ChoiceDef { label: "确认与祂同化", sub: "结算", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],
@@ -496,7 +496,7 @@ SceneDef {
 
 /* ---- 环境机关对抗场景 ---- */
 SceneDef {
-    id: "bh_20_pressure", bg: Some("img_laser.png"), loc: Some("L3 · 深水压区"),
+    id: "bh_20_pressure", bg: Some("bihai_bg.png"), loc: Some("L3 · 深水压区"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["水压骤增，舱壁像被一只巨掌合拢。你若不能稳住，就会在这里被碾成深海的一缕磷光。（对抗深水压）"]),
     choices: &[ChoiceDef { label: "稳住身形 · 顶住水压", sub: "对抗 · 成功回 hub", cond: None,
@@ -506,7 +506,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bh_21_anoxia", bg: Some("img_laser.png"), loc: Some("L3 · 缺氧区"),
+    id: "bh_21_anoxia", bg: Some("bihai_bg.png"), loc: Some("L3 · 缺氧区"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["氧气瞬间见底。你若屏不住这口气，海水会顺着肺涌进来——成为深渊最新的一层。（对抗缺氧）"]),
     choices: &[ChoiceDef { label: "屏住呼吸 · 求生", sub: "对抗 · 成功回 hub", cond: None,

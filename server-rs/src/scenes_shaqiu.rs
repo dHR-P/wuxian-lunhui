@@ -353,7 +353,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= F1 · 坠毁穿梭机残骸 ================= */
     SceneDef {
-        id: "sq_01_hub", bg: Some("img_laser.png"), loc: Some("F1 · 坠毁穿梭机残骸"),
+        id: "sq_01_hub", bg: Some("shaqiu_bg.png"), loc: Some("F1 · 坠毁穿梭机残骸"),
         mood: "fear", speaker: Some("黑铁"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_oxy_3") {
@@ -372,7 +372,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_02_blackbox", bg: Some("img_zhuyuan_book.png"), loc: Some("F1 · 驾驶舱 · 黑匣子"),
+        id: "sq_02_blackbox", bg: Some("shaqiu_bg.png"), loc: Some("F1 · 驾驶舱 · 黑匣子"),
         mood: "cold", speaker: Some("数据终端 → 波丽"), voice: Some("vo_sq_cockpit"),
         text: TextSpec::Static(&[
             "黑匣子回放着坠毁前 40 秒：不是故障——是被拖下去的。那团绿色从地平线漫过来，像海，把穿梭机整个囫囵吞了下去。",
@@ -388,7 +388,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_03_autopsy", bg: Some("img_zhuyuan_book.png"), loc: Some("F1 · 生活舱 · 解剖台"),
+        id: "sq_03_autopsy", bg: Some("shaqiu_bg.png"), loc: Some("F1 · 生活舱 · 解剖台"),
         mood: "cold", speaker: Some("依凡"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_autopsy_hint") {
@@ -405,7 +405,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_04_signal", bg: Some("img_laser.png"), loc: Some("F1 · 信号舱 · 信号发射器"),
+        id: "sq_04_signal", bg: Some("shaqiu_bg.png"), loc: Some("F1 · 信号舱 · 信号发射器"),
         mood: "mystery", speaker: Some("广播里的幸存者"), voice: Some("vo_sq_signal"),
         text: TextSpec::Static(&[
             "信标在静电里一明一灭，重复着那句求救。信号源从沙海深处传来——沿着它，你可能会找到第二个出生在绿潮里的人。你记下了方位。",
@@ -419,7 +419,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_05_locker", bg: Some("img_laser.png"), loc: Some("F1 · 生活舱 · 储物柜"),
+        id: "sq_05_locker", bg: Some("shaqiu_bg.png"), loc: Some("F1 · 生活舱 · 储物柜"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["储物柜的水汽锈住合页，你用力撬开——里面斜躺着一根粗壮的「磁力撬具」。它比撬柜子有用得多：南侧那个塌方的闸门，正等着它。"]),
         choices: &[
@@ -432,7 +432,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= F2 · 沙漠地表 · 绿潮战场 ================= */
     SceneDef {
-        id: "sq_10_f2", bg: Some("img_redqueen.png"), loc: Some("F2 · 营地B · 补给站废墟"),
+        id: "sq_10_f2", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 营地B · 补给站废墟"),
         mood: "fear", speaker: Some("格列弗 → 全体"), voice: Some("vo_sq_onslaught"),
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_oxy_3") {
@@ -452,7 +452,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_11_medbox", bg: Some("img_redqueen.png"), loc: Some("F2 · 营地A · 医疗箱"),
+        id: "sq_11_medbox", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 营地A · 医疗箱"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["医疗箱里静静躺着一副「滤毒面罩」。套上它，你能在沼泽孢子毒气区里直穿而不被榨干肺里的水汽——那是穿过这片战场最省氧的路。"]),
         choices: &[
@@ -463,7 +463,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_12_survivor", bg: Some("img_redqueen.png"), loc: Some("F2 · 营地A · 被吞没的哨站"),
+        id: "sq_12_survivor", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 营地A · 被吞没的哨站"),
         mood: "fear", speaker: Some("格列弗 → 全体"), voice: Some("vo_sq_gliff"),
         text: TextSpec::Static(&[
             "你抵达时，哨站正被绿潮一点一点嚼碎。铁皮房梁下压着一只仍在挥动的手——那是信号里的幸存者格列弗。幕墙正在合拢，你只有一次选择的机会。",
@@ -479,7 +479,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_13_battery", bg: Some("img_redqueen.png"), loc: Some("F2 · 营地B · 补给站废墟"),
+        id: "sq_13_battery", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 营地B · 补给站废墟"),
         mood: "cold", speaker: Some("引擎终端 → 全体"), voice: Some("vo_sq_battery"),
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_battery_saved") || st.flag("sq_gate_powered") || st.flag("sq_bait_lure") {
@@ -499,7 +499,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_14_vent", bg: Some("img_redqueen.png"), loc: Some("F2 · 沼泽孢子毒气区 · 中央通风台"),
+        id: "sq_14_vent", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 沼泽孢子毒气区 · 中央通风台"),
         mood: "calm", speaker: Some("黑铁"), voice: None,
         text: TextSpec::Static(&["你爬到毒气区中央那座安全通风台上，灌了两口净水，氧气表针缓了一缓。这台子四周的绿潮像不敢近前，只在几步外静静涌着。短暂的安宁。"]),
         choices: &[
@@ -510,7 +510,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_npc_hawk", bg: Some("img_redqueen.png"), loc: Some("F2 · 北缘观景点 · 鹰"),
+        id: "sq_npc_hawk", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 北缘观景点 · 鹰"),
         mood: "mystery", speaker: Some("鹰·清晰者"), voice: None,
         text: TextSpec::Static(&["一只灰羽的鹰立在北缘断天线顶，用一种几乎懂你说话的眼神看你。它啄了啄自己的羽翼，朝母巢方向偏了偏头——它在告诉你，条条大路都通那片绿色更深处。"]),
         choices: &[
@@ -523,7 +523,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= F3 · 共生体母巢 ================= */
     SceneDef {
-        id: "sq_20_f3", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 共生体母巢 · 入口肉厅"),
+        id: "sq_20_f3", bg: Some("shaqiu_bg.png"), loc: Some("F3 · 共生体母巢 · 入口肉厅"),
         mood: "cold", speaker: Some("黑铁"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_spore_serum") {
@@ -540,7 +540,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_21_eggnest", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 孵化腔 · 卵堆"),
+        id: "sq_21_eggnest", bg: Some("shaqiu_bg.png"), loc: Some("F3 · 孵化腔 · 卵堆"),
         mood: "cold", speaker: Some("依凡"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_autopsy_hint") {
@@ -558,7 +558,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_22_hatch", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 孵化膜"),
+        id: "sq_22_hatch", bg: Some("shaqiu_bg.png"), loc: Some("F3 · 孵化膜"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["一层极薄的孵化膜挡在通道某处，你看出它怕酸——只要兑上某种能溶解黏蛋白的液体，它就会软化成可以挤过去的果冻。你把这记在心上。"]),
         choices: &[
@@ -571,7 +571,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= F4 · 沙丘洞穴 · 深渊回响 ================= */
     SceneDef {
-        id: "sq_30_f4", bg: Some("img_laser.png"), loc: Some("F4 · 沙丘洞穴 · 前厅"),
+        id: "sq_30_f4", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 沙丘洞穴 · 前厅"),
         mood: "fear", speaker: Some("黑铁"), voice: Some("vo_sq_whisper"),
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_boss_secret") {
@@ -588,7 +588,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_31_mural", bg: Some("img_laser.png"), loc: Some("F4 · 回音长廊 · 壁画前"),
+        id: "sq_31_mural", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 回音长廊 · 壁画前"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["壁画上，远古生物把成桶的水倒进王座下的裂缝，那头「王」便沉沉睡去。你在刻痕旁补了一句批注：水，是它唯一的命门。"]),
         choices: &[
@@ -599,7 +599,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_32_throne", bg: Some("img_laser.png"), loc: Some("F4 · 王座石台"),
+        id: "sq_32_throne", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 王座石台"),
         mood: "mystery", speaker: Some("黑铁"), voice: None,
         text: TextSpec::Static(&["王座石台四周散着大片的干涸裂缝，你甚至能听见地底深处有汩汩的、近似渴望的声响。那不是水声——是某头渴极了的东西，翻了个身。"]),
         choices: &[
@@ -610,7 +610,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_33_trap", bg: Some("img_laser.png"), loc: Some("F4 · 回音长廊深处"),
+        id: "sq_33_trap", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 回音长廊深处"),
         mood: "cold", speaker: Some("假『水玉文明』全息贵族"), voice: Some("vo_sq_trap"),
         text: TextSpec::Static(&[
             "空气突然清亮。一幅全息影像升起：自称『水玉文明』的发光贵族，用完美的人类语邀请你们『献上航标，换取取之不尽的净化水』。它太礼貌了，礼貌得像一段广告。",
@@ -625,7 +625,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_34_whisper", bg: Some("img_laser.png"), loc: Some("F4 · 回音长廊 · 壁画前"),
+        id: "sq_34_whisper", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 回音长廊 · 壁画前"),
         mood: "cold", speaker: Some("黑铁"), voice: Some("vo_sq_whisper"),
         text: TextSpec::Dyn(|st| {
             if st.flag("sq_boss_secret") {
@@ -645,7 +645,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= BOSS · 渴水兽王 ================= */
     SceneDef {
-        id: "sq_40_boss_intro", bg: Some("img_laser.png"), loc: Some("F4 · 王座擂地 · 渴水兽王"),
+        id: "sq_40_boss_intro", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 王座擂地 · 渴水兽王"),
         mood: "danger", speaker: Some("渴水兽王"), voice: Some("vo_sq_boss"),
         text: TextSpec::Static(&[
             "王座下的裂缝轰然炸开，绿潮从地底喷涌而出，那头巨兽撑起半植物半兽的躯体，苔壳寸寸隆起。它没有咆哮——它只是缓缓朝你伸出前爪，裂口微微开合，像在标本里呼出的最后一口气也要掬起来。",
@@ -658,7 +658,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_41_round", bg: Some("img_laser.png"), loc: Some("F4 · 王座擂地 · 决战"),
+        id: "sq_41_round", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 王座擂地 · 决战"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             let hp = boss_hp(st);
@@ -688,7 +688,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_42_boss_down", bg: Some("img_zhuyuan_book.png"), loc: Some("F4 · 王座擂地 · 兽王既殁"),
+        id: "sq_42_boss_down", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 王座擂地 · 兽王既殁"),
         mood: "calm", speaker: Some("希望号通讯"), voice: Some("vo_sq_down"),
         text: TextSpec::Static(&[
             "渴水兽王倒下的最后一刻，整座洞穴的绿潮同时枯萎了一瞬——像是行星叹了口气。它胸前那条干涸河床缓缓合拢，变得滚烫而干。",
@@ -700,7 +700,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_43_relic", bg: Some("img_laser.png"), loc: Some("F4 · 圣物室 · 遗泽种子"),
+        id: "sq_43_relic", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 圣物室 · 遗泽种子"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["圣物室的正中，石台上静静躺着一枚沉甸甸的「遗泽种子」，像一粒小太阳。它不属于草木，也不属于机械——它是这颗星最深处那份求生的意志，凝成的一枚种子。"]),
         choices: &[
@@ -713,7 +713,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sq_44_victory", bg: Some("img_zhuyuan_book.png"), loc: Some("F4 · 沙丘洞穴 · 升空井"),
+        id: "sq_44_victory", bg: Some("shaqiu_bg.png"), loc: Some("F4 · 沙丘洞穴 · 升空井"),
         mood: "calm", speaker: Some("希望号通讯 → 全体"), voice: Some("vo_sq_rise"),
         text: TextSpec::Dyn(|st| {
             let extra = if st.flag("sq_battery_saved") {
@@ -764,7 +764,7 @@ pub static SHAQIU_SCENES: &[SceneDef] = &[
 
     /* ================= NPC 对话（talk 节点） ================= */
     SceneDef {
-        id: "sq_npc_gliff", bg: Some("img_redqueen.png"), loc: Some("F2 · 获救后的格列弗"),
+        id: "sq_npc_gliff", bg: Some("shaqiu_bg.png"), loc: Some("F2 · 获救后的格列弗"),
         mood: "cold", speaker: Some("格列弗"), voice: None,
         text: TextSpec::Static(&["获救的格列弗蜷在通风台边灌着水，抬头看你：「那绿色……会喝水。你们身上的每滴都是它的水。想要穿过它，就把它眼里最值钱的东西——水——反着用。」"]),
         choices: &[ChoiceDef { label: "记下他的话", sub: "Points 10", cond: None,

@@ -171,7 +171,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_01_first", bg: Some("img_laser.png"), loc: Some("启动层 · 铁灰房间"),
+        id: "xf_01_first", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 铁灰房间"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["房间中央横着一具不会动的冰冷躯体——某个先你一步走进这里的人。他衣兜里露出一角揉皱的纸，纸边被血浸透，字迹仍在。"]),
         choices: &[
@@ -183,7 +183,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ================= F1 启动层 · hub ================= */
     SceneDef {
-        id: "xf_10_arrive", bg: Some("img_laser.png"), loc: Some("启动层 · 洗牌走廊"),
+        id: "xf_10_arrive", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 洗牌走廊"),
         mood: "cold", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("xf_f1_probe") {
@@ -210,7 +210,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ---- F1 调查点 ---- */
     SceneDef {
-        id: "xf_01_room1", bg: Some("img_laser.png"), loc: Some("启动层 · 铁灰房间壹"),
+        id: "xf_01_room1", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 铁灰房间壹"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["这间房的画号是 <em>03</em>。墙角有一道很浅的刻痕，像有人用指甲反复写过：『07 · 14』。你不确定这是答案，还是又一个诱饵。"]),
         choices: &[ChoiceDef { label: "记下 07 · 14", sub: "数字线索 · 机关追责", cond: None,
@@ -218,7 +218,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_02_room2", bg: Some("img_laser.png"), loc: Some("启动层 · 铁灰房间贰 · 致命机关"),
+        id: "xf_02_room2", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 铁灰房间贰 · 致命机关"),
         mood: "danger", speaker: None, voice: Some("vo_xf_trap"),
         text: TextSpec::Static(&["脚步声一重，地面中央的薄板微微一沉——你触到机关了。金属尖刺从四壁缝隙中缓慢伸出一寸又缩回，像在丈量你逃开的速度。（致命机关）"]),
         choices: &[
@@ -230,7 +230,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_03_room3", bg: Some("img_laser.png"), loc: Some("启动层 · 铁灰房间叁 · 死法"),
+        id: "xf_03_room3", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 铁灰房间叁 · 死法"),
         mood: "danger", speaker: None, voice: Some("vo_xf_trap"),
         text: TextSpec::Static(&["房间一侧的墙上贴着一块早被磨出深痕的告示：<em>『防止移动天花板压人 · 需按下号键』</em>。你意识到，这里每一个死法都被精心设计成「可以躲开」，前提是你读得懂它们。"]),
         choices: &[
@@ -240,7 +240,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_04_draw1", bg: Some("img_laser.png"), loc: Some("启动层 · 墙上画号（一）"),
+        id: "xf_04_draw1", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 墙上画号（一）"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["画号 <em>05</em>。你踮脚看，编号下方被人用焦炭补了一行小字：『质数之和，二位——别信他的减法』。不知道『他』是谁，但这条笔记救过某个人。"]),
         choices: &[ChoiceDef { label: "抄下这条笔记", sub: "数字线索 · 门禁铺垫", cond: None,
@@ -248,7 +248,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_05_draw2", bg: Some("img_laser.png"), loc: Some("启动层 · 夹层记号"),
+        id: "xf_05_draw2", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 夹层记号"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["夹层里塞着一只断了一截的铅笔和一张更旧的图。图上有三条并行的路径，每条尽头都画着一个叉——只有最底下那条，末尾圈着一个圈。你把它折好，和批注放在一处。"]),
         choices: &[ChoiceDef { label: "收好图纸", sub: "Item it_xf_num_note 内容补全", cond: None,
@@ -256,7 +256,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_06_draw3", bg: Some("img_laser.png"), loc: Some("启动层 · 褪色序列"),
+        id: "xf_06_draw3", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 褪色序列"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["墙上一列几乎要消失的序列：<em>0,1,1,2,3,5,…</em>。第七个数是多少？你盯着看，忽然明白这不是装饰——它是指向出路的方向标，只在肯数数的人面前显形。"]),
         choices: &[ChoiceDef { label: "推算出数列第七项", sub: "记下 13 · 触发机关警觉", cond: None,
@@ -264,7 +264,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_07_floor1", bg: Some("img_laser.png"), loc: Some("启动层 · 血滴轨迹"),
+        id: "xf_07_floor1", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 血滴轨迹"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["暗色的血点断断续续地拖向一个方向。它不是逃跑的痕迹，而是倒着拖出去的——有人被往回拽过。你顺着它反方向走，来到更深那扇门前。"]),
         choices: &[ChoiceDef { label: "顺着反方向探索", sub: "发现通往中层方向", cond: None,
@@ -272,7 +272,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_08_floor2", bg: Some("img_laser.png"), loc: Some("启动层 · 空床位"),
+        id: "xf_08_floor2", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 空床位"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["墙根整整齐齐码着一排空床位——像是给谁准备的，又像是从来没人睡过。你在其中一张床垫下摸到一粒硬物：一枚沾灰的旧钥匙。"]),
         choices: &[ChoiceDef { label: "收下旧钥匙", sub: "Item it_xf_key · 备用开门", cond: None,
@@ -280,7 +280,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_09_floor3", bg: Some("img_laser.png"), loc: Some("启动层 · 揉皱纸条"),
+        id: "xf_09_floor3", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 揉皱纸条"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["纸条上重复着一句话，字迹从工整写到歪斜：<em>『房间会换，数字不会作假』『房间会换，数字不会』『房间会换』</em>——最后一行只写到一半。你莫名觉得冷。"]),
         choices: &[ChoiceDef { label: "把纸条收进批注", sub: "数字对路的最后一块拼图", cond: None,
@@ -288,7 +288,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_10_fight", bg: Some("img_laser.png"), loc: Some("启动层 · 走廊 · 擦肩"),
+        id: "xf_10_fight", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 走廊 · 擦肩"),
         mood: "danger", speaker: None, voice: Some("vo_xf_guard"),
         text: TextSpec::Static(&["铁灰巡卫的红灯扫过，你贴着墙一动不动。它没有停留，机械地朝更深处走去，留下一串碾过石砖的响声。（遭遇）"]),
         choices: &[], fight_id: Some("xf_guard"), video: None, cine_label: None, overlay: None,
@@ -296,7 +296,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ---- F1 门禁 · 画号门甲 ---- */
     SceneDef {
-        id: "xf_12_gate", bg: Some("img_laser.png"), loc: Some("启动层 · 画号门甲（G1）"),
+        id: "xf_12_gate", bg: Some("xinhuangfang_bg.png"), loc: Some("启动层 · 画号门甲（G1）"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["当你凑齐 07 · 14 与那行焦炭小字的批注，门闸的纹路恰好嵌合成一道间隙。中层在门缝后露出一角更深的铁灰——那是你不确定该不该踏进的地方。"]),
         choices: &[ChoiceDef { label: "（推门踏入中层）", sub: "pt_xf_1 单向 · 进 F2", cond: None,
@@ -306,7 +306,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ================= F2 中层 · hub ================= */
     SceneDef {
-        id: "xf_20_arrive", bg: Some("img_redqueen.png"), loc: Some("中层 · 编号回廊"),
+        id: "xf_20_arrive", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 编号回廊"),
         mood: "cold", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["中层的走廊比启动层更密，每个房间墙角都钉着一枚编号。数字不再只是线索，它们开始像评语一样，给每个经过的活物打分。这里住着一个还没断气的住客——幸存的考验者。"]),
         choices: &[
@@ -320,7 +320,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_20_center", bg: Some("img_redqueen.png"), loc: Some("中层 · 中心枢纽 · 生存者营地"),
+        id: "xf_20_center", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 中心枢纽 · 生存者营地"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["几块门板搭成的掩体后，散落着罐头空壳与半截蜡烛。有人在这里活了不短的时间——直到他决定把所有数字交给下一个来者。你在营地角落摸到一支还能用的手电。"]),
         choices: &[ChoiceDef { label: "拿起手电", sub: "Item it_xf_flashlight · 照亮前路", cond: None,
@@ -328,7 +328,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_21_right", bg: Some("img_redqueen.png"), loc: Some("中层 · 回廊暗格"),
+        id: "xf_21_right", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 回廊暗格"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["暗格里的数字批注与你在启动层读到的恰好互补。合上它，门禁上的『质数之和』终于有了活路——介乎 9 与 17 的质数只有一对，而门只要那一个答案。"]),
         choices: &[ChoiceDef { label: "补全批注 · 数字对路（二）", sub: "xf_num_2 已足 · 前路开", cond: None,
@@ -336,7 +336,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_22_note", bg: Some("img_redqueen.png"), loc: Some("中层 · 幸存者留言"),
+        id: "xf_22_note", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 幸存者留言"),
         mood: "cold", speaker: Some("留言"), voice: None,
         text: TextSpec::Static(&["留言用烧焦的笔迹写着：<em>『别信墙上的死因，信夹层的地图。出口需要三组数字，最后那组在出口层——前提是你别在见到它之前疯掉。』</em>"]),
         choices: &[ChoiceDef { label: "默记嘱托", sub: "心理锚点 · 数字线索（三）", cond: None,
@@ -344,13 +344,13 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_20_fight", bg: Some("img_redqueen.png"), loc: Some("中层 · 编号回廊 · 交锋"),
+        id: "xf_20_fight", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 编号回廊 · 交锋"),
         mood: "danger", speaker: None, voice: Some("vo_xf_guard"),
         text: TextSpec::Static(&["编号守望者的目光落定在你身上，四壁开始极缓慢地松动。你没有退路——只能从它身边夺路而过。（遭遇）"]),
         choices: &[], fight_id: Some("xf_fixer"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_22_gate", bg: Some("img_redqueen.png"), loc: Some("中层 · 画号门乙（G2）"),
+        id: "xf_22_gate", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 画号门乙（G2）"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["当第二组数字补全，门乙的锁舌无声收回。出口层的空气从门缝里渗进来，带着一丝诡异的光。你深呼吸，推开它。"]),
         choices: &[ChoiceDef { label: "（踏入出口层）", sub: "pt_xf_2 单向 · 进 F3", cond: None,
@@ -358,7 +358,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_20_back", bg: Some("img_redqueen.png"), loc: Some("中层 · 回廊返程"),
+        id: "xf_20_back", bg: Some("xinhuangfang_bg.png"), loc: Some("中层 · 回廊返程"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["你折返启动层，把已经摸清的走廊又走了一遍。房间在你身后继续洗牌，原有的记号渐渐失去意义——你开始怀疑，是不是从一开始就没有真正的『更深处』。"]),
         choices: &[ChoiceDef { label: "回到启动层洗牌走廊", sub: "回到原点 · 重新数一次", cond: None,
@@ -368,7 +368,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ================= F3 出口层 · hub ================= */
     SceneDef {
-        id: "xf_30_arrive", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 出口之室"),
+        id: "xf_30_arrive", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 出口之室"),
         mood: "danger", speaker: Some("旁白"), voice: Some("vo_xf_exit"),
         text: TextSpec::Static(&["尽头那道门亮着不容质疑的白光。可你很快就发现，自己在原地绕了三圈才真正接近它——数字若对不齐，这道光只是迷宫给自己照的灯。角落里有个人影。"]),
         choices: &[
@@ -382,7 +382,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_30_room", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 出口之室"),
+        id: "xf_30_room", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 出口之室"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["白光来自门缝里一片刺目的空旷。你没有立刻推门——因为门侧的铭牌上，被人用指甲划掉了一行字，又写了另一行上去。它似乎也在犹豫。"]),
         choices: &[ChoiceDef { label: "记下门侧铭牌", sub: "出口线索 · 渐明", cond: None,
@@ -390,7 +390,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_31_mid", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 中心暗房"),
+        id: "xf_31_mid", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 中心暗房"),
         mood: "danger", speaker: None, voice: Some("vo_xf_trap"),
         text: TextSpec::Static(&["你弯腰探进暗房，脚下的感应板一沉。天花板上方传来迟缓的液压声——这间不是出口，是另一道机关。你屏住呼吸，等它缩回去。"]),
         choices: &[
@@ -402,7 +402,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_32_num", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 编号墙"),
+        id: "xf_32_num", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 编号墙"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["编号墙上钉着一排完整的数字，唯独离开口最近的那枚被人摘下带走。你想起那条留言——第三组数字在这里。你把它从墙后摸出来，握进手心。"]),
         choices: &[ChoiceDef { label: "取得第三组数字", sub: "数字对路（三） · 出口之门将开", cond: None,
@@ -410,7 +410,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_30_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 必经交锋"),
+        id: "xf_30_fight", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 必经交锋"),
         mood: "danger", speaker: None, voice: Some("vo_xf_wanderer"),
         text: TextSpec::Static(&["出口徘徊者停下踱步，挡在你与白光之间。它似乎只想要一个你也没有的答案——可它挡了路，就得让开。（遭遇）"]),
         choices: &[], fight_id: Some("xf_wanderer"), video: None, cine_label: None, overlay: None,
@@ -418,7 +418,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ---- F3 出口之门 ---- */
     SceneDef {
-        id: "xf_33_gate", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 出口之门（G3）"),
+        id: "xf_33_gate", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 出口之门（G3）"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("xf_nums_done") {
@@ -436,7 +436,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_34_open", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 白光之后"),
+        id: "xf_34_open", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 白光之后"),
         mood: "awe", speaker: Some("旁白"), voice: Some("vo_xf_exit_open"),
         text: TextSpec::Static(&["白光漫过你的一瞬，身后的洗牌声停住了。不是因为终结，而是因为你终于站在了这局算术的所答——门之后没有仪器，只有更亮的一片空旷，像某个兑现的承诺。"]),
         choices: &[ChoiceDef { label: "（迈出最后一步）", sub: "结局 · 脱出", cond: None,
@@ -446,7 +446,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ================= 考验者（可选战/和平） ================= */
     SceneDef {
-        id: "xf_40_kanshi", bg: Some("img_laser.png"), loc: Some("出口层 · 角落 · 幸存者"),
+        id: "xf_40_kanshi", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 角落 · 幸存者"),
         mood: "danger", speaker: Some("幸存的考验者"), voice: Some("vo_xf_kanshi"),
         text: TextSpec::Static(&[
             "他靠在门侧，浑浊的眼睛透过乱发看着你。<em>「你是想逃出去，还是想死得体面一点？」</em>他问，语气平静得不像话。",
@@ -459,7 +459,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_41_kanshi_peace", bg: Some("img_laser.png"), loc: Some("出口层 · 幸存者 · 交托"),
+        id: "xf_41_kanshi_peace", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 幸存者 · 交托"),
         mood: "calm", speaker: Some("幸存的考验者"), voice: None,
         text: TextSpec::Static(&["他沉默很久，然后从怀里取出那叠批注，放在地上推向你。<em>「我数到第三组就停不下来了。」</em>他扯出一个难看的笑，<em>「你帮我把它数完吧——如果门后面真是出口。」</em>"]),
         choices: &[ChoiceDef { label: "收下完整批注", sub: "Item it_xf_num_note · 补全数字对路", cond: None,
@@ -467,7 +467,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_41_kanshi_down", bg: Some("img_laser.png"), loc: Some("出口层 · 幸存者 · 制服"),
+        id: "xf_41_kanshi_down", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 幸存者 · 制服"),
         mood: "cold", speaker: None, voice: Some("vo_xf_kanshi_down"),
         text: TextSpec::Static(&["你制服了他，从他颤抖的手里夺下完整的数字批注。他瘫坐在地，反而笑了。<em>「对……拿走它，逃出去。替我数完那组数。」</em>他把最后一枚编号墙上的数字也塞给你，闭上眼。"]),
         choices: &[ChoiceDef { label: "拾起完整批注与数字", sub: "Item it_xf_num_note · 数字对路完备", cond: None,
@@ -476,7 +476,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
     },
     /* 考验者战斗回合（选择驱动） */
     SceneDef {
-        id: "xf_42_kanshi_round", bg: Some("img_laser.png"), loc: Some("出口层 · 与考验者交手"),
+        id: "xf_42_kanshi_round", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 与考验者交手"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             format!("幸存的考验者 剩余 {} / 120 血，你 HP {}。他握着一截烧焦的笔，像握着一把随时会落下判决的刀。",
@@ -493,7 +493,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xf_43_kanshi_peace", bg: Some("img_laser.png"), loc: Some("出口层 · 幸存者 · 让路"),
+        id: "xf_43_kanshi_peace", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 幸存者 · 让路"),
         mood: "calm", speaker: None, voice: None,
         text: TextSpec::Static(&["他没有再说话，只把门侧的编号墙往你这边推了推，露出那枚被他藏起的数字。你拾起它，他替你阖上门，像送走最后一个记得他的人。"]),
         choices: &[ChoiceDef { label: "（走向出口之门）", sub: "数字对路完备 · 可开门", cond: None,
@@ -503,7 +503,7 @@ pub static XINHUANGFANG_SCENES: &[SceneDef] = &[
 
     /* ================= 结局（开放：脱出 / 回到原点 / 永远迷失） ================= */
     SceneDef {
-        id: "xf_38_ending", bg: Some("img_zhuyuan_book.png"), loc: Some("出口层 · 白光尽头 · 抉择"),
+        id: "xf_38_ending", bg: Some("xinhuangfang_bg.png"), loc: Some("出口层 · 白光尽头 · 抉择"),
         mood: "mystery", speaker: Some("旁白"), voice: Some("vo_xf_ending"),
         text: TextSpec::Static(&[
             "白光尽头的空旷在你脚下铺开。你终于站在了这段算术的尽头——但答案是否值得去对，只有你自己知道。",

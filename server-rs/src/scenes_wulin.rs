@@ -232,14 +232,14 @@ SceneDef {
 
 /* ---- 坊市支线 ---- */
 SceneDef {
-    id: "wl_notice", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 大会榜文"),
+    id: "wl_notice", bg: Some("wulin_bg.png"), loc: Some("L1 · 大会榜文"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["榜上墨迹：今科武林大会，登台连胜者夺魁，魁首与盟主比武夺号。落款处一点朱砂刺眼得像血。"]),
     choices: &[ChoiceDef { label: "默记赛制", sub: "+5 点 · 情报", cond: None, effects: &[Eff::Points(5)], route: Route::To("wl_00") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_signin", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 大会签到处"),
+    id: "wl_signin", bg: Some("wulin_bg.png"), loc: Some("L1 · 大会签到处"),
     mood: "calm", speaker: Some("大会执事"), voice: None,
     text: TextSpec::Static(&["执事提笔勾名：「侠士何人？壮哉，引帖一枚，凭此登台。」他打量你两眼，压低声音：「台上水深，莫贪魁首。」"]),
     choices: &[ChoiceDef { label: "领引帖 · 签到", sub: "Item it_wl_post · 记名入册", cond: None,
@@ -247,7 +247,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_stall", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 兵器摊"),
+    id: "wl_stall", bg: Some("wulin_bg.png"), loc: Some("L1 · 兵器摊"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["兵器摊主耍弄一柄青锋：『好剑斩的未必是歹人。要不要来一柄壮壮胆？』——你总留意到摊角压着半页魔教的符纸。"]),
     choices: &[ChoiceDef { label: "买一柄青锋", sub: "Weapon + 线索 · 5 点", cond: None,
@@ -255,7 +255,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_herb", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 药摊 · 伤药"),
+    id: "wl_herb", bg: Some("wulin_bg.png"), loc: Some("L1 · 药摊 · 伤药"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["药摊老妪递来一帖金创药，摩挲着药纸低声道：可巧，这几日有『贵人』收了好几副生骨断筋的药。"]),
     choices: &[ChoiceDef { label: "买下伤药", sub: "San 恢复 · 5 点", cond: None,
@@ -263,14 +263,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_watch_post", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 观者留言壁"),
+    id: "wl_watch_post", bg: Some("wulin_bg.png"), loc: Some("L1 · 观者留言壁"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["留言壁贴满各派事先放话的帖子。你翻到一张被撕了半边的——落款竟是『某人』，透出一句：今夜诸派，莫登盟主台。"]),
     choices: &[ChoiceDef { label: "记住这句警告", sub: "+5 点 · 阴谋前兆", cond: None, effects: &[Eff::Points(5)], route: Route::To("wl_00") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_dark_door", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 西隅暗门"),
+    id: "wl_dark_door", bg: Some("wulin_bg.png"), loc: Some("L1 · 西隅暗门"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["西隅暗门半掩，门缝里滑出一枚玄铁令牌——上刻魔教『血月』印记。你恍然：这届武林大会，早有魔教的手脚。"]),
     choices: &[ChoiceDef { label: "拾起密令信物", sub: "Item it_wl_token · 为卧底免战线埋钥", cond: None,
@@ -280,7 +280,7 @@ SceneDef {
 
 /* ================= 幕二 · 擂台广场（擂台轮战） ================= */
 SceneDef {
-    id: "wl_arena", bg: Some("img_nexus.png"), loc: Some("L2 · 擂台广场"),
+    id: "wl_arena", bg: Some("wulin_bg.png"), loc: Some("L2 · 擂台广场"),
     mood: "excitement", speaker: Some("锣鼓声 · 满场喝彩"), voice: None,
     text: TextSpec::Dyn(|st| {
         if cond_after_all_fights(st) {
@@ -300,20 +300,20 @@ SceneDef {
 },
 
 /* 擂台战 fight 入口场景（native FightCfg 由引擎处理胜负） */
-SceneDef { id: "wl_fight_1", bg: Some("img_nexus.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "wl_fight_1", bg: Some("wulin_bg.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["锣响三声，峨嵋净空掌已立于台上。你纵身登台——擂台轮战开始。"]),
     choices: &NO_CH, fight_id: Some("wc_fight_1"), video: None, cine_label: None, overlay: None },
-SceneDef { id: "wl_fight_2", bg: Some("img_nexus.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "wl_fight_2", bg: Some("wulin_bg.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["北吼门狮吼震场，你稳稳接住拳势。第二轮。"]),
     choices: &NO_CH, fight_id: Some("wc_fight_2"), video: None, cine_label: None, overlay: None },
-SceneDef { id: "wl_fight_3", bg: Some("img_nexus.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "wl_fight_3", bg: Some("wulin_bg.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["鬼门刀寒光扑面，你侧身避过致命一刀，反手逼进。第三轮。"]),
     choices: &NO_CH, fight_id: Some("wc_fight_3"), video: None, cine_label: None, overlay: None },
-SceneDef { id: "wl_fight_hei_ma", bg: Some("img_nexus.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: Some("面纱客"), voice: None,
+SceneDef { id: "wl_fight_hei_ma", bg: Some("wulin_bg.png"), loc: Some("L2 · 英雄擂"), mood: "danger", speaker: Some("面纱客"), voice: None,
     text: TextSpec::Static(&["面纱客不答话，先动了手。剑走偏锋、招招取要害——这不是名门正派的武式。"]),
     choices: &NO_CH, fight_id: Some("wc_hei_ma"), video: None, cine_label: None, overlay: None },
 SceneDef {
-    id: "wl_after_hm", bg: Some("img_nexus.png"), loc: Some("L2 · 擂台后台"),
+    id: "wl_after_hm", bg: Some("wulin_bg.png"), loc: Some("L2 · 擂台后台"),
     mood: "mystery", speaker: Some("面纱客"), voice: None,
     text: TextSpec::Static(&["败北的面纱客低声撂下一句：「道上的事，你一个外人莫要强出头。」他转身没入后台，你看见他腰间令牌——正是你拾到的那枚血月印记的同类！"]),
     choices: &[ChoiceDef { label: "尾随入后台", sub: "入 L3 · 阴谋线", cond: None, effects: &NO_EFF, route: Route::To("wl_back") }],
@@ -322,7 +322,7 @@ SceneDef {
 
 /* ================= 幕三 · 后台 · 盟主府前堂（阴谋揭露） ================= */
 SceneDef {
-    id: "wl_back", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 后台 · 盟主府前堂"),
+    id: "wl_back", bg: Some("wulin_bg.png"), loc: Some("L3 · 后台 · 盟主府前堂"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["后台帐幔重重，前堂却空了一半——本应挤满的护院，此刻只剩下零星几处。你嗅到一丝极淡的血腥气。"]),
     choices: &[
@@ -335,7 +335,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_mi_ling", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 密令夹层"),
+    id: "wl_mi_ling", bg: Some("wulin_bg.png"), loc: Some("L3 · 密令夹层"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["夹层里压着一沓以血月印封缄的密令——内容是：今夜大会散去前，『送』盟主一程。底下另有半句接不上。"]),
     choices: &[ChoiceDef { label: "记下密令", sub: "wl_black_hint · 确认魔教插手", cond: None,
@@ -343,7 +343,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_old_case", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 盟主旧案宗卷"),
+    id: "wl_old_case", bg: Some("wulin_bg.png"), loc: Some("L3 · 盟主旧案宗卷"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["宗卷里夹着多封盟主以真迹盖印的密信——往来的对象，正是魔教。你翻到最后一页：这位『盟主』早在三年前就换了人，真盟主只怕已……reacting你攥紧信纸，真相已然大白。"]),
     choices: &[ChoiceDef { label: "确认黑化 · 铁证在手", sub: "wl_plot_exposed · 阴谋揭露", cond: None,
@@ -351,14 +351,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_back_hall", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 后台议事壁"),
+    id: "wl_back_hall", bg: Some("wulin_bg.png"), loc: Some("L3 · 后台议事壁"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["议事壁的地面溅着未干涸的血点，一路延伸到密道口。你确认：这场武林大会，从一开始就是魔教设的局。"]),
     choices: &[ChoiceDef { label: "循血路下密道", sub: "入 L4 · 决战在即", cond: None, effects: &NO_EFF, route: Route::To("wl_secret") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_servant", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 杂役耳房"),
+    id: "wl_servant", bg: Some("wulin_bg.png"), loc: Some("L3 · 杂役耳房"),
     mood: "cold", speaker: Some("杂役老赵"), voice: None,
     text: TextSpec::Static(&["老赵筛着糠，压着嗓子：「侠士莫管闲事……这三年，盟主金吾卫里的人换了一茬又一茬，净是些生面孔。」"]),
     choices: &[ChoiceDef { label: "谢过老赵", sub: "+5 点 · 卧底早有端倪", cond: None, effects: &[Eff::Points(5)], route: Route::To("wl_back") }],
@@ -367,7 +367,7 @@ SceneDef {
 
 /* ================= 幕四 · 盟主府密道（卧底反转 / 决战抉择） ================= */
 SceneDef {
-    id: "wl_secret", bg: Some("img_corridor.png"), loc: Some("L4 · 盟主府密道"),
+    id: "wl_secret", bg: Some("wulin_bg.png"), loc: Some("L4 · 盟主府密道"),
     mood: "danger", speaker: Some("烛影 · 低语"), voice: None,
     text: TextSpec::Static(&["密道烛火摇曳，两侧石壁刻满魔教的祭纹。前方暗厅里坐着『盟主』，身后立着一个通体玄衣的舵主——正是你要找的卧底。"]),
     choices: &[
@@ -380,7 +380,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_wo_di", bg: Some("img_corridor.png"), loc: Some("L4 · 卧底密室"),
+    id: "wl_wo_di", bg: Some("wulin_bg.png"), loc: Some("L4 · 卧底密室"),
     mood: "danger", speaker: Some("摩云舵主"), voice: None,
     text: TextSpec::Static(&["舵主见你举着那枚血月信物，瞳孔骤缩——他本欲出手，却在看清你油然而生的江湖气后，压低了刀：「原来是你……」他反手一指暗厅：『那里面坐的，根本不是我的人。』"]),
     choices: &[ChoiceDef { label: "窥破卧底 · 身份反转", sub: "wl_wo_di_found · 反戈线", cond: None,
@@ -388,14 +388,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_hidden_doc", bg: Some("img_corridor.png"), loc: Some("L4 · 密道藏信"),
+    id: "wl_hidden_doc", bg: Some("wulin_bg.png"), loc: Some("L4 · 密道藏信"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["砖缝里藏着一封告密信——是魔教某长老抱怨『盟主位不稳，当速速以血祭坛』。你明白了整盘棋。"]),
     choices: &[ChoiceDef { label: "收好藏信", sub: "+5 点 · 拔细", cond: None, effects: &[Eff::Points(5)], route: Route::To("wl_secret") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_escape_sign", bg: Some("img_corridor.png"), loc: Some("L4 · 逃脱指示碑"),
+    id: "wl_escape_sign", bg: Some("wulin_bg.png"), loc: Some("L4 · 逃脱指示碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["石壁刻着「事败由此走」的记号，直通外场的撤离阵。你记下退路，以备万一。"]),
     choices: &[ChoiceDef { label: "记下退路", sub: "＋撤离阵坐标", cond: None, effects: &[Eff::Points(5)], route: Route::To("wl_secret") }],
@@ -404,14 +404,14 @@ SceneDef {
 
 /* ================= 决战 · 黑化盟主（选择驱动遭遇） ================= */
 SceneDef {
-    id: "wl_menzhu_intro", bg: Some("img_corridor.png"), loc: Some("L4 · 盟主议事暗厅"),
+    id: "wl_menzhu_intro", bg: Some("wulin_bg.png"), loc: Some("L4 · 盟主议事暗厅"),
     mood: "danger", speaker: Some("黑化盟主"), voice: Some("vo_wl_menzhu"),
     text: TextSpec::Static(&["『真盟主三年前就死在我手上。』他撕开伪装，满厅兵刃齐鸣——武林大会真正的魁首，从来不是我。『所以，你也去死吧。』"]),
     choices: &[ChoiceDef { label: "拔剑 · 与黑化盟主一决", sub: "决战开始", cond: None, effects: &NO_EFF, route: Route::Dyn(start_menzhu) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "wl_menzhu_round", bg: Some("img_corridor.png"), loc: Some("L4 · 盟主议事暗厅"),
+    id: "wl_menzhu_round", bg: Some("wulin_bg.png"), loc: Some("L4 · 盟主议事暗厅"),
     mood: "danger", speaker: Some("黑化盟主"), voice: None,
     text: TextSpec::Dyn(|st| {
         let hp = st.fight.as_ref().map(|f| f.hp).unwrap_or(0);
@@ -429,7 +429,7 @@ SceneDef {
 
 /* ================= 结局幕 ================= */
 SceneDef {
-    id: "wl_32_card", bg: Some("img_corridor.png"), loc: Some("盟主府 · 暗厅余烬"),
+    id: "wl_32_card", bg: Some("wulin_bg.png"), loc: Some("盟主府 · 暗厅余烬"),
     mood: "calm", speaker: Some("武林各派"), voice: Some("vo_wl_win"),
     text: TextSpec::Static(&["黑化盟主颓然倒地，武林大会的闹剧就此收场。各派掌门这才看清，这三年来供上盟主位的是个冒名顶替的魔头。
 
@@ -447,7 +447,7 @@ SceneDef {
     }),
 },
 SceneDef {
-    id: "wl_33_revolt", bg: Some("img_corridor.png"), loc: Some("盟主府 · 暗厅余烬"),
+    id: "wl_33_revolt", bg: Some("wulin_bg.png"), loc: Some("盟主府 · 暗厅余烬"),
     mood: "calm", speaker: Some("摩云舵主"), voice: Some("vo_wl_revolt"),
     text: TextSpec::Static(&["你选择反戈相助——与真正的卧底摩云舵主联手，里应外合压下了黑化盟主最后的反扑。盟主令被你握在手中，一场朝廷与武林勾结的乱局就此止于暗处。"]),
     choices: &[ChoiceDef { label: "（持盟主令 · 离场）", sub: "sp_grade D · 反转结局", cond: None, effects: &NO_EFF, route: Route::Dyn(route_finalize) }],

@@ -174,7 +174,7 @@ SceneDef {
 
 /* ================= L1 梦境小镇 · 榆树街 hub ================= */
 SceneDef {
-    id: "jj2_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 榆树街"),
+    id: "jj2_l1_hub", bg: Some("jishujing_bg.png"), loc: Some("L1 · 榆树街"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("jj2_slept") {
@@ -196,7 +196,7 @@ SceneDef {
 
 /* ---- L1 调查点 ---- */
 SceneDef {
-    id: "jj2_l1_house", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 梦中小屋"),
+    id: "jj2_l1_house", bg: Some("jishujing_bg.png"), loc: Some("L1 · 梦中小屋"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["屋里所有钟都停在 2:04。桌上摆着一碗没动过的麦片，椅背上搭着一件条纹睡衣——衣角的爪子印痕还新鲜。"]),
     choices: &[ChoiceDef { label: "记下小屋", sub: "伏笔 · 地图标记", cond: None,
@@ -204,7 +204,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l1_tree", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 街心榆树"),
+    id: "jj2_l1_tree", bg: Some("jishujing_bg.png"), loc: Some("L1 · 街心榆树"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["街心那棵大榆树的树影里，埋着一枚四指爪印的铜钥匙。孩子说过：『那是他忘在梦里的钥匙，别让腕表型的门咬住你。』"]),
     choices: &[ChoiceDef { label: "抠出爪痕钥匙", sub: "Item jj2_key · 开 L1 梦境门", cond: None,
@@ -212,7 +212,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l1_statue", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 街道雕像"),
+    id: "jj2_l1_statue", bg: Some("jishujing_bg.png"), loc: Some("L1 · 街道雕像"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["雕像是熟睡的孩子，脸上被刻出一排名字。最底下是你的名字——笔迹刚干，像刚有人用指尖蘸着灰写的。"]),
     choices: &[ChoiceDef { label: "读自己的名字", sub: "San-2 · 你被盯上了", cond: None,
@@ -220,7 +220,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l1_door", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 梦境之门"),
+    id: "jj2_l1_door", bg: Some("jishujing_bg.png"), loc: Some("L1 · 梦境之门"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.inventory.iter().any(|i| i == "jj2_key") {
@@ -237,7 +237,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l1_kids", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 榆树街"),
+    id: "jj2_l1_kids", bg: Some("jishujing_bg.png"), loc: Some("L1 · 榆树街"),
     mood: "cold", speaker: Some("榆树街的孩子"), voice: None,
     text: TextSpec::Static(&["孩子拽着你的衣角，声音压得很低：「他睡在你隔壁那间教室。别让他知道你记得他的脸——他怕『记得』的人。」"]),
     choices: &[ChoiceDef { label: "「我记住了。」", sub: "San+2 · 伏笔", cond: None,
@@ -247,7 +247,7 @@ SceneDef {
 
 /* ---- L1 象征战 ---- */
 SceneDef {
-    id: "jj2_fight_l1", bg: Some("img_corridor.png"), loc: Some("L1 · 榆树街暗影带"),
+    id: "jj2_fight_l1", bg: Some("jishujing_bg.png"), loc: Some("L1 · 榆树街暗影带"),
     mood: "danger", speaker: Some("榆树街的影子"), voice: None,
     text: TextSpec::Static(&["影子与你隔着半条街对峙，它的轮廓边缘在融化。它朝你手上爬——「别睡，别睡，别睡。」"]),
     choices: &[], fight_id: Some("jj2_fight_l1"), video: None, cine_label: None, overlay: None,
@@ -255,7 +255,7 @@ SceneDef {
 
 /* ================= L2 梦境学校 hub ================= */
 SceneDef {
-    id: "jj2_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 梦境学校"),
+    id: "jj2_l2_hub", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 梦境学校"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("jj2_seen_name") {
@@ -277,7 +277,7 @@ SceneDef {
 
 /* ---- L2 调查点 ---- */
 SceneDef {
-    id: "jj2_l2_desk", bg: Some("img_corridor.png"), loc: Some("L2 · 教室课桌"),
+    id: "jj2_l2_desk", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 教室课桌"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["课桌上刻满了同一个名字，笔迹从第一行稚嫩到这几年尖利。最上面一行还新：那正是你同桌的学号。"]),
     choices: &[ChoiceDef { label: "擦去同桌的名字", sub: "伏笔 · 地图标记", cond: None,
@@ -285,7 +285,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l2_clock", bg: Some("img_corridor.png"), loc: Some("L2 · 失控时钟"),
+    id: "jj2_l2_clock", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 失控时钟"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["钟盘停在 2:04，时针被什么掰断，缺的那枚齿轮躺在钟盘下的炉灰里，还亮着一粒余烬的火星。"]),
     choices: &[ChoiceDef { label: "捻起那枚余烬", sub: "Item jj2_ember · 开 L2 手印门", cond: None,
@@ -293,7 +293,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l2_window", bg: Some("img_corridor.png"), loc: Some("L2 · 窗外"),
+    id: "jj2_l2_window", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 窗外"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["窗玻璃上印着一排外翻的手印，像有人从外面的夜晚往里扒过。玻璃最上方，一个名字被热气描出来——那不是你同桌的。"]),
     choices: &[ChoiceDef { label: "看清那个名字", sub: "SetFlag jj2_seen_name · 记忆回潮前置", cond: None,
@@ -301,7 +301,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l2_furnace_door", bg: Some("img_corridor.png"), loc: Some("L2 · 锅炉房铁门"),
+    id: "jj2_l2_furnace_door", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 锅炉房铁门"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.inventory.iter().any(|i| i == "jj2_ember") {
@@ -318,7 +318,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l2_teacher", bg: Some("img_corridor.png"), loc: Some("L2 · 教师办公室"),
+    id: "jj2_l2_teacher", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 教师办公室"),
     mood: "cold", speaker: Some("被困的老师"), voice: None,
     text: TextSpec::Static(&["老师抱着一摞名册，声音发抖：「他烧锅炉那年，就把名字一件件收进了炉里。可我记得他——他被『记得』的时候，会害怕。」"]),
     choices: &[ChoiceDef { label: "「我也记得。」", sub: "San+2 · 弗莱迪的破绽", cond: None,
@@ -328,7 +328,7 @@ SceneDef {
 
 /* ---- L2 象征战 ---- */
 SceneDef {
-    id: "jj2_fight_l2", bg: Some("img_corridor.png"), loc: Some("L2 · 教室"),
+    id: "jj2_fight_l2", bg: Some("jishujing_bg_highschool.png"), loc: Some("L2 · 教室"),
     mood: "danger", speaker: Some("困在教室的怪物"), voice: None,
     text: TextSpec::Static(&["那些课桌一起朝前滑了半步，露出一张熟悉的、属于某个同学的脸。它在等你把它「记得」起来，然后放它睡。"]),
     choices: &[], fight_id: Some("jj2_fight_l2"), video: None, cine_label: None, overlay: None,
@@ -336,7 +336,7 @@ SceneDef {
 
 /* ================= L3 意识深处 · 弗莱迪的锅炉房 hub ================= */
 SceneDef {
-    id: "jj2_l3_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 弗莱迪的锅炉房"),
+    id: "jj2_l3_hub", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 弗莱迪的锅炉房"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("jj2_awake") {
@@ -359,7 +359,7 @@ SceneDef {
 
 /* ---- L3 调查点 ---- */
 SceneDef {
-    id: "jj2_l3_boiler", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 熔炉本体"),
+    id: "jj2_l3_boiler", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 熔炉本体"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["熔炉的舌头舔过一摞试卷，把名字一张张化成灰。你听见炉膛深处，一阵压抑到极点的、属于成群熟睡者的呼吸。"]),
     choices: &[ChoiceDef { label: "伸手探炉", sub: "San-3 · 你摸到了灰里的一个名字", cond: None,
@@ -367,7 +367,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l3_memory", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 记忆碎片"),
+    id: "jj2_l3_memory", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 记忆碎片"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["蒸汽的涡里飘着一片玻璃，里面是你醒着时的卧室。握着它，你有一瞬确信：外面还有人等你，你不是光躺在这炉边的名字。"]),
     choices: &[ChoiceDef { label: "握住记忆碎片", sub: "SetFlag jj2_awake · 清醒之锚 +40点", cond: None,
@@ -375,7 +375,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l3_mirror", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 裂镜"),
+    id: "jj2_l3_mirror", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 裂镜"),
     mood: "danger", speaker: Some("裂镜里的自己"), voice: None,
     text: TextSpec::Static(&["裂镜里你的脸有一瞬变成弗莱迪的脸，又拼回原样。镜中人开口：「别怕他——他怕的是『记得』他的人。」"]),
     choices: &[ChoiceDef { label: "与裂镜里的自己击掌", sub: "SetFlag jj2_seen_name", cond: None,
@@ -383,7 +383,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l3_wall", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 锈墙刻痕"),
+    id: "jj2_l3_wall", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 锈墙刻痕"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["锈墙上刻着一排排划正的『正』字，最顶上一行被划到一半。下面是弗莱迪的名字，笔画被他自己的爪痕涂蓝了三分。"]),
     choices: &[ChoiceDef { label: "把弗莱迪的名字刻完", sub: "伏笔 · 地图标记", cond: None,
@@ -391,7 +391,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_l3_ghost", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 炉边"),
+    id: "jj2_l3_ghost", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 炉边"),
     mood: "cold", speaker: Some("梦中女孩残影"), voice: None,
     text: TextSpec::Static(&["残影贴得很近，声音像从很远的水底传来：「别再往炉里添我的名字。你记得我，我就走得掉。你也能——只要你在锅炉烧起来以前醒来。」"]),
     choices: &[ChoiceDef { label: "「我会记得你。」", sub: "San+2 · 弗莱迪的破绽 +", cond: None,
@@ -401,7 +401,7 @@ SceneDef {
 
 /* ---- L3 env 机关：记忆回潮 ---- */
 SceneDef {
-    id: "jj2_l3_flash", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 记忆回潮区"),
+    id: "jj2_l3_flash", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 记忆回潮区"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["蒸汽忽然拧成你刚进副本那段回忆，往咽喉里灌。你若没认出「弗莱迪的名字」，回忆会把你原来的睡意拖回炉边。"]),
     choices: &[ChoiceDef { label: "【沉入回潮】", sub: "已见名字则+San免被拖走，否则San-10 · 死亡档案", cond: None,
@@ -411,7 +411,7 @@ SceneDef {
 
 /* ---- L3 象征战 ---- */
 SceneDef {
-    id: "jj2_fight_l3", bg: Some("img_zhuyuan_book.png"), loc: Some("L3 · 蒸汽锅炉侧"),
+    id: "jj2_fight_l3", bg: Some("jishujing_bg_boiler.png"), loc: Some("L3 · 蒸汽锅炉侧"),
     mood: "danger", speaker: Some("锅炉蒸汽鬼影"), voice: None,
     text: TextSpec::Static(&["蒸汽凝成半透明的东西，朝你伸出一只手。它的胸腔里滚着一段睡前的哼唱——它是被弗莱迪收进炉里的一位「住客」。"]),
     choices: &[], fight_id: Some("jj2_fight_l3"), video: None, cine_label: None, overlay: None,
@@ -419,7 +419,7 @@ SceneDef {
 
 /* ================= BOSS · 梦魇弗莱迪 ================= */
 SceneDef {
-    id: "jj2_boss", bg: Some("img_laser.png"), loc: Some("L3 · 锅炉核心 · 决战处"),
+    id: "jj2_boss", bg: Some("jishujing_bg.png"), loc: Some("L3 · 锅炉核心 · 决战处"),
     mood: "danger", speaker: Some("梦魇弗莱迪"), voice: None,
     text: TextSpec::Static(&["灰帽绿纹的男人从锅炉阴影里踱出，四根铁爪蹭着钢板。他朝你勾了勾手：「梦做一半最香，你偏要吵醒它——那就把你也收进炉里。」"]),
     choices: &[
@@ -432,7 +432,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_boss_round", bg: Some("img_laser.png"), loc: Some("L3 · 锅炉核心 · 决战"),
+    id: "jj2_boss_round", bg: Some("jishujing_bg.png"), loc: Some("L3 · 锅炉核心 · 决战"),
     mood: "danger", speaker: Some("梦魇弗莱迪"), voice: None,
     text: TextSpec::Dyn(|st| format!("弗莱迪剩余 {} 血，你 HP {}。铁爪在钢板上拉出四道火星。<i>（你瞥见炉膛里熟睡着的人群——有谁能替你记得弗莱迪的脸？）</i>", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
     choices: &[
@@ -447,21 +447,21 @@ SceneDef {
 
 /* ================= 开放结局 · 挣脱梦境（击败弗莱迪）================= */
 SceneDef {
-    id: "jj2_end_flee", bg: Some("img_laser.png"), loc: Some("契约边界 · 醒来"),
+    id: "jj2_end_flee", bg: Some("jishujing_bg.png"), loc: Some("契约边界 · 醒来"),
     mood: "calm", speaker: Some("主神·结算"), voice: None,
     text: TextSpec::Static(&["锅炉在一记重击里熄了火。弗莱迪的灰帽滚进炉膛，人是醒了——你攥紧记忆碎片，把这句话说给炉膛里所有人听：「你不记得他，他就忘了你。」你睁开眼，枕头边还留着那枚爪痕钥匙的凉意。"]),
     choices: &[ChoiceDef { label: "确认结算", sub: "开放结局1 · 挣脱梦境", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_end_sleep", bg: Some("img_laser.png"), loc: Some("梦境最深 · 与他共眠"),
+    id: "jj2_end_sleep", bg: Some("jishujing_bg.png"), loc: Some("梦境最深 · 与他共眠"),
     mood: "choice", speaker: Some("梦魇弗莱迪"), voice: None,
     text: TextSpec::Static(&["你放下刀，把眼睛阖上。弗莱迪的爪尖轻轻合拢你的手，哼起那首没唱完的摇篮曲：「乖，梦外面不是真……这儿才永远有人记得你。」——不知道这一觉，你还会不会醒。"]),
     choices: &[ChoiceDef { label: "把这一梦收进结算", sub: "开放结局2 · 与弗莱迪共眠", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jj2_end_share", bg: Some("img_laser.png"), loc: Some("现实边缘 · 把梦交给同伴"),
+    id: "jj2_end_share", bg: Some("jishujing_bg.png"), loc: Some("现实边缘 · 把梦交给同伴"),
     mood: "choice", speaker: Some("同伴·梦境接管"), voice: None,
     text: TextSpec::Static(&["你回头把沉睡的同伴一个个拍醒：「替我记住弗莱迪的脸——这张脸，得由你们来记得。」梦里的锅炉一条条熄下去。你卸下了「记得」的重担，他们却接过了它。你醒来时，肩头轻得发空。"]),
     choices: &[ChoiceDef { label: "把梦交给同伴 · 结算", sub: "开放结局3 · 由同伴接手", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],

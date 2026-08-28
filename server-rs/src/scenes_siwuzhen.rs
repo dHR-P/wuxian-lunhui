@@ -156,7 +156,7 @@ pub static SIWUZHEN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sw_prelude", bg: Some("img_laser.png"), loc: Some("死雾镇 · 镇后河岸"),
+        id: "sw_prelude", bg: Some("siwuzhen_bg.png"), loc: Some("死雾镇 · 镇后河岸"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "河岸的雾几乎凝成实体。在雾最浓的那一团里，一个比其他旧影高大得多的轮廓正缓缓直起身——它裹着缠满水草的麻衣，像一具会走路的雾本身。",
@@ -167,7 +167,7 @@ pub static SIWUZHEN_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "sw_01", bg: Some("img_zhuyuan_book.png"), loc: Some("镇后河桥桥头"), mood: "danger",
+        id: "sw_01", bg: Some("siwuzhen_bg.png"), loc: Some("镇后河桥桥头"), mood: "danger",
         speaker: Some("雾中行尸之王"), voice: None,
         text: TextSpec::Static(&["雾中行尸之王 挡在出口。雾里没有活人——可它偏偏还记得自己曾是个人。" ]),
         choices: &[
@@ -177,7 +177,7 @@ pub static SIWUZHEN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sw_round", bg: Some("img_laser.png"), loc: Some("决战 · 河桥之上"), mood: "danger",
+        id: "sw_round", bg: Some("siwuzhen_bg.png"), loc: Some("决战 · 河桥之上"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("雾中行尸之王 尚余 {} 气力，你 HP {}。每击散一缕雾，它的执念就薄一分。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

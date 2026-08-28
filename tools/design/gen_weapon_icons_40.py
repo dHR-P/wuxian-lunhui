@@ -21,8 +21,9 @@ from gen_wan import gen  # noqa: E402
 STAGE_DIR = os.path.join(HERE, "item_icons", "weapon_stages_40")
 os.makedirs(STAGE_DIR, exist_ok=True)
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(HERE))
 DEPLOY_DIR = os.path.join(
-    os.path.dirname(HERE), "server-rs", "ui", "assets", "img")
+    PROJECT_ROOT, "server-rs", "ui", "assets", "img")
 os.makedirs(DEPLOY_DIR, exist_ok=True)
 
 LOG_PATH = os.path.join(HERE, "weapon_icons_40_log.md")

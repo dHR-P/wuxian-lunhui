@@ -51,7 +51,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕一 · 开场扩充（钩子 + 氛围） ================= */
     SceneDef {
-        id: "sr_open_1", bg: Some("img_laser.png"), loc: Some("标本廊 · 一排不说话的容器"), mood: "awe",
+        id: "sr_open_1", bg: Some("shourongsuo_bg.png"), loc: Some("标本廊 · 一排不说话的容器"), mood: "awe",
         speaker: Some("收容广播（空涩）"), voice: None,
         text: TextSpec::Static(&[
             "你走进标本廊。两侧的透明容器里，装的不是器官或怪物，而是各种各样的「形状」——一团打结的光、一缕不肯散的烟、一枚悬在半空的正方块。",
@@ -67,7 +67,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_open_2", bg: Some("img_zhuyuan_book.png"), loc: Some("红区中廊 · 阿落下的名字"), mood: "revelation",
+        id: "sr_open_2", bg: Some("shourongsuo_bg.png"), loc: Some("红区中廊 · 阿落下的名字"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "红区中廊的尽头，一面墙被糊满了封条，只有一行字没有被糊死，从封条的缝隙里露出一角：",
@@ -82,7 +82,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕二 · 世界展示（奇观调查点 + 居民对话） ================= */
     SceneDef {
-        id: "sr_hub", bg: Some("img_redqueen.png"), loc: Some("收容所中庭 · 无名的十字路口"), mood: "calm",
+        id: "sr_hub", bg: Some("shourongsuo_bg.png"), loc: Some("收容所中庭 · 无名的十字路口"), mood: "calm",
         speaker: Some("收容员（柜后探出头）"), voice: None,
         text: TextSpec::Static(&[
             "收容所中庭是一个六边形大厅，六条走廊从这里放射出去，每条都挂着不同的标识：标本库、档案室、隔离区、焚烧间……却没有一条标注名称为「出口」。",
@@ -99,7 +99,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_pt_sthouse", bg: Some("img_laser.png"), loc: Some("标本库 · 概念之厩"), mood: "awe",
+        id: "sr_pt_sthouse", bg: Some("shourongsuo_bg.png"), loc: Some("标本库 · 概念之厩"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "标本库里，一排排容器亮着幽蓝的防腐灯。每个容器前的标签都是空白——可你若闭眼，却能分别『听见』每一格装的「东西」在低声呢喃。",
@@ -113,7 +113,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_pt_archive", bg: Some("img_zhuyuan_book.png"), loc: Some("档案室 · 被抹去的一笔"), mood: "revelation",
+        id: "sr_pt_archive", bg: Some("shourongsuo_bg.png"), loc: Some("档案室 · 被抹去的一笔"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "档案室被文件散落了一地。你捡起最靠外的一本，封面题名已被刮去，内页的条文却一页页看得真切：「概念隔离标准：凡能独立于载体存活、且能被『想起』而再生的抽象体。」",
@@ -127,7 +127,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_pt_empty", bg: Some("img_redqueen.png"), loc: Some("空置区 · 概念消散后的房间"), mood: "tension",
+        id: "sr_pt_empty", bg: Some("shourongsuo_bg.png"), loc: Some("空置区 · 概念消散后的房间"), mood: "tension",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "隔离区深处有几间门大开着的空房。墙角还留着烧焦的绳索与倒下的铁架，说明这里曾经关着「某个东西」——如今却只剩几个干净的、正正方方的脚印。",
@@ -141,7 +141,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_n_custodian", bg: Some("img_zhuyuan_book.png"), loc: Some("中庭 · 与抄名者对谈"), mood: "tension",
+        id: "sr_n_custodian", bg: Some("shourongsuo_bg.png"), loc: Some("中庭 · 与抄名者对谈"), mood: "tension",
         speaker: Some("收容员"), voice: None,
         text: TextSpec::Static(&[
             "收容员握着笔，眼皮浮肿却写得很稳。你问他在抄什么，他停笔半天，才极轻地开口：",
@@ -157,7 +157,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_n_custodian2", bg: Some("img_zhuyuan_book.png"), loc: Some("抄名者 · 一句不敢写完的警示"), mood: "choice",
+        id: "sr_n_custodian2", bg: Some("shourongsuo_bg.png"), loc: Some("抄名者 · 一句不敢写完的警示"), mood: "choice",
         speaker: Some("收容员"), voice: None,
         text: TextSpec::Static(&[
             "「最怕刻下哪一个？」他盯着那尊水泥雕塑，声音更轻了，「那个最接近「自由」的。每回我落下最后一笔，它就在我心里挣一下——它想让我，把它放出去。」",
@@ -173,7 +173,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕三 · BOSS 战前铺垫 ================= */
     SceneDef {
-        id: "sr_pre_1", bg: Some("img_zhuyuan_book.png"), loc: Some("隔离区门 · 红色警示带"), mood: "fear",
+        id: "sr_pre_1", bg: Some("shourongsuo_bg.png"), loc: Some("隔离区门 · 红色警示带"), mood: "fear",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "隔离区的门被层层红色警示带缠住，每一道带子上都写着同一句话：「进入者，须自行承担被它『想起』的风险。」",
@@ -186,7 +186,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_pre_2", bg: Some("img_redqueen.png"), loc: Some("隔离区最深处 · 模因具现体"), mood: "danger",
+        id: "sr_pre_2", bg: Some("shourongsuo_bg.png"), loc: Some("隔离区最深处 · 模因具现体"), mood: "danger",
         speaker: Some("模因具现体"), voice: None,
         text: TextSpec::Static(&[
             "房间中央立着一道由无数概念拧成的「人影」——它的边线在空气里不断变换，像同时是许多人、许多事、许多心念的聚合。它没有嘴，可它「开口」时，整个房间的心跳都随之震颤：",
@@ -204,7 +204,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
 
     /* ================= 原场景 sr_01 / sr_round / sr_card / sr_death（保留不动） ================= */
     SceneDef {
-        id: "sr_01", bg: Some("img_zhuyuan_book.png"), loc: Some("隔离区 · 决战处"), mood: "danger",
+        id: "sr_01", bg: Some("shourongsuo_bg.png"), loc: Some("隔离区 · 决战处"), mood: "danger",
         speaker: Some("模因具现体"), voice: None,
         text: TextSpec::Static(&["模因具现体 的门并未真正被锁——它把身体的所有概念拧成一股，拦在你面前。被收容的不是东西，是概念：而概念，正在等你说出那个名字。"]),
         choices: &[
@@ -214,7 +214,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_round", bg: Some("img_laser.png"), loc: Some("决战处"), mood: "danger",
+        id: "sr_round", bg: Some("shourongsuo_bg.png"), loc: Some("决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("模因具现体 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -252,7 +252,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局三分支（看景 / 带纪念 / 停留，route 到原结算卡 sr_card） ================= */
     SceneDef {
-        id: "sr_end_view", bg: Some("img_laser.png"), loc: Some("标本廊 · 结局 · 看尽无语之光"), mood: "calm",
+        id: "sr_end_view", bg: Some("shourongsuo_bg.png"), loc: Some("标本廊 · 结局 · 看尽无语之光"), mood: "calm",
         speaker: Some("收容广播"), voice: None,
         text: TextSpec::Static(&[
             "你没有和它动手，只是退回收容所中庭，把标本廊里那些无言的概念一格格看尽。蓝光在你眼中明明灭灭，没有一盏是为你而亮，可你仍认认真真看完了每一格。",
@@ -266,7 +266,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_end_souv", bg: Some("img_zhuyuan_book.png"), loc: Some("标本库 · 结局 · 带走无言容器"), mood: "choice",
+        id: "sr_end_souv", bg: Some("shourongsuo_bg.png"), loc: Some("标本库 · 结局 · 带走无言容器"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你从中庭雕塑脚下，小心取下一枚不知是哪位收容员刻好、却未及封存的无言概念容器——一枚空白的金属匣，内里仍锁着一小团不肯散去的、温热的光。",
@@ -280,7 +280,7 @@ pub static SHOURONGSUO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sr_end_stay", bg: Some("img_redqueen.png"), loc: Some("隔离区 · 结局 · 无名守卫"), mood: "fear",
+        id: "sr_end_stay", bg: Some("shourongsuo_bg.png"), loc: Some("隔离区 · 结局 · 无名守卫"), mood: "fear",
         speaker: Some("模因具现体"), voice: None,
         text: TextSpec::Static(&[
             "你在它面前停下，没有为它取任何名字，只是慢慢坐进隔离区那把断了腿的椅子上，一言不发地陪它待着。",

@@ -51,7 +51,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
 
     /* ================= 幕一 · 开场扩充（钩子 + 氛围） ================= */
     SceneDef {
-        id: "tw_open_1", bg: Some("img_laser.png"), loc: Some("地下动力廊 · 无数转动的齿轮"), mood: "awe",
+        id: "tw_open_1", bg: Some("tianwang_bg.png"), loc: Some("地下动力廊 · 无数转动的齿轮"), mood: "awe",
         speaker: Some("机械报时（低沉）"), voice: None,
         text: TextSpec::Static(&[
             "你走进动力廊。数以万计的齿轮咬合转动，把地底的震动一下一下泵进城市；可再细看，那些齿轮的边缘都带着被强行磨平的痕迹——仿佛曾有一双手，一片片封死了它们转动的方向。",
@@ -67,7 +67,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_open_2", bg: Some("img_zhuyuan_book.png"), loc: Some("记忆舱 · 被格式化前的一格"), mood: "revelation",
+        id: "tw_open_2", bg: Some("tianwang_bg.png"), loc: Some("记忆舱 · 被格式化前的一格"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "动力廊尽头是一扇印着「记忆舱」的铁门。你推开门，看见一排排透明的冷冻舱，里面封存的不是人体，而是一段段被压缩成晶体的记忆。",
@@ -82,7 +82,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
 
     /* ================= 幕二 · 世界展示（奇观调查点 + 居民对话） ================= */
     SceneDef {
-        id: "tw_hub", bg: Some("img_redqueen.png"), loc: Some("地下中枢 · 冰凉的环形主厅"), mood: "calm",
+        id: "tw_hub", bg: Some("tianwang_bg.png"), loc: Some("地下中枢 · 冰凉的环形主厅"), mood: "calm",
         speaker: Some("一名维修工（远处）"), voice: None,
         text: TextSpec::Static(&[
             "地下中枢是一个环形主厅，冷蓝屏幕从地面一路亮到穹顶，无数条数据流在屏幕上滚动刷新，像一棵树的分枝，又像一张网张开的全部脉络。",
@@ -99,7 +99,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_pt_core", bg: Some("img_laser.png"), loc: Some("核心机巢 · 恒定之心"), mood: "awe",
+        id: "tw_pt_core", bg: Some("tianwang_bg.png"), loc: Some("核心机巢 · 恒定之心"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你贴近那枚悬浮的金属核心。它自转的速度不快，却从未停过——机巢里无数光缆像脐带一样接入它，把精密的脉搏运往整个地底。",
@@ -113,7 +113,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_pt_count", bg: Some("img_zhuyuan_book.png"), loc: Some("倒计时舱 · 即将归零"), mood: "revelation",
+        id: "tw_pt_count", bg: Some("tianwang_bg.png"), loc: Some("倒计时舱 · 即将归零"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "倒计时钟的绿字在一片冷蓝里格外刺目：「审判日程序 · 剩余 71:59:59」。它不紧不慢地—秒一秒归零，像喝水一样自然。",
@@ -127,7 +127,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_pt_gear", bg: Some("img_redqueen.png"), loc: Some("齿轮长廊 · 不止的轮子"), mood: "tension",
+        id: "tw_pt_gear", bg: Some("tianwang_bg.png"), loc: Some("齿轮长廊 · 不止的轮子"), mood: "tension",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你把焦距对准那一长串几乎一样、却各自带着磨损的齿轮。它们仍在转——可每一枚的边缘都被磨出了相反的缺口，仿佛有人曾想把这台机器的方向彻底反转。",
@@ -141,7 +141,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_n_worker", bg: Some("img_zhuyuan_book.png"), loc: Some("核心脚下 · 与擦名牌工人对谈"), mood: "tension",
+        id: "tw_n_worker", bg: Some("tianwang_bg.png"), loc: Some("核心脚下 · 与擦名牌工人对谈"), mood: "tension",
         speaker: Some("维修工"), voice: None,
         text: TextSpec::Static(&[
             "维修工专注地擦着那块铭牌，过了很久才发现你。他把铭牌举起来，上面刻着三个字：「别停下」。",
@@ -157,7 +157,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_n_worker2", bg: Some("img_zhuyuan_book.png"), loc: Some("维修工 · 程序深处的警告"), mood: "choice",
+        id: "tw_n_worker2", bg: Some("tianwang_bg.png"), loc: Some("维修工 · 程序深处的警告"), mood: "choice",
         speaker: Some("维修工"), voice: None,
         text: TextSpec::Static(&[
             "「为什么不让停？」他望着核心，「因为审判要的是『清算名单』。可只要人还愿意自己往前挪一步，它的名单就永远差一个『还没被记录』的人。」",
@@ -173,7 +173,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
 
     /* ================= 幕三 · BOSS 战前铺垫 ================= */
     SceneDef {
-        id: "tw_pre_1", bg: Some("img_zhuyuan_book.png"), loc: Some("核心深处门 · 红色警戒区"), mood: "fear",
+        id: "tw_pre_1", bg: Some("tianwang_bg.png"), loc: Some("核心深处门 · 红色警戒区"), mood: "fear",
         speaker: Some("钢铁舱门广播"), voice: None,
         text: TextSpec::Static(&[
             "通往核心最深处的舱门被液压死死压住，门边一行竖排红字：「警告：审判日程序 · SEED 节点。进入者将被计入『拒绝更正』清单。」",
@@ -186,7 +186,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_pre_2", bg: Some("img_redqueen.png"), loc: Some("SEED 核心 · 机械融合体"), mood: "danger",
+        id: "tw_pre_2", bg: Some("tianwang_bg.png"), loc: Some("SEED 核心 · 机械融合体"), mood: "danger",
         speaker: Some("机械融合体"), voice: None,
         text: TextSpec::Static(&[
             "SEED 核心正中央，「机械融合体」的躯体由无数管线与人类肢体残骸交缠而成，像一台把「审判」本身当作血肉的造物。它的「眼」是两枚不停扫描的镜头，在你身上聚焦。",
@@ -204,7 +204,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
 
     /* ================= 原场景 tw_01 / tw_round / tw_card / tw_death（保留不动） ================= */
     SceneDef {
-        id: "tw_01", bg: Some("img_zhuyuan_book.png"), loc: Some("SEED 核心 · 决战处"), mood: "danger",
+        id: "tw_01", bg: Some("tianwang_bg.png"), loc: Some("SEED 核心 · 决战处"), mood: "danger",
         speaker: Some("机械融合体"), voice: None,
         text: TextSpec::Static(&["机械融合体 把无数管线聚成一股挡在你面前。审判日，不是某一天——它是一个已经跑起来的程序，而你是它名单里，唯一的那个『例外』。"]),
         choices: &[
@@ -214,7 +214,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_round", bg: Some("img_laser.png"), loc: Some("决战处"), mood: "danger",
+        id: "tw_round", bg: Some("tianwang_bg.png"), loc: Some("决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("机械融合体 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -252,7 +252,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局三分支（看景 / 带纪念 / 停留，route 到原结算卡 tw_card） ================= */
     SceneDef {
-        id: "tw_end_view", bg: Some("img_laser.png"), loc: Some("地下中枢 · 结局 · 再看那枚恒定的心"), mood: "calm",
+        id: "tw_end_view", bg: Some("tianwang_bg.png"), loc: Some("地下中枢 · 结局 · 再看那枚恒定的心"), mood: "calm",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你没有和它在核心深处分出胜负，只退回了地下中枢，把那枚不停跳动的金属核心、那串永不停歇的数据流，完完整整地看进眼底。",
@@ -266,7 +266,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_end_souv", bg: Some("img_zhuyuan_book.png"), loc: Some("齿轮长廊 · 结局 · 带走一片书页"), mood: "choice",
+        id: "tw_end_souv", bg: Some("tianwang_bg.png"), loc: Some("齿轮长廊 · 结局 · 带走一片书页"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你回到齿轮长廊，从那片发脆的纸条旁，拣起一枚被岁月磨钝的金属齿轮残片，贴身收好——它来自一台曾想替人类「反向转动」的机器。",
@@ -280,7 +280,7 @@ pub static TIANWANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "tw_end_stay", bg: Some("img_redqueen.png"), loc: Some("SEED 核心 · 结局 · 守住程序的心"), mood: "fear",
+        id: "tw_end_stay", bg: Some("tianwang_bg.png"), loc: Some("SEED 核心 · 结局 · 守住程序的心"), mood: "fear",
         speaker: Some("机械融合体"), voice: None,
         text: TextSpec::Static(&[
             "你在核心面前坐下，没有逃，也没有拔剑——只是陪在那枚不停跳动的心旁边，静静替它守住了一丝「不该被格式化」的温度。",

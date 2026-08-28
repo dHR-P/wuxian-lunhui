@@ -43,7 +43,7 @@ pub static PANBU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "pb_01", bg: Some("img_zhuyuan_book.png"), loc: Some("圣遗前庭"), mood: "danger",
+        id: "pb_01", bg: Some("panbu_bg.png"), loc: Some("圣遗前庭"), mood: "danger",
         speaker: Some("灵蛇族长"), voice: None,
         text: TextSpec::Static(&["蛇牙在月光下泛着幽绿。", "族长盘踞在祭坛中央，吐信冷笑：圣骨是我的。"]),
         choices: &[
@@ -53,7 +53,7 @@ pub static PANBU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "pb_round", bg: Some("img_laser.png"), loc: Some("蛇牙祭坛"), mood: "danger",
+        id: "pb_round", bg: Some("panbu_bg.png"), loc: Some("蛇牙祭坛"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("灵蛇族长剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

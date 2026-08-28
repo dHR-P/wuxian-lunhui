@@ -182,7 +182,7 @@ SceneDef {
 
 /* ---- L1 镇门 hub ---- */
 SceneDef {
-    id: "tq_01", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 通衢镇门"),
+    id: "tq_01", bg: Some("tongqu_bg.png"), loc: Some("L1 · 通衢镇门"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "镇门望楼的水珠一滴接一滴坠下青石，留下深浅不一的车辙。通衢是南来北往的中继，什么人都往这儿过——镖师、商贩、还有那些不该在落雨天赶路的夜行人。",
@@ -200,7 +200,7 @@ SceneDef {
 
 /* ---- L1 调查点场景 ---- */
 SceneDef {
-    id: "tq_05_stele", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 镇门石碣"),
+    id: "tq_05_stele", bg: Some("tongqu_bg.png"), loc: Some("L1 · 镇门石碣"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["石碣背面刻着古镇三百年：商道咽喉、镖局林立，近年却因一桩「押纲失踪案」逐渐败落——「镇以路兴，亦以路衰」。"]),
     choices: &[ChoiceDef { label: "指腹摩挲石碣刻痕", sub: "+5 点 · 记住三家镖局旧名", cond: None,
@@ -208,7 +208,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_10_track", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 雨后车辙 · 追凶线索"),
+    id: "tq_10_track", bg: Some("tongqu_bg.png"), loc: Some("L1 · 雨后车辙 · 追凶线索"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["官道泥泞里两行车辙宽窄不一——后面那辆是重载镖车，压痕却浅得不像装货；却有一行极新的夜行脚印，直往黑店方向追去，足尖朝向镇尾。"]),
     choices: &[ChoiceDef { label: "记下车辙与脚印的朝向", sub: "追凶线索 · 指黑店", cond: None,
@@ -216,7 +216,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_05_flag", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 镖旗残片"),
+    id: "tq_05_flag", bg: Some("tongqu_bg.png"), loc: Some("L1 · 镖旗残片"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["半幅摔落的镖旗浸在泥水里，一角绣着「振远镖局」。旗面被人横着斩断——镖旗落地，是江湖最重的凶讯。"]),
     choices: &[ChoiceDef { label: "收起镖旗残片", sub: "伏笔 · 护镖始末", cond: None,
@@ -224,7 +224,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_04_dangpu", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 当铺招牌"),
+    id: "tq_04_dangpu", bg: Some("tongqu_bg.png"), loc: Some("L1 · 当铺招牌"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["当铺檐下挂着一张泛黄的当票，押物写着「一箱二十年陈·染血绸帕」。落款是当今镖局内外院的一个旧暗号。"]),
     choices: &[ChoiceDef { label: "记下当票暗号", sub: "护镖线伏笔", cond: None,
@@ -234,7 +234,7 @@ SceneDef {
 
 /* ================= L2 市井街巷 ================= */
 SceneDef {
-    id: "tq_02", bg: Some("img_corridor.png"), loc: Some("L2 · 市井长街"),
+    id: "tq_02", bg: Some("tongqu_bg.png"), loc: Some("L2 · 市井长街"),
     mood: "cold", speaker: Some("镖旗猎猎"), voice: None,
     text: TextSpec::Static(&[
         "市井长街一分为二——西头是「振远镖局」的朱漆大门，东头是一家悬着旧酒幌的黑店。夜雨里，镖局灯火通明，黑店却早早落了板，招牌在风里吱呀作响。",
@@ -251,7 +251,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tq_20_biaoju", bg: Some("img_corridor.png"), loc: Some("L2 · 振远镖局 · 柜房"),
+    id: "tq_20_biaoju", bg: Some("tongqu_bg.png"), loc: Some("L2 · 振远镖局 · 柜房"),
     mood: "cold", speaker: Some("老镖师 · 沈镖头"), voice: Some("vo_tq_biaoju"),
     text: TextSpec::Dyn(|st| {
         if st.flag("tq_biaoju_trust") {
@@ -272,20 +272,20 @@ SceneDef {
 
 /* ---- 护镖支线：接委托后 · 先与挡路护院过招 ---- */
 SceneDef {
-    id: "tq_20_huyuan_fight", bg: Some("img_corridor.png"), loc: Some("L2 · 镖局内院口"),
+    id: "tq_20_huyuan_fight", bg: Some("tongqu_bg.png"), loc: Some("L2 · 镖局内院口"),
     mood: "danger", speaker: Some("护院"), voice: None,
     text: TextSpec::Static(&["沈镖头刚一点头，院门那杆红缨枪便横了过来——新任护院不解内情，误你为趁乱而入的夜行贼。"]),
     choices: &[ChoiceDef { label: "【过招】", sub: "tqf_huyuan 护院", cond: None, effects: &NO_EFF, route: Route::To("tq_20_huyuan_fight2") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_20_huyuan_fight2", bg: Some("img_corridor.png"), loc: Some("L2 · 镖局内院口"),
+    id: "tq_20_huyuan_fight2", bg: Some("tongqu_bg.png"), loc: Some("L2 · 镖局内院口"),
     mood: "danger", speaker: None, voice: Some("vo_tq_huyuan"),
     text: TextSpec::Static(&["「睡多了，眼拙。」——护院一枪刺来。（战斗）"]),
     choices: &[], fight_id: Some("tqf_huyuan"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_20_huyuan_win", bg: Some("img_corridor.png"), loc: Some("L2 · 镖局内院口"),
+    id: "tq_20_huyuan_win", bg: Some("tongqu_bg.png"), loc: Some("L2 · 镖局内院口"),
     mood: "calm", speaker: Some("护院"), voice: None,
     text: TextSpec::Static(&["护院收枪抱拳：「失礼。既得沈镖头亲许，请进。」红缨枪撤下，内院密闸的门缝里透出沈镖头浑浊却笃定的目光。"]),
     choices: &[ChoiceDef { label: "踏进内院 · 获镖局信物", sub: "tq_biaoju_trust · 开 G1", cond: None,
@@ -295,7 +295,7 @@ SceneDef {
 
 /* ---- 黑店阴谋支线 ---- */
 SceneDef {
-    id: "tq_21_dark_shop", bg: Some("img_corridor.png"), loc: Some("L2 · 黑店暗门"),
+    id: "tq_21_dark_shop", bg: Some("tongqu_bg.png"), loc: Some("L2 · 黑店暗门"),
     mood: "danger", speaker: Some("黑店掌柜"), voice: Some("vo_tq_dark"),
     text: TextSpec::Dyn(|st| {
         if st.flag("tq_heidian_truth") {
@@ -312,7 +312,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_21_aced_shock", bg: Some("img_corridor.png"), loc: Some("L2 · 黑店后厨"),
+    id: "tq_21_aced_shock", bg: Some("tongqu_bg.png"), loc: Some("L2 · 黑店后厨"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你把雨后车辙的脚印指给他看——掌柜脸色一僵，后厨的杀猪刀「哐当」落地。黑店的底，被一句话凿穿。"]),
     choices: &[ChoiceDef { label: "逼问幕后", sub: "识破黑店 · 打手现身", cond: None,
@@ -320,13 +320,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_21_dark_fight", bg: Some("img_corridor.png"), loc: Some("L2 · 黑店后厨"),
+    id: "tq_21_dark_fight", bg: Some("tongqu_bg.png"), loc: Some("L2 · 黑店后厨"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["两条打手掀翻案板扑来！（战斗）"]),
     choices: &[], fight_id: Some("tqf_thug"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_21_dark_win", bg: Some("img_corridor.png"), loc: Some("L2 · 黑店后厨"),
+    id: "tq_21_dark_win", bg: Some("tongqu_bg.png"), loc: Some("L2 · 黑店后厨"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["打手瘫倒，掌柜被按在灶台前。他招了：昨夜押纲旁落、镖旗断旗，皆是「镇尾那头」主使——黑店只是洗货收脏的下脚。你已握黑店阴谋的核心：幕后是那位本该护镖的头领。"]),
     choices: &[ChoiceDef { label: "记下黑店供词", sub: "tq_heidian_truth · 指认幕后", cond: None,
@@ -336,7 +336,7 @@ SceneDef {
 
 /* ---- 追凶（江湖恩怨）支线 ---- */
 SceneDef {
-    id: "tq_22_inn", bg: Some("img_corridor.png"), loc: Some("L2 · 客栈 · 追凶"),
+    id: "tq_22_inn", bg: Some("tongqu_bg.png"), loc: Some("L2 · 客栈 · 追凶"),
     mood: "danger", speaker: Some("店小二"), voice: None,
     text: TextSpec::Static(&["客栈二楼也蹊跷——后檐那道人影脚程急，显然是在追着某件镖物离开。夜色里，他腰间甩出一角黑巾。"]),
     choices: &[
@@ -347,7 +347,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_22_inn_tip", bg: Some("img_corridor.png"), loc: Some("L2 · 客栈二楼"),
+    id: "tq_22_inn_tip", bg: Some("tongqu_bg.png"), loc: Some("L2 · 客栈二楼"),
     mood: "cold", speaker: Some("店小二"), voice: None,
     text: TextSpec::Static(&["小二压低声音：「昨夜押纲确实过境——可苏记镖局只留守了一辆车，空车。另一车货，天亮前被人从黑店后门接走了。」追凶之路，直指镇尾。"]),
     choices: &[ChoiceDef { label: "合上黑店供词", sub: "追凶与黑店汇流", cond: None,
@@ -355,13 +355,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_22_inn_fight", bg: Some("img_corridor.png"), loc: Some("L2 · 客栈后檐"),
+    id: "tq_22_inn_fight", bg: Some("tongqu_bg.png"), loc: Some("L2 · 客栈后檐"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["那道人影见你追近，拔刀便斩——正是黑店的蒙面探子！（战斗）"]),
     choices: &[], fight_id: Some("tqf_tuishun"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_22_inn_win", bg: Some("img_corridor.png"), loc: Some("L2 · 客栈后檐"),
+    id: "tq_22_inn_win", bg: Some("tongqu_bg.png"), loc: Some("L2 · 客栈后檐"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["探子被制，怀里的押纲清单散落一地——上面签着黑店的暗记，也牵出一句惊雷：「镇尾古宅，货在灯火尽处等人。」江湖恩怨终有归处：追凶直入古宅。"]),
     choices: &[ChoiceDef { label: "收起押纲清单", sub: "tq_trace_2 · 追凶入古宅", cond: None,
@@ -369,7 +369,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_22_self", bg: Some("img_corridor.png"), loc: Some("L2 · 市井 · 三条线索在攥手"),
+    id: "tq_22_self", bg: Some("tongqu_bg.png"), loc: Some("L2 · 市井 · 三条线索在攥手"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["押纲下落、黑店供词、沈镖头的信物在胸前凑齐。镖局护镖、追凶恩怨、黑店阴谋——三线同指一处：镇尾古宅，雪夜伏击，灯火尽处的蒙面头领。"]),
     choices: &[ChoiceDef { label: "循线索出镇尾", sub: "入 L3 镇尾古宅 · 决战", cond: None, effects: &NO_EFF, route: Route::To("tq_03") }],
@@ -378,7 +378,7 @@ SceneDef {
 
 /* ---- 当铺柜台（护镖物证支线）---- */
 SceneDef {
-    id: "tq_23_dangpu2", bg: Some("img_corridor.png"), loc: Some("L2 · 当铺柜台"),
+    id: "tq_23_dangpu2", bg: Some("tongqu_bg.png"), loc: Some("L2 · 当铺柜台"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["当铺柜台后方压着一张羊皮契——「押纲兑银，银由黑店后门结。」字迹与镖局旧暗号同出一手：内鬼不是外人，是押纲的见证人。"]),
     choices: &[ChoiceDef { label: "说要买回那匹染血绸帕", sub: "护镖物证 · +40 点", cond: None,
@@ -388,7 +388,7 @@ SceneDef {
 
 /* ================= L3 镇尾古宅 ================= */
 SceneDef {
-    id: "tq_03", bg: Some("img_train.png"), loc: Some("L3 · 镇尾古宅"),
+    id: "tq_03", bg: Some("tongqu_bg.png"), loc: Some("L3 · 镇尾古宅"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "古宅的中堂里灯火尽处坐着一个人——雪夜落在他肩头，蒙面的黑巾抚平。押纲的箱子就搁在供桌下，箱盖半开，露出一点不该在镖局的寒光。",
@@ -404,7 +404,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tq_30_altar", bg: Some("img_train.png"), loc: Some("L3 · 古宅供桌"),
+    id: "tq_30_altar", bg: Some("tongqu_bg.png"), loc: Some("L3 · 古宅供桌"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["供桌上搁着押纲的箱。箱盖半开，露出一锭官银和一封火漆封印的书信——这不是寻常货，是让人动了杀心的「镖」。"]),
     choices: &[ChoiceDef { label: "读封在金漆下的密信", sub: "+5 点", cond: None,
@@ -412,7 +412,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_31_letter", bg: Some("img_train.png"), loc: Some("L3 · 密信残页"),
+    id: "tq_31_letter", bg: Some("tongqu_bg.png"), loc: Some("L3 · 密信残页"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["半张残页被雪水润开：「……镖既入我手，何须再守江湖道义？三日后雪夜，以蒙面收纲。」字迹与当铺羊皮契同源——幕后，就在镖局最信赖的人影里。"]),
     choices: &[ChoiceDef { label: "收密信残页作证", sub: "Item it_tq_letter_shred", cond: None,
@@ -420,7 +420,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_32_scroll", bg: Some("img_train.png"), loc: Some("L3 · 古宅残简"),
+    id: "tq_32_scroll", bg: Some("tongqu_bg.png"), loc: Some("L3 · 古宅残简"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["墙角压着一册烧得只剩半边的旧镖局名册——黑店掌柜，早年竟是振远镖局外押的「总把式」。江湖恩怨，原来早在十几年前就系在一根绳上。"]),
     choices: &[ChoiceDef { label: "收起旧名册", sub: "+5 点", cond: None,
@@ -430,7 +430,7 @@ SceneDef {
 
 /* ---- BOSS · 雪夜劫镖·蒙面头领（选择驱动）---- */
 SceneDef {
-    id: "tq_boss_enter", bg: Some("img_train.png"), loc: Some("L3 · 古宅中堂 · 决战"),
+    id: "tq_boss_enter", bg: Some("tongqu_bg.png"), loc: Some("L3 · 古宅中堂 · 决战"),
     mood: "danger", speaker: Some("蒙面头领"), voice: Some("vo_tq_boss"),
     text: TextSpec::Static(&[
         "「你瞧见了镖。」蒙面头领缓缓起身，雁翎刀出鞘一寸，「雪夜里，镖，运送的不只是货——是人心。」",
@@ -440,7 +440,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_boss_round", bg: Some("img_train.png"), loc: Some("L3 · 古宅中堂 · 激战"),
+    id: "tq_boss_round", bg: Some("tongqu_bg.png"), loc: Some("L3 · 古宅中堂 · 激战"),
     mood: "danger", speaker: Some("蒙面头领"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("头领 HP {} / {}", f.hp.max(0), 180)).unwrap_or_else(|| "HP --".to_string());
@@ -462,7 +462,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tq_boss_win", bg: Some("img_train.png"), loc: Some("L3 · 古宅中堂"),
+    id: "tq_boss_win", bg: Some("tongqu_bg.png"), loc: Some("L3 · 古宅中堂"),
     mood: "calm", speaker: Some("蒙面头领"), voice: Some("vo_tq_boss_win"),
     text: TextSpec::Dyn(|st| {
         let mode = if st.flag("tq_heidian_truth") {
@@ -478,7 +478,7 @@ SceneDef {
 
 /* ================= 结局 / 结算 ================= */
 SceneDef {
-    id: "tq_33_exit", bg: Some("img_train.png"), loc: Some("L3 · 古宅 · 撤离阵"),
+    id: "tq_33_exit", bg: Some("tongqu_bg.png"), loc: Some("L3 · 古宅 · 撤离阵"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Static(&[
         "密信在手中沉甸甸。你踏出古宅，雪夜不知何时停了——主神的光柱自头顶降下，将这通衢古镇的一夜收进那片永恒的白光里。",

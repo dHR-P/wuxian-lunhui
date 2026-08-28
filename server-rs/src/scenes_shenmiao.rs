@@ -184,7 +184,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
 
     /* ================= F1 逆流之涡（hub） ================= */
     SceneDef {
-        id: "sm_10_f1", bg: Some("img_laser.png"), loc: Some("F1 · 逆流之涡 · 倒垂神柱"),
+        id: "sm_10_f1", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 逆流之涡 · 倒垂神柱"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_has_reliquary(st) {
@@ -204,7 +204,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_11_vortex", bg: Some("img_laser.png"), loc: Some("F1 · 倒流涡心"),
+        id: "sm_11_vortex", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 倒流涡心"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["涡心不是往下陷，而是往天上鼓——像一片倒扣的海。你把手探进涡流，水是温的，温得像谁刚咽的气。你隐约拼出一个念头：这座神殿，其实是旧神沉下去的咽喉。"]),
         choices: &[ChoiceDef { label: "记下涡心的逆流朝向", sub: "真相碎片 · 判实相", cond: None,
@@ -212,7 +212,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_12_pillar", bg: Some("img_laser.png"), loc: Some("F1 · 倒垂神柱"),
+        id: "sm_12_pillar", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 倒垂神柱"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["你把脸凑到柱文前，那些逆写的祷文在水光里竟慢慢转正，拼成一行你竟读得懂的话：『水向上流的时候，死者会从天上回来。』你数了一下，柱上刻满的，全是名字。"]),
         choices: &[ChoiceDef { label: "记下一个名字", sub: "逆写祷文 · 点亮一柱", cond: None,
@@ -220,7 +220,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_13_whisper", bg: Some("img_laser.png"), loc: Some("F1 · 上层低语"),
+        id: "sm_13_whisper", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 上层低语"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["你抬头，看见倒悬的「上一层」有很多双眼睛贴在头上方的地板上往下看你——那是整个倒流之海浅层溺亡者残存的注视。它们一动不动，只是看，看得你脊背发凉，却也没拦你。"]),
         choices: &[ChoiceDef { label: "快步低头走过低语", sub: "不再看它们", cond: None,
@@ -228,7 +228,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_14_pool", bg: Some("img_laser.png"), loc: Some("F1 · 逆泳之池"),
+        id: "sm_14_pool", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 逆泳之池"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["池水逆着浮力往上漫，池底沉着一样东西——一枚系着倒流波纹的青铜祭器。你伸手够，水却把祭器往「上」送，像要故意放你够着一般。拿到手里，掌心立刻传来一声极轻的、倒放的钟鸣。"]),
         choices: &[ChoiceDef { label: "捞出旧神祭器", sub: "Item it_shenmiao_reliquary · 可转正倒置门环", cond: None,
@@ -236,13 +236,13 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_15_fight", bg: Some("img_laser.png"), loc: Some("F1 · 涡口 · 遭遇"),
+        id: "sm_15_fight", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 涡口 · 遭遇"),
         mood: "danger", speaker: None, voice: Some("vo_sm_fight"),
         text: TextSpec::Static(&["水幕被什么撕开——一头浑身水壳的残影撞过来。更远处，木然的溺行祭司正一步步跟来。这不是欢迎。你把祭器攥紧，迎上去。"]),
         choices: &[], fight_id: Some("sm_current_shade"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_16_gate", bg: Some("img_laser.png"), loc: Some("F1 · 倒置门环（G1 已开）"),
+        id: "sm_16_gate", bg: Some("shenmiao_bg.png"), loc: Some("F1 · 倒置门环（G1 已开）"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["祭器一转，倒置门环咔地转正，倒悬的门扉垂成一条通往「上一层」的路。你顺着倒流的水向上走——其实是你往更深的地方去。颠倒回廊在前方伸展开。"]),
         choices: &[ChoiceDef { label: "（踏入颠倒回廊）", sub: "pt_sm_1 单向 · 进 F2", cond: None,
@@ -252,7 +252,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
 
     /* ================= F2 颠倒回廊（hub） ================= */
     SceneDef {
-        id: "sm_20_f2", bg: Some("img_redqueen.png"), loc: Some("F2 · 颠倒回廊 · 天顶圣坛"),
+        id: "sm_20_f2", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 颠倒回廊 · 天顶圣坛"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["你踩的是一片高高在上的「天花板」，地板长得只在你的头顶。向前是倒悬的柱阵与回廊，尽头立着一尊雕花的石像——它挡住了通往更深处的路。这里的一切都在倒着生活，只有你，一个倒着走的人。"]),
         choices: &[
@@ -266,7 +266,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_21_ceiling", bg: Some("img_redqueen.png"), loc: Some("F2 · 天顶圣坛"),
+        id: "sm_21_ceiling", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 天顶圣坛"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["圣坛倒扣在头顶，坛心里的神像却面朝下，像要凝视路过的你。你看见圣坛底座刻着旧神的生卒年——它不是被谁杀死，而是「寿终正寝」，老死在这座下沉殿里，沉了千万年。"]),
         choices: &[ChoiceDef { label: "记下旧神的生卒年", sub: "真相碎片 · 旧神已死", cond: None,
@@ -274,7 +274,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_22_echo", bg: Some("img_redqueen.png"), loc: Some("F2 · 颠倒回廊"),
+        id: "sm_22_echo", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 颠倒回廊"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["回廊空旷，你喊了一声，回声却从「上方」落下来，叠成两个人声。你回头，没有人。旧的你没有跟上，新的你走在了前面——这条回廊，藏着比回音更早的东西。"]),
         choices: &[ChoiceDef { label: "与自己的回声错身", sub: "回廊之谜", cond: None,
@@ -282,7 +282,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_23_fall", bg: Some("img_redqueen.png"), loc: Some("F2 · 倒悬龙柱"),
+        id: "sm_23_fall", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 倒悬龙柱"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["雕成龙形的石柱从脚底向天上倒悬，龙首垂在你面前。它只剩一个空腔，腔里是干涸的旧血印——这曾经是旧神的「圣物」，如今只是根柱。你伸手，指腹划过粗糙的鳞纹。"]),
         choices: &[ChoiceDef { label: "拂过倒悬龙柱的旧痕", sub: "圣物朽尽", cond: None,
@@ -290,13 +290,13 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_24_fight", bg: Some("img_redqueen.png"), loc: Some("F2 · 回廊 · 围拢"),
+        id: "sm_24_fight", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 回廊 · 围拢"),
         mood: "danger", speaker: None, voice: Some("vo_sm_fight"),
         text: TextSpec::Static(&["天顶的倒影侍从猛地齐刷刷站起，几十双眼睛同时望向你——它们不让你再往前了。倒悬的金铃哗啦啦响成一片。"]),
         choices: &[], fight_id: Some("sm_inverted_servant"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_25_npc", bg: Some("img_redqueen.png"), loc: Some("F2 · 倒悬祭司"),
+        id: "sm_25_npc", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 倒悬祭司"),
         mood: "awe", speaker: Some("倒悬祭司"), voice: None,
         text: TextSpec::Static(&["一个极老的活人，用一根绳子把自己吊在天顶上，头朝下看着你——他是这座殿里唯一「醒着」的存在。「别往前了，」他说，「神龛里还留着一口气。你去，它会醒。」他顿了很久，补了一句，「可那口气，是旧神咽不下的。」"]),
         choices: &[ChoiceDef { label: "问他神龛里留着什么", sub: "角色留笔 · 铺向真相", cond: None,
@@ -304,7 +304,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_26_enter_f3", bg: Some("img_redqueen.png"), loc: Some("F2 · 无面石像前"),
+        id: "sm_26_enter_f3", bg: Some("shenmiao_bg.png"), loc: Some("F2 · 无面石像前"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&["你正要绕过无面石像，它却移开了——凹坑面庞里浮起你的脸，轻轻让开了一条路。也许它终于认出，你并不是来亵渎的，只是来接那一口咽不下的气。身后的回廊合拢，只剩向前的深暗。"]),
         choices: &[ChoiceDef { label: "（踏进沉眠神龛）", sub: "pt_sm_2 单向 · 进 F3", cond: None,
@@ -314,7 +314,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
 
     /* ================= F3 沉眠神龛（hub + BOSS） ================= */
     SceneDef {
-        id: "sm_30_f3", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 沉眠神龛 · 旧神祭窟"),
+        id: "sm_30_f3", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 沉眠神龛 · 旧神祭窟"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("sm_spawn_dead") {
@@ -333,7 +333,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_31_basilica", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 空神龛"),
+        id: "sm_31_basilica", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 空神龛"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["你靠近空神龛，龛内竟有温度——是活着的那种温。你终于明白：眷属不是守护者，它本来就是旧神「残念」的一部分；神龛里的空，是旧神留给自己最后那口气的位置。你放轻手，没有去填它。"]),
         choices: &[ChoiceDef { label: "把手按在空龛上", sub: "真相碎片 · 空即余温", cond: None,
@@ -341,7 +341,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_32_eye", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 穹顶之眼"),
+        id: "sm_32_eye", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 穹顶之眼"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["你抬头，穹顶那泓深暗原来是一只眼——垂死的神，最后睁着的那只眼。它已经不再看，只是没有闭上。你与它对视的几秒里，听见它想说却再也说不出的一句话，消散在倒流的水声里。"]),
         choices: &[ChoiceDef { label: "替那只眼闭上视野", sub: "真相碎片 · 垂死仍未瞑目", cond: None,
@@ -349,7 +349,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_33_bones", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 旧神残骨"),
+        id: "sm_33_bones", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 旧神残骨"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["水底的残骨巨大而完整，像一座沉没的山脉。骨上覆着细密的、倒着生长的脉络——它一生都在「供养」这片倒流之海，直到把自己也长成海的一部分。你不再觉得它可怕，只觉它老透了。"]),
         choices: &[ChoiceDef { label: "拾起一枚骨屑作凭记", sub: "真相碎片 · 旧神已老", cond: None,
@@ -357,7 +357,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_34_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 神龛前 · 缠斗"),
+        id: "sm_34_fight", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 神龛前 · 缠斗"),
         mood: "danger", speaker: None, voice: Some("vo_sm_fight"),
         text: TextSpec::Static(&["黑水猛然沸腾，几团旧神唾沫扑了上来，翻着细小的眼。它们不是来拦你去路的——它们只是不想让你碰那只空神龛。"]),
         choices: &[], fight_id: Some("sm_god_sludge"), video: None, cine_label: None, overlay: None,
@@ -365,7 +365,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
 
     /* ================= BOSS · 旧神眷属（相位闪现） ================= */
     SceneDef {
-        id: "sm_35_boss", bg: Some("img_laser.png"), loc: Some("F3 · 行走的水面"),
+        id: "sm_35_boss", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 行走的水面"),
         mood: "danger", speaker: Some("旧神眷属"), voice: Some("vo_sm_boss"),
         text: TextSpec::Static(&[
             "黑水中央，旧神眷属「站」上了水面。它没有脚，却在水的倒影里踩出脚印；它没有脸，眦裂处却张着一圈口器，齐齐朝你。",
@@ -378,7 +378,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_35_boss_round", bg: Some("img_laser.png"), loc: Some("F3 · 旧神眷属 · 相位闪现"),
+        id: "sm_35_boss_round", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 旧神眷属 · 相位闪现"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             let f = st.fight.as_ref().map(|f| format!("旧神眷属 实相 HP {} / {}", f.hp.max(0), 200)).unwrap_or_else(|| "…".to_string());
@@ -402,7 +402,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_36_win", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 空神龛 · 安魂"),
+        id: "sm_36_win", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 空神龛 · 安魂"),
         mood: "calm", speaker: None, voice: Some("vo_sm_boss_down"),
         text: TextSpec::Static(&["你一击落在它显形的实相上。旧神眷属没有溃散成血雾——它只是裂开，像一面碎了很久的镜子，慢慢归拢进那泓倒流的涡心。水面恢复平静，白霜化开，那只穹顶之眼，终于闭上了。"]),
         choices: &[ChoiceDef { label: "把祭器放进空神龛", sub: "安魂 · 得旧神残灰", cond: None,
@@ -410,7 +410,7 @@ pub static SHENMIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "sm_37_ending", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 旧神祭窟 · 尾声"),
+        id: "sm_37_ending", bg: Some("shenmiao_bg.png"), loc: Some("F3 · 旧神祭窟 · 尾声"),
         mood: "mystery", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "水不再向上流。它们终于学会往下落了——千百年来第一次。旧神那口咽不下的气，在你手里被妥帖地放回了空龛。",

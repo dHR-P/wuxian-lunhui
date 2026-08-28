@@ -184,7 +184,7 @@ pub static MIWU_SCENES: &[SceneDef] = &[
     },
     // 保留原 BOSS 入口场景
     SceneDef {
-        id: "mw_01", bg: Some("img_zhuyuan_book.png"), loc: Some("超市地下 · 雾渊"), mood: "danger",
+        id: "mw_01", bg: Some("miwu_bg.png"), loc: Some("超市地下 · 雾渊"), mood: "danger",
         speaker: Some("BOSS"), voice: None,
         text: TextSpec::Static(&["雾中巨物 挡在出口。雾里最可怕的，是雾里回来的人。"]),
         choices: &[
@@ -194,7 +194,7 @@ pub static MIWU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mw_round", bg: Some("img_laser.png"), loc: Some("超市地下 · 决战处"), mood: "danger",
+        id: "mw_round", bg: Some("miwu_bg.png"), loc: Some("超市地下 · 决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("BOSS 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

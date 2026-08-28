@@ -156,7 +156,7 @@ pub static MENGGUIJIE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mg_prelude", bg: Some("img_laser.png"), loc: Some("锅炉房 · 最深一扇门"),
+        id: "mg_prelude", bg: Some("mengguijie_bg.png"), loc: Some("锅炉房 · 最深一扇门"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "最深一扇门被蒸汽顶开一条缝，一截露出金属指甲的手搭在了门框上。那顶宽檐帽的剪影，把整间锅炉房的红光都吸了过去。",
@@ -167,7 +167,7 @@ pub static MENGGUIJIE_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "mg_01", bg: Some("img_zhuyuan_book.png"), loc: Some("梦境 · 弗莱迪的锅炉房"), mood: "danger",
+        id: "mg_01", bg: Some("mengguijie_bg.png"), loc: Some("梦境 · 弗莱迪的锅炉房"), mood: "danger",
         speaker: Some("弗莱迪·克鲁格"), voice: None,
         text: TextSpec::Static(&["弗莱迪 挡在出口，咧开嘴指着自己手套上的刀刃。别睡着。睡着了，就是它的。" ]),
         choices: &[
@@ -177,7 +177,7 @@ pub static MENGGUIJIE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mg_round", bg: Some("img_laser.png"), loc: Some("决战 · 梦境锅炉房"), mood: "danger",
+        id: "mg_round", bg: Some("mengguijie_bg.png"), loc: Some("决战 · 梦境锅炉房"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("弗莱迪 尚余 {} 气力，你 HP {}。清醒一寸，它就弱一分。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

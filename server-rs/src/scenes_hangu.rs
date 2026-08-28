@@ -185,7 +185,7 @@ pub static HANGU_SCENES: &[SceneDef] = &[
     },
     // 保留原 BOSS 入口场景（供地图/其他 route 引用）
     SceneDef {
-        id: "hg_01", bg: Some("img_zhuyuan_book.png"), loc: Some("决战关隘"), mood: "danger",
+        id: "hg_01", bg: Some("hangu_bg.png"), loc: Some("决战关隘"), mood: "danger",
         speaker: Some("BOSS"), voice: None,
         text: TextSpec::Static(&["狂化军团长箜邪 挡在出口。人族的城墙，是最后一道。"]),
         choices: &[
@@ -195,7 +195,7 @@ pub static HANGU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hg_round", bg: Some("img_laser.png"), loc: Some("决战关隘"), mood: "danger",
+        id: "hg_round", bg: Some("hangu_bg.png"), loc: Some("决战关隘"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("BOSS 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

@@ -321,7 +321,7 @@ SceneDef {
 
 /* ---- 幕 2 「狱友」 ---- */
 SceneDef {
-    id: "ts_act2_cell", bg: Some("img_corridor.png"), loc: Some("L1 · 牢房区"), mood: "cold",
+    id: "ts_act2_cell", bg: Some("tianshe_bg.png"), loc: Some("L1 · 牢房区"), mood: "cold",
     speaker: Some("阿莲"), voice: None,
     text: TextSpec::Static(&[
         "隔着铁栏，你看见一张瘦削的脸——是个妇人，头发散乱，眼神却亮。「也是……材料？」她自嘲地笑，「我叫阿莲，江东谷地的药婆。」",
@@ -340,7 +340,7 @@ SceneDef {
 
 /* ---- 幕 3 「越狱夜」 ---- */
 SceneDef {
-    id: "ts_act3_convoy", bg: Some("img_train.png"), loc: Some("L1 · 体检室→甬道"), mood: "danger",
+    id: "ts_act3_convoy", bg: Some("tianshe_bg.png"), loc: Some("L1 · 体检室→甬道"), mood: "danger",
     speaker: Some("蛇监工"), voice: None,
     text: TextSpec::Static(&[
         "你被拖上体检台，蛇监工翻着名册：「编号 087，劣品，右臂无法再生……」",
@@ -359,13 +359,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_guard_fight", bg: Some("img_train.png"), loc: Some("L1 · 监工室"), mood: "danger",
+    id: "ts_guard_fight", bg: Some("tianshe_bg.png"), loc: Some("L1 · 监工室"), mood: "danger",
     speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["监工室的蛇哨卫拔出骨矛，挡在你与令牌箱之间——"]),
     choices: &NO_CH, fight_id: Some("tianshe_guard"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_guard_win", bg: Some("img_train.png"), loc: Some("L1 · 监工室"), mood: "cold",
+    id: "ts_guard_win", bg: Some("tianshe_bg.png"), loc: Some("L1 · 监工室"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "你放倒蛇哨卫，撬开令牌箱取走<b>监工令牌</b>。甬道尽头的刻字在血光里亮起：<b>「出口不在电梯，在血池底下。别信蛇蜕。」</b>（镜像线 · 刻字二）",
@@ -379,7 +379,7 @@ SceneDef {
 
 /* ---- 幕 4 「血池之下」（miniboss） ---- */
 SceneDef {
-    id: "ts_act4_pool", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 血池车间"), mood: "danger",
+    id: "ts_act4_pool", bg: Some("tianshe_bg.png"), loc: Some("L2 · 血池车间"), mood: "danger",
     speaker: Some("阿莲"), voice: None,
     text: TextSpec::Static(&[
         "血池在脚下翻涌，池壁挂满白骨与拖痕。吊钩上，一具具\"材料\"被送上改造线。",
@@ -397,13 +397,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_zero_fight", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 血池车间 · miniboss"), mood: "danger",
+    id: "ts_zero_fight", bg: Some("tianshe_bg.png"), loc: Some("L2 · 血池车间 · miniboss"), mood: "danger",
     speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["锁链崩断，零号试做型挣动着朝你扑来——你只有两个选择：药，或刀。"]),
     choices: &NO_CH, fight_id: Some("zero_proto"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_zero_win", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 血池车间"), mood: "cold",
+    id: "ts_zero_win", bg: Some("tianshe_bg.png"), loc: Some("L2 · 血池车间"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["零号试做型终于不动了。血池归于平静。你从池边拾起一块犹带体温的徽记——那是它的编号，也是它曾有过的名字的余响。"]),
     choices: &[
@@ -415,7 +415,7 @@ SceneDef {
 
 /* ---- 幕 5 「初蛇基因库」 ---- */
 SceneDef {
-    id: "ts_act5_temple", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 祭祀场→母体槽室"), mood: "angry",
+    id: "ts_act5_temple", bg: Some("tianshe_bg.png"), loc: Some("L3 · 祭祀场→母体槽室"), mood: "angry",
     speaker: Some("老石"), voice: Some("vo_tianshe_laoshi"),
     text: TextSpec::Static(&[
         "图腾柱不是木头——是<b>万族的头骨与脊椎</b>，一层层叠成蛇形。北壁符箓金光下，一行小字：「代价：三百个魂，一座城？」",
@@ -434,7 +434,7 @@ SceneDef {
 
 /* ---- 幕 6 「零号核心」（最终二段战） ---- */
 SceneDef {
-    id: "ts_act6_core", bg: Some("img_redqueen.png"), loc: Some("L4 · 大厅→核心熔炉"), mood: "danger",
+    id: "ts_act6_core", bg: Some("tianshe_bg.png"), loc: Some("L4 · 大厅→核心熔炉"), mood: "danger",
     speaker: Some("穆拉巴"), voice: Some("vo_tianshe_mulaba_name"),
     text: TextSpec::Static(&[
         "王座上，穆拉巴褪下蛇蜕披风，露出满身金纹。「你们这些没有能量循环的虫子……也配谈名字？」",
@@ -452,13 +452,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_boss1_fight", bg: Some("img_redqueen.png"), loc: Some("L4 · 族长寝巢 · 阶段一"), mood: "danger",
+    id: "ts_boss1_fight", bg: Some("tianshe_bg.png"), loc: Some("L4 · 族长寝巢 · 阶段一"), mood: "danger",
     speaker: Some("⚔ BOSS"), voice: None,
     text: TextSpec::Static(&["穆拉巴怒吼着扑来，骨杖上的\"初蛇之眼\"亮起豺狼般的凶光。"]),
     choices: &NO_CH, fight_id: Some("mulaba"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_boss1_retreat", bg: Some("img_redqueen.png"), loc: Some("L4 · 族长寝巢 → 熔炉"), mood: "danger",
+    id: "ts_boss1_retreat", bg: Some("tianshe_bg.png"), loc: Some("L4 · 族长寝巢 → 熔炉"), mood: "danger",
     speaker: Some("穆拉巴"), voice: Some("vo_tianshe_mulaba_snake"),
     text: TextSpec::Static(&[
         "穆拉巴「弃战献祭」——他撕碎蛇蜕，朝核心熔炉狂奔。熔炉轰然吞噬了他的身影与全部\"零号计划\"的成果。",
@@ -470,14 +470,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_boss2_start", bg: Some("img_redqueen.png"), loc: Some("L4 · 核心熔炉 · 阶段二"), mood: "danger",
+    id: "ts_boss2_start", bg: Some("tianshe_bg.png"), loc: Some("L4 · 核心熔炉 · 阶段二"), mood: "danger",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["熔炉深处，万族的血与人族的魂翻涌凝形——初蛇聚合体苏醒了。" ]),
     choices: &[ChoiceDef { label: "（逼近聚合体）", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(start_snake) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_boss2_round", bg: Some("img_redqueen.png"), loc: Some("L4 · 核心熔炉 · 决战"), mood: "danger",
+    id: "ts_boss2_round", bg: Some("tianshe_bg.png"), loc: Some("L4 · 核心熔炉 · 决战"), mood: "danger",
     speaker: Some("⚔ 决战"), voice: None,
     text: TextSpec::Dyn(txt_boss2_round),
     choices: &[
@@ -491,7 +491,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_boss2_win", bg: Some("img_redqueen.png"), loc: Some("L4 · 核心熔炉"), mood: "calm",
+    id: "ts_boss2_win", bg: Some("tianshe_bg.png"), loc: Some("L4 · 核心熔炉"), mood: "calm",
     speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "样本共鸣——你体内的初蛇基因与这头\"伪初蛇\"同频共振。/幼体在共鸣里坍缩成一枚温热的<b>初蛇基因样本</b>与<b>零号核心结晶</b>。",
@@ -533,7 +533,7 @@ SceneDef {
 
 /* ---- 幕 7 结局「崩塌与黎明」 ---- */
 SceneDef {
-    id: "ts_finale", bg: Some("img_redqueen.png"), loc: Some("L4 · 逃生竖井"), mood: "cold",
+    id: "ts_finale", bg: Some("tianshe_bg.png"), loc: Some("L4 · 逃生竖井"), mood: "cold",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "你带着活下来的人冲进逃生竖井。背后，零号基地在一连串轰鸣中塌入地底。",
@@ -593,7 +593,7 @@ SceneDef {
 
 /* ---- 中立枢纽 scene_ts_hall（收集/调查/NPC 返回点） ---- */
 SceneDef {
-    id: "ts_hall", bg: Some("img_corridor.png"), loc: Some("零号基地 · 探索间"), mood: "cold",
+    id: "ts_hall", bg: Some("tianshe_bg.png"), loc: Some("零号基地 · 探索间"), mood: "cold",
     speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "零号基地的暗绿灯光在头顶明灭。你可以继续在当前的楼层里调查，或循主线向前推进。",
@@ -608,7 +608,7 @@ SceneDef {
 
 /* ---- 失败品记录残页 · 收集点（方案 A 连号 flag ts_archive_1..8） ---- */
 SceneDef {
-    id: "ts_roster", bg: Some("img_corridor.png"), loc: Some("L1 · 体检台 · 押运名册"), mood: "cold",
+    id: "ts_roster", bg: Some("tianshe_bg.png"), loc: Some("L1 · 体检台 · 押运名册"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·名册：押运名单上，17 个名字被勾掉。批注——<b>「人族，无能量循环，可作载体」</b>。",
@@ -618,7 +618,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_flow", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 改造流水线 · 记录"), mood: "angry",
+    id: "ts_flow", bg: Some("tianshe_bg.png"), loc: Some("L2 · 改造流水线 · 记录"), mood: "angry",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·流水线：改造记录——<b>「希望他/她能撑过第七次修正」</b>，署名被蛇纹盖住。",
@@ -628,7 +628,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_prayer", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 血池回廊 · 墙刻祈祷"), mood: "sad",
+    id: "ts_prayer", bg: Some("tianshe_bg.png"), loc: Some("L2 · 血池回廊 · 墙刻祈祷"), mood: "sad",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·祈祷：囚犯刻在墙上的祈祷残句——<b>「若有人逃出去，请告诉江东……」</b>",
@@ -638,7 +638,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_mother", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 样本库 · 培养槽日志"), mood: "cold",
+    id: "ts_mother", bg: Some("tianshe_bg.png"), loc: Some("L2 · 样本库 · 培养槽日志"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·母体：培养槽日志——<b>「第 41 次尝试，母体拒绝人族基因。它记得什么？」</b>",
@@ -648,7 +648,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_seal", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 祭祀场 · 符箓抄本"), mood: "cold",
+    id: "ts_seal", bg: Some("tianshe_bg.png"), loc: Some("L3 · 祭祀场 · 符箓抄本"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·符箓：圣人符箓抄本残页，边角——<b>「代价：三百个魂，一座城？」</b>",
@@ -658,7 +658,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_escape", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 母体槽室 · 钧的刻字"), mood: "cold",
+    id: "ts_escape", bg: Some("tianshe_bg.png"), loc: Some("L3 · 母体槽室 · 钧的刻字"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·越狱（镜像）：钧的笔迹——<b>「出口不在电梯，在血池底下。别信蛇蜕。」</b>",
@@ -668,7 +668,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_name", bg: Some("img_redqueen.png"), loc: Some("L4 · 核心区 · 实验室名单"), mood: "sad",
+    id: "ts_name", bg: Some("tianshe_bg.png"), loc: Some("L4 · 核心区 · 实验室名单"), mood: "sad",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·名字：实验室名单里\"盘部落-覃\"的条目，已做已故标记——那是古线中一个未能走更远的人。",
@@ -678,7 +678,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_heart", bg: Some("img_redqueen.png"), loc: Some("L4 · 逃生竖井旁 · 无名氏记录"), mood: "sad",
+    id: "ts_heart", bg: Some("tianshe_bg.png"), loc: Some("L4 · 逃生竖井旁 · 无名氏记录"), mood: "sad",
     speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残页·心跳：无名氏的最后记录——<b>「今天又有人被拖走了。我数着数着，忘了自己的名字。」</b>",
@@ -690,14 +690,14 @@ SceneDef {
 
 /* ---- 调查点（门禁道具 / 机关 / 情报） ---- */
 SceneDef {
-    id: "ts_tokenbox", bg: Some("img_train.png"), loc: Some("L1 · 监工室 · 令牌箱"), mood: "cold",
+    id: "ts_tokenbox", bg: Some("tianshe_bg.png"), loc: Some("L1 · 监工室 · 令牌箱"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["令牌箱锁着，但箱身上的感应纹路正是 G1 闸门的型号。你需要先放倒守卫的蛇哨卫才能撬开。"]),
     choices: &[ChoiceDef { label: "（返回）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("ts_hall") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_foreman", bg: Some("img_train.png"), loc: Some("L1 · 监工室 · 书桌"), mood: "cold",
+    id: "ts_foreman", bg: Some("tianshe_bg.png"), loc: Some("L1 · 监工室 · 书桌"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["监工室的桌面上摊着一份排班表——监工室令牌在保险箱里，体检室在右，往北是通往基因实验区的电梯。"]),
     choices: &[ChoiceDef { label: "（记下情报）", sub: "intel_1 · Points+5", cond: None,
@@ -705,7 +705,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_wall", bg: Some("img_corridor.png"), loc: Some("L1 · 牢房 · 墙上刻字"), mood: "cold",
+    id: "ts_wall", bg: Some("tianshe_bg.png"), loc: Some("L1 · 牢房 · 墙上刻字"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["染血的刻字：「别信祭坛，信火种。」——那是一双与你一样逃亡的手留下的。（镜像 · 刻字一）"]),
     choices: &[ChoiceDef { label: "（记下刻字）", sub: "mirror_1", cond: None,
@@ -713,14 +713,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_pool", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 血池 · 翻涌池面"), mood: "danger",
+    id: "ts_pool", bg: Some("tianshe_bg.png"), loc: Some("L2 · 血池 · 翻涌池面"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["血池深处仿佛有无数双眼睛与你对视。白骨在池壁下的暗河方向延伸——那也许就是老石说的暗河。"]),
     choices: &[ChoiceDef { label: "（退开）", sub: "San-5", cond: None, effects: &[Eff::San(-5)], route: Route::To("ts_hall") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_console", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 监工站 · 控制台"), mood: "cold",
+    id: "ts_console", bg: Some("tianshe_bg.png"), loc: Some("L2 · 监工站 · 控制台"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["控制台闪着血红的光。你抽出那张<b>基因样本卡</b>——它能开启样本库的大门（G2）。"]),
     choices: &[ChoiceDef { label: "【取走基因样本卡】", sub: "G2 解锁 · +10", cond: None,
@@ -728,7 +728,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_safe", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 样本库 · 保险柜"), mood: "cold",
+    id: "ts_safe", bg: Some("tianshe_bg.png"), loc: Some("L2 · 样本库 · 保险柜"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["保险柜里躺着一枚<b>封界通行符</b>，旁边一张便签：某试验品侧缝，能取到初蛇基因样本。"]),
     choices: &[ChoiceDef { label: "【取走封界通行符】", sub: "G3 解锁 · +15", cond: None,
@@ -736,7 +736,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_rune", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 符文切割场 · 符文装置"), mood: "danger",
+    id: "ts_rune", bg: Some("tianshe_bg.png"), loc: Some("L2 · 符文切割场 · 符文装置"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["你参透潮汐符文的规律——血池涨落的间隙，正是横穿符文切割场的安全时机。（rune_secret）"]),
     choices: &[ChoiceDef { label: "【参透规律】", sub: "rune_secret · +30", cond: None,
@@ -744,7 +744,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_valve", bg: Some("img_ts_l2_pool.png"), loc: Some("L2 · 血池 · 排水阀门"), mood: "danger",
+    id: "ts_valve", bg: Some("tianshe_bg.png"), loc: Some("L2 · 血池 · 排水阀门"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["你按下阀门，血池翻涌着向暗河倾泻，冲散了周围的杂兵。可零号试做型不惧血池。"]),
     choices: &[ChoiceDef { label: "【放池】", sub: "blood_valve · +20", cond: None,
@@ -752,7 +752,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_altar", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 祭坛 · 初蛇血契"), mood: "cold",
+    id: "ts_altar", bg: Some("tianshe_bg.png"), loc: Some("L3 · 祭坛 · 初蛇血契"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["祭坛血槽里凝着一滴<b>初蛇血契</b>。取走它，就能开启祭祀场南门直下族长巢穴（L4）。"]),
     choices: &[ChoiceDef { label: "【取走初蛇血契】", sub: "G4 · +15", cond: None,
@@ -760,7 +760,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_mothercurve", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 初蛇母体 · 巨槽"), mood: "cold",
+    id: "ts_mothercurve", bg: Some("tianshe_bg.png"), loc: Some("L3 · 初蛇母体 · 巨槽"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["你在母体巨槽的侧缝取出一管温热的<b>初蛇基因样本</b>——它是终结第二段 BOSS 的关键，也是跨副本的兑换券。"]),
     choices: &[ChoiceDef { label: "【取走初蛇基因样本】", sub: "样本共鸣关键", cond: None,
@@ -768,7 +768,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_temple", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 图腾柱 · 暗格"), mood: "cold",
+    id: "ts_temple", bg: Some("tianshe_bg.png"), loc: Some("L3 · 图腾柱 · 暗格"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["你撬开图腾柱底部的暗格，里面刻着一条渗血的侧翼路线——被标记：<b>直入核心区侧翼</b>（P6 绕行捷径）。"]),
     choices: &[ChoiceDef { label: "【记下暗格秘密】", sub: "temple_secret · P6 捷径", cond: None,
@@ -776,7 +776,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_hope", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 母体槽壁 · 血液刻印"), mood: "cold",
+    id: "ts_hope", bg: Some("tianshe_bg.png"), loc: Some("L3 · 母体槽壁 · 血液刻印"), mood: "cold",
     speaker: None, voice: None,
     text: TextSpec::Static(&["母体槽壁的血液刻印发烫亮起——那是钧的血液印记（镜像 · 刻字三）。刻印与你的血共鸣，化作一团微光：<b>希望模板残光</b>。"]),
     choices: &[ChoiceDef { label: "【引燃希望模板残光】", sub: "hope_light · mirror_3", cond: None,
@@ -784,7 +784,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_furnace", bg: Some("img_redqueen.png"), loc: Some("L4 · 基因熔炉"), mood: "danger",
+    id: "ts_furnace", bg: Some("tianshe_bg.png"), loc: Some("L4 · 基因熔炉"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["熔炉在疯狂运转。你知道，走到这一步，穆拉巴与零号计划的真相，都在那融化的初蛇之血里。"]),
     choices: &[ChoiceDef { label: "（退回大厅）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("ts_act6_core") }],
@@ -793,7 +793,7 @@ SceneDef {
 
 /* ---- NPC 对话 ---- */
 SceneDef {
-    id: "ts_npc_alien", bg: Some("img_corridor.png"), loc: Some("L1 · 牢房区 · 阿莲"), mood: "cold",
+    id: "ts_npc_alien", bg: Some("tianshe_bg.png"), loc: Some("L1 · 牢房区 · 阿莲"), mood: "cold",
     speaker: Some("阿莲"), voice: Some("vo_tianshe_alian"),
     text: TextSpec::Static(&[
         "「药材认得全，符文未必。若你信得过我，这次若能逃出去，我就把'再生'之法教给同样被抓的人。」",
@@ -804,7 +804,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_npc_stone", bg: Some("img_corridor.png"), loc: Some("L1 · 牢房区 · 老石"), mood: "cold",
+    id: "ts_npc_stone", bg: Some("tianshe_bg.png"), loc: Some("L1 · 牢房区 · 老石"), mood: "cold",
     speaker: Some("老石"), voice: None,
     text: TextSpec::Static(&["「我这身力气，原是打铁的。铁匠的直觉告诉我——往北的电梯不是出口。血池底下，有暗河。」（镜像伏笔）"]),
     choices: &[ChoiceDef { label: "（继续交谈）", sub: "trust_stone_1", cond: None,
@@ -812,7 +812,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ts_npc_jun", bg: Some("img_ts_l2_pool.png"), loc: Some("L3 · 下层回廊 · 钧留音"), mood: "calm",
+    id: "ts_npc_jun", bg: Some("tianshe_bg.png"), loc: Some("L3 · 下层回廊 · 钧留音"), mood: "calm",
     speaker: Some("钧（镜像留音）"), voice: Some("vo_tianshe_jun"),
     text: TextSpec::Static(&["「别信祭坛，信火种。出口，在血池底下。」——那声音平静得不像一个正在越狱的人，像早已想通了生死。"]),
     choices: &[ChoiceDef { label: "（让刻印沉入心底）", sub: "mirror_3", cond: None,

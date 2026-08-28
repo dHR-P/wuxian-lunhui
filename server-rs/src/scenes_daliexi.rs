@@ -156,7 +156,7 @@ pub static DALIEXI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "dl_prelude", bg: Some("img_laser.png"), loc: Some("大裂隙 · 裂口最先醒的地方"),
+        id: "dl_prelude", bg: Some("daliexi_bg.png"), loc: Some("大裂隙 · 裂口最先醒的地方"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "灰雾散开的瞬间，你看到了它——一具由无数断裂的肢体、碎骨与岩石糅合成的巨大「聚合体」，正从裂缝里一寸寸探出上半身，像被深渊缝起来的一场噩梦。",
@@ -167,7 +167,7 @@ pub static DALIEXI_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "dl_01", bg: Some("img_zhuyuan_book.png"), loc: Some("裂口崖岸"), mood: "danger",
+        id: "dl_01", bg: Some("daliexi_bg.png"), loc: Some("裂口崖岸"), mood: "danger",
         speaker: Some("裂隙行尸聚合体"), voice: None,
         text: TextSpec::Static(&["裂隙行尸聚合体 挡在出口，由无数碎裂之躯拼成的巨影缓缓压近。裂口下面，是另一个死亡。" ]),
         choices: &[
@@ -177,7 +177,7 @@ pub static DALIEXI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "dl_round", bg: Some("img_laser.png"), loc: Some("决战 · 裂口崖岸"), mood: "danger",
+        id: "dl_round", bg: Some("daliexi_bg.png"), loc: Some("决战 · 裂口崖岸"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("裂隙行尸聚合体 尚余 {} 气力，你 HP {}。每打散一缕，深渊就退一段。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

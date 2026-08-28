@@ -51,7 +51,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
 
     /* ================= 幕一 · 开场扩充（钩子 + 氛围） ================= */
     SceneDef {
-        id: "yx_open_1", bg: Some("img_laser.png"), loc: Some("舷窗 · 悬停在银白战场之上"), mood: "awe",
+        id: "yx_open_1", bg: Some("yinxiang_bg.png"), loc: Some("舷窗 · 悬停在银白战场之上"), mood: "awe",
         speaker: Some("锻（全智噪波）"), voice: None,
         text: TextSpec::Static(&[
             "舷窗外的星海被劈成两半——一侧是燃烧的残舰群，另一侧是死寂的黑，黑的正中央悬浮着一座银白色巨石般的旗舰。",
@@ -65,7 +65,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_open_2", bg: Some("img_zhuyuan_book.png"), loc: Some("主走廊 · 一段被冻结的战争"), mood: "revelation",
+        id: "yx_open_2", bg: Some("yinxiang_bg.png"), loc: Some("主走廊 · 一段被冻结的战争"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你走过一条走廊，脚下是多年前一次舱室爆裂留下的裂缝。裂缝的尽头，一具身着银色作战服的人形被真空保持在『逃跑』的姿势——它甚至来不及恐惧。",
@@ -80,7 +80,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
 
     /* ================= 幕二 · 世界展示（奇观调查点 + 居民对话） ================= */
     SceneDef {
-        id: "yx_hub", bg: Some("img_redqueen.png"), loc: Some("舰桥主控区 · 环形观景廊"), mood: "calm",
+        id: "yx_hub", bg: Some("yinxiang_bg.png"), loc: Some("舰桥主控区 · 环形观景廊"), mood: "calm",
         speaker: Some("（舰桥自检女声）"), voice: None,
         text: TextSpec::Static(&[
             "「Welcome to 银色战争 · 舰桥。全息星图自检完毕：残舰 3,422 条，冻结生命反应 0。祝参观愉快。」",
@@ -97,7 +97,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_pt_hull", bg: Some("img_laser.png"), loc: Some("外部甲板 · 风化的损伤之窗"), mood: "awe",
+        id: "yx_pt_hull", bg: Some("yinxiang_bg.png"), loc: Some("外部甲板 · 风化的损伤之窗"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "三层装甲壳上嵌着一个完全贯穿的弹孔，直径足以让你把自己整个塞进去。四百年过去，弹孔边缘的银色合金仍在缓慢结晶，如同石钟乳倒生。",
@@ -113,7 +113,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_pt_hero", bg: Some("img_zhuyuan_book.png"), loc: Some("机师廊 · 无声纪念碑"), mood: "revelation",
+        id: "yx_pt_hero", bg: Some("yinxiang_bg.png"), loc: Some("机师廊 · 无声纪念碑"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "廊道尽头立着一排排金属橄榄，每根橄榄上都刻着一个人的名字与一句告别。最末一根，压着一枚尚未开启的信封，字迹是活人来不及寄出的。",
@@ -127,7 +127,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_pt_engine", bg: Some("img_laser.png"), loc: Some("主引擎舱 · 死去的火焰"), mood: "awe",
+        id: "yx_pt_engine", bg: Some("yinxiang_bg.png"), loc: Some("主引擎舱 · 死去的火焰"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "主反应堆早已冷透，可冷却液结成的蓝色冰晶仍包裹着整颗堆芯，在黯淡的应急灯光里像一颗巨大的、落下雪来的星球。",
@@ -141,7 +141,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_n_mech", bg: Some("img_redqueen.png"), loc: Some("机修站 · 最后的工作者"), mood: "tension",
+        id: "yx_n_mech", bg: Some("yinxiang_bg.png"), loc: Some("机修站 · 最后的工作者"), mood: "tension",
         speaker: Some("维修师机械"), voice: None,
         text: TextSpec::Static(&[
             "机械人形偏过头，用一只仍亮的镜头『看』你。它四百年都在重复同一套动作：擦净阵亡机师的护目镜，然后敬一个礼。",
@@ -157,7 +157,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_n_mech2", bg: Some("img_redqueen.png"), loc: Some("机修站 · 一句遗愿"), mood: "choice",
+        id: "yx_n_mech2", bg: Some("yinxiang_bg.png"), loc: Some("机修站 · 一句遗愿"), mood: "choice",
         speaker: Some("维修师机械"), voice: None,
         text: TextSpec::Static(&[
             "「为什么不走？」它重复你的话，镜头里闪了一帧数据，「因为还有人会来。总会有人摸到这艘船，问『这是为什么』。」",
@@ -173,7 +173,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
 
     /* ================= 幕三 · BOSS 战前铺垫（1-2 场景 · 只做铺垫，迎战仍走原 yx_01） ================= */
     SceneDef {
-        id: "yx_pre_1", bg: Some("img_zhuyuan_book.png"), loc: Some("通往舰桥的增压走廊"), mood: "fear",
+        id: "yx_pre_1", bg: Some("yinxiang_bg.png"), loc: Some("通往舰桥的增压走廊"), mood: "fear",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "走廊尽头的气密门被人用银色合金从内侧焊死，切口之平整，像出自一人之手。门上刻着一行字，字迹稳定得近乎固执：",
@@ -186,7 +186,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_pre_2", bg: Some("img_redqueen.png"), loc: Some("舰桥 · 银色舰长的寂静王座"), mood: "danger",
+        id: "yx_pre_2", bg: Some("yinxiang_bg.png"), loc: Some("舰桥 · 银色舰长的寂静王座"), mood: "danger",
         speaker: Some("银色舰长"), voice: None,
         text: TextSpec::Static(&[
             "舰桥正中央，「银色舰长」坐在那具因为四百年而斑驳的指挥座上，护目镜面朝你，一动不动。全息星图上只剩三条航线还在闪烁，全都通往这片战场的边缘。",
@@ -204,7 +204,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
 
     /* ================= 原场景 yx_01 / yx_round / yx_card / yx_death（保留不动） ================= */
     SceneDef {
-        id: "yx_01", bg: Some("img_zhuyuan_book.png"), loc: Some("舰桥 · 决战处"), mood: "danger",
+        id: "yx_01", bg: Some("yinxiang_bg.png"), loc: Some("舰桥 · 决战处"), mood: "danger",
         speaker: Some("银色舰长"), voice: None,
         text: TextSpec::Static(&["银色舰长 起身，银白面甲裂开一线冷光。真空里没有声音，但你能听见自己的心跳，和他拔出佩剑那一下，几乎同时落下。"]),
         choices: &[
@@ -214,7 +214,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_round", bg: Some("img_laser.png"), loc: Some("决战处"), mood: "danger",
+        id: "yx_round", bg: Some("yinxiang_bg.png"), loc: Some("决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("银色舰长 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -252,7 +252,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局三分支（看景 / 带纪念 / 停留，route 到原结算卡 yx_card） ================= */
     SceneDef {
-        id: "yx_end_view", bg: Some("img_laser.png"), loc: Some("观景廊 · 结局 · 远望星海"), mood: "calm",
+        id: "yx_end_view", bg: Some("yinxiang_bg.png"), loc: Some("观景廊 · 结局 · 远望星海"), mood: "calm",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你没有拔剑，只是最后站上观景廊，把这片烧了四百年的战场完整看进眼底。星海在舷窗外缓缓沉降，像一场没有观众的闭幕。",
@@ -266,7 +266,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_end_souv", bg: Some("img_zhuyuan_book.png"), loc: Some("外部甲板 · 结局 · 带走纪念"), mood: "choice",
+        id: "yx_end_souv", bg: Some("yinxiang_bg.png"), loc: Some("外部甲板 · 结局 · 带走纪念"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你回到外部甲板，在那枚贯穿的弹孔边缘，郑重取下一片仍有余温触感的银白结晶鳞片，贴身收好。",
@@ -280,7 +280,7 @@ pub static YINXIANG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yx_end_stay", bg: Some("img_redqueen.png"), loc: Some("舰桥 · 结局 · 陪他守到灯灭"), mood: "fear",
+        id: "yx_end_stay", bg: Some("yinxiang_bg.png"), loc: Some("舰桥 · 结局 · 陪他守到灯灭"), mood: "fear",
         speaker: Some("银色舰长"), voice: None,
         text: TextSpec::Static(&[
             "你在他的指挥座旁坐下，什么都没说。舰桥的应急灯一格格熄灭，最终只剩那颗远星的光，把两个人的影子投在金属地板上。",

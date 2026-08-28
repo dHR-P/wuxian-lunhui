@@ -88,7 +88,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 枯井井沿 ——
     SceneDef {
         id: "sb_01",
-        bg: Some("img_laser.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("枯井井沿"),
         mood: "mystery",
         speaker: None,
@@ -134,7 +134,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 下井 ——
     SceneDef {
         id: "sb_02",
-        bg: Some("img_laser.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("井道（下沉中）"),
         mood: "danger",
         speaker: None,
@@ -166,7 +166,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 老屋门口 ——
     SceneDef {
         id: "sb_03",
-        bg: Some("img_zhuyuan_book.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("老屋门口"),
         mood: "mystery",
         speaker: None,
@@ -204,7 +204,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 谷仓（门禁）——
     SceneDef {
         id: "sb_04",
-        bg: Some("img_zhuyuan_book.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("谷仓门口"),
         mood: "mystery",
         speaker: None,
@@ -243,7 +243,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 谷仓开门的遭遇（可选遭遇战）——
     SceneDef {
         id: "sb_07",
-        bg: Some("img_zhuyuan_book.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("谷仓内"),
         mood: "danger",
         speaker: Some("复苏者·旧温"),
@@ -269,7 +269,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 老温讲述 ——
     SceneDef {
         id: "sb_05",
-        bg: Some("img_laser.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("枯井井沿"),
         mood: "mystery",
         speaker: Some("守井的老温"),
@@ -308,7 +308,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 老屋翻找，遭遇游魂 ——
     SceneDef {
         id: "sb_06",
-        bg: Some("img_zhuyuan_book.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("老屋阁楼"),
         mood: "danger",
         speaker: None,
@@ -333,7 +333,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 井底白骨坪（大小 BOSS 前）——
     SceneDef {
         id: "sb_12",
-        bg: Some("img_corridor.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("井底白骨坪"),
         mood: "danger",
         speaker: None,
@@ -366,7 +366,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— BOSS 战后复盘分支 ——
     SceneDef {
         id: "sb_13",
-        bg: Some("img_corridor.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("井底白骨坪"),
         mood: "mystery",
         speaker: None,
@@ -390,7 +390,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 选择驱动 BOSS（Normal + Dyn 多段回合）——
     SceneDef {
         id: "sb_boss_round",
-        bg: Some("img_redqueen.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("井底白骨坪"),
         mood: "danger",
         speaker: Some("首位复苏者"),
@@ -411,7 +411,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— BOSS 战后结算 ——
     SceneDef {
         id: "sb_settle",
-        bg: Some("img_train.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("井口（雾散）"),
         mood: "awe",
         speaker: None,
@@ -451,7 +451,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 死亡 ——
     SceneDef {
         id: "sb_death",
-        bg: Some("img_corridor.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("灰雾深处"),
         mood: "danger",
         speaker: None,
@@ -476,7 +476,7 @@ pub static SHUANGBAI_SCENES: &[SceneDef] = &[
     // —— 中枢（玩家被打回村道）——
     SceneDef {
         id: "sb_hub",
-        bg: Some("img_train.png"),
+        bg: Some("shuangbai_bg.png"),
         loc: Some("霜白村村道"),
         mood: "mystery",
         speaker: None,

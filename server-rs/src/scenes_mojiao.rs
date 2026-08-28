@@ -278,7 +278,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
 
     /* ---- L1 血月山道 hub ---- */
     SceneDef {
-        id: "mj_01", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 血月山道"),
+        id: "mj_01", bg: Some("mojiao_bg.png"), loc: Some("L1 · 血月山道"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_has_moon_pass(st) {
@@ -297,7 +297,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_02_moon_mark", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 血月刻石"),
+        id: "mj_02_moon_mark", bg: Some("mojiao_bg.png"), loc: Some("L1 · 血月刻石"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["血月刻石上镂着古老的符文，缝隙里嵌着一枚油亮的黑色令牌——血月令牌。碑侧一行小字：「血月升起时，总坛才开门。」"]),
         choices: &[ChoiceDef { label: "取下血月令牌", sub: "Item it_mj_moon_pass · 开 G1", cond: None,
@@ -305,7 +305,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_02_sheath", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 断裂剑鞘"),
+        id: "mj_02_sheath", bg: Some("mojiao_bg.png"), loc: Some("L1 · 断裂剑鞘"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["道边一柄断剑，鞘上刻着两个字：「除魔」。剑身却染着发黑的血——拔剑的是一位曾立志除魔的人，最后却死在了血月之下。"]),
         choices: &[ChoiceDef { label: "收下断剑作戒", sub: "剧情伏笔 · 得断剑", cond: None,
@@ -313,7 +313,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_03_alt_path", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 巡山暗道"),
+        id: "mj_03_alt_path", bg: Some("mojiao_bg.png"), loc: Some("L1 · 巡山暗道"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["楚道的岩缝里藏着一条供暗哨换班的窄径，尽头一块断碑记着：「血月三年，坛主欲以活人喂养其血月邪功——凡妄入者，皆成池中料。」"]),
         choices: &[ChoiceDef { label: "记下血月真相", sub: "+15 点 · 情报", cond: None,
@@ -321,13 +321,13 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_01_fight_jiaozhong", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 血月山道 · 遭遇"),
+        id: "mj_01_fight_jiaozhong", bg: Some("mojiao_bg.png"), loc: Some("L1 · 血月山道 · 遭遇"),
         mood: "danger", speaker: None, voice: Some("vo_mj_jiaozhong"),
         text: TextSpec::Static(&["你想强闯，巡山教众立刻围了上来，弯刀出鞘。（战斗）"]),
         choices: &[], fight_id: Some("mj_jiaozhong"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_04_gate", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 登坛牌坊（G1 已开）"),
+        id: "mj_04_gate", bg: Some("mojiao_bg.png"), loc: Some("L1 · 登坛牌坊（G1 已开）"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&["血月令牌嵌入兽首，「咔」地一转，石门泛起一片血晕，在血月下缓缓两开。你踏过牌坊，身后山门轰然合拢——没有回头路了。"]),
         choices: &[ChoiceDef { label: "（踏入总坛前殿）", sub: "p_mj_1 单向 · 进 L2", cond: None, effects: &NO_EFF, route: Route::To("mj_05_arrive_qian") }],
@@ -336,7 +336,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
 
     /* ================= L2 总坛前殿 ================= */
     SceneDef {
-        id: "mj_05_arrive_qian", bg: Some("img_redqueen.png"), loc: Some("L2 · 总坛前殿"),
+        id: "mj_05_arrive_qian", bg: Some("mojiao_bg.png"), loc: Some("L2 · 总坛前殿"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_has_hufa_token(st) {
@@ -354,7 +354,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_05_rost", bg: Some("img_redqueen.png"), loc: Some("L2 · 影卫名录"),
+        id: "mj_05_rost", bg: Some("mojiao_bg.png"), loc: Some("L2 · 影卫名录"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["一份鬼魅般的影卫名册摊在案上，记着一个个编号与「归处：血池」。最后一行墨色新干：「红衣护法 · 赤，掌前殿，令一环。」"]),
         choices: &[ChoiceDef { label: "记下护法令牌所在", sub: "剧情", cond: None,
@@ -362,7 +362,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_05_ding", bg: Some("img_redqueen.png"), loc: Some("L2 · 铜鼎机关"),
+        id: "mj_05_ding", bg: Some("mojiao_bg.png"), loc: Some("L2 · 铜鼎机关"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["殿中一口青铜巨鼎，鼎腹刻着一头血月纹。你试着转动鼎耳，机簧低鸣，整座前殿的气窗齐齐开合——这是操控殿中傀儡的枢纽。"]),
         choices: &[ChoiceDef { label: "转动鼎耳", sub: "+10 点 · 殿内响动", cond: None,
@@ -370,13 +370,13 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_06_hufa_fight", bg: Some("img_redqueen.png"), loc: Some("L2 · 前殿 · 会护法"),
+        id: "mj_06_hufa_fight", bg: Some("mojiao_bg.png"), loc: Some("L2 · 前殿 · 会护法"),
         mood: "danger", speaker: Some("红衣护法 · 赤"), voice: Some("vo_mj_hufa"),
         text: TextSpec::Static(&["红衣护法·赤的目光掠过你，「刷」地抽出那柄血纹长刀——「能走到这里，你手里已经染了教众的血。」（战斗）"]),
         choices: &[], fight_id: Some("mj_hufa"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_06_hufa_win", bg: Some("img_redqueen.png"), loc: Some("L2 · 前殿"),
+        id: "mj_06_hufa_win", bg: Some("mojiao_bg.png"), loc: Some("L2 · 前殿"),
         mood: "calm", speaker: None, voice: None,
         text: TextSpec::Static(&["护法倒下的衣袂下滚出一枚暗红令牌。血月印记温热如活物——红衣令牌，锁着通往血池殿的朱门。"]),
         choices: &[ChoiceDef { label: "拾取红衣令牌", sub: "Item it_mj_hufa_token · 开 G2", cond: None,
@@ -384,7 +384,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_06_gate", bg: Some("img_redqueen.png"), loc: Some("L2 · 前殿正门（G2 已开）"),
+        id: "mj_06_gate", bg: Some("mojiao_bg.png"), loc: Some("L2 · 前殿正门（G2 已开）"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&["红衣令牌贴上护封，血印寸寸消融。朱门无声滑开，一股浓得化不开的血腥气扑面——血池殿，就在门后。"]),
         choices: &[ChoiceDef { label: "（入血池殿密梯）", sub: "p_mj_2 单向 · 进 L3", cond: None, effects: &NO_EFF, route: Route::To("mj_10_arrive_pool") }],
@@ -393,7 +393,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
 
     /* ================= L3 血池殿 ================= */
     SceneDef {
-        id: "mj_10_arrive_pool", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池殿"),
+        id: "mj_10_arrive_pool", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池殿"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_pool_clear(st) {
@@ -412,14 +412,14 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_10_hongshang", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池殿 · 红衣使者"),
+        id: "mj_10_hongshang", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池殿 · 红衣使者"),
         mood: "cold", speaker: Some("红衣使者"), voice: None,
         text: TextSpec::Static(&["红衣使者背对着你，轻声道：「数十年前，也是这样的血月。一位立志除魔的剑客奉命潜入总坛……他没能活着出来。他留下了一柄断剑。」他抬眼看了你一眼，「你和他，很像。」"]),
         choices: &[ChoiceDef { label: "听完这段往事", sub: "若持断剑 · 触真相线", cond: None, effects: &NO_EFF, route: Route::To("mj_05_arrive_qian_hint") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_05_arrive_qian_hint", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池殿"),
+        id: "mj_05_arrive_qian_hint", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池殿"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             if inv(st, "it_mj_broken_sword") {
@@ -432,7 +432,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_12_trial_stele", bg: Some("img_redqueen.png"), loc: Some("L3 · 试炼碑"),
+        id: "mj_12_trial_stele", bg: Some("mojiao_bg.png"), loc: Some("L3 · 试炼碑"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["试炼碑上刻着血池试炼的规矩：「池中傀儡主以万千傀儡血肉为体，狂暴后血浪每三回侵蚀一次。若有镇血之物，可暂缓其势。」"]),
         choices: &[ChoiceDef { label: "记下试炼规则", sub: "情报", cond: None,
@@ -440,7 +440,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_13_puppet", bg: Some("img_redqueen.png"), loc: Some("L3 · 四方傀儡窟"),
+        id: "mj_13_puppet", bg: Some("mojiao_bg.png"), loc: Some("L3 · 四方傀儡窟"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&["血池四面开有四个石窟，一身身陶土傀儡整齐伏跪。你隐约听见窟里有暗道通往回层的声响——那是一条万一血池殿失守的退路。"]),
         choices: &[ChoiceDef { label: "记下傀儡窟秘道", sub: "+10 点 · 回跳线索", cond: None,
@@ -448,7 +448,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_20_trial", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池 · 试炼起"),
+        id: "mj_20_trial", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池 · 试炼起"),
         mood: "danger", speaker: Some("血池傀儡主"), voice: Some("vo_mj_pool"),
         text: TextSpec::Static(&[
             "血池骤然沸腾，万千傀儡的血肉从池底汇聚，一股狰狞的巨影自池心缓缓立起——血池傀儡主。",
@@ -458,7 +458,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_pool_round", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池 · 激战"),
+        id: "mj_pool_round", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池 · 激战"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             let f = st.fight.as_ref().map(|f| format!("池中傀儡主 HP {} / {}", f.hp.max(0), 120)).unwrap_or_else(|| "HP --".to_string());
@@ -480,7 +480,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_21_trial_done", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池 · 试炼毕"),
+        id: "mj_21_trial_done", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池 · 试炼毕"),
         mood: "calm", speaker: Some("红衣使者"), voice: None,
         text: TextSpec::Static(&["血池傀儡主轰然塌回池底，血浪方平。池心浮起一枚暗红的赤血钥——它通向更深处，教主的密室。红衣使者望着你：「去吧，那是最后一扇门了。」"]),
         choices: &[ChoiceDef { label: "潜身拾起赤血钥", sub: "Item it_mj_pool_key · 开 G3", cond: None,
@@ -488,7 +488,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_22_gate_pool", bg: Some("img_redqueen.png"), loc: Some("L3 · 血池殿门（G3 已开）"),
+        id: "mj_22_gate_pool", bg: Some("mojiao_bg.png"), loc: Some("L3 · 血池殿门（G3 已开）"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&["赤血钥旋入锁孔，「嗡——」铁链纷纷断裂。通往教主密室的门在你面前缓缓打开，血月的冷光倾泻而下。"]),
         choices: &[ChoiceDef { label: "（入教主密梯）", sub: "p_mj_3 单向 · 进 L4", cond: None, effects: &NO_EFF, route: Route::To("mj_22_arrive_lord") }],
@@ -497,7 +497,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
 
     /* ================= L4 教主密室 ================= */
     SceneDef {
-        id: "mj_22_arrive_lord", bg: Some("img_corridor.png"), loc: Some("L4 · 教主密室"),
+        id: "mj_22_arrive_lord", bg: Some("mojiao_bg.png"), loc: Some("L4 · 教主密室"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_lord_down(st) {
@@ -515,7 +515,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_21_throne", bg: Some("img_corridor.png"), loc: Some("L4 · 教主宝座"),
+        id: "mj_21_throne", bg: Some("mojiao_bg.png"), loc: Some("L4 · 教主宝座"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["宝座扶手两侧各刻着一行字。左：「生于此，亦葬于此。」右：「血月之下，无人能逃。」座上留下一枚早该腐朽的铜令——旧主的信物。"]),
         choices: &[ChoiceDef { label: "记下宝座铭文", sub: "剧情", cond: None,
@@ -523,7 +523,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_21_tome", bg: Some("img_corridor.png"), loc: Some("L4 · 秘术书 · 残卷"),
+        id: "mj_21_tome", bg: Some("mojiao_bg.png"), loc: Some("L4 · 秘术书 · 残卷"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["一本泛黄的残卷静静躺在石案上，封面以血朱砂写着一个「镇」字。你翻开，上面记着镇血月邪功的上古符诀——与血池试炼碑上说的「镇血之物」同源。"]),
         choices: &[ChoiceDef { label: "研读残卷", sub: "解锁密室暗牢 · 可镇血", cond: None,
@@ -531,7 +531,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_23_ghost", bg: Some("img_corridor.png"), loc: Some("L4 · 前朝残魂"),
+        id: "mj_23_ghost", bg: Some("mojiao_bg.png"), loc: Some("L4 · 前朝残魂"),
         mood: "cold", speaker: Some("前朝残魂"), voice: None,
         text: TextSpec::Static(&["一道近乎透明的残影守在宝座之侧，开口时声音像从血里飘出来：「我……便是当年那个立志除魔的剑客。我把一柄断剑留在山道上，把一身技艺锁进这间暗牢——意图有朝一日，有人能替我斩断血月。」"]),
         choices: &[ChoiceDef { label: "追寻当年真相", sub: "truth 线", cond: None,
@@ -539,7 +539,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_30_lord", bg: Some("img_corridor.png"), loc: Some("L4 · 教主密室 · 决战"),
+        id: "mj_30_lord", bg: Some("mojiao_bg.png"), loc: Some("L4 · 教主密室 · 决战"),
         mood: "danger", speaker: Some("魔教教主 · 血月尊者"), voice: Some("vo_mj_lord"),
         text: TextSpec::Static(&[
             "宝座上的血月尊者缓缓起身，血袍无风自动。「血月升起，总坛才开门——你来的时候，血正好红了。能闯过血池试炼，你是个可造之材……可惜，找错了对手。」",
@@ -549,7 +549,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_lord_round", bg: Some("img_corridor.png"), loc: Some("L4 · 教主密室 · 激战"),
+        id: "mj_lord_round", bg: Some("mojiao_bg.png"), loc: Some("L4 · 教主密室 · 激战"),
         mood: "danger", speaker: Some("魔教教主"), voice: None,
         text: TextSpec::Dyn(|st| {
             let f = st.fight.as_ref().map(|f| format!("血月尊者 HP {} / {}", f.hp.max(0), 200)).unwrap_or_else(|| "HP --".to_string());
@@ -571,7 +571,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_31_lord_down", bg: Some("img_corridor.png"), loc: Some("L4 · 教主密室"),
+        id: "mj_31_lord_down", bg: Some("mojiao_bg.png"), loc: Some("L4 · 教主密室"),
         mood: "calm", speaker: Some("血月尊者（临终）"), voice: Some("vo_mj_lord_down"),
         text: TextSpec::Static(&["血月尊者踉跄跪地，血袍褪成惨白。「生于此……亦葬于此……」他望向殿顶那轮血月，忽然流下一滴清泪，「原来……血月底下……也有想逃的人。」他缓缓阖上眼，血月的光芒随之黯淡。"]),
         choices: &[ChoiceDef { label: "（走向血月尊者的遗愿）", sub: "抉择结局", cond: None, effects: &NO_EFF, route: Route::To("mj_40_ending") }],
@@ -580,7 +580,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
 
     /* ================= 抉择结局三分支 ================= */
     SceneDef {
-        id: "mj_40_ending", bg: Some("img_corridor.png"), loc: Some("L4 · 教主密室"),
+        id: "mj_40_ending", bg: Some("mojiao_bg.png"), loc: Some("L4 · 教主密室"),
         mood: "mystery", speaker: Some("红衣使者"), voice: Some("vo_mj_ending"),
         text: TextSpec::Static(&[
             "红衣使者不知何时出现在你身后，声音低沉：「教主已死，血月将落。而这地方……要如何收场，全在你一念之间。」",
@@ -600,7 +600,7 @@ pub static MOJIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "mj_41_exit", bg: Some("img_corridor.png"), loc: Some("L4 · 撤离阵"),
+        id: "mj_41_exit", bg: Some("mojiao_bg.png"), loc: Some("L4 · 撤离阵"),
         mood: "calm", speaker: Some("主神"), voice: None,
         text: TextSpec::Dyn(|st| {
             match (st.flag("mj_end_rule"), st.flag("mj_end_destroy"), st.flag("mj_end_truth")) {

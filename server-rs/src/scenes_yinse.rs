@@ -256,7 +256,7 @@ pub static YINSE_SCENES: &[SceneDef] = &[
 
 /* ---- 幕 0 ・ 开场：主神空间入口 ---- */
 SceneDef {
-    id: "ys_00", bg: Some("img_ysd_l1_waste.png"), loc: Some("主神广场 · 新任务门"),
+    id: "ys_00", bg: Some("yinse_bg.png"), loc: Some("主神广场 · 新任务门"),
     mood: "danger", speaker: Some("李铭（记录员）"), voice: Some("vo_yinse_liming_start"),
     text: TextSpec::Static(&[
         "<b>【主线任务】</b>深入银色大地调查 y+E 年地灵族『机界升华』被镇压的真相，夺回（或归还）地灵族三神兵留下的机核碎片，并把地灵族的火种带出遗迹。",
@@ -274,7 +274,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_00_waro", bg: Some("img_ysd_l1_waste.png"), loc: Some("主神广场 · 新任务门"),
+    id: "ys_00_waro", bg: Some("yinse_bg.png"), loc: Some("主神广场 · 新任务门"),
     mood: "cold", speaker: Some("李铭（记录员）"), voice: None,
     text: TextSpec::Static(&[
         "「瓦罗——地灵之祖，人类『机械计划』自救分支中最成功的一支。他以圣位之身，断开了外位面的道路。」",
@@ -284,7 +284,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_00_refuse", bg: Some("img_ysd_l1_waste.png"), loc: Some("主神广场 · 新任务门"),
+    id: "ys_00_refuse", bg: Some("yinse_bg.png"), loc: Some("主神广场 · 新任务门"),
     mood: "danger", speaker: Some("李铭（记录员）"), voice: Some("vo_yinse_liming_refuse"),
     text: TextSpec::Static(&[
         "「修正任务不可拒绝。」李铭的声音不带温度。「修改的刀刃有差，文明的火种便会熄灭。你只能去。」",
@@ -312,14 +312,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_03_asang_save", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 战壕 · 救人"),
+    id: "ys_03_asang_save", bg: Some("yinse_bg.png"), loc: Some("L1 战壕 · 救人"),
     mood: "danger", speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["两名古兽人拾荒者转过身——你坏了它们的好事。它们逼近了。"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_scav ×2（连战）", cond: None, effects: &NO_EFF, route: Route::To("ys_03_asang_win") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_03_asang_win", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 战壕 · 救人"),
+    id: "ys_03_asang_win", bg: Some("yinse_bg.png"), loc: Some("L1 战壕 · 救人"),
     mood: "calm", speaker: Some("阿桑"), voice: Some("vo_yinse_asang"),
     text: TextSpec::Static(&[
         "拾荒者溃逃之后，那名瘦削的少年站起身，灰扑扑的脸上还带着惊魂未定。",
@@ -333,7 +333,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_03_asang", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 · 阿桑（NPC）"),
+    id: "ys_03_asang", bg: Some("yinse_bg.png"), loc: Some("L1 · 阿桑（NPC）"),
     mood: "cold", speaker: Some("阿桑"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("ys_save_asang") {
@@ -348,7 +348,7 @@ SceneDef {
 
 /* ---- 幕 2 ・ 战壕：战潮王・髅（miniboss） —— */
 SceneDef {
-    id: "ys_02_war_flags", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 北废墟 · 战旗"),
+    id: "ys_02_war_flags", bg: Some("yinse_bg.png"), loc: Some("L1 北废墟 · 战旗"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "北废墟里立着一面破败的战旗。旗面上用兽血绘着一颗颅骨——那是战潮王・髅的纹章。",
@@ -359,7 +359,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_04_trench", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 战壕汇合点"),
+    id: "ys_04_trench", bg: Some("yinse_bg.png"), loc: Some("L1 战壕汇合点"),
     mood: "danger", speaker: Some("阿桑"), voice: None,
     text: TextSpec::Dyn(|st| {
         let head = "一具背插战旗的巨影坐在尸堆上，把地灵族的机械臂当串肉签。他听见你的脚步，缓缓抬起头。";
@@ -381,14 +381,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_05_lou_enter", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 · 战潮王・髅战场"),
+    id: "ys_05_lou_enter", bg: Some("yinse_bg.png"), loc: Some("L1 · 战潮王・髅战场"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你拔出武器。白骨面具下的那排獠牙，朝你咧开了。「古兽人的地盘——人类，你也算一条命。」"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_lou", cond: None, effects: &NO_EFF, route: Route::To("ys_05_lou_win") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_05_lou_win", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 · 战潮王・髅战场"),
+    id: "ys_05_lou_win", bg: Some("yinse_bg.png"), loc: Some("L1 · 战潮王・髅战场"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["骨锯砸在白银大地上，扬起一片灰。你在尸堆里翻出一枚银白色结晶体——地灵方解石，还有一节髅骨。"]),
     choices: &[ChoiceDef { label: "（走向电梯井）", sub: "G1 · 得地灵方解石+髅骨", cond: None,
@@ -396,7 +396,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_05_bypass", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 战壕 · 绕过"),
+    id: "ys_05_bypass", bg: Some("yinse_bg.png"), loc: Some("L1 战壕 · 绕过"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["你丢下银蚴的尸体。战潮王嗅到同类的死气，迟疑片刻，最终挥挥手让开了路——但电梯井仍需地灵方解石。"]),
     choices: &[ChoiceDef { label: "（走向电梯井）", sub: "G1", cond: None,
@@ -404,7 +404,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_05_bypass_forced", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 战壕 · 被堵"),
+    id: "ys_05_bypass_forced", bg: Some("yinse_bg.png"), loc: Some("L1 战壕 · 被堵"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你试图沿塌方斜道绕行，却被两名拾荒者与一条银蚴堵了正着——没有诱饵，它们发现了你。"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_scav + ys_worm", cond: None, effects: &NO_EFF, route: Route::To("ys_05_ele1") }],
@@ -412,7 +412,7 @@ SceneDef {
 },
 /* G1 电梯井 */
 SceneDef {
-    id: "ys_05_ele1", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 南电梯塔 · 电梯井"),
+    id: "ys_05_ele1", bg: Some("yinse_bg.png"), loc: Some("L1 南电梯塔 · 电梯井"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("ys_lou_bypassed") {
@@ -430,14 +430,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_05_ele1_open", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 → L2 电梯井下行"),
+    id: "ys_05_ele1_open", bg: Some("yinse_bg.png"), loc: Some("L1 → L2 电梯井下行"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["地灵方解石贴合凹槽，「咔」一声轻响，铁闸升起。你踏入黑暗的电梯井——脚下传来失重的一瞬，是下降。"]),
     choices: &[ChoiceDef { label: "（下行 L2）", sub: "pt_down1 → L2(36,4)", cond: None, effects: &NO_EFF, route: Route::To("ys_06_city") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_05_ele1_open_slope", bg: Some("img_ysd_l1_waste.png"), loc: Some("L1 南侧塌方斜道"),
+    id: "ys_05_ele1_open_slope", bg: Some("yinse_bg.png"), loc: Some("L1 南侧塌方斜道"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["塌方斜道上的两名拾荒者与一条银蚴挡路——你只能杀过去。"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_scav + ys_worm", cond: None, effects: &NO_EFF, route: Route::To("ys_06_city") }],
@@ -446,7 +446,7 @@ SceneDef {
 
 /* ---- 幕 3 ・ 都市遗迹（L2）：居民骸骨 / 机关链 / 小枢 / 库房 ---- */
 SceneDef {
-    id: "ys_06_city", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 都市遗迹 · 电梯到站台"),
+    id: "ys_06_city", bg: Some("yinse_bg.png"), loc: Some("L2 都市遗迹 · 电梯到站台"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "电梯在都市遗迹中央停下。街区还亮着40%的符文灯——两百年没坏，因为它们在等人回来供电。",
@@ -461,7 +461,7 @@ SceneDef {
 },
 /* 机关链 master→B→C（顺序，错序触发电偶） */
 SceneDef {
-    id: "ys_06_power_master", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 配电塔总控"),
+    id: "ys_06_power_master", bg: Some("yinse_bg.png"), loc: Some("L2 配电塔总控"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "配电塔总控台的符文屏还亮着最后一线蓝光，一封两百年前的调度日志弹出来：『先合主闸，次合 B 支路，再合 C 支路——顺序不可乱。』",
@@ -475,14 +475,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_power_mid", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 配电塔 · 拔闸提示"),
+    id: "ys_06_power_mid", bg: Some("yinse_bg.png"), loc: Some("L2 配电塔 · 拔闸提示"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["总控已合。调度日志亮起下一行指示：『次合 B 支路（东侧 (24,9)），最后合 C 支路（南侧 (16,22)）。』"]),
     choices: &[ChoiceDef { label: "（去配电点 B）", sub: "Z2", cond: None, effects: &NO_EFF, route: Route::To("ys_06_power_b") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_power_b", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 配电点 B"),
+    id: "ys_06_power_b", bg: Some("yinse_bg.png"), loc: Some("L2 配电点 B"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["配电点 B 的拉闸卡在铁锈里。你在正确顺序中（先 master 后 B）。"]),
     choices: &[
@@ -494,7 +494,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_power_c", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 配电点 C"),
+    id: "ys_06_power_c", bg: Some("yinse_bg.png"), loc: Some("L2 配电点 C"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["配电点 C 的拉闸。A 与 B 已依序合上，只剩最后一步。"]),
     choices: &[
@@ -506,21 +506,21 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_golem_fight", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 · 错序 · 符文电偶"),
+    id: "ys_06_golem_fight", bg: Some("yinse_bg.png"), loc: Some("L2 · 错序 · 符文电偶"),
     mood: "danger", speaker: Some("⚔ 遭遇"), voice: None,
     text: TextSpec::Static(&["操作顺序出错，配电塔的保护回路暴走——一尊三米符文电偶自塔内升起，电光四溅。"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_golem", cond: None, effects: &NO_EFF, route: Route::To("ys_06_golem_win") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_golem_win", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 配电塔"),
+    id: "ys_06_golem_win", bg: Some("yinse_bg.png"), loc: Some("L2 配电塔"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["电偶坍倒，电弧归于死寂。调度日志依旧固执地闪烁：『请按 master→B→C 顺序。』"]),
     choices: &[ChoiceDef { label: "（回配电塔总控重新操作）", sub: "Z1", cond: None, effects: &NO_EFF, route: Route::To("ys_06_power_master") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_power_done", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 都市街道 · 全面送电"),
+    id: "ys_06_power_done", bg: Some("yinse_bg.png"), loc: Some("L2 都市街道 · 全面送电"),
     mood: "calm", speaker: Some("小枢"), voice: None,
     text: TextSpec::Static(&[
         "三处配电点依序闭合的刹那，整座都市的符文灯一明，尔后全数亮起——两百年的夜晚，第一次被点亮。",
@@ -531,7 +531,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_06_gate2", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 符文闸门前"),
+    id: "ys_06_gate2", bg: Some("yinse_bg.png"), loc: Some("L2 符文闸门前"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["供电恢复，符文闸门（G2）自下而上亮起，轰然升开。都市中心大道、隐藏库房与回程吊索全部畅通。"]),
     choices: &[ChoiceDef { label: "（前往居民骸骨长街 / 小枢 / 隐藏库房）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("ys_06_city") }],
@@ -539,7 +539,7 @@ SceneDef {
 },
 /* 居民骸骨长街（san-8 真相） */
 SceneDef {
-    id: "ys_07_home_bones", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 居民骸骨长街"),
+    id: "ys_07_home_bones", bg: Some("yinse_bg.png"), loc: Some("L2 居民骸骨长街"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(txt_home_bones),
     choices: &[ChoiceDef { label: "（凝视片刻，后退）", sub: "San-8 · 真相线索", cond: None,
@@ -548,7 +548,7 @@ SceneDef {
 },
 /* 小枢（NPC） */
 SceneDef {
-    id: "ys_07_xiaoshu", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 · 小枢"),
+    id: "ys_07_xiaoshu", bg: Some("yinse_bg.png"), loc: Some("L2 · 小枢"),
     mood: "cold", speaker: Some("小枢（机械幼体意识）"), voice: Some("vo_yinse_xiaoshu"),
     text: TextSpec::Static(&[
         "一尊圆头单眼的小机械体从配电塔阴影里探出来，独眼的红光明明灭灭，努力用机械音吐出断续的话：",
@@ -565,7 +565,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_07_xiaoshu_ok", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 · 小枢随行"),
+    id: "ys_07_xiaoshu_ok", bg: Some("yinse_bg.png"), loc: Some("L2 · 小枢随行"),
     mood: "calm", speaker: Some("小枢"), voice: None,
     text: TextSpec::Static(&["小枢的独眼眨了眨，机械音里竟听出几分欣喜：「好……我记下你的方向。你们要去的是那间库房——地灵密钥给你，里面有老师留的东西。」"]),
     choices: &[ChoiceDef { label: "（前往隐藏库房）", sub: "需地灵密钥 + l2_power_restored", cond: None,
@@ -574,7 +574,7 @@ SceneDef {
 },
 /* 隐藏库房（三神兵·机核碎片） */
 SceneDef {
-    id: "ys_08_vault", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 隐藏库房"),
+    id: "ys_08_vault", bg: Some("yinse_bg.png"), loc: Some("L2 隐藏库房"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["库房的门缝里漏出幽蓝圣光。你用随身的地灵密钥拧开门——满屋的蓝图和齿轮间，一枚不规则机械核心静静躺在托架上。"]),
     choices: &[
@@ -585,7 +585,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_08_vault_taken", bg: Some("img_ysd_l2_city.png"), loc: Some("L2 隐藏库房 · 取走碎片"),
+    id: "ys_08_vault_taken", bg: Some("yinse_bg.png"), loc: Some("L2 隐藏库房 · 取走碎片"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "你托起那枚不规则机核碎片，触手微烫，颅内掠过一声不属于你的叹息——那是两百年前，一个文明最后的『我还在』。",
@@ -598,7 +598,7 @@ SceneDef {
 
 /* ---- 幕 4 ・ 工厂（L3）：生产线 / 升华装置 / 裂缝 ---- */
 SceneDef {
-    id: "ys_09_factory", bg: Some("img_ysd_l3_factory.png"), loc: Some("L3 机界升华工厂 · 入口"),
+    id: "ys_09_factory", bg: Some("yinse_bg.png"), loc: Some("L3 机界升华工厂 · 入口"),
     mood: "danger", speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "流水线还在转——没人维护的机械臂，仍在把『人形材料』压进模子里。两百年前，它们压的是地灵族自己。",
@@ -613,7 +613,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_09_assembly_line", bg: Some("img_ysd_l3_factory.png"), loc: Some("L3 三神兵生产线"),
+    id: "ys_09_assembly_line", bg: Some("yinse_bg.png"), loc: Some("L3 三神兵生产线"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "巨型刀、剑、盾的三件半成品焊接体还挂在流水线上——攻/防/机，地灵族三神兵的雏形。",
@@ -625,7 +625,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_09_proto_enter", bg: Some("img_ysd_l3_factory.png"), loc: Some("L3 三神兵生产线 · 试作"),
+    id: "ys_09_proto_enter", bg: Some("yinse_bg.png"), loc: Some("L3 三神兵生产线 · 试作"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["试作残骸的半睁机械眼投来熔炉橙红的光——它从流水线解下，重力落地，地面龟裂。"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_proto", cond: None, effects: &NO_EFF, route: Route::To("ys_09_factory") }],
@@ -633,7 +633,7 @@ SceneDef {
 },
 /* G3 升华装置启动间 · 真相回放（Sequence Cine） */
 SceneDef {
-    id: "ys_10_sublime", bg: Some("img_ysd_l3_factory.png"), loc: Some("L3 升华装置启动间"),
+    id: "ys_10_sublime", bg: Some("yinse_bg.png"), loc: Some("L3 升华装置启动间"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "机核碎片嵌入，装置启动。眼前炸开一连串圣光影像——",
@@ -651,7 +651,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_10_truth_found", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 升华装置启动间 · 真相"),
+    id: "ys_10_truth_found", bg: Some("yinse_bg.png"), loc: Some("L3 升华装置启动间 · 真相"),
     mood: "danger", speaker: Some("瓦罗残响（预录）"), voice: None,
     text: TextSpec::Static(&[
         "影像最后定格在瓦罗那张只剩一条缝的圣面上。他临终的声音破开两百年：『人类……我不是自愿背叛。我认得我焊的骨头。』",
@@ -663,7 +663,7 @@ SceneDef {
 },
 /* 低纬度裂缝（灾厄区 + 机关拉杆） */
 SceneDef {
-    id: "ys_11_rift", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 低纬度裂缝"),
+    id: "ys_11_rift", bg: Some("yinse_bg.png"), loc: Some("L3 低纬度裂缝"),
     mood: "danger", speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "一道墨紫色的巨大裂缝撕开厂房东壁，逆几何的虚空在裂缝里缓缓坍缩，漂浮着零碎的机械残骸。",
@@ -677,14 +677,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_11_rift_fight", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 裂缝口 · 战斗"),
+    id: "ys_11_rift_fight", bg: Some("yinse_bg.png"), loc: Some("L3 裂缝口 · 战斗"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["灾厄之蛹的眼柄同时睁开，两条银蛇自裂缝涌出——它们扑来！"]),
     choices: &[ChoiceDef { label: "战斗", sub: "ys_pupa + 银蛇×2", cond: None, effects: &NO_EFF, route: Route::To("ys_11_rift_lever") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_11_rift_lever", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 裂缝机关拉杆"),
+    id: "ys_11_rift_lever", bg: Some("yinse_bg.png"), loc: Some("L3 裂缝机关拉杆"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["拉杆分两个方向：向右，激活裂缝传送（可直达瓦罗之墓的裂隙台）；向左，关闭裂缝，让灾厄停息。只能选一次。"]),
     choices: &[
@@ -696,7 +696,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_11_rift_open", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 裂缝传送激活"),
+    id: "ys_11_rift_open", bg: Some("yinse_bg.png"), loc: Some("L3 裂缝传送激活"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "你把拉杆推向右侧。裂缝亮起墨紫色的传送门——可直接上瓦罗之墓的裂隙台，但走此路会 San -15，并遭遇灾厄。",
@@ -710,7 +710,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_11_rift_closed", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 裂缝关闭"),
+    id: "ys_11_rift_closed", bg: Some("yinse_bg.png"), loc: Some("L3 裂缝关闭"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["你向左按下拉杆。裂缝无声合拢，灾厄的笔墨紫虚空像一道被拉上的拉链——厂房重新安静下来。低纬度的吠鸣消失了。"]),
     choices: &[ChoiceDef { label: "（转往主升降井 G4）", sub: "关闭裂缝同样强化了核心封印判断", cond: None, effects: &NO_EFF, route: Route::Dyn(route_core) }],
@@ -718,7 +718,7 @@ SceneDef {
 },
 /* 裂缝彩蛋：骨（机械升华体） */
 SceneDef {
-    id: "ys_11_rift_easter", bg: Some("img_ysd_l3_rift.png"), loc: Some("L3 裂缝 · 彩蛋"),
+    id: "ys_11_rift_easter", bg: Some("yinse_bg.png"), loc: Some("L3 裂缝 · 彩蛋"),
     mood: "cold", speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "你凝望裂缝深处。逆几何的虚空里，一道与瓦罗相似的机械升华体身影一闪而过——他没有被镇压，也没有陨落，而是朝裂缝更深处走去。",
@@ -730,7 +730,7 @@ SceneDef {
 
 /* ---- 幕 5 ・ 转折：瓦罗的真相（L4 门外） ---- */
 SceneDef {
-    id: "ys_12_tomb", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 环形墓道 · 决战祭坛前"),
+    id: "ys_12_tomb", bg: Some("yinse_bg.png"), loc: Some("L4 环形墓道 · 决战祭坛前"),
     mood: "danger", speaker: Some("瓦罗残响"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("ys_entered_side") {
@@ -750,7 +750,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_12_truth_talk", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛前 · 真相"),
+    id: "ys_12_truth_talk", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛前 · 真相"),
     mood: "calm", speaker: Some("瓦罗残响"), voice: Some("vo_yinse_waro_truth"),
     text: TextSpec::Static(&[
         "石门无声滑开一线。你听完了瓦罗的独白——被鲲鹏算计、被低纬度诱惑、被东天二皇镇压，而非自愿堕落。",
@@ -766,7 +766,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_12_peace", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛前 · 交还"),
+    id: "ys_12_peace", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛前 · 交还"),
     mood: "calm", speaker: Some("瓦罗残响"), voice: None,
     text: TextSpec::Static(&[
         "你把三神兵·机核碎片举到祭坛前。瓦罗残响的机壳短暂浮出『平静』的面容。「原来……人类的火，还亮着。」",
@@ -777,7 +777,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_12_machine_off", bg: Some("img_ysd_l3_factory.png"), loc: Some("L3 升华装置启动间 · 强行关闭"),
+    id: "ys_12_machine_off", bg: Some("yinse_bg.png"), loc: Some("L3 升华装置启动间 · 强行关闭"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "你折返 L3，强行重启升华装置并立即断开熔断器。机器发出濒死的轰鸣，转子缓缓停转。裂缝里传来一声短促的怒吼。",
@@ -788,7 +788,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_12_machine_off_back", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛前"),
+    id: "ys_12_machine_off_back", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛前"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["你回到祭坛前。装置已停，裂缝的光线黯淡，瓦罗残响的躯壳比先前少了三分凶戾。"]),
     choices: &[ChoiceDef { label: "（步入决战祭坛）", sub: "waro_machine_off · BOSS dmg -3", cond: None,
@@ -796,7 +796,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_12_tomb_side", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 裂隙台 · 侧门落地"),
+    id: "ys_12_tomb_side", bg: Some("yinse_bg.png"), loc: Some("L4 裂隙台 · 侧门落地"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你从裂隙台的边缘踉跄落地，额头冷汗直流。瓦罗残响的机壳在祭坛中央轰然立起——仇恨被裂缝侧门的闯入彻底点燃，它开局便狂暴。"]),
     choices: &[ChoiceDef { label: "（正面迎战）", sub: "r1 狂暴阈值 @170", cond: None,
@@ -804,7 +804,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_12_stele", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 瓦罗石碑"),
+    id: "ys_12_stele", bg: Some("yinse_bg.png"), loc: Some("L4 瓦罗石碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["石碑上刻着一行诗谜：「白银大地葬的不是龙，是把自己焊接成骨头的一族。火种不熄，便不算枉死。」（San -2）"]),
     choices: &[ChoiceDef { label: "（记住碑文）", sub: "San-2", cond: None,
@@ -814,7 +814,7 @@ SceneDef {
 
 /* ---- 幕 6 ・ 决战：机界升华体 两段式（场景链） ---- */
 SceneDef {
-    id: "ys_13_fight_r1", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛 · 一形态"),
+    id: "ys_13_fight_r1", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛 · 一形态"),
     mood: "danger", speaker: Some("瓦罗残响"), voice: None,
     text: TextSpec::Dyn(txt_boss_r1),
     choices: &[
@@ -826,7 +826,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: Some("决战 · 机界升华体"), overlay: None,
 },
 SceneDef {
-    id: "ys_13_cast_check", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 祭坛 · 符文检查"),
+    id: "ys_13_cast_check", bg: Some("yinse_bg.png"), loc: Some("L4 祭坛 · 符文检查"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("ys_l2_power_restored") {
@@ -845,7 +845,7 @@ SceneDef {
 },
 /* 一段战 · 选择驱动回合 */
 SceneDef {
-    id: "ys_13_round_r1", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 · 决战 · 一形态"),
+    id: "ys_13_round_r1", bg: Some("yinse_bg.png"), loc: Some("L4 · 决战 · 一形态"),
     mood: "danger", speaker: Some("⚔ 决战"), voice: None,
     text: TextSpec::Dyn(txt_round_r1),
     choices: &[
@@ -858,7 +858,7 @@ SceneDef {
 },
 /* 转场演出：东天二皇投影（演出级，不可战） */
 SceneDef {
-    id: "ys_waR0_cast", bg: Some("img_ysd_l3_rift.png"), loc: Some("L4 祭坛 · 转场演出"),
+    id: "ys_waR0_cast", bg: Some("yinse_bg.png"), loc: Some("L4 祭坛 · 转场演出"),
     mood: "danger", speaker: Some("东皇太一投影"), voice: Some("vo_yinse_taiyi"),
     text: TextSpec::Static(&[
         "一形态溃灭的刹那，祭坛上的升华法阵彻底崩解。一线巨影自天而降——",
@@ -873,7 +873,7 @@ SceneDef {
 },
 /* 二段战 · 入口 */
 SceneDef {
-    id: "ys_14_fight_r2", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛 · 二形态"),
+    id: "ys_14_fight_r2", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛 · 二形态"),
     mood: "danger", speaker: Some("瓦罗残响"), voice: None,
     text: TextSpec::Dyn(txt_boss_r2),
     choices: &[
@@ -886,7 +886,7 @@ SceneDef {
 },
 /* 二段战 · 选择驱动回合 */
 SceneDef {
-    id: "ys_14_round_r2", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 · 决战 · 二形态"),
+    id: "ys_14_round_r2", bg: Some("yinse_bg.png"), loc: Some("L4 · 决战 · 二形态"),
     mood: "danger", speaker: Some("⚔ 决战"), voice: None,
     text: TextSpec::Dyn(txt_round_r2),
     choices: &[
@@ -901,7 +901,7 @@ SceneDef {
 },
 /* ---- 结局（按 flag 分支） ---- */
 SceneDef {
-    id: "ys_15_ending_peace", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛 · 撤离传送门"),
+    id: "ys_15_ending_peace", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛 · 撤离传送门"),
     mood: "calm", speaker: Some("瓦罗残响（遗言）"), voice: None,
     text: TextSpec::Static(&[
         "你把三神兵·机核碎片交还。瓦罗残响那唯一的人类眼睛慢慢阖上，躯壳化作亿万银白色光点，沉入祭坛，沉入大地。",
@@ -913,7 +913,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_15_ending_fire", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛 · 撤离传送门"),
+    id: "ys_15_ending_fire", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛 · 撤离传送门"),
     mood: "calm", speaker: Some("吴明（录音旁白）"), voice: Some("vo_yinse_wuming"),
     text: TextSpec::Static(&[
         "你反手扣住三神兵·机核碎片，瓦罗残响一滞。李铭：「文明的种子，加一。至于两千名在银色大地上战死的先遣者……他们不叫英雄，他们叫『人』。」",
@@ -924,7 +924,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "ys_15_ending_venge", bg: Some("img_ysd_l4_arena.png"), loc: Some("L4 决战祭坛 · 撤离传送门"),
+    id: "ys_15_ending_venge", bg: Some("yinse_bg.png"), loc: Some("L4 决战祭坛 · 撤离传送门"),
     mood: "danger", speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "你亲手送葬了这团执念。仪式没有和平，也没有私藏——你只是把它从历史里抹去。",
@@ -1030,7 +1030,7 @@ SceneDef {
 },
 /* ---- 撤离信标（任意层可提前结算） ---- */
 SceneDef {
-    id: "ys_evac_beacon", bg: Some("img_ysd_l1_waste.png"), loc: Some("撤离信标 · 提前结算"),
+    id: "ys_evac_beacon", bg: Some("yinse_bg.png"), loc: Some("撤离信标 · 提前结算"),
     mood: "cold", speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "你抵达撤离信标。李铭的声音传来：「提前撤离将按当前已达成内容评级结算。确定吗？」",

@@ -156,7 +156,7 @@ pub static JINGJILING_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "jj_prelude", bg: Some("img_laser.png"), loc: Some("寂静岭 · 锈蚀的十字街心"),
+        id: "jj_prelude", bg: Some("jingjiling_bg.png"), loc: Some("寂静岭 · 锈蚀的十字街心"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "那半堵墙塌了下来——准确的说是「里」的世界伸了过来。灰雾尽头，一个巨大的身影缓缓挪步，裹着深色风衣，手里拖着一只硕大的、像工地旁的三角铁块。",
@@ -167,7 +167,7 @@ pub static JINGJILING_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "jj_01", bg: Some("img_zhuyuan_book.png"), loc: Some("锈蚀十字街心"), mood: "danger",
+        id: "jj_01", bg: Some("jingjiling_bg.png"), loc: Some("锈蚀十字街心"), mood: "danger",
         speaker: Some("三角头"), voice: None,
         text: TextSpec::Static(&["三角头 挡在出口，拖着铁锤一步一步靠近。雾里有东西在敲——它替你敲开那扇门。" ]),
         choices: &[
@@ -177,7 +177,7 @@ pub static JINGJILING_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "jj_round", bg: Some("img_laser.png"), loc: Some("决战 · 十字街心"), mood: "danger",
+        id: "jj_round", bg: Some("jingjiling_bg.png"), loc: Some("决战 · 十字街心"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("三角头 尚余 {} 气力，你 HP {}。每打碎一段锈蚀，心里的门就锁紧一分。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

@@ -326,7 +326,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_10_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 冰层营地 · 裂谷入口"),
+    id: "tx_10_l1_hub", bg: Some("tiexue_bg.png"), loc: Some("L1 · 冰层营地 · 裂谷入口"),
     mood: "cold", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         let eggs = eggs_smashed_count(st);
@@ -347,7 +347,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_12_supply", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 冰原补给箱"),
+    id: "tx_12_supply", bg: Some("tiexue_bg.png"), loc: Some("L1 · 冰原补给箱"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["你在冻僵的补给箱里翻出一份冰原干粮（ice_ration），就着雪啃了几口，体温回升了一些，神志也清明了些。"]),
     choices: &[ChoiceDef { label: "（收下补给）", sub: "Item ice_ration · +20 点 · San+5", cond: None,
@@ -357,7 +357,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_11_frozen", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 冻尸 · 铁血战士"),
+    id: "tx_11_frozen", bg: Some("tiexue_bg.png"), loc: Some("L1 · 冻尸 · 铁血战士"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "iron_blade") {
@@ -375,7 +375,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_15_l1_to_l2", bg: Some("img_laser.png"), loc: Some("L1 → L2 · 单向下冰阶"),
+    id: "tx_15_l1_to_l2", bg: Some("tiexue_bg.png"), loc: Some("L1 → L2 · 单向下冰阶"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你踏入左耳室的下冰阶，脚下的石阶向左下方无限伸展。身后传来闷雷般的坍塌——裂谷入口塌方，退路封死。你只能前行。"]),
     choices: &[ChoiceDef { label: "（沿冰阶下行 · T1 单向）", sub: "→ L2 金字塔墓道", cond: None, effects: &NO_EFF, route: Route::To("tx_20_l2_hub") }],
@@ -383,7 +383,7 @@ SceneDef {
 },
 
 /* ---- L1 异形卵 · 清扫（4 处独立场景，捣毁后对齐统计） ---- */
-SceneDef { id: "tx_20_egg", bg: Some("img_corridor.png"), loc: Some("L1 · 异形卵膜簇"), mood: "danger",
+SceneDef { id: "tx_20_egg", bg: Some("tiexue_bg.png"), loc: Some("L1 · 异形卵膜簇"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["一簇簇卵膜在冰层下起伏呼吸，隐隐可见里面蜷缩的黑影。破坏它们，能削弱皇后巢穴的增员力量。"]) ,
     choices: &[ChoiceDef { label: "捣毁一枚卵", sub: "异形扑袭 · 计卵巢进度", cond: None,
@@ -394,13 +394,13 @@ SceneDef { id: "tx_20_egg", bg: Some("img_corridor.png"), loc: Some("L1 · 异�
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_20_egg_fight", bg: Some("img_corridor.png"), loc: Some("L1 · 卵膜 · 洞穴"),
+SceneDef { id: "tx_20_egg_fight", bg: Some("tiexue_bg.png"), loc: Some("L1 · 卵膜 · 洞穴"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["被你弄裂的卵膜里窜出一头抱脸虫——湿淋淋的黏液裹着八爪，朝你脸面弹射而来。（战斗）"]) ,
     choices: &NO_CH, fight_id: Some("tx_facehugger"), video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_21_egg_fight", bg: Some("img_corridor.png"), loc: Some("L2 · 巢室卵膜"),
+SceneDef { id: "tx_21_egg_fight", bg: Some("tiexue_bg.png"), loc: Some("L2 · 巢室卵膜"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["墓道巢室里，几枚更大的卵膜似乎感应到你的逼近，微微颤动。你捣裂其中一枚，诱出一头抱脸虫。（战斗）"]) ,
     choices: &NO_CH, fight_id: Some("tx_facehugger"), video: None, cine_label: None, overlay: None,
@@ -408,7 +408,7 @@ SceneDef { id: "tx_21_egg_fight", bg: Some("img_corridor.png"), loc: Some("L2 ·
 
 /* ================= 第二幕 · 转折：迷宫之心（L2） ================= */
 SceneDef {
-    id: "tx_20_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 金字塔墓道迷宫"),
+    id: "tx_20_l2_hub", bg: Some("tiexue_bg.png"), loc: Some("L2 · 金字塔墓道迷宫"),
     mood: "danger", speaker: Some("楚浩"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("altar_key") {
@@ -430,14 +430,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_30_wall", bg: Some("img_corridor.png"), loc: Some("L2 · 入口浮雕壁画"), mood: "mystery",
+SceneDef { id: "tx_30_wall", bg: Some("tiexue_bg.png"), loc: Some("L2 · 入口浮雕壁画"), mood: "mystery",
     speaker: Some("楚浩"), voice: None,
     text: TextSpec::Static(&["壁画刻着铁血战士的成年礼：幼年战士独身深入卵巢，猎杀第一只异形。「……他们在用异形养育战士。」楚浩的声音压得很低，「我们闯进了一场正进行到一半的祭典。」张恒：「所以那些卵——」（卵膜裂开的声音）"]) ,
     choices: &[ChoiceDef { label: "（回墓道）", sub: "剧情情报", cond: None, effects: &[Eff::MarkPoint("tx_p_wall_l2")], route: Route::To("tx_20_l2_hub") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_30_warrack", bg: Some("img_corridor.png"), loc: Some("L2 · 陪葬室 · 武器架"), mood: "calm",
+SceneDef { id: "tx_30_warrack", bg: Some("tiexue_bg.png"), loc: Some("L2 · 陪葬室 · 武器架"), mood: "calm",
     speaker: None, voice: None,
     text: TextSpec::Static(&["陪葬室的武器架上摆着几件锈铁血武器与一匣弹丸。你挑了两枚合手的补给，顺带记下了墙上的献祭铭文（提示：祭坛需要『踩对两片石板』，或可与铁血结盟以得肩炮助战）。"]) ,
     choices: &[ChoiceDef { label: "取走补给", sub: "+20 点 · 线索", cond: None,
@@ -445,7 +445,7 @@ SceneDef { id: "tx_30_warrack", bg: Some("img_corridor.png"), loc: Some("L2 · �
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_32_acid", bg: Some("img_corridor.png"), loc: Some("L2 · 酸液枪管陷阱"), mood: "danger",
+SceneDef { id: "tx_32_acid", bg: Some("tiexue_bg.png"), loc: Some("L2 · 酸液枪管陷阱"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["回廊中段的石壁嵌着一杆锈蚀的铁血枪管，管口淤着经年累月的酸液。它不是武器——是用来蚀开门锁的机关。"]),
     choices: &[
@@ -457,7 +457,7 @@ SceneDef { id: "tx_32_acid", bg: Some("img_corridor.png"), loc: Some("L2 · 酸�
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_33_core", bg: Some("img_corridor.png"), loc: Some("L2 · 核心墓室 · 祭坛石板"), mood: "mystery",
+SceneDef { id: "tx_33_core", bg: Some("tiexue_bg.png"), loc: Some("L2 · 核心墓室 · 祭坛石板"), mood: "mystery",
     speaker: Some("系统"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("altar_key") {
@@ -472,7 +472,7 @@ SceneDef { id: "tx_33_core", bg: Some("img_corridor.png"), loc: Some("L2 · 核�
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "tx_35_l2_to_l3", bg: Some("img_laser.png"), loc: Some("L2 → L3 · 圣门单向"), mood: "danger",
+SceneDef { id: "tx_35_l2_to_l3", bg: Some("tiexue_bg.png"), loc: Some("L2 → L3 · 圣门单向"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["你念出石板上的死亡法则，祭坛圣门 G3 的符文亮起金光。脚下石板突然塌陷，三人一路向下坠入了圣殿——这是单向的坠落，只进不出。"]),
     choices: &[ChoiceDef { label: "（坠入圣殿 · T3 单向）", sub: "→ L3 祭坛圣殿", cond: None, effects: &NO_EFF, route: Route::To("tx_30_l3_hub") }],
@@ -480,7 +480,7 @@ SceneDef { id: "tx_35_l2_to_l3", bg: Some("img_laser.png"), loc: Some("L2 → L3
 },
 
 /* ---- L2 巢室卵 · 清扫（2 处） ---- */
-SceneDef { id: "tx_21_egg", bg: Some("img_corridor.png"), loc: Some("L2 · 异形巢室 · 卵膜"), mood: "danger",
+SceneDef { id: "tx_21_egg", bg: Some("tiexue_bg.png"), loc: Some("L2 · 异形巢室 · 卵膜"), mood: "danger",
     speaker: None, voice: None,
     text: TextSpec::Static(&["北侧巢室里卵膜挤作一团，隐约还有未孵化的幼体蜷动。清除它们同样计入卵巢进度（eggs_smashed）。"]),
     choices: &[ChoiceDef { label: "捣碎巢室卵膜", sub: "异形扑袭 · 计进度", cond: Some(cond_egg5_not),
@@ -493,7 +493,7 @@ SceneDef { id: "tx_21_egg", bg: Some("img_corridor.png"), loc: Some("L2 · 异�
 
 /* ================= 第三幕 · 结局：祭坛上的猎与猎物（L3） ================= */
 SceneDef {
-    id: "tx_30_l3_hub", bg: Some("img_laser.png"), loc: Some("L3 · 祭坛圣殿 · 皇后巢"),
+    id: "tx_30_l3_hub", bg: Some("tiexue_bg.png"), loc: Some("L3 · 祭坛圣殿 · 皇后巢"),
     mood: "danger", speaker: Some("楚浩"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("queen_defeated") {
@@ -517,7 +517,7 @@ SceneDef {
 
 /* ---- 支线 · 铁血战士（可战可和） ---- */
 SceneDef {
-    id: "tx_40_predator", bg: Some("img_laser.png"), loc: Some("L3 · 圣殿 · 铁血战士"),
+    id: "tx_40_predator", bg: Some("tiexue_bg.png"), loc: Some("L3 · 圣殿 · 铁血战士"),
     mood: "mystery", speaker: Some("铁血战士"), voice: Some("vo_tx_predator"),
     text: TextSpec::Static(&[
         "一名铁血战士立在石柱高处，网纹装甲沾着经年累月的血渍，面具下冒出两缕识别的龇气流。它没有吼叫，只发出深长的「啧——」声——那是猎人打量猎物，也是见了同类的认可与警告。",
@@ -532,7 +532,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_41_alliance", bg: Some("img_laser.png"), loc: Some("L3 · 圣殿 · 铁血战士"),
+    id: "tx_41_alliance", bg: Some("tiexue_bg.png"), loc: Some("L3 · 圣殿 · 铁血战士"),
     mood: "calm", speaker: Some("铁血战士"), voice: None,
     text: TextSpec::Static(&[
         "你将 L1 冻尸上的腕刃递出的瞬间，铁血战士的动作顿住了。它低头看了看那枚腕刃，又看向你，面具下的龇气流化为一声低沉却有分量的「啧——」。（它接过腕刃，向你行了一个猎人的礼。）",
@@ -543,7 +543,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_predator_round", bg: Some("img_laser.png"), loc: Some("L3 · 圣殿 · 猎杀之战"),
+    id: "tx_predator_round", bg: Some("tiexue_bg.png"), loc: Some("L3 · 圣殿 · 猎杀之战"),
     mood: "danger", speaker: Some("铁血战士"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("铁血战士 HP {} / {}", f.hp.max(0), 150)).unwrap_or_else(|| "铁血战士 HP --".to_string());
@@ -560,7 +560,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_42_hunted", bg: Some("img_laser.png"), loc: Some("L3 · 圣殿 · 猎杀胜利"),
+    id: "tx_42_hunted", bg: Some("tiexue_bg.png"), loc: Some("L3 · 圣殿 · 猎杀胜利"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["铁血战士轰然倒地，腕刃「铮」地脱落。狩猎它的是一双远比它狠的猎手——你取下它腕上的猎场之礼（predator_wristblade_elite）。祭坛中央的碎裂圣像泛着幽光。"]),
     choices: &[ChoiceDef { label: "（回圣殿 · 迎战皇后）", sub: "predator_hunted", cond: None, effects: &NO_EFF, route: Route::To("tx_30_l3_hub") }],
@@ -569,7 +569,7 @@ SceneDef {
 
 /* ---- 祭坛酸液喷口机关（2 步 puzzle → tx_acid_primed） ---- */
 SceneDef {
-    id: "tx_50_acid_puzzle", bg: Some("img_laser.png"), loc: Some("L3 · 祭坛酸液喷口"),
+    id: "tx_50_acid_puzzle", bg: Some("tiexue_bg.png"), loc: Some("L3 · 祭坛酸液喷口"),
     mood: "mystery", speaker: Some("系统"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("tx_acid_primed") {
@@ -590,7 +590,7 @@ SceneDef {
 
 /* ---- 主线 BOSS · 异形皇后（选择驱动，双终结二选一） ---- */
 SceneDef {
-    id: "tx_55_queen_start", bg: Some("img_laser.png"), loc: Some("L3 · 中央祭坛 · 皇后现身"),
+    id: "tx_55_queen_start", bg: Some("tiexue_bg.png"), loc: Some("L3 · 中央祭坛 · 皇后现身"),
     mood: "danger", speaker: Some("楚浩"), voice: Some("vo_tx_queen"),
     text: TextSpec::Static(&[
         "卵膜撕裂声裹着祭坛的幽光。异形皇后自石缝中立起，产卵管的尾腹拖行在石板上，猩红的肉壁随之鼓动——它把这座金字塔当成了育婴房。",
@@ -601,7 +601,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_queen_round", bg: Some("img_laser.png"), loc: Some("L3 · 皇后巢 · 激战"),
+    id: "tx_queen_round", bg: Some("tiexue_bg.png"), loc: Some("L3 · 皇后巢 · 激战"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("异形皇后 HP {} / {}", f.hp.max(0), 200)).unwrap_or_else(|| "异形皇后 HP --".to_string());
@@ -628,7 +628,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_60_queen_win", bg: Some("img_laser.png"), loc: Some("L3 · 碎裂圣像 · 胜利"),
+    id: "tx_60_queen_win", bg: Some("tiexue_bg.png"), loc: Some("L3 · 碎裂圣像 · 胜利"),
     mood: "calm", speaker: Some("系统"), voice: Some("vo_tx_queen_win"),
     text: TextSpec::Dyn(|st| {
         let fin = if st.flag("tx_queen_shoulder") {
@@ -653,7 +653,7 @@ SceneDef {
 },
 
 SceneDef {
-    id: "tx_61_shard", bg: Some("img_laser.png"), loc: Some("L3 · 碎裂圣像 · 拾取"),
+    id: "tx_61_shard", bg: Some("tiexue_bg.png"), loc: Some("L3 · 碎裂圣像 · 拾取"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["你伸出手，从碎裂圣像的裂缝间拈起那粒泛着法则微光的颗粒——死亡的概念在指尖流过。（AddItem death_divinity_shard 任务绑定，免掉落，已收于背上。）归途圣门 G4 已开——该回去了。"]),
     choices: &[ChoiceDef { label: "（走向回归圣门）", sub: "G4 · 结算", cond: None, effects: &NO_EFF, route: Route::To("tx_90_exit") }],
@@ -662,7 +662,7 @@ SceneDef {
 
 /* ================= 结局 / 结算 ================= */
 SceneDef {
-    id: "tx_90_exit", bg: Some("img_laser.png"), loc: Some("L3 · 回归圣门"),
+    id: "tx_90_exit", bg: Some("tiexue_bg.png"), loc: Some("L3 · 回归圣门"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("queen_defeated") {

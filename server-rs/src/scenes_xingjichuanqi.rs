@@ -144,7 +144,7 @@ pub static XINGJICHUANQI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xj_prelude2", bg: Some("img_laser.png"), loc: Some("裂谷口 · 夜幕将合"),
+        id: "xj_prelude2", bg: Some("xingjichuanqi_bg.png"), loc: Some("裂谷口 · 夜幕将合"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "裂谷深处，一双双灰白的眼在黑暗中睁开——那是夜行嗜血生物群，正被最后一缕日光惊醒。白昼留给这颗星球的美，在此刻彻底关上了门。",
@@ -155,7 +155,7 @@ pub static XINGJICHUANQI_SCENES: &[SceneDef] = &[
     },
     // ================= 迎战 BOSS（保留原结构） =================
     SceneDef {
-        id: "xj_01", bg: Some("img_zhuyuan_book.png"), loc: Some("裂谷尽头"), mood: "danger",
+        id: "xj_01", bg: Some("xingjichuanqi_bg.png"), loc: Some("裂谷尽头"), mood: "danger",
         speaker: Some("夜行嗜血生物群"), voice: None,
         text: TextSpec::Static(&["嗜血生物群 挡在出口。夜里，它们是这颗星球的领主。这里的美，只在白天——而此刻，是夜。" ]),
         choices: &[
@@ -165,7 +165,7 @@ pub static XINGJICHUANQI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xj_round", bg: Some("img_laser.png"), loc: Some("决战处 · 裂谷尽头"), mood: "danger",
+        id: "xj_round", bg: Some("xingjichuanqi_bg.png"), loc: Some("决战处 · 裂谷尽头"), mood: "danger",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| format!("夜行嗜血生物群 尚余 {} 气力，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

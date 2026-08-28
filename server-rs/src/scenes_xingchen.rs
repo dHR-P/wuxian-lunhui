@@ -185,7 +185,7 @@ pub static XINGCHEN_SCENES: &[SceneDef] = &[
     },
     // 保留原 BOSS 入口场景
     SceneDef {
-        id: "xc_01", bg: Some("img_zhuyuan_book.png"), loc: Some("出口腔道"), mood: "danger",
+        id: "xc_01", bg: Some("xingchen_bg.png"), loc: Some("出口腔道"), mood: "danger",
         speaker: Some("BOSS"), voice: None,
         text: TextSpec::Static(&["星核守卫 挡在出口。它的胃，是一整个星团。"]),
         choices: &[
@@ -195,7 +195,7 @@ pub static XINGCHEN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xc_round", bg: Some("img_laser.png"), loc: Some("出口腔道 · 决战处"), mood: "danger",
+        id: "xc_round", bg: Some("xingchen_bg.png"), loc: Some("出口腔道 · 决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("BOSS 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

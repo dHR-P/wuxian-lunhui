@@ -222,7 +222,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_01_drop_land", bg: Some("img_zhuyuan_book"), loc: Some("L1 南天门残垣 · 坠落点"),
+    id: "tt_01_drop_land", bg: Some("tianting_bg.png"), loc: Some("L1 南天门残垣 · 坠落点"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "脚下是碎裂的天庭砖瓦，倒悬在云海之上——你踩着的，是三十三天里被撕下来的某一片。",
@@ -237,7 +237,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_01_fengshen_ask", bg: Some("img_zhuyuan_book"), loc: Some("主神广场 · 任务门"),
+    id: "tt_01_fengshen_ask", bg: Some("tianting_bg.png"), loc: Some("主神广场 · 任务门"),
     mood: "cold", speaker: Some("李铭（记录员）"), voice: None,
     text: TextSpec::Static(&[
         "「封神榜——蛇以三界胎膜布局、万族签押的刑名之书。」李铭顿了顿，「被它钉住的族，气数会被抽去喂『天』。」",
@@ -247,7 +247,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_01_refuse", bg: Some("img_zhuyuan_book"), loc: Some("主神广场 · 任务门"),
+    id: "tt_01_refuse", bg: Some("tianting_bg.png"), loc: Some("主神广场 · 任务门"),
     mood: "danger", speaker: Some("李铭（记录员）"), voice: Some("vo_tianting_liming_refuse"),
     text: TextSpec::Static(&[
         "「高难修正不可拒绝。」李铭的声音不带温度。「倒悬的王座压了几千年——这一次，轮到你们去把天空翻回来。」",
@@ -257,7 +257,7 @@ SceneDef {
 },
 /* 天条断碑（封神榜残页·一） */
 SceneDef {
-    id: "tt_03_stele", bg: Some("img_zhuyuan_book"), loc: Some("L1 · 天条断碑"),
+    id: "tt_03_stele", bg: Some("tianting_bg.png"), loc: Some("L1 · 天条断碑"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(txt_stele),
     choices: &[
@@ -269,7 +269,7 @@ SceneDef {
 },
 /* 南天门残门（G1） */
 SceneDef {
-    id: "tt_02_gate", bg: Some("img_zhuyuan_book"), loc: Some("L1 南天门残门"),
+    id: "tt_02_gate", bg: Some("tianting_bg.png"), loc: Some("L1 南天门残门"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "残门被一道黯淡的天条封着。门缝里漏出神桥的风——冷，且带着天条煮沸纸墨的腥气。",
@@ -284,7 +284,7 @@ SceneDef {
 },
 /* 天庭兵冢（遭遇 + 神将禁军情报） */
 SceneDef {
-    id: "tt_04_ruins", bg: Some("img_zhuyuan_book"), loc: Some("L1 天庭兵冢"),
+    id: "tt_04_ruins", bg: Some("tianting_bg.png"), loc: Some("L1 天庭兵冢"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "兵冢上插满断裂的天戟，戟尖朝下——仿佛每一把戟，都在钉住某个『升上去的人』。",
@@ -299,7 +299,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_04_win", bg: Some("img_zhuyuan_book"), loc: Some("L1 天庭兵冢 · 清理"),
+    id: "tt_04_win", bg: Some("tianting_bg.png"), loc: Some("L1 天庭兵冢 · 清理"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["断戟坠地。你在戟坑里翻出一角快烂掉的天条残片，上面用血写着半句话：『……被镇压的，从来不是最弱的。』"]),
     choices: &[ChoiceDef { label: "（返回南天门残门）", sub: "G1", cond: None,
@@ -309,7 +309,7 @@ SceneDef {
 
 /* ---- 幕 1 ・ 神桥（L2）：录事官残魂 / 星宿残阵 ---- */
 SceneDef {
-    id: "tt_05_bridge", bg: Some("img_redqueen"), loc: Some("L2 天庭神桥 · 断裂处"),
+    id: "tt_05_bridge", bg: Some("tianting_bg.png"), loc: Some("L2 天庭神桥 · 断裂处"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "神桥从南天门断崖探进云海，走到一半轰然断裂。桥下的倒悬云海深处，有星星点点的『光』在反向坠落。",
@@ -323,7 +323,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_05_bridge_lushi", bg: Some("img_redqueen"), loc: Some("L2 神桥 · 录事官残魂"),
+    id: "tt_05_bridge_lushi", bg: Some("tianting_bg.png"), loc: Some("L2 神桥 · 录事官残魂"),
     mood: "cold", speaker: Some("录事官残魂 · 敬"), voice: Some("vo_tianting_lushi"),
     text: TextSpec::Static(&[
         "「别怕，我……」残魂的声音飘忽。「我是录事官敬。几千年前，我负责替东天二皇誊抄『镇压』的名单。」",
@@ -339,7 +339,7 @@ SceneDef {
 },
 /* 云海断碑（残页二） */
 SceneDef {
-    id: "tt_06_cloud_stele", bg: Some("img_redqueen"), loc: Some("L2 云海断碑"),
+    id: "tt_06_cloud_stele", bg: Some("tianting_bg.png"), loc: Some("L2 云海断碑"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "云海断碑上，刻着一副残缺的四象阵图。青龙、白虎、朱雀的纹路被圣裁刮花，只剩玄武一角还泛着幽蓝的光。",
@@ -354,7 +354,7 @@ SceneDef {
 },
 /* 星宿残阵（puzzle） */
 SceneDef {
-    id: "tt_07_stars", bg: Some("img_redqueen"), loc: Some("L2 星宿残阵"),
+    id: "tt_07_stars", bg: Some("tianting_bg.png"), loc: Some("L2 星宿残阵"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "二十八宿残碑散落在石阵里，多数倒伏，只有几颗还倔强地亮着。碑上用最古老的天文笔迹刻着一句：『星宿归位，方见天路。』",
@@ -368,7 +368,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_07_stars_done", bg: Some("img_redqueen"), loc: Some("L2 星宿残阵 · 归位"),
+    id: "tt_07_stars_done", bg: Some("tianting_bg.png"), loc: Some("L2 星宿残阵 · 归位"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["你按四象阵图的残页依次扶正残碑。二十八宿次第亮起，在倒悬的云海间拼出一座短暂完整的星空——像旧天庭还活着的那一刻。"]),
     choices: &[ChoiceDef { label: "（步向封神台方向 L3）", sub: "pt_down2", cond: None, effects: &NO_EFF, route: Route::To("tt_08_fengshen") }],
@@ -377,7 +377,7 @@ SceneDef {
 
 /* ---- 幕 2 ・ 封神台（L3）：真相 / BOSS 战场 ---- */
 SceneDef {
-    id: "tt_08_fengshen", bg: Some("img_laser"), loc: Some("L3 封神台 · 入口"),
+    id: "tt_08_fengshen", bg: Some("tianting_bg.png"), loc: Some("L3 封神台 · 入口"),
     mood: "danger", speaker: Some("李铭"), voice: None,
     text: TextSpec::Static(&[
         "跨进封神台，天变得越发倒悬。残破的天庭殿宇漂浮在狂化万族的哀嚎里——每一扇窗后，都是一双被封神榜典掉的眼睛。",
@@ -392,7 +392,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_08_fengshen_core", bg: Some("img_laser"), loc: Some("L3 封神台核心"),
+    id: "tt_08_fengshen_core", bg: Some("tianting_bg.png"), loc: Some("L3 封神台核心"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "封神台核心的正中，第三张封神榜残页被一圈狂化的万族虚影护住。残页上的墨痕，恰好接续了云海断碑被劈断的那句——",
@@ -406,7 +406,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_09_truth_wall", bg: Some("img_laser"), loc: Some("L3 诛仙剑痕残壁"),
+    id: "tt_09_truth_wall", bg: Some("tianting_bg.png"), loc: Some("L3 诛仙剑痕残壁"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "封神台深处的残壁上，横着一道诛仙四剑劈出的剑痕。剑痕之下的石皮剥落，露出一行被隐去了几个世纪的刻字：",
@@ -422,7 +422,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_11_fengshen_truth", bg: Some("img_laser"), loc: Some("L3 诛仙剑痕 · 真相揭晓"),
+    id: "tt_11_fengshen_truth", bg: Some("tianting_bg.png"), loc: Some("L3 诛仙剑痕 · 真相揭晓"),
     mood: "danger", speaker: Some("录事官残魂 · 敬（残响）"), voice: None,
     text: TextSpec::Static(&[
         "三张封神榜残页在你手中相合，你读懂了整件事——封神榜吞噬万族气数供养『天』，而天上坐着的，是东天二皇。",
@@ -437,7 +437,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_10_cages", bg: Some("img_laser"), loc: Some("L3 万族囚笼"),
+    id: "tt_10_cages", bg: Some("tianting_bg.png"), loc: Some("L3 万族囚笼"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("tt_fengshen_truth") {
@@ -452,7 +452,7 @@ SceneDef {
 },
 /* 凌霄殿残殿 · 倒悬王座（L4 入口；条件路由：BOSS 已破 → 结局抉择，未破 → 迎战封神投影） */
 SceneDef {
-    id: "tt_12_lingxiao", bg: Some("img_laser"), loc: Some("L4 凌霄殿残殿 · 倒悬王座"),
+    id: "tt_12_lingxiao", bg: Some("tianting_bg.png"), loc: Some("L4 凌霄殿残殿 · 倒悬王座"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("tt_lingxiao_open") {
@@ -470,7 +470,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_13_fight_gate", bg: Some("img_laser"), loc: Some("L3 封神台结界 · 开战前"),
+    id: "tt_13_fight_gate", bg: Some("tianting_bg.png"), loc: Some("L3 封神台结界 · 开战前"),
     mood: "danger", speaker: Some("天庭神将 · 封神投影"), voice: Some("vo_tianting_shenjiang"),
     text: TextSpec::Static(&[
         "结界在你面前裂开。封神台的狂化余烬冲天而起，凝聚成一尊金甲神将——封神投影。",
@@ -486,7 +486,7 @@ SceneDef {
 
 /* ---- 幕 3 ・ 决战：封神投影 两段式（场景链） ---- */
 SceneDef {
-    id: "tt_14_r1", bg: Some("img_laser"), loc: Some("L3 封神台 · 决战 · 一形态"),
+    id: "tt_14_r1", bg: Some("tianting_bg.png"), loc: Some("L3 封神台 · 决战 · 一形态"),
     mood: "danger", speaker: Some("天庭神将 · 封神投影"), voice: None,
     text: TextSpec::Dyn(txt_boss_r1),
     choices: &[
@@ -498,7 +498,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_14_interrupt_check", bg: Some("img_laser"), loc: Some("L3 封神台 · 打断判定"),
+    id: "tt_14_interrupt_check", bg: Some("tianting_bg.png"), loc: Some("L3 封神台 · 打断判定"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("tt_fengshen_truth") {
@@ -517,7 +517,7 @@ SceneDef {
 },
 /* 一段战 · 选择驱动回合 */
 SceneDef {
-    id: "tt_14_round_r1", bg: Some("img_laser"), loc: Some("L3 · 决战 · 一形态"),
+    id: "tt_14_round_r1", bg: Some("tianting_bg.png"), loc: Some("L3 · 决战 · 一形态"),
     mood: "danger", speaker: Some("⚔ 决战"), voice: None,
     text: TextSpec::Dyn(txt_round_r1),
     choices: &[
@@ -530,7 +530,7 @@ SceneDef {
 },
 /* 转场演出：东天二皇投影（圣位红线 · 演出级 · 不可战） */
 SceneDef {
-    id: "tt_huang_cast", bg: Some("img_laser"), loc: Some("L3 封神台上空 · 转场演出"),
+    id: "tt_huang_cast", bg: Some("tianting_bg.png"), loc: Some("L3 封神台上空 · 转场演出"),
     mood: "danger", speaker: Some("东皇太一投影"), voice: Some("vo_tianting_taiyi"),
     text: TextSpec::Static(&[
         "一形态溃灭的刹那，封神台的天幕轰然碎裂。一线双重日冕剪影自倒悬的天顶降临——",
@@ -545,7 +545,7 @@ SceneDef {
 },
 /* 二段战 · 入口 */
 SceneDef {
-    id: "tt_15_r2", bg: Some("img_laser"), loc: Some("L3 封神台 · 决战 · 二形态"),
+    id: "tt_15_r2", bg: Some("tianting_bg.png"), loc: Some("L3 封神台 · 决战 · 二形态"),
     mood: "danger", speaker: Some("天庭神将 · 封神投影（真灵）"), voice: None,
     text: TextSpec::Dyn(txt_boss_r2),
     choices: &[
@@ -558,7 +558,7 @@ SceneDef {
 },
 /* 二段战 · 选择驱动回合 */
 SceneDef {
-    id: "tt_15_round_r2", bg: Some("img_laser"), loc: Some("L3 · 决战 · 二形态"),
+    id: "tt_15_round_r2", bg: Some("tianting_bg.png"), loc: Some("L3 · 决战 · 二形态"),
     mood: "danger", speaker: Some("⚔ 决战"), voice: None,
     text: TextSpec::Dyn(txt_round_r2),
     choices: &[
@@ -572,7 +572,7 @@ SceneDef {
 
 /* ---- 幕 4 ・ 抉择结局（倒悬王座前） ---- */
 SceneDef {
-    id: "tt_17_choice", bg: Some("img_laser"), loc: Some("L4 凌霄殿残殿 · 倒悬王座前"),
+    id: "tt_17_choice", bg: Some("tianting_bg.png"), loc: Some("L4 凌霄殿残殿 · 倒悬王座前"),
     mood: "danger", speaker: Some("帝俊（投影残响）"), voice: None,
     text: TextSpec::Static(&[
         "封神投影彻底溃散。你站在凌霄殿残殿的废墟中央——头顶，是一座倒悬的黄金王座；王座下，压着人皇伏羲那未竟的四象五行八卦阵的边缘。",
@@ -590,7 +590,7 @@ SceneDef {
 },
 /* ---- 结局（按 flag 分支） ---- */
 SceneDef {
-    id: "tt_16_ending_unmask", bg: Some("img_laser"), loc: Some("L4 凌霄殿 · 真相传世"),
+    id: "tt_16_ending_unmask", bg: Some("tianting_bg.png"), loc: Some("L4 凌霄殿 · 真相传世"),
     mood: "calm", speaker: Some("李铭"), voice: Some("vo_tianting_liming_unmask"),
     text: TextSpec::Static(&[
         "你把三张封神榜残页并作一卷，掷向那些焚毁的万族名册。封神真相随天风传遍残境——「镇压的从来不是天道，是东天二皇。」",
@@ -604,7 +604,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_16_ending_seal", bg: Some("img_laser"), loc: Some("L4 凌霄殿 · 助伏羲镇天"),
+    id: "tt_16_ending_seal", bg: Some("tianting_bg.png"), loc: Some("L4 凌霄殿 · 助伏羲镇天"),
     mood: "calm", speaker: Some("伏羲（残响）"), voice: Some("vo_tianting_fuxi"),
     text: TextSpec::Static(&[
         "你循着残页上的四象五行阵角，补完人皇伏羲那未竟的封印。青龙白虎朱雀玄武次第归位，倒悬的王座被一缕人道的微光，缓缓翻回它该在的地方。",
@@ -618,7 +618,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "tt_16_ending_self", bg: Some("img_laser"), loc: Some("L4 凌霄殿 · 自取神性"),
+    id: "tt_16_ending_self", bg: Some("tianting_bg.png"), loc: Some("L4 凌霄殿 · 自取神性"),
     mood: "cold", speaker: Some("李铭（旁白）"), voice: None,
     text: TextSpec::Static(&[
         "你没有选择把真相传世，也没有替伏羲补阵。你伸手，从封神投影溃散之处，攫走了一枚仍泛着圣光的「神性碎片」。",

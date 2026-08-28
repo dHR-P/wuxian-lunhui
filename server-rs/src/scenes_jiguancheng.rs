@@ -328,7 +328,7 @@ SceneDef {
 
 /* ---- L1 城门 hub ---- */
 SceneDef {
-    id: "jg_01", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 城门与外围"),
+    id: "jg_01", bg: Some("jiguancheng_bg.png"), loc: Some("L1 · 城门与外围"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "外城广场的青石缝里冒出芜荽般的锈绿。你已站在那扇洞开的城门前。",
@@ -347,7 +347,7 @@ SceneDef {
 
 /* ---- L1 调查点场景 ---- */
 SceneDef {
-    id: "jg_02_gear_key", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 深巷藏龛"),
+    id: "jg_02_gear_key", bg: Some("jiguancheng_bg.png"), loc: Some("L1 · 深巷藏龛"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["深巷尽头的一方石龛里，供着一枚黄铜齿轮钥匙——钥匙柄刻着「墨工」。"]),
     choices: &[ChoiceDef { label: "取走铜钥·墨工", sub: "Item it_gear_key · 开 G1", cond: None,
@@ -355,7 +355,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_02_ling_a", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 墨令残片 · 甲"),
+    id: "jg_02_ling_a", bg: Some("jiguancheng_bg.png"), loc: Some("L1 · 墨令残片 · 甲"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["城门口的石缝里卡着一枚断裂的墨令——断口新得反常，像才被人掰开。"]),
     choices: &[ChoiceDef { label: "拾取断裂墨令·甲", sub: "Item it_mo_ling_a", cond: None,
@@ -363,7 +363,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_05_rune_bell", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 门楼铜钟"),
+    id: "jg_05_rune_bell", bg: Some("jiguancheng_bg.png"), loc: Some("L1 · 门楼铜钟"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["门楼看台上悬着一口锈铜钟。钟身受击时会发出极规律的低鸣——像在给什么计数。"]),
     choices: &[ChoiceDef { label: "记下铜钟的节拍", sub: "剧情", cond: None,
@@ -371,7 +371,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_05_ancestor", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 墨门先贤绘像"),
+    id: "jg_05_ancestor", bg: Some("jiguancheng_bg.png"), loc: Some("L1 · 墨门先贤绘像"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["门楼下绘着一位银发老者的像，题字：「墨守……不活于正……枢机不当启」。"]),
     choices: &[ChoiceDef { label: "默记守城誓言", sub: "剧情", cond: None,
@@ -379,7 +379,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_05_rune_arrow", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 箭楼残件（铭文 1/4）"),
+    id: "jg_05_rune_arrow", bg: Some("jiguancheng_bg.png"), loc: Some("L1 · 箭楼残件（铭文 1/4）"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["东侧箭楼残破，弩臂上刻着铭文：「三启以定枢……闲人莫问」。你把铭文拓印下来。"]),
     choices: &[ChoiceDef { label: "拓印铭文", sub: "rune 1/4", cond: None,
@@ -389,7 +389,7 @@ SceneDef {
 
 /* ================= L2 齿轮工坊 ================= */
 SceneDef {
-    id: "jg_02_arrive_workshop", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮工坊"),
+    id: "jg_02_arrive_workshop", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮工坊"),
     mood: "cold", speaker: Some("齿轮阵警报音"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("gear_puzzle_clear") {
@@ -411,7 +411,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_11_gear_a", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮机关 · 甲"),
+    id: "jg_11_gear_a", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮机关 · 甲"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你一扳那枚齿轮机关，主齿轮组轰然点亮一角，机簧里滚落一枚枢机令（甲）。"]),
     choices: &[ChoiceDef { label: "拔动机关·甲", sub: "枢机令·甲 · 三启 1/3", cond: None,
@@ -419,7 +419,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_11_gear_b", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮机关 · 乙"),
+    id: "jg_11_gear_b", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮机关 · 乙"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["天桥高处的机关乙逆时针转满一圈，滚出一枚枢机令（乙）。"]),
     choices: &[ChoiceDef { label: "拧动机关·乙", sub: "枢机令·乙 · 三启 2/3", cond: None,
@@ -427,7 +427,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_11_gear_c", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮机关 · 丙"),
+    id: "jg_11_gear_c", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮机关 · 丙"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["主齿轮组下方的机关丙被压下，机簧深处滚出最后一枚枢机令（丙）。"]),
     choices: &[ChoiceDef { label: "压动机关·丙", sub: "枢机令·丙 · 三启 3/3", cond: None,
@@ -435,7 +435,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_05_rune_workshop", bg: Some("img_laser.png"), loc: Some("L2 · 天桥铭牌（铭文 2/4）"),
+    id: "jg_05_rune_workshop", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 天桥铭牌（铭文 2/4）"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["天桥铁牌上刻着铭文：「枢机升降，唯三启是从」。拓印后，你记下升降梯的规矩。"]),
     choices: &[ChoiceDef { label: "拓印铭文", sub: "rune 2/4", cond: None,
@@ -443,7 +443,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_04_parts", bg: Some("img_laser.png"), loc: Some("L2 · 地沟零件池"),
+    id: "jg_04_parts", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 地沟零件池"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["工坊底沟的零件坑里泡着锈齿轮与断簧，其间滚着一枚丹药。"]),
     choices: &[ChoiceDef { label: "捞起气血丹", sub: "Item it_qixue_dan", cond: None,
@@ -451,7 +451,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_02_rune_done", bg: Some("img_laser.png"), loc: Some("机关城 · 铭文集拓"),
+    id: "jg_02_rune_done", bg: Some("jiguancheng_bg.png"), loc: Some("机关城 · 铭文集拓"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("rune_full") {
@@ -464,7 +464,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_06_turn", bg: Some("img_laser.png"), loc: Some("L2 · 工坊枢纽 · 关键转折"),
+    id: "jg_06_turn", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 工坊枢纽 · 关键转折"),
     mood: "danger", speaker: Some("齿轮阵警报音（铭文）"), voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_mo_ling_b") {
@@ -484,34 +484,34 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_06_rash", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮阵 · 铁卫增援"),
+    id: "jg_06_rash", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮阵 · 铁卫增援"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["总闸被猛地拉下，整座工坊的机簧纹路乱颤——一群铁卫从墙后的暗格鱼贯而出！"]),
     choices: &[ChoiceDef { label: "迎战铁卫增援", sub: "jc_guard3 增援", cond: None, effects: &NO_EFF, route: Route::To("jg_13_guard3_reinf") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_13_guard3_reinf", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮阵"),
+    id: "jg_13_guard3_reinf", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮阵"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["一尊铁卫已经扑到你面前——（战斗）"]),
     choices: &[ChoiceDef { label: "【迎战】", sub: "jc_guard3", cond: None, effects: &NO_EFF, route: Route::To("jg_13_guard3_reinf_fight") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_13_guard3_reinf_fight", bg: Some("img_laser.png"), loc: Some("L2 · 齿轮阵"),
+    id: "jg_13_guard3_reinf_fight", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 齿轮阵"),
     mood: "danger", speaker: None, voice: Some("vo_jg_guard3"),
     text: TextSpec::Static(&["那尊铁卫朝你过来了。" ]),
     choices: &[], fight_id: Some("jc_guard3"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_02_lift", bg: Some("img_laser.png"), loc: Some("L2 · 升降梯（G2 已开）"),
+    id: "jg_02_lift", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 升降梯（G2 已开）"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["三启已成，升降梯的缆索轰然咬合。你踏上去，铁笼朝上爬去——身后缆索齐齐断裂，铁梯轰然坠入黑暗。"]),
     choices: &[ChoiceDef { label: "（升梯至枢机回廊）", sub: "p_jc_2 单向 · 缆断", cond: None, effects: &NO_EFF, route: Route::To("jg_03_arrive_corridor") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_02_ladder", bg: Some("img_laser.png"), loc: Some("L2 · 西爬梯（险路）"),
+    id: "jg_02_ladder", bg: Some("jiguancheng_bg.png"), loc: Some("L2 · 西爬梯（险路）"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["西侧爬梯窄得只容一人侧身。吊锤在头顶隆隆摆动，齿轮兽伏在梯口——这是比升降梯险得多的一条路，而且……进去了就回不来。"]),
     choices: &[ChoiceDef { label: "攀梯而上（单向进 L3）", sub: "p_jc_3 · 敌众+吊锤", cond: None, effects: &NO_EFF, route: Route::To("jg_03_arrive_corridor") }],
@@ -520,7 +520,7 @@ SceneDef {
 
 /* ================= L3 枢机回廊 ================= */
 SceneDef {
-    id: "jg_03_arrive_corridor", bg: Some("img_corridor.png"), loc: Some("L3 · 枢机回廊"),
+    id: "jg_03_arrive_corridor", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 枢机回廊"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if inv(st, "it_pivot_key") {
@@ -540,7 +540,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_13_pivot_key", bg: Some("img_corridor.png"), loc: Some("L3 · 暗格 · 零件箱"),
+    id: "jg_13_pivot_key", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 暗格 · 零件箱"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["桥门楼墙体内的暗格，藏着一枚三棱枢机钥。钥柄温润，是活人久握过的。"]),
     choices: &[ChoiceDef { label: "取走枢机钥", sub: "Item it_pivot_key · 开 G3", cond: None,
@@ -548,7 +548,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_13_keeper_note", bg: Some("img_corridor.png"), loc: Some("L3 · 守城人笔记"),
+    id: "jg_13_keeper_note", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 守城人笔记"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["遗骸旁压着一卷朽烂的帛书，字迹用力到纸背凸起：「封匣之人，即是我等。墨者不死，城何以灭……三百年前我等以命封匣，今日以血继之。」"]),
     choices: &[ChoiceDef { label: "读完遗书", sub: "伏笔 · 守城人自述", cond: None,
@@ -556,7 +556,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_05_rune_corridor", bg: Some("img_corridor.png"), loc: Some("L3 · 壁雕 · 墨门机关总图（铭文 3/4）"),
+    id: "jg_05_rune_corridor", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 壁雕 · 墨门机关总图（铭文 3/4）"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["整面墙的机关总图里，枢机大殿的位置被一枚三齿轮记号框出。你在角落拓到第 3 枚铭文。"]),
     choices: &[ChoiceDef { label: "拓印铭文", sub: "rune 3/4", cond: None,
@@ -564,13 +564,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_13_gearbest", bg: Some("img_corridor.png"), loc: Some("L3 · 中央桥下"),
+    id: "jg_13_gearbest", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 中央桥下"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jg_gearbest2"),
     text: TextSpec::Static(&["你纵身跃下中央桥——巨齿轮兽伏在桥下阴影里。（战斗）"]),
     choices: &[], fight_id: Some("jc_gearbest2"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_13_gearbest_win", bg: Some("img_corridor.png"), loc: Some("L3 · 中央桥下"),
+    id: "jg_13_gearbest_win", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 中央桥下"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["巨齿轮兽瘫伏不动，腹部的断裂墨令从齿缝里滑落——这是断裂墨令·乙。"]),
     choices: &[ChoiceDef { label: "拾取断裂墨令·乙", sub: "Item it_mo_ling_b", cond: None,
@@ -578,7 +578,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_02_pivot_bridge", bg: Some("img_corridor.png"), loc: Some("L3 · 枢机桥（G3 已开）"),
+    id: "jg_02_pivot_bridge", bg: Some("jiguancheng_bg.png"), loc: Some("L3 · 枢机桥（G3 已开）"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["枢机钥旋入锁孔，「嗡——」铁闸升起，枢机桥在你面前展开。你踏上最后一道单向门——身后轰然合拢，再无回头的路。"]),
     choices: &[ChoiceDef { label: "（过枢机桥 → 核心密室）", sub: "p_jc_5 单向 · 决战前最后单向门", cond: None, effects: &NO_EFF, route: Route::To("jg_21_arrive_core") }],
@@ -587,7 +587,7 @@ SceneDef {
 
 /* ================= L4 核心密室 ================= */
 SceneDef {
-    id: "jg_21_arrive_core", bg: Some("img_corridor.png"), loc: Some("L4 · 核心密室"),
+    id: "jg_21_arrive_core", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 核心密室"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "墨玉核心幽蓝的光在整座大殿里漫流，暗金脉纹沿壁走向穹顶。远处，五米高的青铜剪影正一缕缕凝实——枢机巨像。",
@@ -602,7 +602,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_05_rune_core", bg: Some("img_corridor.png"), loc: Some("L4 · 枢机核心壁雕（铭文 4/4）"),
+    id: "jg_05_rune_core", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 枢机核心壁雕（铭文 4/4）"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["枢机大殿的壁雕刻着一枚巨大的墨玉核心，其下铭文：「齿轮为经、机关为纬——枢机若启，勿让匣物见天日」。你拓下最后一枚铭文。"]),
     choices: &[ChoiceDef { label: "拓印铭文", sub: "rune 4/4", cond: None,
@@ -610,7 +610,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_24_keeper_rel_ac", bg: Some("img_zhuyuan_book.png"), loc: Some("L4 · 静室遗物"),
+    id: "jg_24_keeper_rel_ac", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 静室遗物"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["静室门槛外散落着一叠守城人的遗物——一封未寄出的信：「封匣之人，即是我等。勿让后人再启。」你拾起封缄的遗书。"]),
     choices: &[ChoiceDef { label: "收下守城人遗书", sub: "Item it_shoucheng_letter", cond: None,
@@ -620,7 +620,7 @@ SceneDef {
 
 /* ---- BOSS · 枢机巨像（选择驱动）---- */
 SceneDef {
-    id: "jg_22_colossus", bg: Some("img_corridor.png"), loc: Some("L4 · 枢机大殿 · 决战"),
+    id: "jg_22_colossus", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 枢机大殿 · 决战"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jg_colossus"),
     text: TextSpec::Static(&[
         "你踏进枢机大殿那一刻，五米的青铜巨像轰然睁目。三层齿轮颅缓缓展开，胸口墨玉核心直射暗金光芒。",
@@ -630,7 +630,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_colossus_round", bg: Some("img_corridor.png"), loc: Some("L4 · 枢机大殿 · 激战"),
+    id: "jg_colossus_round", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 枢机大殿 · 激战"),
     mood: "danger", speaker: Some("枢机巨像"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("巨像 HP {} / {}", f.hp.max(0), 160)).unwrap_or_else(|| "巨像 HP --".to_string());
@@ -652,7 +652,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_23_colossus_down", bg: Some("img_corridor.png"), loc: Some("L4 · 枢机大殿"),
+    id: "jg_23_colossus_down", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 枢机大殿"),
     mood: "calm", speaker: Some("守城人残响"), voice: Some("vo_jg_colossus_down"),
     text: TextSpec::Dyn(|st| {
         let mode = match (st.flag("jc_box_open"), st.flag("jc_box_seal"), st.flag("jc_box_destroy")) {
@@ -669,7 +669,7 @@ SceneDef {
 
 /* ================= 结局三分支 · 密匣之择 ================= */
 SceneDef {
-    id: "jg_30_box", bg: Some("img_zhuyuan_book.png"), loc: Some("L4 · 密匣石台"),
+    id: "jg_30_box", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 密匣石台"),
     mood: "mystery", speaker: Some("守城人残响"), voice: Some("vo_jg_box"),
     text: TextSpec::Static(&[
         "石台上的跨界密匣贴满墨门封条，匣底的星图隔着暗香微微透光。守城人枯哑的声音自深处传来，藏着一丝机关音：",
@@ -688,7 +688,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_31_exit", bg: Some("img_corridor.png"), loc: Some("L4 · 撤离阵"),
+    id: "jg_31_exit", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 撤离阵"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Dyn(|st| {
         match (st.flag("jc_box_open"), st.flag("jc_box_seal"), st.flag("jc_box_destroy")) {
@@ -728,7 +728,7 @@ SceneDef {
 
 /* ================= 隐藏 BOSS · 入魔的守城人 ================= */
 SceneDef {
-    id: "jg_25_keeper", bg: Some("img_zhuyuan_book.png"), loc: Some("L4 · 静室"),
+    id: "jg_25_keeper", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 静室"),
     mood: "danger", speaker: Some("入魔的守城人"), voice: Some("vo_jg_keeper"),
     text: TextSpec::Static(&[
         "石门无声滑开，一股朽木与烛火的潮气扑来。枯坐的老人缓缓抬头，双目赤红，铜链自朽木中生出——「你……来晚了三百年。」",
@@ -741,7 +741,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_keeper_round", bg: Some("img_zhuyuan_book.png"), loc: Some("L4 · 静室 · 激战"),
+    id: "jg_keeper_round", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 静室 · 激战"),
     mood: "danger", speaker: Some("入魔的守城人"), voice: None,
     text: TextSpec::Dyn(|st| {
         let f = st.fight.as_ref().map(|f| format!("守城人 HP {} / {}", f.hp.max(0), 140)).unwrap_or_else(|| "HP --".to_string());
@@ -760,7 +760,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jg_26_keeper_freed", bg: Some("img_zhuyuan_book.png"), loc: Some("L4 · 静室"),
+    id: "jg_26_keeper_freed", bg: Some("jiguancheng_bg.png"), loc: Some("L4 · 静室"),
     mood: "calm", speaker: Some("守城人"), voice: Some("vo_jg_keeper_free"),
     text: TextSpec::Static(&["铜链自他腕上寸寸滑落。守城人怔怔望着你手里的墨令，赤红如潮水褪去：「封匣之人，即是我等……你今日以墨令，封了那人犯下的罪。」他化作一片光尘，石室归于寂静。"]),
     choices: &[ChoiceDef { label: "（转身离开静室）", sub: "keeper_freed · 回核心大殿", cond: None, effects: &NO_EFF, route: Route::To("jg_21_arrive_core") }],

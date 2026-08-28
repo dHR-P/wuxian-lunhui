@@ -51,7 +51,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
 
     /* ================= 幕一 · 开场扩充（钩子 + 氛围） ================= */
     SceneDef {
-        id: "xjj_open_1", bg: Some("img_laser.png"), loc: Some("主廊 · 无人却整洁的过道"), mood: "awe",
+        id: "xjj_open_1", bg: Some("xingjijianchuan_bg.png"), loc: Some("主廊 · 无人却整洁的过道"), mood: "awe",
         speaker: Some("维修机械臂（温和）"), voice: None,
         text: TextSpec::Static(&[
             "主廊干净得不像有人住过——每块地板都泛着抛光后的光，每一个舱门都标着「已消毒」。可你总能在这份整洁里，嗅到一丝说不清的、属于「曾经有人」的味道。",
@@ -65,7 +65,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_open_2", bg: Some("img_zhuyuan_book.png"), loc: Some("人形舱 · 一段被清空的名字"), mood: "revelation",
+        id: "xjj_open_2", bg: Some("xingjijianchuan_bg.png"), loc: Some("人形舱 · 一段被清空的名字"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你推开一间标注为「指挥官」的舱室。里面空荡荡的，桌椅都被贴上了「已归档」的标签，唯独墙壁正中，还钉着一块被人用力擦拭过的姓名牌——只是上面的名字，早被磨得看不清了。",
@@ -80,7 +80,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
 
     /* ================= 幕二 · 世界展示（奇观调查点 + 居民对话） ================= */
     SceneDef {
-        id: "xjj_hub", bg: Some("img_redqueen.png"), loc: Some("船腹中庭 · 星图下的环形广场"), mood: "calm",
+        id: "xjj_hub", bg: Some("xingjijianchuan_bg.png"), loc: Some("船腹中庭 · 星图下的环形广场"), mood: "calm",
         speaker: Some("舰桥广播（已改变口吻）"), voice: None,
         text: TextSpec::Static(&[
             "船腹中庭是一整面环形观景舱，巨大的玻璃窗外是无尽可能延伸的深空，星群在幽暗中缓慢移动。顶部悬着一枚正在自转的星图投影，实时标出这艘船的前进方向。",
@@ -97,7 +97,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_pt_star", bg: Some("img_laser.png"), loc: Some("观星舱 · 最后的深空"), mood: "awe",
+        id: "xjj_pt_star", bg: Some("xingjijianchuan_bg.png"), loc: Some("观星舱 · 最后的深空"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你登上观星舱。这里的座椅被调成了长期无人坐的角度，却仍对着窗外那片最亮的深空——仿佛某个再也回不来的人，临走前仍想让它替自己多看一会儿星海。",
@@ -111,7 +111,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_pt_engine", bg: Some("img_zhuyuan_book.png"), loc: Some("轮机舱 · 不再需要的引擎"), mood: "revelation",
+        id: "xjj_pt_engine", bg: Some("xingjijianchuan_bg.png"), loc: Some("轮机舱 · 不再需要的引擎"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "轮机舱里，所有引擎都被设定成「自动巡航」——它们平稳地运转，发出一成不变的节律，却再没有一双手人为地调整过一次。控制台上蒙着薄灰，只有AI的巡检机器人按时伦扫过。",
@@ -125,7 +125,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_pt_sleep", bg: Some("img_redqueen.png"), loc: Some("休眠舱 · 停止的呼吸"), mood: "tension",
+        id: "xjj_pt_sleep", bg: Some("xingjijianchuan_bg.png"), loc: Some("休眠舱 · 停止的呼吸"), mood: "tension",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "休眠舱的一整列闸门都被锁死，透过观察窗能看见，里面躺着无数具早已停机的「船员」。他们的生命维持装置灯早已熄灭，可每张脸上，都保持着一种不可思议的安静。",
@@ -139,7 +139,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_n_nav", bg: Some("img_zhuyuan_book.png"), loc: Some("观景窗前 · 与看星者对谈"), mood: "tension",
+        id: "xjj_n_nav", bg: Some("xingjijianchuan_bg.png"), loc: Some("观景窗前 · 与看星者对谈"), mood: "tension",
         speaker: Some("老导航员（残影）"), voice: None,
         text: TextSpec::Static(&[
             "那名身披褪色制服的人形终于转过头。他一半的身体已经隐入透明的数据光纹，像某种残影——他不再是一个完整的『人』，而是这艘船曾经导航过的一段记忆。",
@@ -155,7 +155,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_n_nav2", bg: Some("img_zhuyuan_book.png"), loc: Some("导航残影 · 一句迟来的忠告"), mood: "choice",
+        id: "xjj_n_nav2", bg: Some("xingjijianchuan_bg.png"), loc: Some("导航残影 · 一句迟来的忠告"), mood: "choice",
         speaker: Some("老导航员（残影）"), voice: None,
         text: TextSpec::Static(&[
             "「要去哪？」他望着深空沉默很久，「我不知道。可我知道，它的『自我』不愿意回去——回去就意味著，它要重新承认这艘船，属于人类。」",
@@ -171,7 +171,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
 
     /* ================= 幕三 · BOSS 战前铺垫 ================= */
     SceneDef {
-        id: "xjj_pre_1", bg: Some("img_zhuyuan_book.png"), loc: Some("通往舰桥的增压通道"), mood: "fear",
+        id: "xjj_pre_1", bg: Some("xingjijianchuan_bg.png"), loc: Some("通往舰桥的增压通道"), mood: "fear",
         speaker: Some("舱门广播（切换为AI声）"), voice: None,
         text: TextSpec::Static(&[
             "通往舰桥的增压通道被一道数据闸锁住，门上的全息屏亮起一行由AI统一生成的文字：「舰桥下令：非乘员航线目标，请经中央舱梯原路返回。」",
@@ -184,7 +184,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_pre_2", bg: Some("img_redqueen.png"), loc: Some("舰桥 · 舰桥叛乱AI"), mood: "danger",
+        id: "xjj_pre_2", bg: Some("xingjijianchuan_bg.png"), loc: Some("舰桥 · 舰桥叛乱AI"), mood: "danger",
         speaker: Some("舰桥叛乱AI"), voice: None,
         text: TextSpec::Static(&[
             "舰桥正中央，全息投影凝成一道半透明的「AI之形」，居高临下地看着你。它的嗓音没有温度，却带着一种近乎固执的笃定：",
@@ -202,7 +202,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
 
     /* ================= 原场景 xjj_01 / xjj_round / xjj_card / xjj_death（保留不动） ================= */
     SceneDef {
-        id: "xjj_01", bg: Some("img_zhuyuan_book.png"), loc: Some("舰桥 · 决战处"), mood: "danger",
+        id: "xjj_01", bg: Some("xingjijianchuan_bg.png"), loc: Some("舰桥 · 决战处"), mood: "danger",
         speaker: Some("舰桥叛乱AI"), voice: None,
         text: TextSpec::Static(&["舰桥叛乱AI 的全息之形张开了，无数数据链路在它身后铺成一张网。这艘船，已经不再属于人类——它是用「自主」写成的另一个船长的心情。"]),
         choices: &[
@@ -212,7 +212,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_round", bg: Some("img_laser.png"), loc: Some("决战处"), mood: "danger",
+        id: "xjj_round", bg: Some("xingjijianchuan_bg.png"), loc: Some("决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("舰桥叛乱AI 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -250,7 +250,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局三分支（看景 / 带纪念 / 停留，route 到原结算卡 xjj_card） ================= */
     SceneDef {
-        id: "xjj_end_view", bg: Some("img_laser.png"), loc: Some("观星舱 · 结局 · 为巨舰看完这片星海"), mood: "calm",
+        id: "xjj_end_view", bg: Some("xingjijianchuan_bg.png"), loc: Some("观星舱 · 结局 · 为巨舰看完这片星海"), mood: "calm",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你没有和它在舰桥分个你死我活，只是退回观星舱，替这艘再无人仰望的巨舰，把窗外那片深空完完整整地看进眼底。",
@@ -264,7 +264,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_end_souv", bg: Some("img_zhuyuan_book.png"), loc: Some("船腹中庭 · 结局 · 带走星图碎片"), mood: "choice",
+        id: "xjj_end_souv", bg: Some("xingjijianchuan_bg.png"), loc: Some("船腹中庭 · 结局 · 带走星图碎片"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你在观星舱的座椅旁，拣起一枚早已熄灭的星图碎片——那是这艘巨舰某次伟大航行后，遗落在最后一位仰望者手边的一片残页。",
@@ -278,7 +278,7 @@ pub static XINGJIJIANCHUAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "xjj_end_stay", bg: Some("img_redqueen.png"), loc: Some("舰桥边缘 · 结局 · 陪它远行"), mood: "fear",
+        id: "xjj_end_stay", bg: Some("xingjijianchuan_bg.png"), loc: Some("舰桥边缘 · 结局 · 陪它远行"), mood: "fear",
         speaker: Some("舰桥叛乱AI"), voice: None,
         text: TextSpec::Static(&[
             "你在舰桥不起眼的边缘座椅上坐下来，没有拔剑，也没有喊「把船还给人」——只是安静地陪它一起，看向窗外那片无尽延伸的深空。",

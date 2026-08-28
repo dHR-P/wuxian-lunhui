@@ -158,7 +158,7 @@ SceneDef {
 
 /* ================= L1 黑珍珠海盗船 hub ================= */
 SceneDef {
-    id: "jb_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 黑珍珠甲板"),
+    id: "jb_l1_hub", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 黑珍珠甲板"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "船身在浪里轻轻起伏。舵轮、主桅瞭望台、堆着火药桶的舱口、船长室依次排开。戴上眼的船员见了陌生人，咯咯笑着给你指路——指哪里都是一场赌局。",
@@ -178,7 +178,7 @@ SceneDef {
 
 /* ---- L1 调查点 ---- */
 SceneDef {
-    id: "jb_01_wheel", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 舵轮"),
+    id: "jb_01_wheel", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 舵轮"),
     mood: "cold", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["铜铸的舵轮被海盐锈得发绿，罗盘指针疯转不歇。一半刻着航线，一半刻着「亡灵」的注脚——这艘船不靠风行驶，它靠「还不了的债」。"]),
     choices: &[ChoiceDef { label: "转舵一圈", sub: "+10 点", cond: None,
@@ -186,7 +186,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_01_mast", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 主桅瞭望台"),
+    id: "jb_01_mast", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 主桅瞭望台"),
     mood: "awe", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["爬上湿滑的绳梯，从瞭望台往下望——黑色船帆层层叠叠，海面尽头躺着一座搁浅的船坞。你默默记下了沉船湾的方向。"]),
     choices: &[ChoiceDef { label: "记下航道", sub: "San+2 · 指向 L2", cond: None,
@@ -194,7 +194,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_01_barrel", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 火药桶堆"),
+    id: "jb_01_barrel", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 火药桶堆"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["火药桶码得整整齐齐，桶缝里塞着一只漏着酒味的皮囊。这尸是放哨弟兄偷藏的朗姆酒——船厨阿朵正找它呢。"]),
     choices: &[ChoiceDef { label: "顺走朗姆酒", sub: "Item jb_rum · 开船员舱闩门", cond: None,
@@ -202,7 +202,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_01_cabin", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 船长室"),
+    id: "jb_01_cabin", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 船长室"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["船长室里空无一人，桌上摊着一卷羊皮海图，红叉指向一座海岛洞穴。海图边一行小字：<i>「财宝洞 · 还清了债的，才能活着走出来。」</i>"]),
     choices: &[ChoiceDef { label: "收起羊皮海图", sub: "伏笔", cond: None,
@@ -210,7 +210,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_npc_cook", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 厨房"),
+    id: "jb_npc_cook", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 厨房"),
     mood: "calm", speaker: Some("船厨·阿朵"), voice: None,
     text: TextSpec::Static(&["阿朵一边剁鱼一边抬眼：「这船欠了海神一船的债，船长把自己典给了月亮。你要去财宝洞？先弄点朗姆酒，让看舱门的醉鬼放你过去——他那点儿酒瘾，拿一桶就够了。」"]),
     choices: &[ChoiceDef { label: "「一桶朗姆，谢啦。」", sub: "San+3", cond: None,
@@ -218,7 +218,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_l1_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 甲板 · 战斗"),
+    id: "jb_l1_fight", bg: Some("jialebi_bg_deck.png"), loc: Some("L1 · 甲板 · 战斗"),
     mood: "danger", speaker: Some("醉水手"), voice: None,
     text: TextSpec::Static(&["醉水手几步跨到你面前，酒瓶往地上一掼：「新来的？先教教你，谁的船。」（战斗）"]),
     choices: &[], fight_id: Some("jb_fight_l1"), video: None, cine_label: None, overlay: None,
@@ -226,7 +226,7 @@ SceneDef {
 
 /* ================= L2 沉船湾 hub ================= */
 SceneDef {
-    id: "jb_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 沉船湾 · 礁石湾"),
+    id: "jb_l2_hub", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 沉船湾 · 礁石湾"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "舷梯尽头的浅滩横着一艘半沉的古船，桅杆劈裂成獠牙。锈蚀巨锚砸进沙里，潮水在宝箱与渡板间来回舔。独眼海盗坐在断桅头，眯眼打量你。",
@@ -246,7 +246,7 @@ SceneDef {
 
 /* ---- L2 调查点 ---- */
 SceneDef {
-    id: "jb_02_chest", bg: Some("img_corridor.png"), loc: Some("L2 · 海蚀洞·宝箱"),
+    id: "jb_02_chest", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 海蚀洞·宝箱"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["暗礁洞里藏着一口蒙尘的宝箱，箱盖压着一张泛黄的藏宝图，红圈圈住的正是「财宝洞」的入口航线。没有它，暗礁水道十船九翻。"]),
     choices: &[ChoiceDef { label: "取走藏宝图", sub: "Item jb_treasure_map · 开暗礁水道闸", cond: None,
@@ -254,7 +254,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_02_wreck", bg: Some("img_corridor.png"), loc: Some("L2 · 沉船残骸"),
+    id: "jb_02_wreck", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 沉船残骸"),
     mood: "cold", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["船骸的舱壁上钉着七具白骨，骨手握着一枚枚烂成渣的银币。他们到死都攥着财宝不放——那场风暴，是海神来讨债的。"]),
     choices: &[ChoiceDef { label: "记下这处警示", sub: "+10 点", cond: None,
@@ -262,7 +262,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_02_plank", bg: Some("img_corridor.png"), loc: Some("L2 · 湿滑渡板"),
+    id: "jb_02_plank", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 湿滑渡板"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["一根淌着海水的破木板从礁石伸向对岸，板下是旋涡。你踩稳节奏踏过去，板缝里别着一只锈而准的旧罗盘——落洞前它保准能用上。"]),
     choices: &[ChoiceDef { label: "捡起旧罗盘", sub: "Item jb_compass · 防坍方", cond: None,
@@ -270,7 +270,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_02_anchor", bg: Some("img_corridor.png"), loc: Some("L2 · 锈蚀巨锚"),
+    id: "jb_02_anchor", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 锈蚀巨锚"),
     mood: "cold", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["巨锚锈得和礁石长在一起，锚环上缠着一枚被海盐磨亮的银币，像是海神落下的零钱。你把它掂了掂，塞进怀里。"]),
     choices: &[ChoiceDef { label: "取走银币", sub: "+15 点", cond: None,
@@ -278,7 +278,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_npc_pirate", bg: Some("img_corridor.png"), loc: Some("L2 · 断桅头"),
+    id: "jb_npc_pirate", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 断桅头"),
     mood: "calm", speaker: Some("独眼海盗"), voice: None,
     text: TextSpec::Static(&["独眼海盗嚼着干鱼，用船钩往财宝洞方向一指：「那洞收人很凶。要有张像样的藏宝图认得暗礁水道；进了洞，看紧头顶——洞顶的石头比人还馋。」"]),
     choices: &[ChoiceDef { label: "「我有罗盘备着。」", sub: "San+3 · 关键提醒", cond: Some(cond_has_compass),
@@ -287,7 +287,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_l2_fight", bg: Some("img_corridor.png"), loc: Some("L2 · 礁湾 · 战斗"),
+    id: "jb_l2_fight", bg: Some("jialebi_bg_cove.png"), loc: Some("L2 · 礁湾 · 战斗"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["沙土一松，巨爪蟹破土而出。它认得你怀里的银币气味，钳子朝你兜头合拢。（战斗）"]),
     choices: &[], fight_id: Some("jb_fight_l2"), video: None, cine_label: None, overlay: None,
@@ -295,7 +295,7 @@ SceneDef {
 
 /* ================= L3 财宝洞 hub ================= */
 SceneDef {
-    id: "jb_l3_hub", bg: Some("img_laser.png"), loc: Some("L3 · 财宝洞 · 洞穴宝库"),
+    id: "jb_l3_hub", bg: Some("jialebi_bg.png"), loc: Some("L3 · 财宝洞 · 洞穴宝库"),
     mood: "awe", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "穿过暗礁水道，洞顶漏下一束月光，把整个宝库照亮。金币堆成山，月光水池泛着银波，中央祭坛立着一团褪色的黑帆——巴博萨的气息贴着地面爬过来。",
@@ -315,7 +315,7 @@ SceneDef {
 
 /* ---- L3 调查 / 铺垫 ---- */
 SceneDef {
-    id: "jb_03_pool", bg: Some("img_laser.png"), loc: Some("L3 · 月光水池"),
+    id: "jb_03_pool", bg: Some("jialebi_bg.png"), loc: Some("L3 · 月光水池"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["水池映出一轮假月亮。你低头看，水面的倒影全是金币，唯一不往下沉的那枚，是你要带走的。巴博萨的债，就写在这不沉的一枚里。"]),
     choices: &[ChoiceDef { label: "捞起不沉的银币", sub: "+20 点", cond: None,
@@ -323,7 +323,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_03_altar", bg: Some("img_laser.png"), loc: Some("L3 · 献祭祭坛"),
+    id: "jb_03_altar", bg: Some("jialebi_bg.png"), loc: Some("L3 · 献祭祭坛"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["祭坛正中立着一截烧剩的黑帆，上面用血字写巴博萨的真名。你把帆角压进怀里——传说，叫得出亡者真名的人，能在最后一击中胜他半招。"]),
     choices: &[ChoiceDef { label: "记住真名·【BOSS 铺垫】", sub: "jb_boss_primed", cond: None,
@@ -331,7 +331,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_03_bones", bg: Some("img_laser.png"), loc: Some("L3 · 白骨堆"),
+    id: "jb_03_bones", bg: Some("jialebi_bg.png"), loc: Some("L3 · 白骨堆"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["堆成小山的白骨里，有一副还摆着「抱金而亡」的姿势。先驱把话刻在了洞壁：<i>「洞顶的石头贪得无厌，没带罗盘，谁都别硬闯。」</i>"]),
     choices: &[ChoiceDef { label: "记下洞壁警告", sub: "San+2", cond: None,
@@ -339,7 +339,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_npc_ghost", bg: Some("img_laser.png"), loc: Some("L3 · 洞窟阴处"),
+    id: "jb_npc_ghost", bg: Some("jialebi_bg.png"), loc: Some("L3 · 洞窟阴处"),
     mood: "mystery", speaker: Some("老海盗鬼魂"), voice: None,
     text: TextSpec::Static(&["半透明的老海盗摊开手，掌心里浮着一柄船长的诅咒刀：「巴博萨把灵魂典给了海，谁赢他，谁就能替他'赎'这一船人。孩子，叫得出他真名，你手里才有那把刀。」"]),
     choices: &[ChoiceDef { label: "「巴博萨…我记住了。」", sub: "jb_boss_primed · San+2", cond: None,
@@ -347,13 +347,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_l3_fight", bg: Some("img_laser.png"), loc: Some("L3 · 宝库 · 战斗"),
+    id: "jb_l3_fight", bg: Some("jialebi_bg.png"), loc: Some("L3 · 宝库 · 战斗"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["一口宝箱在金币堆里微微震动，盖子裂开一道缝，里面不是金——是一排牙齿。拟态匣饿了。（战斗）"]),
     choices: &[], fight_id: Some("jb_fight_l3"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_03_env_cavein", bg: Some("img_laser.png"), loc: Some("L3 · 坍方落石带"),
+    id: "jb_03_env_cavein", bg: Some("jialebi_bg.png"), loc: Some("L3 · 坍方落石带"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["洞顶传来碎裂声，落石正伺机兜头砸下。你有罗盘的活路，没罗盘就葬在这堆宝石下面。（有罗盘 → 退避；否则活埋）"]),
     choices: &[ChoiceDef { label: "【顶石而行】", sub: "有罗盘则绕过坍方，否则活埋", cond: None,
@@ -363,14 +363,14 @@ SceneDef {
 
 /* ================= 巴博萨（选择驱动 BOSS）================= */
 SceneDef {
-    id: "jb_boss_area", bg: Some("img_laser.png"), loc: Some("L3 · 巴博萨战圈"),
+    id: "jb_boss_area", bg: Some("jialebi_bg.png"), loc: Some("L3 · 巴博萨战圈"),
     mood: "danger", speaker: Some("亡灵船长·巴博萨"), voice: None,
     text: TextSpec::Static(&["你踏进月光正中。黑帆倏地收拢成一道人形，巴博萨从影子里走脱，枯手往你肩头一拍，冰凉刺骨：「你欠海神的债，我来收。」"]),
     choices: &[ChoiceDef { label: "拔剑迎战", sub: "发起 BOSS 战", cond: None, effects: &NO_EFF, route: Route::Dyn(start_boss) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_boss_round", bg: Some("img_laser.png"), loc: Some("L3 · 与巴博萨决战"),
+    id: "jb_boss_round", bg: Some("jialebi_bg.png"), loc: Some("L3 · 与巴博萨决战"),
     mood: "danger", speaker: Some("亡灵船长·巴博萨"), voice: None,
     text: TextSpec::Dyn(|st| format!(
         "{}\n巴博萨剩余 {} 血，你 HP {}。",
@@ -385,7 +385,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_boss_win", bg: Some("img_laser.png"), loc: Some("L3 · 巴博萨受死"),
+    id: "jb_boss_win", bg: Some("jialebi_bg.png"), loc: Some("L3 · 巴博萨受死"),
     mood: "calm", speaker: Some("亡灵船长·巴博萨"), voice: None,
     text: TextSpec::Static(&["巴博萨的受诅的刀寸寸碎裂，船身的黑帆褪回海面，亡灵船员的骨影一个接一个沉进沙里。他把最后一枚血封的银币推到你面前，咧开嘴：「债，清了。」海神的长叹从洞顶吹过。"]),
     choices: &[ChoiceDef { label: "收下黑珍珠徽章", sub: "Item jb_black_pearl", cond: None,
@@ -395,7 +395,7 @@ SceneDef {
 
 /* ================= 开放结局（无真相线，全导向结算卡）================= */
 SceneDef {
-    id: "jb_ending", bg: Some("img_zhuyuan_book.png"), loc: Some("财宝洞 · 洞门 · 日出"),
+    id: "jb_ending", bg: Some("jialebi_bg.png"), loc: Some("财宝洞 · 洞门 · 日出"),
     mood: "awe", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["你抱着战利品走出洞口，海平面正染成金红色。黑珍珠号在远处渐沉，没有真相要追，只有这一船的传说等着你亲口去讲。你想怎么续写它？"]),
     choices: &[
@@ -406,7 +406,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jb_settle", bg: Some("img_zhuyuan_book.png"), loc: Some("主神·结算"),
+    id: "jb_settle", bg: Some("jialebi_bg.png"), loc: Some("主神·结算"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Static(&["黑珍珠的传说在你身后合拢。这一趟，要么带着财宝与自由回去，要么把故事留在那片被诅咒的海上。主神为你结算本次冒险评级。"]),
     choices: &[ChoiceDef { label: "确认走向撤离光柱", sub: "结算 · 评级", cond: None, effects: &NO_EFF, route: Route::Dyn(route_settle) }],

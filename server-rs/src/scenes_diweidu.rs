@@ -185,7 +185,7 @@ pub static DIWEIDU_SCENES: &[SceneDef] = &[
     },
     // 保留原 BOSS 入口场景
     SceneDef {
-        id: "dw_01", bg: Some("img_zhuyuan_book.png"), loc: Some("大领主宫邸"), mood: "danger",
+        id: "dw_01", bg: Some("diweidu_bg.png"), loc: Some("大领主宫邸"), mood: "danger",
         speaker: Some("BOSS"), voice: None,
         text: TextSpec::Static(&["灾厄聚合体 挡在出口。低纬度的影子，会追着活人。"]),
         choices: &[
@@ -195,7 +195,7 @@ pub static DIWEIDU_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "dw_round", bg: Some("img_laser.png"), loc: Some("大领主宫邸 · 决战处"), mood: "danger",
+        id: "dw_round", bg: Some("diweidu_bg.png"), loc: Some("大领主宫邸 · 决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("BOSS 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

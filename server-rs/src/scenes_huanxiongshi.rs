@@ -127,7 +127,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_hub", bg: Some("img_corridor.png"), loc: Some("F1 RPD 警局 · 主厅"),
+        id: "hx_f1_hub", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 RPD 警局 · 主厅"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "大厅被翻得底朝天，墙上的警徽还在。丧尸的低吼从四楼隐约传来。你要在核弹落下前找到出路。",
@@ -156,7 +156,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_lockup", bg: Some("img_corridor.png"), loc: Some("F1 枪械保险柜"),
+        id: "hx_f1_lockup", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 枪械保险柜"),
         mood: "tension", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["警员的尸体歪在柜前，钥匙还插在锁孔里。柜内躺着一把警用手枪，和一串通往城郊哨所的铁质钥匙。"]),
         choices: &[ChoiceDef { label: "取走手枪与哨所钥匙", sub: "得 手枪/哨所钥匙(+20)", cond: None,
@@ -165,7 +165,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_med", bg: Some("img_corridor.png"), loc: Some("F1 医务室"),
+        id: "hx_f1_med", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 医务室"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["医务室的柜门被撬开一半，几卷绷带和一支肾上腺针露出来。沈哲靠在门口喘气：「保命要紧。」"]),
         choices: &[ChoiceDef { label: "收下急救包", sub: "得 急救包 · San(+5)", cond: None,
@@ -173,7 +173,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_radio", bg: Some("img_corridor.png"), loc: Some("F1 对讲电台"),
+        id: "hx_f1_radio", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 对讲电台"),
         mood: "mystery", speaker: Some("电台（嘶哑人声）"), voice: None,
         text: TextSpec::Static(&[
             "电台嘶哑地响着：「……城郊……铁丝网外，军方有最后一批直升机……他们说要把能带走的都带走，其余的……留给核弹。」",
@@ -184,7 +184,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_log", bg: Some("img_corridor.png"), loc: Some("F1 警长日志"),
+        id: "hx_f1_log", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 警长日志"),
         mood: "mystery", speaker: Some("警官·艾恩斯（日记）"), voice: None,
         text: TextSpec::Static(&["日志最后几页写满了潦草的笔迹：警局沦陷、街道沦陷、……「他们说是蜂巢泄的毒。可蜂巢在地下。那这地上的地狱，是谁造的？」"]),
         choices: &[ChoiceDef { label: "合上日志", sub: "+20 点", cond: None,
@@ -192,7 +192,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_morgue", bg: Some("img_corridor.png"), loc: Some("F1 停尸间"),
+        id: "hx_f1_morgue", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 停尸间"),
         mood: "fear", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["冷柜的门被猛地顶开，数具腐尸瘫在地上——他们是第一批倒在病毒下的警察。角落里一张城市地图标出了一条通往城郊的捷径。"]),
         choices: &[ChoiceDef { label: "记下捷径", sub: "情报 · San(-5)", cond: None,
@@ -200,7 +200,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_roof", bg: Some("img_corridor.png"), loc: Some("F1 警局屋顶"),
+        id: "hx_f1_roof", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 警局屋顶"),
         mood: "awe", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["夜风卷着灰烬。整个浣熊市都在燃烧，街道上蠕动着一片片身影。极远处，一架直升机拖着火光坠落——那是活人毫无希望地想要逃离。"]),
         choices: &[ChoiceDef { label: "收回目光", sub: "San(-5)", cond: None,
@@ -208,7 +208,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_n_shen", bg: Some("img_corridor.png"), loc: Some("F1 大厅 · 沈哲旁"),
+        id: "hx_n_shen", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 大厅 · 沈哲旁"),
         mood: "tension", speaker: Some("沈哲 · 幸存警员"), voice: None,
         text: TextSpec::Static(&["沈哲握着一把弹匣见底的手枪，声音沙哑：「我能活到现在，凭的是两条：不走回头路，不回头看死人。」他顿了顿，「城郊那架直升机，是唯一的活路——但你得先能冲过街上的那群东西。」"]),
         choices: &[ChoiceDef { label: "（回到大厅）", sub: "", cond: None,
@@ -217,7 +217,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
     },
     /* ---- 暴君 Tyrant（选择驱动 BOSS，血存 st.fight） ---- */
     SceneDef {
-        id: "hx_f1_boss_zone", bg: Some("img_horde.png"), loc: Some("F1 地下机库 · 暴君破墙"),
+        id: "hx_f1_boss_zone", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 地下机库 · 暴君破墙"),
         mood: "danger", speaker: Some("暴君 Tyrant"), voice: None,
         text: TextSpec::Static(&[
             "你刚踏入地下机库的阴影，身后的水泥墙轰然炸开。一个逾两米的身影撕开碎屑缓步走出——灰色风衣、绷带勒紧的肌肉、猩红的独眼。",
@@ -232,7 +232,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_tyrant_round", bg: Some("img_horde.png"), loc: Some("F1 地下机库 · vs 暴君"),
+        id: "hx_tyrant_round", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 地下机库 · vs 暴君"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             let rg = st.fight.as_ref().map(|f| f.raged).unwrap_or(false);
@@ -248,7 +248,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_tyrant_finisher", bg: Some("img_horde.png"), loc: Some("F1 地下机库 · 致命一击"),
+        id: "hx_tyrant_finisher", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 地下机库 · 致命一击"),
         mood: "danger", speaker: Some("暴君 Tyrant"), voice: None,
         text: TextSpec::Static(&["暴君单膝跪地，绷带下露出苍白的核心。它仰头嘶吼，猩红独眼浑浊地扫过你。你看见了破绽——一记对准核心的致命穿刺。"]),
         choices: &[ChoiceDef { label: "【致命一击】", sub: "终结暴君", cond: None,
@@ -256,7 +256,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f1_boss_defeated", bg: Some("img_horde.png"), loc: Some("F1 地下机库 · 暴君已倒下"),
+        id: "hx_f1_boss_defeated", bg: Some("huanxiongshi_bg.png"), loc: Some("F1 地下机库 · 暴君已倒下"),
         mood: "choice", speaker: Some("郑咤"), voice: None,
         text: TextSpec::Static(&["暴君轰然倒下，机库在余震中扬起灰尘。郑咤擦了把血：「不错的爆发。不过核弹可不等我们——走。」"]),
         choices: &[ChoiceDef { label: "（返回大厅 · 突围）", sub: "得 暴君战斗勋章", cond: None,
@@ -266,7 +266,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
 
     /* ------------------- 幕二 · 燃烧街道（F2） ------------------- */
     SceneDef {
-        id: "hx_f2_arrive", bg: Some("img_horde.png"), loc: Some("F2 街道 · 岔路口"),
+        id: "hx_f2_arrive", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 街道 · 岔路口"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["你从警局侧门钻入燃烧的街道。翻覆的警车横在路心，尸群在店铺之间游荡。极西的路障后，是通往城郊的最后一段路。"]),
         choices: &[
@@ -276,13 +276,13 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f2_dog_fight", bg: Some("img_horde.png"), loc: Some("F2 街道 · 丧尸犬群"),
+        id: "hx_f2_dog_fight", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 街道 · 丧尸犬群"),
         mood: "fear", speaker: Some("丧尸犬"), voice: None,
         text: TextSpec::Static(&["脱缰的丧尸犬从车底扑向你！它们的獠牙浸着黑色的毒涎。"]),
         choices: &NO_CH, fight_id: Some("hx_dog"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f2_hub", bg: Some("img_horde.png"), loc: Some("F2 街道枢纽"),
+        id: "hx_f2_hub", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 街道枢纽"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["燃烧的街巷呈网格铺开。艾彬躲在翻覆的警车后面打手势，郑咤则守着角落清扫尸群。城郊路障在极西——需要哨所钥匙才升得起。"]),
         choices: &[
@@ -298,7 +298,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f2_car", bg: Some("img_horde.png"), loc: Some("F2 翻覆警车"),
+        id: "hx_f2_car", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 翻覆警车"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["警车后备箱被撞开，散落着几卷绷带与一支完好无损的肾上腺素针。"]),
         choices: &[ChoiceDef { label: "取走急救包", sub: "得 急救包 · San(+5)", cond: None,
@@ -306,7 +306,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f2_store", bg: Some("img_horde.png"), loc: Some("F2 便利店货架"),
+        id: "hx_f2_store", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 便利店货架"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["货架被洗劫一空，却在收银台下的暗格里躺着一枚城郊哨所的钥匙——大概是哪个警员私藏的。"]),
         choices: &[ChoiceDef { label: "取走哨所钥匙", sub: "得 哨所钥匙", cond: None,
@@ -314,7 +314,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f2_cafe", bg: Some("img_horde.png"), loc: Some("F2 废弃咖啡馆"),
+        id: "hx_f2_cafe", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 废弃咖啡馆"),
         mood: "mystery", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["咖啡香气早已被血腥取代。墙上涂满求救的血字，角落里半杯凉透的咖啡旁，坐着一具握拳的干尸——它到死都护着桌上的全家福。"]),
         choices: &[ChoiceDef { label: "轻掩双眼", sub: "San(-5) · +20 点", cond: None,
@@ -322,7 +322,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f2_barricade", bg: Some("img_horde.png"), loc: Some("F2 路障 · 广播柱"),
+        id: "hx_f2_barricade", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 路障 · 广播柱"),
         mood: "mystery", speaker: Some("广播"), voice: None,
         text: TextSpec::Static(&["路障边的广播柱上夹着一张皱巴巴的军令：「最后一批撤离定于 55 分钟后，地点城郊直升机坪。未持有哨所授权者，不得通过路障。」"]),
         choices: &[ChoiceDef { label: "撕下军令", sub: "情报 · +10 点", cond: None,
@@ -330,14 +330,14 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_n_aibin", bg: Some("img_horde.png"), loc: Some("F2 警车后 · 艾彬"),
+        id: "hx_n_aibin", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 警车后 · 艾彬"),
         mood: "tension", speaker: Some("艾彬（主神轮回者）"), voice: None,
         text: TextSpec::Static(&["艾彬压低声音：「看那片黑烟——核弹快来了。我们要么抢直升机仓皇出逃，要么……塞给所谓'军方'一群丧尸陪葬。」他盯着你的眼睛，「你选哪个？是活着逃，还是烧一场大火？」"]),
         choices: &[ChoiceDef { label: "（回街道）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("hx_f2_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_n_zhou", bg: Some("img_horde.png"), loc: Some("F2 街角 · 郑咤"),
+        id: "hx_n_zhou", bg: Some("huanxiongshi_bg.png"), loc: Some("F2 街角 · 郑咤"),
         mood: "tension", speaker: Some("郑咤（轮回者）"), voice: None,
         text: TextSpec::Static(&["郑咤掸净弹匣上的血，声音硬：「主神给了活路，但没给'活'。想活着离开浣熊市，要么在核弹落地前挤上那最后几架直升机，要么扛到天亮看烟花——你挑一个。」"]),
         choices: &[ChoiceDef { label: "（回街道）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("hx_f2_hub") }],
@@ -346,7 +346,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
 
     /* ------------------- 幕三 · 城郊 / 核弹倒计时 / 终结（F3） ------------------- */
     SceneDef {
-        id: "hx_f3_arrive", bg: Some("img_horde.png"), loc: Some("F3 城郊 · 铁丝网"),
+        id: "hx_f3_arrive", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 城郊 · 铁丝网"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["哨所钥匙升起路障，你冲入城郊。铁丝网外是军方最后的撤离点，破败的避难屋、肃立的直升机坪，都暴露在核爆半径的边缘。"]),
         choices: &[ChoiceDef { label: "（探查城郊）", sub: "遭遇尸潮", cond: None,
@@ -354,13 +354,13 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f3_horde_fight", bg: Some("img_horde.png"), loc: Some("F3 城郊 · 尸潮"),
+        id: "hx_f3_horde_fight", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 城郊 · 尸潮"),
         mood: "fear", speaker: Some("丧尸群"), voice: None,
         text: TextSpec::Static(&["铁丝网下蠕动着大片尸潮——它们从掩体后爬起，像一片跌撞的潮水向你涌来！"]),
         choices: &NO_CH, fight_id: Some("hx_horde"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f3_hub", bg: Some("img_horde.png"), loc: Some("F3 城郊枢纽"),
+        id: "hx_f3_hub", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 城郊枢纽"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["远处传来沉闷的倒计时电子音。直升机坪的探照灯扫过浓烟，扫过你的脸。核弹，不等人。"]),
         choices: &[
@@ -374,7 +374,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f3_shelter", bg: Some("img_corridor.png"), loc: Some("F3 避难屋"),
+        id: "hx_f3_shelter", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 避难屋"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["避难屋的应急灯昏亮，货架上堆着军粮与急救包。艾彬靠在墙上数着呼吸：「留在这儿，能睡一觉……也可能，就此醒不来。」"]),
         choices: &[
@@ -386,7 +386,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_f3_gate", bg: Some("img_horde.png"), loc: Some("F3 城郊哨所"),
+        id: "hx_f3_gate", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 城郊哨所"),
         mood: "mystery", speaker: Some("哨所广播"), voice: None,
         text: TextSpec::Static(&["哨所电台一遍遍重复：「撤离窗口……剩余 40 分钟……军方不保证返航……重复，军方不保证返航。」最后一行小字疯狂闪烁：<b>核弹代号「灭菌」</b>。"]),
         choices: &[ChoiceDef { label: "记下核弹代号", sub: "+10 点", cond: None,
@@ -394,7 +394,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hx_n_pilot", bg: Some("img_horde.png"), loc: Some("F3 直升机坪 · 飞行员"),
+        id: "hx_n_pilot", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 直升机坪 · 飞行员"),
         mood: "tension", speaker: Some("直升机飞行员"), voice: None,
         text: TextSpec::Static(&["飞行员掀开护目镜，烟嗓沙哑：「最后一批。要上就现在上，油不够绕第二圈。」他盯着你：「我只载一具活人。你是那个活人吗？」"]),
         choices: &[ChoiceDef { label: "（回到城郊枢纽）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("hx_f3_hub") }],
@@ -402,7 +402,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
     },
     /* ---- 核弹倒计时 ---- */
     SceneDef {
-        id: "hx_nuke_room", bg: Some("img_corridor.png"), loc: Some("F3 · 核弹倒计时"),
+        id: "hx_nuke_room", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 · 核弹倒计时"),
         mood: "fear", speaker: Some("系统广播"), voice: None,
         text: TextSpec::Dyn(|st| {
             let left = 3 - nuke_t(st);
@@ -422,7 +422,7 @@ pub static HUANXIONGSHI_SCENES: &[SceneDef] = &[
 
     /* ------------------- 抉择结局三分支（逃离 / 乘机 / 留下） ------------------- */
     SceneDef {
-        id: "hx_ending_choice", bg: Some("img_horde.png"), loc: Some("F3 · 城郊岔路"),
+        id: "hx_ending_choice", bg: Some("huanxiongshi_bg.png"), loc: Some("F3 · 城郊岔路"),
         mood: "choice", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["核爆半径的终点近在眼前。三条路，三条命。没有对错——只在于，你愿意把自己交给哪一种结局。"]),
         choices: &[

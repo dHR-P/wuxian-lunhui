@@ -15,11 +15,10 @@
 //!   ③ 拔剑/不拔剑双结局：boss 胜利→ jz_50_choice 二选一（互斥 flag jz_took_sword / jz_spare_sword +
 //!      AddItem 无名剑/i jz_spare_sword San+15），分幕文案后进结算卡片（sp_grade=D）。
 //!
-//! ★待素材替换清单（新 bg 落地后把 bg= 字段换成新图；当前用现有图占位）：
-//!   L1 山门古道 井 bg jz_bg_gate    （现用 img_zhuyuan_book.png 占位）
-//!   L2 埋剑长廊 井 bg jz_bg_corridor（现用 img_corridor.png 占位）
-//!   L3 剑冢深谷 井 bg jz_bg_valley  （现用 img_laser.png 占位）
-//!   L4 无名剑碑 井 bg jz_bg_stele   （现用 img_laser.png 占位）
+//! ★背景素材已落地（新图 jianzhong_bg_*，素材子代理生成接线）：
+//!   L1 山门古道 → jianzhong_bg_open.png   （入口/开场）
+//!   L2 埋剑长廊 / L3 剑冢深谷 → jianzhong_bg_invest.png（调查/探索）
+//!   L4 无名剑碑 / BOSS → jianzhong_bg_battle.png（战斗/核心）
 //! 敌人立绘复用 §4：guard→剑仆、hunter→入魔客、zombie→灰袍剑仆、horde→巡山群像；
 //! 镜像/BOSS/怨灵等新美术由主 agent 统一排期生图替换。
 
@@ -363,14 +362,14 @@ SceneDef {
     fight_id: None, video: Some("vid_jz_opening.mp4"), cine_label: Some("过场 · 山门古道"), overlay: None,
 },
 SceneDef {
-    id: "jz_00_trust", bg: Some("img_zhuyuan_book.png"), loc: Some("剑冢 · 山门古道"),
+    id: "jz_00_trust", bg: Some("jianzhong_bg_open.png"), loc: Some("剑冢 · 山门古道"),
     mood: "calm", speaker: Some("守陵人"), voice: None,
     text: TextSpec::Static(&["你撩起袖口露出主神手环。守陵人神色一凝：「……你身上有外面的味道。」他侧身让出一步：「进去吧，此间剑，辨得出谁是同道。」"]),
     choices: &[ChoiceDef { label: "（入内）", sub: "→ L1 山门古道", cond: None, effects: &NO_EFF, route: Route::To("jz_01") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_00_bow", bg: Some("img_zhuyuan_book.png"), loc: Some("剑冢 · 山门古道"),
+    id: "jz_00_bow", bg: Some("jianzhong_bg_open.png"), loc: Some("剑冢 · 山门古道"),
     mood: "calm", speaker: Some("守陵人"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("jz_intent_sword") {
@@ -384,13 +383,13 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_00_rush", bg: Some("img_zhuyuan_book.png"), loc: Some("剑冢 · 山门古道 · 强闯"),
+    id: "jz_00_rush", bg: Some("jianzhong_bg_open.png"), loc: Some("剑冢 · 山门古道 · 强闯"),
     mood: "danger", speaker: Some("巡山剑仆"), voice: Some("vo_jz_rush"),
     text: TextSpec::Static(&["守陵人一声冷笑，雾里三柄剑同时出鞘——巡山剑仆·三人结阵拦下你的去路！（战斗）"]),
     choices: &[], fight_id: Some("jz_patrol"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_03_oldman_rush_win", bg: Some("img_zhuyuan_book.png"), loc: Some("剑冢 · 山门古道"),
+    id: "jz_03_oldman_rush_win", bg: Some("jianzhong_bg_open.png"), loc: Some("剑冢 · 山门古道"),
     mood: "cold", speaker: Some("守陵人"), voice: None,
     text: TextSpec::Static(&["三柄剑仆伏于雾中。守陵人拊掌而叹：「剑意虽强，情亦有道。」他不拦你：「强闯者已过石坊，还需我放行么？」（已获守陵人信任）"]),
     choices: &[ChoiceDef { label: "登石阶入内", sub: "→ L1 山门古道", cond: None, effects: &NO_EFF, route: Route::To("jz_01") }],
@@ -414,7 +413,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_02_huangjing", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 荒径断碑"),
+    id: "jz_02_huangjing", bg: Some("jianzhong_bg_open.png"), loc: Some("L1 · 荒径断碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["西侧荒径的断碑上，几行剑刻潦草得近乎剥落，却隐约拼出一个名字与一个年份——千年前剑主的旧案，似乎在这条无人走的小径上留有痕迹。"]),
     choices: &[ChoiceDef { label: "拓下断碑残文", sub: "旧案线索 1/2 · +15 点", cond: None,
@@ -423,7 +422,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_02_beilin", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 碑林"),
+    id: "jz_02_beilin", bg: Some("jianzhong_bg_open.png"), loc: Some("L1 · 碑林"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["碑林里立着千百块无名的残碑，尽数指向山谷深处。一方祭台角落压着一枚丹丸。"]),
     choices: &[ChoiceDef { label: "取金创药·气血丹", sub: "Item it_qixue_dan · HP+30", cond: None,
@@ -431,7 +430,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_03_oldman", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 守陵人小屋"),
+    id: "jz_03_oldman", bg: Some("jianzhong_bg_open.png"), loc: Some("L1 · 守陵人小屋"),
     mood: "cold", speaker: Some("守陵人"), voice: None,
     text: TextSpec::Static(&["守陵人小屋的木门半掩，他坐在灯下磨一柄锈剑。见你来，他抬眼：「……里面越深，剑意越压人。你身侧那位小棠姑娘，怕是要撑不住心神。——这枚药，带她也好。」"]),
     choices: &[ChoiceDef { label: "收下气血丹", sub: "Item it_qixue_dan", cond: None,
@@ -439,7 +438,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_06_arrive_l2", bg: Some("img_corridor.png"), loc: Some("L2 · 埋剑长廊"),
+    id: "jz_06_arrive_l2", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 埋剑长廊"),
     mood: "cold", speaker: Some("小棠"), voice: None,
     text: TextSpec::Static(&["你踏上石阶，雾在脚下散开，露出一条极长的长廊。长廊两侧插着千百柄剑，锈得只剩轮廓，却每一柄都在低鸣。小棠攥住你的袖口：「师兄……这些剑，在哭。」"]),
     choices: &[
@@ -455,7 +454,7 @@ SceneDef {
 
 /* ================= L2 埋剑长廊 hub ================= */
 SceneDef {
-    id: "jz_10_arrive_l2", bg: Some("img_corridor.png"), loc: Some("L2 · 埋剑长廊"),
+    id: "jz_10_arrive_l2", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 埋剑长廊"),
     mood: "cold", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         let heart = if st.flag("jz_heart_clean") { "你的剑心澄明，剑鸣自你身侧让开一条路。" } else { "剑意尚未驯服——长廊中段那扇锈锁铁门之后，还有更深的长廊。" };
@@ -471,7 +470,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_11_sword_tassel", bg: Some("img_corridor.png"), loc: Some("L2 · 藏剑龛"),
+    id: "jz_11_sword_tassel", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 藏剑龛"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["藏剑龛的暗格里压着一枚褪色的剑穗，红缨早已沉成暗褐——那是千年前剑主佩剑的遗物。"]),
     choices: &[ChoiceDef { label: "收起剑穗", sub: "Item it_sword_tassel · 解锁藏剑龛暗格", cond: None,
@@ -480,7 +479,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_12_mirror1", bg: Some("img_corridor.png"), loc: Some("L2 · 试剑龛 · 剑心幻影"),
+    id: "jz_12_mirror1", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 试剑龛 · 剑心幻影"),
     mood: "danger", speaker: Some("剑心幻影"), voice: Some("vo_jz_mirror1"),
     text: TextSpec::Dyn(|st| {
         let w = match st.weapon {
@@ -494,7 +493,7 @@ SceneDef {
     choices: &[], fight_id: Some("jz_phantom_1"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_13_mirror1_win", bg: Some("img_corridor.png"), loc: Some("L2 · 试剑龛"),
+    id: "jz_13_mirror1_win", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 试剑龛"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["剑心幻影碎成点点金光，剑面上的那双眼随之一同湮灭。你破了第一道心魔——但更深处的黑影，仿佛在长廊尽头张望。"]),
     choices: &[ChoiceDef { label: "（继续前行）", sub: "jz_mirror_1 ✔", cond: None,
@@ -502,7 +501,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_13_jianming", bg: Some("img_corridor.png"), loc: Some("L2 · 铭剑龛 · 剑铭"),
+    id: "jz_13_jianming", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 铭剑龛 · 剑铭"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&[
         "铭剑龛的剑身上刻着千年前的旧案：剑主「背剑离山」被师门疑为叛徒，自戮于剑碑之下；此案疑点重重——剑铭末尾一行小字：「他从未背叛，他只是……不肯说出那晚在剑冢见到的人。」",
@@ -514,27 +513,27 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_14_rust_win", bg: Some("img_corridor.png"), loc: Some("L2 · 长廊"),
+    id: "jz_14_rust_win", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 长廊"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["锈剑傀儡瘫作一地碎铁，眼窝里的剑刃失了光。长廊归于剑鸣的呜咽。"]),
     choices: &[ChoiceDef { label: "（继续）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("jz_10_arrive_l2") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_15_echo", bg: Some("img_corridor.png"), loc: Some("L2 · 断剑龛 · 剑鸣回响"),
+    id: "jz_15_echo", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 断剑龛 · 剑鸣回响"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jz_echo"),
     text: TextSpec::Static(&["断剑龛里一声锐响，满廊枯剑同时震鸣——剑鸣化成一道人形镌影，向你涌来！（战斗）"]),
     choices: &[], fight_id: Some("jz_echo"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_15_echo_win", bg: Some("img_corridor.png"), loc: Some("L2 · 断剑龛"),
+    id: "jz_15_echo_win", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 断剑龛"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["剑鸣回响散去，满廊枯剑复归沉寂。你平复着翻涌的气血，望向长廊尽头那扇锈锁铁门。"]),
     choices: &[ChoiceDef { label: "（折返）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("jz_10_arrive_l2") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_16_open_gate_l2", bg: Some("img_corridor.png"), loc: Some("L2 · 长廊中段"),
+    id: "jz_16_open_gate_l2", bg: Some("jianzhong_bg_invest.png"), loc: Some("L2 · 长廊中段"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["锈锁铁门在你身后无声合拢，你已置身长廊的中后段——剑柱更密，剑鸣更沉。尽头是通往深谷的石阶。"]),
     choices: &[ChoiceDef { label: "登石阶下赴深谷", sub: "→ L3 剑冢深谷", cond: Some(cond_has_heart_clean), effects: &NO_EFF, route: Route::To("jz_20_arrive_l3") }],
@@ -543,7 +542,7 @@ SceneDef {
 
 /* ================= L3 剑冢深谷 ================= */
 SceneDef {
-    id: "jz_20_arrive_l3", bg: Some("img_laser.png"), loc: Some("L3 · 剑冢深谷"),
+    id: "jz_20_arrive_l3", bg: Some("jianzhong_bg_invest.png"), loc: Some("L3 · 剑冢深谷"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         let heart = if st.flag("jz_heart_clean") {
@@ -562,7 +561,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_21_shizhong", bg: Some("img_laser.png"), loc: Some("L3 · 深谷石冢"),
+    id: "jz_21_shizhong", bg: Some("jianzhong_bg_invest.png"), loc: Some("L3 · 深谷石冢"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["一方石冢供着一枚温润的静心石，石纹如水。你握住它，体内翻涌的剑意霎时平息。"]),
     choices: &[ChoiceDef { label: "取静心石", sub: "Item it_jingxin_stone · 剑心清明", cond: None,
@@ -571,7 +570,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_22_sword_marks", bg: Some("img_laser.png"), loc: Some("L3 · 谷壁剑痕"),
+    id: "jz_22_sword_marks", bg: Some("jianzhong_bg_invest.png"), loc: Some("L3 · 谷壁剑痕"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["谷壁上一道深可没指的剑痕，正是当日剑主自戮前最后一剑的落点。剑气扑面，你的心神一阵刺痛。"]),
     choices: &[ChoiceDef { label: "辨认剑痕", sub: "San-10 · 旧案线索", cond: None,
@@ -580,7 +579,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_23_mirror2", bg: Some("img_laser.png"), loc: Some("L3 · 深谷 · 心魔显影"),
+    id: "jz_23_mirror2", bg: Some("jianzhong_bg_invest.png"), loc: Some("L3 · 深谷 · 心魔显影"),
     mood: "danger", speaker: Some("剑心幻影·高手"), voice: Some("vo_jz_mirror2"),
     text: TextSpec::Dyn(|st| {
         let w = match st.weapon {
@@ -594,7 +593,7 @@ SceneDef {
     choices: &[], fight_id: Some("jz_phantom_2"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_23_mirror2_win", bg: Some("img_laser.png"), loc: Some("L3 · 深谷"),
+    id: "jz_23_mirror2_win", bg: Some("jianzhong_bg_invest.png"), loc: Some("L3 · 深谷"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["心魔影像在你剑下轰然溃散，化作一声不甘的叹息没入石壁。你抹去额角的汗——心已澄，剑始鸣。"]),
     choices: &[ChoiceDef { label: "（定心）", sub: "jz_mirror_2 ✔ · +20 点", cond: None,
@@ -602,7 +601,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_24_open_gate_l3", bg: Some("img_laser.png"), loc: Some("L3 · 深谷石门已成"),
+    id: "jz_24_open_gate_l3", bg: Some("jianzhong_bg_invest.png"), loc: Some("L3 · 深谷石门已成"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["深谷石门的字迹随一声长叹隐去，门缝里的寒气涌出。你穿过石门，沿绝壁栈道折返而下，尽头是天梯——通往无名剑碑之巅。"]),
     choices: &[ChoiceDef { label: "登天梯而上", sub: "→ L4 无名剑碑之巅", cond: None, effects: &NO_EFF, route: Route::To("jz_30_arrive_l4") }],
@@ -611,7 +610,7 @@ SceneDef {
 
 /* ================= L4 无名剑碑之巅 ================= */
 SceneDef {
-    id: "jz_30_arrive_l4", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑之巅"),
+    id: "jz_30_arrive_l4", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑之巅"),
     mood: "mystery", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&[
         "夕照像熔金一样泼在整面剑碑上，万剑低鸣如潮。碑前的广场上，两尊铁面守卫横剑而立。远处的断崖，一脚踏空便是坠回深谷的路。",
@@ -629,20 +628,20 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_32_guard", bg: Some("img_laser.png"), loc: Some("L4 · 剑碑广场"),
+    id: "jz_32_guard", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 剑碑广场"),
     mood: "danger", speaker: Some("旁白"), voice: Some("vo_jz_guard"),
     text: TextSpec::Static(&["两尊铁面双剑守卫同时出剑，交叉的剑气在你身周扫出一个圆（战斗）。"]),
     choices: &[], fight_id: Some("jz_stele_guard"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_33_cliff", bg: Some("img_laser.png"), loc: Some("L4 · 断崖"),
+    id: "jz_33_cliff", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 断崖"),
     mood: "danger", speaker: None, voice: Some("vo_jz_cliff"),
     text: TextSpec::Static(&["你一脚踩滑，断崖边缘的石砾簌簌而下——你坠入谷底！（坠崖：HP-5、San-5，回深谷底部洞厅。）"]),
     choices: &[ChoiceDef { label: "（坠入深谷）", sub: "HP-5 · San-5", cond: None, effects: &NO_EFF, route: Route::Dyn(route_cliff) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_31_stele_north", bg: Some("img_laser.png"), loc: Some("L4 · 北残碑"),
+    id: "jz_31_stele_north", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 北残碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["北面的残碑铭着一行古字，被风化得只剩半句：「……无名，故名无名。」你记下其残文。"]),
     choices: &[ChoiceDef { label: "拓下北残碑", sub: "破译线索 1 · +10 点", cond: None,
@@ -651,7 +650,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_31_stele_east", bg: Some("img_laser.png"), loc: Some("L4 · 东剑痕碑"),
+    id: "jz_31_stele_east", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 东剑痕碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["东侧剑痕碑上，一道剑痕恰好劈开一行铭文——你辨认出「背剑」二字。"]),
     choices: &[ChoiceDef { label: "拓东剑痕碑", sub: "隐文 1/3", cond: None,
@@ -660,7 +659,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_31_stele_west", bg: Some("img_laser.png"), loc: Some("L4 · 西剑痕碑"),
+    id: "jz_31_stele_west", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 西剑痕碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["西侧剑痕碑上，剑痕劈开「离山」二字。残碑的风化处，还有一个小指印。"]),
     choices: &[ChoiceDef { label: "拓西剑痕碑", sub: "隐文 2/3", cond: None,
@@ -669,7 +668,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_31_stele_south", bg: Some("img_laser.png"), loc: Some("L4 · 南残碑"),
+    id: "jz_31_stele_south", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 南残碑"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["南侧残碑的刻痕与其它三处剑痕似有呼应——「那晚的剑冢，有第二个脚印」。"]),
     choices: &[ChoiceDef { label: "拓南剑痕碑", sub: "隐文 3/3", cond: None,
@@ -678,7 +677,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_34_stele_secret", bg: Some("img_laser.png"), loc: Some("L4 · 剑碑隐文破译"),
+    id: "jz_34_stele_secret", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 剑碑隐文破译"),
     mood: "calm", speaker: Some("旁白"), voice: Some("vo_jz_stele_secret"),
     text: TextSpec::Static(&["三处剑痕与北残碑的残文拼合，你读出了剑碑之下被抹去的另一行字：「那晚他并非叛出，而是替师门拦下了一个不该出现在剑冢的人。以死证清白——却无人知晓。」剑碑隐文，一朝破译。"]),
     choices: &[ChoiceDef { label: "（隐文入心）", sub: "jz_stele_secret ✔", cond: None, effects: &NO_EFF, route: Route::To("jz_30_arrive_l4") }],
@@ -687,7 +686,7 @@ SceneDef {
 
 /* ---- 剑冢之灵 · BOSS 前对话 ---- */
 SceneDef {
-    id: "jz_41_prequel", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑 · 对峙"),
+    id: "jz_41_prequel", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑 · 对峙"),
     mood: "mystery", speaker: Some("剑冢之灵"), voice: Some("vo_jz_spirit"),
     text: TextSpec::Static(&[
         "夕照泼在剑碑上，碑中凝出一道白发人影，金瞳如落日。他目光落在你身上，极轻地笑了一声：「每柄剑都是一段未了之愿。我等你，等了一千年。」",
@@ -704,7 +703,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_42_boss", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑 · 决战"),
+    id: "jz_42_boss", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑 · 决战"),
     mood: "danger", speaker: Some("剑冢之灵"), voice: Some("vo_jz_spirit_fight"),
     text: TextSpec::Dyn(|st| {
         let silent_penalty = if st.flag("jz_answer_silent") { "它因你的沉默动了怒，剑气凝滞沉重（起手 dmg+2）。" } else { "你答出心中所愿，剑灵的剑意波澜一滞，凝成了一柄无形之剑。." };
@@ -714,7 +713,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_boss_round", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑 · 激战"),
+    id: "jz_boss_round", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑 · 激战"),
     mood: "danger", speaker: Some("剑冢之灵"), voice: None,
     text: TextSpec::Dyn(|st| {
         let hp = st.fight.as_ref().map(|f| f.hp.max(0)).unwrap_or(150);
@@ -747,7 +746,7 @@ SceneDef {
 
 /* ==== 结局抉择 · 拔剑 / 不拔剑（双结局，互斥 flag）==== */
 SceneDef {
-    id: "jz_50_choice", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑"),
+    id: "jz_50_choice", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑"),
     mood: "calm", speaker: Some("剑冢之灵"), voice: Some("vo_jz_choice"),
     text: TextSpec::Static(&[
         "剑冢之灵在你面前一寸寸淡去，万剑低鸣渐止。那柄千年无名剑，静静插在碑前，剑身在夕照里流转着未熄的光。",
@@ -763,14 +762,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_51_ending_took", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑"),
+    id: "jz_51_ending_took", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑"),
     mood: "calm", speaker: Some("小棠"), voice: None,
     text: TextSpec::Static(&["你握住剑柄，那柄剑在我掌心沉沉一坠，像一段迟来了千年的许诺。你带着剑走了——剑冢的呜咽，跟了你很远。小棠在夕照里低声说：「……也罢，剑在你手，便是答案。」"]),
     choices: &[ChoiceDef { label: "（下山 · 结算）", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(route_end_settle) }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_51_ending_spare", bg: Some("img_laser.png"), loc: Some("L4 · 无名剑碑"),
+    id: "jz_51_ending_spare", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 无名剑碑"),
     mood: "calm", speaker: Some("小棠"), voice: Some("vo_jz_spare"),
     text: TextSpec::Static(&["你没有拔剑。剑冢之灵在你面前笑了笑，化作一缕夕照，渐渐消散。「……去吧，带着你的答案。」万剑入土，剑气归山。小棠立在夕照里，望着你良久：「师兄，剑冢答应你的事……做到了吗？」"]),
     choices: &[ChoiceDef { label: "（下山 · 结算）", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(route_end_settle) }],
@@ -804,7 +803,7 @@ SceneDef {
 
 /* ================= 心魔镜像·剑主 apex（L4 断崖旁，可触发）================= */
 SceneDef {
-    id: "jz_33_mirror_apex", bg: Some("img_laser.png"), loc: Some("L4 · 剑主幻影"),
+    id: "jz_33_mirror_apex", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 剑主幻影"),
     mood: "danger", speaker: Some("剑心幻影·剑主"), voice: Some("vo_jz_mirror_apex"),
     text: TextSpec::Dyn(|st| {
         let w = match st.weapon {
@@ -818,7 +817,7 @@ SceneDef {
     choices: &[], fight_id: Some("jz_phantom_apex"), video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "jz_33_mirror_apex_win", bg: Some("img_laser.png"), loc: Some("L4 · 剑主幻影"),
+    id: "jz_33_mirror_apex_win", bg: Some("jianzhong_bg_battle.png"), loc: Some("L4 · 剑主幻影"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["剑主残影在你剑下寸寸崩解，那一点万剑归一之意，落进你心底。你破尽了全部三道心魔。」"]),
     choices: &[ChoiceDef { label: "（万剑归一）", sub: "jz_mirror_apex ✔", cond: None,

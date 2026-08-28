@@ -191,14 +191,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: Some("过场 · 开幕之夜"), overlay: None,
 },
 SceneDef {
-    id: "js_00_note", bg: Some("img_nexus.png"), loc: Some("F1 · 前台任务栏"),
+    id: "js_00_note", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 前台任务栏"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["前台的铜牌上压着一张皱巴巴的纸：『凌晨零点，前排第 13 座』。你总觉得这串数字，与恐怖谷里的秘密脱不开干系。"]),
     choices: &[ChoiceDef { label: "记下情报", sub: "+5 点", cond: None, effects: &[Eff::Points(5)], route: Route::To("js_00") }],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f1_foyer", bg: Some("img_nexus.png"), loc: Some("F1 · 剧场前厅门廊"),
+    id: "js_f1_foyer", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 剧场前厅门廊"),
     mood: "calm", speaker: None, voice: None,
     text: TextSpec::Static(&["门廊镀金的栏杆上映着无数宾客的倒影。你瞥见其中一个『宾客』的倒影没有脸——一团蠕动的蓝，随即又恢复如常。你的视网膜在告诉你：是错觉，还是你已经开始看见线粒体？"]),
     choices: &[
@@ -208,7 +208,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f1_dress", bg: Some("img_nexus.png"), loc: Some("F1 · 后台化妆间"),
+    id: "js_f1_dress", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 后台化妆间"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["后台化妆间飘着檀香，妆镜前坐着一名女演员，正对镜精心补妆。你走近才看清——她膨胀发青的面颊静脉里，有颗粒粗大的『核』正随光线忽明忽暗。她的血液，正被某种更古老的东西替换。","女演员缓缓转头，笑颜之下，眼神苍白而空洞。"]),
     choices: &[
@@ -218,7 +218,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f1_stage", bg: Some("img_nexus.png"), loc: Some("F1 · 主舞台"),
+    id: "js_f1_stage", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 主舞台"),
     mood: "mystery", speaker: Some("克丽丝 · 基因研究员"), voice: None,
     text: TextSpec::Static(&["你追到主舞台。深红帷幕下，一位挂着研究员证的蓝袍女子蹲在布景后，用镊子夹取一团渗血的肉块观察。见你靠近，她猛地压低声音：","「别靠近！这是……奇迹，也是灾厄。细胞里的线粒体，正抛开人的意愿，按它自己的图纸重建宿主。——我叫克丽丝，只是来观摩歌剧。现在我看的，是末日的开场彩排。」"]),
     choices: &[
@@ -229,7 +229,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f1_scientist", bg: Some("img_nexus.png"), loc: Some("F1 · 后台 · 克丽丝"),
+    id: "js_f1_scientist", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 后台 · 克丽丝"),
     mood: "mystery", speaker: Some("克丽丝 · 基因研究员"), voice: None,
     text: TextSpec::Static(&["克丽丝把那团肉块放进封存瓶，神情凝重：「这些线粒体在『繁殖』。它们在优秀的细胞里潜伏，在环境中失控，直至把整座剧场变成巢穴。我有个大胆的猜测——真正的主谋，不在剧场，而在那栋亮着蓝光的研究大楼里。」","她顿了顿：「……你自己，可千万小心。一旦你的细胞也开始供能给它们，你就再回不了头。」"]),
     choices: &[
@@ -240,7 +240,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f1_storage", bg: Some("img_nexus.png"), loc: Some("F1 · 后台储物间"),
+    id: "js_f1_storage", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 后台储物间"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["储物间堆满戏服与道具。你在回收箱里翻出一把口径偏旧的手枪，枪身刻着一行小字：『季/·/07』。顺手，还压着半张泛蓝光的课题组名片。"]),
     choices: &[
@@ -251,17 +251,17 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 
-SceneDef { id: "js_boom", bg: Some("img_nexus.png"), loc: Some("F1 · 剧场 · 零点来临"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "js_boom", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 剧场 · 零点来临"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["零点整。舞台中央的巨型吊灯轰然炸裂，千百吨玻璃与碎屑泼洒向观众席——紧接着，满场『观众』腾地站起，抽搐着，从发际、耳窝、眼眶里挤出蠕动的线粒体触须。整座歌剧院，在一瞬之间变成了紫红与蓝的巢穴。"]),
     choices: &NO_CH, fight_id: Some("wc_jq_intro_prop"), video: None, cine_label: None, overlay: None },
-SceneDef { id: "js_f1_exit", bg: Some("img_corridor.png"), loc: Some("F1 · 剧场出口"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "js_f1_exit", bg: Some("jishengqianye_bg.png"), loc: Some("F1 · 剧场出口"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["浓烟从剧场各个出口涌出。你一脚踹开消防门，撞进十月冷冽的纽约夜色——街道上，路灯忽明忽暗，警戒线刚拉起，远处晃动的人影，正以一种不属于常人的僵直步态，向你围拢。"]),
     choices: &[ ChoiceDef { label: "冲进封锁街道", sub: "入 F2", cond: None, effects: &NO_EFF, route: Route::Dyn(r_to_f3) } ],
     fight_id: None, video: None, cine_label: None, overlay: None },
 
 /* ================= 幕二 · F2 街区 · 感染蔓延 ================= */
 SceneDef {
-    id: "js_f2_tower", bg: Some("img_corridor.png"), loc: Some("F2 · 封锁街道"),
+    id: "js_f2_tower", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 封锁街道"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["警戒塔顶的红灯扫过街道。法医封条、翻倒的救护车、沿路拖行的血痕——这座城市，正被看不见的『客人』一格格吞入。你循着蓝光，锁定了那座矗立在街区尽头的中央研究所大楼。"]),
     choices: &[
@@ -273,7 +273,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f2_clinic", bg: Some("img_corridor.png"), loc: Some("F2 · 废弃救护站"),
+    id: "js_f2_clinic", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 废弃救护站"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["救护站的担架上横着几具戛然而止的『病人』，他们体内都残留着同一种泛蓝的胶状物。一名裹着毯子的幸存女孩（梅）抬起眼：「他们说这里安全……但他们是把所有人送进来，去喂那个东西……救救我们，别让那栋楼再亮下去。」"]),
     choices: &[
@@ -283,13 +283,13 @@ SceneDef {
     ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
-SceneDef { id: "js_f2_clinic_sample", bg: Some("img_corridor.png"), loc: Some("F2 · 救护站样本室"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "js_f2_clinic_sample", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 救护站样本室"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你把指尖探入那团胶状物取样——只一瞬，你感到骨髓里一阵微麻。你再抬头，梅的倒影在你视网膜里，多了千万重颤动的细影。你明白：你也被写进了那张图纸。"]),
     choices: &[ ChoiceDef { label: "压抑心悸", sub: "感染链 · 深化", cond: None, effects: &[Eff::SetFlag("jq_fused"), Eff::San(-8)], route: Route::To("js_f2_tower") } ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f2_morgue", bg: Some("img_corridor.png"), loc: Some("F2 · 法医处"),
+    id: "js_f2_morgue", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 法医处"),
     mood: "mystery", speaker: Some("法医 · 罗伊"), voice: None,
     text: TextSpec::Static(&["法医罗伊掀开白布，露出解剖台上的『尸体』——那具躯体的五脏六腑，已被整整齐齐替换成一层层纺织的嵴膜。「这不是尸体，」罗伊摘下手套，「这是一张结网的图纸。真正的线粒体源头，就在那栋中央研究所里。」"]),
     choices: &[
@@ -299,13 +299,13 @@ SceneDef {
     ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
-SceneDef { id: "js_f2_doc", bg: Some("img_corridor.png"), loc: Some("F2 · 法医档案"), mood: "mystery", speaker: None, voice: None,
+SceneDef { id: "js_f2_doc", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 法医档案"), mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["档案里夹着一页盖章不久的《中央研究所 · 生物学实验 · 折A》，铅印处只留半枚残印。你认出身形——和储物间名片上那枚『季/·/07』，同出一源。"]),
     choices: &[ ChoiceDef { label: "拼合线索", sub: "感染链 · 阶段一显明", cond: None, effects: &[Eff::SetFlag("jq_infected_1"), Eff::Points(10)], route: Route::To("js_f2_tower") } ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f2_officer", bg: Some("img_corridor.png"), loc: Some("F2 · 警戒塔 · 布伦"),
+    id: "js_f2_officer", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 警戒塔 · 布伦"),
     mood: "cold", speaker: Some("警官 · 布伦"), voice: None,
     text: TextSpec::Static(&["布伦警官按着腰间的枪横在你面前：「市民，这街区已封锁。退回去。上头有令——谁进那栋楼，就按『疑似病原体』处理。」他顿了顿，压低声音：「……不过，你若能证明自己已见过『图纸』的真面目，我或许能给你放行。」"]),
     choices: &[
@@ -316,7 +316,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f2_alley", bg: Some("img_corridor.png"), loc: Some("F2 · 黑巷"),
+    id: "js_f2_alley", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 黑巷"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["黑巷墙角的垃圾堆上，伏着一只背脊裂开的线粒体猎犬，正用人类嗓音低低抽泣——它看见你，喉间的缝隙一张一合：『……放……放我……回……回……』"]),
     choices: &[
@@ -325,10 +325,10 @@ SceneDef {
     ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
-SceneDef { id: "js_f2_alley_fight", bg: Some("img_corridor.png"), loc: Some("F2 · 黑巷 · 遭遇线粒体猎犬"), mood: "danger", speaker: None, voice: None,
+SceneDef { id: "js_f2_alley_fight", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 黑巷 · 遭遇线粒体猎犬"), mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["猎犬作势扑来，黑巷里刮起腥风。"]),
     choices: &NO_CH, fight_id: Some("wc_jq_hound"), video: None, cine_label: None, overlay: None },
-SceneDef { id: "js_f2_survivor", bg: Some("img_corridor.png"), loc: Some("F2 · 救护站前 · 幸存者梅"), mood: "calm", speaker: Some("幸存者 · 梅"), voice: None,
+SceneDef { id: "js_f2_survivor", bg: Some("jishengqianye_bg.png"), loc: Some("F2 · 救护站前 · 幸存者梅"), mood: "calm", speaker: Some("幸存者 · 梅"), voice: None,
     text: TextSpec::Static(&["梅把一块暖手的芯片塞进你掌心：「拿着。这是我趁乱从大楼通风口拍的……上面全是培育细胞的编号。他们要的从来不是救人。」"]),
     choices: &[ ChoiceDef { label: "收下芯片", sub: "Item it_jq_chip · 锁定 F3", cond: None,
         effects: &[Eff::AddItem("it_jq_chip"), Eff::Points(10)], route: Route::To("js_f2_tower") } ],
@@ -337,7 +337,7 @@ SceneDef { id: "js_f2_survivor", bg: Some("img_corridor.png"), loc: Some("F2 · 
 
 /* ================= 幕三 · F3 中央研究所 ================= */
 SceneDef {
-    id: "js_f3_lobby", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 研究所中庭大厅"),
+    id: "js_f3_lobby", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 研究所中庭大厅"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["你推门而入，中庭大厅的中央立着一尊巨大的『细胞切片』树脂雕塑。蓝光自上方倾泻——这里没有一丝活人气息，只有无数培养皿的嗡鸣与一浪高过一浪的低频搏动。"]),
     choices: &[
@@ -350,7 +350,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f3_archive", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 机密档案室"),
+    id: "js_f3_archive", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 机密档案室"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["档案柜里压着一份未盖章的最高机密：『M-进程』。首页只有一行铅字：『线粒体聚合体 = 唤醒被囚于每个人细胞里的元意识』。你翻到最后，发现了那枚『季/·/07』的签名——正是出品剧场样本的研究员，季学。"]),
     choices: &[
@@ -360,7 +360,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f3_sample", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 样本室"),
+    id: "js_f3_sample", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 样本室"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["样本室内，数千只封存的『线粒体细胞』在灯光下苏醒、震颤，像一片等待合唱的温床。你采集一枚极活跃的，触到了聚合体的门脉。"]),
     choices: &[
@@ -369,14 +369,14 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f3_med", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 病历中心"),
+    id: "js_f3_med", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 病历中心"),
     mood: "mystery", speaker: None, voice: None,
     text: TextSpec::Static(&["病历屏上滚动着『受试者α』的体征曲线。你在第 12 页看到一行批注：『宿主细胞同步率达峰时，宿主将失去『我』。那便是聚合体的王座——也是唯一的出路。』"]),
     choices: &[ ChoiceDef { label: "辨读批注", sub: "提示感染链终点", cond: None, effects: &[Eff::Points(10)], route: Route::To("js_f3_lobby") } ],
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f3_atrium", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 中庭机组"),
+    id: "js_f3_atrium", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 中庭机组"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["你扳断中庭机组的冷却管，啸鸣的蓝光骤降——整栋大楼的搏动霎时紊乱，聚合体的『心跳』漏了一拍。你在管道间瞥见一具外壳，与你身上的——一模一样。","那是『你』的复制体，已被培育到线粒体同步的临界。"]),
     choices: &[
@@ -387,7 +387,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f3_cultivate", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 培育舱"),
+    id: "js_f3_cultivate", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 培育舱"),
     mood: "mystery", speaker: Some("聚合体低语"), voice: None,
     text: TextSpec::Static(&["培育舱灯火通明，中央一池乳白的『培养液』里，浸泡着一枚搏动的细胞核——聚合体的孩子。它认出你，缓缓开口：","「你已经被写入图纸。你的细胞，我的灯……放下抵抗，与我融为一体，你将成为新意识的子民；或倾颓这场旧纪元。」"]),
     choices: &[
@@ -399,7 +399,7 @@ SceneDef {
 
 /* ---------------- 终局抉择 + BOSS ---------------- */
 SceneDef {
-    id: "js_f3_decision", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 聚合体深室闸前"),
+    id: "js_f3_decision", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 聚合体深室闸前"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("jq_fused") {
@@ -415,7 +415,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "js_f3_bossgate", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 聚合体深室"),
+    id: "js_f3_bossgate", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 聚合体深室"),
     mood: "danger", speaker: Some("线粒体聚合体"), voice: None,
     text: TextSpec::Static(&["深室闸门液压撑开——线粒体聚合体在幽蓝光雾中舒张成一座搏动的恢弘心脏。千百道视野同时望向门前的你，声音重叠得几乎撕碎耳膜：","「进。你是我最后的容器。」"]),
     choices: &[
@@ -431,7 +431,7 @@ SceneDef {
 
 /* BOSS 选择驱动回合（HP 存 st.fight，由 start_boss 建立） */
 SceneDef {
-    id: "js_boss_round", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 聚合体深室"),
+    id: "js_boss_round", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 聚合体深室"),
     mood: "danger", speaker: Some("线粒体聚合体"), voice: None,
     text: TextSpec::Dyn(|st| format!("聚合体剩余 {} 点（原始 200）——你 HP {}。它的膜层正像呼吸般扩张，那枚养殖到极致的核心，随每一下搏动向你胸膛逼近。",
         st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
@@ -448,21 +448,21 @@ SceneDef {
 
 /* ================= 结局三线（都收敛到 js_card 结算） ================= */
 SceneDef {
-    id: "js_win_purge", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 聚合体残骸"),
+    id: "js_win_purge", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 聚合体残骸"),
     mood: "calm", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["聚合体的心脏被你的火力贯穿，凝结成一个静止的蓝核，坠落在地，裂成碎屑。窗外，纽约的夜空第一次露出了干净的星河。","清除线达成。线粒体巢穴连根拔除——你从研究所断壁间走出，把那段蓝光留在了身后。"]),
     choices: &[ ChoiceDef { label: "撤离研究所", sub: "完成副本", cond: None, effects: &NO_EFF, route: Route::Dyn(|_st| "js_card".to_string()) } ],
     fight_id: None, video: None, cine_label: Some("结局 · 清除"), overlay: None,
 },
 SceneDef {
-    id: "js_win_coexist", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 聚合体王座"),
+    id: "js_win_coexist", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 聚合体王座"),
     mood: "mystery", speaker: Some("线粒体聚合体"), voice: None,
     text: TextSpec::Static(&["你没有拔枪。你伸手，触碰了那枚搏动的核心。一瞬的灼痛后，蓝光沿你的血管改道，你的细胞与新意识订下契约——不再吞噬，转为共生。餐馆、街道、整座城市里苏醒的『它们』静了下来，重新睡回每个细胞的深处。","共存线达成。人类不再被吞噬，聚合体真正成为细胞的远方兄弟。你带着一枚温和跳动的『第二心脏』离开大楼。"]),
     choices: &[ ChoiceDef { label: "携契约离场", sub: "完成副本", cond: None, effects: &NO_EFF, route: Route::Dyn(|_st| "js_card".to_string()) } ],
     fight_id: None, video: None, cine_label: Some("结局 · 共存"), overlay: None,
 },
 SceneDef {
-    id: "js_win_selfdestruct", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 聚合体王座"),
+    id: "js_win_selfdestruct", bg: Some("jishengqianye_bg.png"), loc: Some("F3 · 聚合体王座"),
     mood: "danger", speaker: Some("线粒体聚合体"), voice: None,
     text: TextSpec::Static(&["你把指尖探入自己的胸腔，触悸到那枚已被线粒体同步的心脏。聚合体怔住：「你……愿为这座城？」你按下了引爆的引信。","细胞图谱自你体内轰然燃烧，蓝与红在大楼中庭炸开成一道贯穿天顶的光柱。聚合体在崩解前最后发出的，是数不清的『它』所喊出的、本属于人类的恐惧。","自毁线达成。你以自己为代价，把线粒体异变整个从纽约的夜空里点燃殆尽。"]),
     choices: &[ ChoiceDef { label: "……请记得我", sub: "完成副本 · 自毁结局", cond: None, effects: &NO_EFF, route: Route::Dyn(|_st| "js_card".to_string()) } ],

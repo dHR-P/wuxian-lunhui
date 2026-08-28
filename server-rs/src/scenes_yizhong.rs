@@ -187,7 +187,7 @@ pub static YIZHONG_SCENES: &[SceneDef] = &[
     },
     // 保留原 BOSS 入口场景
     SceneDef {
-        id: "yz_01", bg: Some("img_zhuyuan_book.png"), loc: Some("茧室核心"), mood: "danger",
+        id: "yz_01", bg: Some("yizhong_bg.png"), loc: Some("茧室核心"), mood: "danger",
         speaker: Some("BOSS"), voice: None,
         text: TextSpec::Static(&["异种成体 挡在出口。它不是入侵——是进化错误。"]),
         choices: &[
@@ -197,7 +197,7 @@ pub static YIZHONG_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_round", bg: Some("img_laser.png"), loc: Some("茧室核心 · 决战处"), mood: "danger",
+        id: "yz_round", bg: Some("yizhong_bg.png"), loc: Some("茧室核心 · 决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("BOSS 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[

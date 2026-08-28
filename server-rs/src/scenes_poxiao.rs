@@ -246,7 +246,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_00_check", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 教堂广场"),
+        id: "px_00_check", bg: Some("poxiao_bg.png"), loc: Some("L1 · 教堂广场"),
         mood: "cold", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "空荡的封锁城区压在永夜的紫蓝天空下。霓虹残灯、废弃车辆、教堂剪影……这座曾属于人类的城市，如今灯火通明的是几处血站。",
@@ -259,7 +259,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
 
     /* ================= L1 hub * 街道 ================= */
     SceneDef {
-        id: "px_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 封锁城区街道"),
+        id: "px_l1_hub", bg: Some("poxiao_bg.png"), loc: Some("L1 · 封锁城区街道"),
         mood: "cold", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["永夜的城市压在头顶，钟楼的时针悬在凌晨。道尔顿的白大褂在昏黄里一闪——他还在教堂等你。你需要在黎明前走完这条街，也走完这座城市的夜。"]),
         choices: &[
@@ -275,21 +275,21 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_altar", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 圣坛笔记"),
+        id: "px_altar", bg: Some("poxiao_bg.png"), loc: Some("L1 · 圣坛笔记"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["教堂圣坛上压着一页手写的笔记，墨水干涸发褐：『苔丝尔德最后一天的日记——太阳落下第三年了。血族说这是新的秩序。可我记得，人类曾靠光活着。』"]),
         choices: &[ChoiceDef { label: "合上笔记", sub: "+5 点 · 人类记忆", cond: None, effects: &[Eff::Points(5)], route: Route::To("px_l1_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_belltower", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 钟楼调查"),
+        id: "px_belltower", bg: Some("poxiao_bg.png"), loc: Some("L1 · 钟楼调查"),
         mood: "cold", speaker: Some("钟楼"), voice: None,
         text: TextSpec::Static(&["钟楼的指针悬在凌晨三时。锁着的钟面下一块黄铜铭牌刻着尖塔的方位——黎明尖塔，是把整座城市照亮的那个塔顶，也是你此行的终点。"]) ,
         choices: &[ChoiceDef { label: "记下方位与时间", sub: "+5 点 · 掐着黎明赶路", cond: None, effects: &[Eff::Points(5), Eff::SetFlag("px_phase_1")], route: Route::To("px_l1_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_bloodbank", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 废弃血站终端"),
+        id: "px_bloodbank", bg: Some("poxiao_bg.png"), loc: Some("L1 · 废弃血站终端"),
         mood: "cold", speaker: Some("道尔顿"), voice: None,
         text: TextSpec::Static(&["道尔顿在血站终端前调出泛蓝的档案：「血清原型……当年能让人重返阳光的那个配方。配方碎片被拆成三份——一份在这里，一份在叛军手里，一份锁在尖塔档案室。」"]),
         choices: &[ChoiceDef { label: "记下血清情报", sub: "Item it_px_plasma · +30 点 · px_blood_bank", cond: None,
@@ -297,28 +297,28 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_apt_letter", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 空屋信件"),
+        id: "px_apt_letter", bg: Some("poxiao_bg.png"), loc: Some("L1 · 空屋信件"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["公寓空屋的桌上压着一封信，落款是没来得及寄出的家书：『若你还能看到太阳，替我告诉爸，我没有怕。』窗外的血族无声地巡过。"]),
         choices: &[ChoiceDef { label: "把信揣好", sub: "+2 点 · 记下一个名字", cond: None, effects: &[Eff::Points(2), Eff::San(5)], route: Route::To("px_l1_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_store_relic", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 店面废墟"),
+        id: "px_store_relic", bg: Some("poxiao_bg.png"), loc: Some("L1 · 店面废墟"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["店面废墟的收银台抽屉里散着几枚血族银币——这座城市仍在使用血族的货币，就像它仍在呼吸一样。你掂了掂，没有带走。"]),
         choices: &[ChoiceDef { label: "记下血族银币线索", sub: "+5 点 · 世界的一角", cond: None, effects: &[Eff::Points(5)], route: Route::To("px_l1_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_ruin", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 坍塌废墟"),
+        id: "px_ruin", bg: Some("poxiao_bg.png"), loc: Some("L1 · 坍塌废墟"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["一处坍塌的废墟压在路口，钢筋从残骸里刺出。太阳落下前，这里是街角的咖啡店。你绕过去，脚下是碎玻璃与落叶。"]),
         choices: &[ChoiceDef { label: "绕过废墟", sub: "不必停留", cond: None, effects: &NO_EFF, route: Route::To("px_l1_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_metro", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 地铁口"),
+        id: "px_metro", bg: Some("poxiao_bg.png"), loc: Some("L1 · 地铁口"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["地铁口吐着潮湿的凉气，阶梯一路向下通入黑暗。你在台阶口停顿——地下的世界，藏着这座城市的另一群人。"]),
         choices: &[ChoiceDef { label: "下阶梯", sub: "px_metro_portal · 单向进地下", cond: None, effects: &NO_EFF, route: Route::To("px_l2_arrive") }],
@@ -327,7 +327,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕 1 · 关键转折「沉沦者！」 ================= */
     SceneDef {
-        id: "px_dalton", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 教会收容所"),
+        id: "px_dalton", bg: Some("poxiao_bg.png"), loc: Some("L1 · 教会收容所"),
         mood: "danger", speaker: Some("爱德华·道尔顿"), voice: Some("vo_px_dalton"),
         text: TextSpec::Static(&[
             "道尔顿抬眼，白大褂下的脸色苍白得近乎透明，却带着一种学者式的疲惫：「你们是……主神空间的人？呵，我早该知道。听着——血清原型在市中心的血站里，日光镜阵在尖塔顶层，而塔里的东西……已经不是吸血鬼了。它叫沉沦者。」",
@@ -340,13 +340,13 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_deg_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 教堂外暗巷"),
+        id: "px_deg_fight", bg: Some("poxiao_bg.png"), loc: Some("L1 · 教堂外暗巷"),
         mood: "danger", speaker: Some("沉沦者"), voice: None,
         text: TextSpec::Static(&["暗巷里的沉沦者撞开教堂后门，白惨惨的手指扣进木梁，双瞳血红地锁住你们。道尔顿往后一退：「别走远——半径之内，才是活路。」（遭遇战）"]),
         choices: &NO_CH, fight_id: Some("pc_degenerate"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_deg_after", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 教堂"),
+        id: "px_deg_after", bg: Some("poxiao_bg.png"), loc: Some("L1 · 教堂"),
         mood: "confidence", speaker: Some("道尔顿"), voice: None,
         text: TextSpec::Static(&["沉沦者抽搐着倒下。道尔顿蹲下捏起一撮灰：「看到了吗？它原本也是血族……它们失去了理智，成了行走的饥饿。我们得在太阳升起前，把那束光还给这座城。」"]),
         choices: &[ChoiceDef { label: "跟随道尔顿前往血站", sub: "血清原型情报", cond: None, effects: &NO_EFF, route: Route::To("px_bloodbank") }],
@@ -355,14 +355,14 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕 2 · 「地下！」· 三方势力抉择 ================= */
     SceneDef {
-        id: "px_l2_arrive", bg: Some("img_corridor.png"), loc: Some("L2 · 地下排水道 · 到达点"),
+        id: "px_l2_arrive", bg: Some("poxiao_bg.png"), loc: Some("L2 · 地下排水道 · 到达点"),
         mood: "cold", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["阶梯尽头的黑暗里亮着几点油灯。下水道的潮气混着机油味，管道深处的滴水声单调如钟。远处隐隐传来人声——这里居然住了人。"]),
         choices: &[ChoiceDef { label: "循着人声前进", sub: "进入叛军据点", cond: None, effects: &NO_EFF, route: Route::To("px_l2_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 叛军据点"),
+        id: "px_l2_hub", bg: Some("poxiao_bg.png"), loc: Some("L2 · 叛军据点"),
         mood: "cold", speaker: Some("奥黛丽·班尼特"), voice: None,
         text: TextSpec::Static(&["油炸火光照亮一张张警惕又疲惫的人脸。奥黛丽·班尼特抱着步枪打量你：「人类要在天亮前把镜阵对准城里每一扇窗——这是我们的城市。」地下，是人类的最后一道防线。"]),
         choices: &[
@@ -377,7 +377,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_rebels", bg: Some("img_corridor.png"), loc: Some("L2 · 通讯台"),
+        id: "px_rebels", bg: Some("poxiao_bg.png"), loc: Some("L2 · 通讯台"),
         mood: "drama", speaker: Some("奥黛丽 + 无线电嘶响"), voice: None,
         text: TextSpec::Static(&["通讯台的数据灯明灭交替。奥黛丽按着枪：「人类要向天下黎明抢下一座城。」通讯器忽然嘶响，一个低沉柔滑的贵族腔插了进来：『血族贵族埃德加·冯·豪森请求通话。』",
             "你们面前摊着一道选择题——三方都想要这座城的黎明，但想要的黎明并不相同。没有对错，只有你选择站哪边。"]),
@@ -389,14 +389,14 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_rebel_oath", bg: Some("img_corridor.png"), loc: Some("L2 · 叛军据点 · 誓约"),
+        id: "px_rebel_oath", bg: Some("poxiao_bg.png"), loc: Some("L2 · 叛军据点 · 誓约"),
         mood: "drama", speaker: Some("奥黛丽·班尼特"), voice: None,
         text: TextSpec::Static(&["奥黛丽把一枚灰白的手印按在你肩头，仿佛烙下一个盟约：「记住，是你的选择，把太阳还给这座城市的人类的。塔上镜阵的接入密钥，叛军永远站在你背后。」"]),
         choices: &[ChoiceDef { label: "接过盟约", sub: "+20 点 · 人类线", cond: None, effects: &[Eff::Points(20)], route: Route::To("px_l2_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_edgar_deal", bg: Some("img_corridor.png"), loc: Some("L2 · 通讯台 · 埃德加的通话"),
+        id: "px_edgar_deal", bg: Some("poxiao_bg.png"), loc: Some("L2 · 通讯台 · 埃德加的通话"),
         mood: "drama", speaker: Some("埃德加·冯·豪森"), voice: None,
         text: TextSpec::Static(&["低沉柔滑的贵族嗓音含着一丝笑意：「聪明的选择，离太阳太近的物种都会燃尽。你我做个交易——阳光会来，但要在血族的秩序之后。道尔顿的血清量产，归我。」",
             "通讯中断前，他留了个口信：「若你在塔上遇险，这支家室的血钟会认得你自己人。」你收好那枚暗红勋章。"]),
@@ -404,21 +404,21 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_neutral", bg: Some("img_corridor.png"), loc: Some("L2 · 通讯台 · 中立"),
+        id: "px_neutral", bg: Some("poxiao_bg.png"), loc: Some("L2 · 通讯台 · 中立"),
         mood: "cold", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["你扯断了通讯线，谁的人情都没接。「这场战斗，我不替任何一边打。」奥黛丽沉默，埃德加的嗓音也淡了。你握紧武器——独行在这座黎明之城，自己认自己的路。"]),
         choices: &[ChoiceDef { label: "转身，独自前行", sub: "+20 点 · 独行者", cond: None, effects: &[Eff::Points(20)], route: Route::To("px_l2_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_elvis", bg: Some("img_corridor.png"), loc: Some("L2 · 叛军爆破手埃尔维斯"),
+        id: "px_elvis", bg: Some("poxiao_bg.png"), loc: Some("L2 · 叛军爆破手埃尔维斯"),
         mood: "calm", speaker: Some("埃尔维斯"), voice: None,
         text: TextSpec::Static(&["埃尔维斯摆弄着一支无线电，咕哝道：「地下住久了，差点忘了太阳长啥样。兄弟，要是你真能送它回来，回头上我这儿来顿热的——我请你喝汤。」"]),
         choices: &[ChoiceDef { label: "记下这份人情", sub: "+10 点 · 世界的一角", cond: None, effects: &[Eff::Points(10)], route: Route::To("px_l2_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_rebel_patrol", bg: Some("img_corridor.png"), loc: Some("L2 · 主排水道 · 叛军巡逻"),
+        id: "px_rebel_patrol", bg: Some("poxiao_bg.png"), loc: Some("L2 · 主排水道 · 叛军巡逻"),
         mood: "danger", speaker: Some("武装人类叛军"), voice: None,
         text: TextSpec::Static(&["主排水道阴影里，奥黛丽的人抬枪：「站住。叛军？血族？还是主神的狗？」枪口对着你，月光从格栅缝漏下来，一瞬间连空气都像绷紧了。"]),
         choices: &[
@@ -428,7 +428,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_armory", bg: Some("img_corridor.png"), loc: Some("L2 · 叛军军械库"),
+        id: "px_armory", bg: Some("poxiao_bg.png"), loc: Some("L2 · 叛军军械库"),
         mood: "cold", speaker: Some("埃尔维斯"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("px_armory_open") {
@@ -444,7 +444,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_pump_console", bg: Some("img_corridor.png"), loc: Some("L2 · 泵房控制台"),
+        id: "px_pump_console", bg: Some("poxiao_bg.png"), loc: Some("L2 · 泵房控制台"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("px_valves") {
@@ -462,28 +462,28 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_valve_a", bg: Some("img_corridor.png"), loc: Some("L2 · 泵房 · 阀门A"),
+        id: "px_valve_a", bg: Some("poxiao_bg.png"), loc: Some("L2 · 泵房 · 阀门A"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["锈蚀的阀门 A 卡得死紧，你使上全身力气才扳动半圈，排水管里传来低沉的汩汩声。管线图上 A 格被划了一道。"]),
         choices: &[ChoiceDef { label: "扳开阀门A", sub: "px_valve_a · 排水进度", cond: None, effects: &[Eff::SetFlag("px_valve_a")], route: Route::To("px_pump_console") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_valve_b", bg: Some("img_corridor.png"), loc: Some("L2 · 泵房 · 阀门B"),
+        id: "px_valve_b", bg: Some("poxiao_bg.png"), loc: Some("L2 · 泵房 · 阀门B"),
         mood: "mystery", speaker: None, voice: None,
         text: TextSpec::Static(&["阀门 B 在暗角，扳手一拧，水声渐大。排水渠图上的最后一格光亮起来，只差把控制台合上电闸。"]),
         choices: &[ChoiceDef { label: "扳开阀门B", sub: "px_valve_b · 排水进度", cond: None, effects: &[Eff::SetFlag("px_valve_b"), Eff::SetFlag("px_valve_console")], route: Route::To("px_pump_console") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_nest", bg: Some("img_corridor.png"), loc: Some("L2 · 深水渠巢穴"),
+        id: "px_nest", bg: Some("poxiao_bg.png"), loc: Some("L2 · 深水渠巢穴"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["排干水后的深水渠露出一片沉沦者的巢穴，骸骨与血浆结晶铺了一地。你在角落找到一个没被舔净的样本箱——里面的血浆还带着微温。"]),
         choices: &[ChoiceDef { label: "取走血浆样本", sub: "Item it_px_plasma · +25 · px_nest", cond: None, effects: &[Eff::AddItem("it_px_plasma"), Eff::SetFlag("px_nest"), Eff::Points(25)], route: Route::To("px_l2_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_generator", bg: Some("img_corridor.png"), loc: Some("L2 · 发电机房"),
+        id: "px_generator", bg: Some("poxiao_bg.png"), loc: Some("L2 · 发电机房"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["发电机房里引擎低沉，配电盘上「货运电梯」一格是暗的。你找到总闸，拧着散热阀把最后一路电送上电梯——指示灯哔地亮起。"]),
         choices: &[ChoiceDef { label: "给货运电梯通电", sub: "px_generator · 上尖塔门禁开通", cond: None, effects: &[Eff::SetFlag("px_generator"), Eff::Points(30)], route: Route::To("px_l2_hub") }],
@@ -491,21 +491,21 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
     },
 
     SceneDef {
-        id: "px_fight_rebel", bg: Some("img_corridor.png"), loc: Some("L2 · 主排水道 · 交火"),
+        id: "px_fight_rebel", bg: Some("poxiao_bg.png"), loc: Some("L2 · 主排水道 · 交火"),
         mood: "danger", speaker: Some("武装人类叛军"), voice: None,
         text: TextSpec::Static(&["一声叹息之后是利落的枪响——你没能说破来意，拔了刀。同样被永夜压着的一群人，此刻在枪口下对峙。（遭遇战 · px_rebel_blood）"]),
         choices: &NO_CH, fight_id: Some("pc_rebel_guard"), video: None, cine_label: None, overlay: None,
     },
     /* ================= 幕 3 · 「等待阳光」· L3 解密与镜阵 ================= */
     SceneDef {
-        id: "px_l3_arrive", bg: Some("img_redqueen.png"), loc: Some("L3 · 黎明尖塔 · 大堂"),
+        id: "px_l3_arrive", bg: Some("poxiao_bg.png"), loc: Some("L3 · 黎明尖塔 · 大堂"),
         mood: "danger", speaker: Some("道尔顿"), voice: None,
         text: TextSpec::Static(&["货运电梯在尖塔大堂停稳。玻璃穹顶透进来一线极淡的血橙，那是黎明的边缘色。道尔顿抬起被玻璃映亮的脸：「镜阵在顶层，钥匙在档案室——先弄清楚它的弱点，再上去送死。」"]),
         choices: &[ChoiceDef { label: "进入尖塔中层", sub: "实验区 / 档案室", cond: None, effects: &NO_EFF, route: Route::To("px_l3_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_l3_hub", bg: Some("img_redqueen.png"), loc: Some("L3 · 黎明尖塔 · 中层"),
+        id: "px_l3_hub", bg: Some("poxiao_bg.png"), loc: Some("L3 · 黎明尖塔 · 中层"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("px_dawn_mirror") {
@@ -528,21 +528,21 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_reception", bg: Some("img_redqueen.png"), loc: Some("L3 · 接待台"),
+        id: "px_reception", bg: Some("poxiao_bg.png"), loc: Some("L3 · 接待台"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["尖塔大堂的接待台落满细尘，登记簿停在太阳落下前最后一页。一名血族前台接待员的工牌还挂在椅背上，名牌旁边贴着一句打印的标语：「黎明之塔，服务永恒之夜。」"]),
         choices: &[ChoiceDef { label: "记下这句标语", sub: "+5 点 · 世界的一角", cond: None, effects: &[Eff::Points(5)], route: Route::To("px_l3_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_lab_log", bg: Some("img_redqueen.png"), loc: Some("L3 · 实验记录"),
+        id: "px_lab_log", bg: Some("poxiao_bg.png"), loc: Some("L3 · 实验记录"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Static(&["实验记录潦草的字迹翻到最后一页：「格里高尔，代号日间战士。血清原型与贵族血脉混合的完美实验体——但嗜血狂热无法抑制。档案室封存了它的全部弱点。」"]),
         choices: &[ChoiceDef { label: "记下血清日志", sub: "px_serum_log · +15 点", cond: None, effects: &[Eff::SetFlag("px_serum_log"), Eff::Points(15)], route: Route::To("px_l3_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_archive", bg: Some("img_redqueen.png"), loc: Some("L3 · 机密档案"),
+        id: "px_archive", bg: Some("poxiao_bg.png"), loc: Some("L3 · 机密档案"),
         mood: "danger", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["档案最后一页用红字写着：『格里高尔，代号「日间战士」。实验失败。嗜血狂热无法抑制；唯一记录的弱点——直接日照下其再生崩溃。』",
             "远处钟楼遥遥敲响：凌晨四点。你了然于心——要打赢它，得先把阳光拆进这座塔。"]),
@@ -550,21 +550,21 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_mirror_l", bg: Some("img_redqueen.png"), loc: Some("L3 · 决战平台 · 左镜"),
+        id: "px_mirror_l", bg: Some("poxiao_bg.png"), loc: Some("L3 · 决战平台 · 左镜"),
         mood: "calm", speaker: Some("道尔顿"), voice: None,
         text: TextSpec::Static(&["左镜的镜面蒙着岁月，你对准折射角缓缓拧动，一抹天光从穹顶漏进，在镜阵里来回跳了一格。道尔顿：「左边成了——下一个，右边。」"]),
         choices: &[ChoiceDef { label: "校准左镜", sub: "镜阵 1/3", cond: None, effects: &[Eff::SetFlag("px_mirror_l")], route: Route::To("px_l3_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_mirror_r", bg: Some("img_redqueen.png"), loc: Some("L3 · 决战平台 · 右镜"),
+        id: "px_mirror_r", bg: Some("poxiao_bg.png"), loc: Some("L3 · 决战平台 · 右镜"),
         mood: "calm", speaker: Some("道尔顿"), voice: None,
         text: TextSpec::Static(&["右镜的镜面反着你与道尔顿的倒影，一道光束又接上。道尔顿扶着镜框：「石阵的光已经连成一条线——只差把主控台的枢纽点亮了。」"]),
         choices: &[ChoiceDef { label: "校准右镜", sub: "镜阵 2/3", cond: None, effects: &[Eff::SetFlag("px_mirror_r")], route: Route::To("px_l3_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_mirror_c", bg: Some("img_redqueen.png"), loc: Some("L3 · 决战平台 · 主控镜阵"),
+        id: "px_mirror_c", bg: Some("poxiao_bg.png"), loc: Some("L3 · 决战平台 · 主控镜阵"),
         mood: "calm", speaker: Some("道尔顿"), voice: None,
         text: TextSpec::Dyn(|st| {
             if st.flag("px_mirror_l") && st.flag("px_mirror_r") {
@@ -582,7 +582,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
 
     /* ================= 幕 4 · 决战「决战！……回归！」 ================= */
     SceneDef {
-        id: "px_duel", bg: Some("img_redqueen.png"), loc: Some("L3 · 决战平台 · 玻璃穹顶下"),
+        id: "px_duel", bg: Some("poxiao_bg.png"), loc: Some("L3 · 决战平台 · 玻璃穹顶下"),
         mood: "danger", speaker: Some("格里高尔 + 道尔顿"), voice: Some("vo_px_duel"),
         text: TextSpec::Static(&[
             "顶层决战的玻璃穹顶漏进第一缕血橙的天光。格里高尔从镜阵下站起身，畸变的肌肉像活物一样蠕动：「血……还给我……」",
@@ -595,7 +595,7 @@ pub static POXIAO_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "px_gregor_round", bg: Some("img_redqueen.png"), loc: Some("L3 · 决战平台 · 与格里高尔缠斗"),
+        id: "px_gregor_round", bg: Some("poxiao_bg.png"), loc: Some("L3 · 决战平台 · 与格里高尔缠斗"),
         mood: "danger", speaker: Some("格里高尔"), voice: None,
         text: TextSpec::Dyn(|st| {
             let hp = st.fight.as_ref().map(|f| f.hp.max(0)).unwrap_or(0);

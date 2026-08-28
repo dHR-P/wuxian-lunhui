@@ -154,7 +154,7 @@ pub static BAISUN_SCENES: &[SceneDef] = &[
 
 /* ================= 开场 ================= */
 SceneDef {
-    id: "bs_00", bg: Some("img_corridor.png"), loc: Some("医院停车场 ≪第二端 ≫"),
+    id: "bs_00", bg: Some("bs_bg_airport.png"), loc: Some("医院停车场 ≪第二端 ≫"),
     mood: "mystery", speaker: Some("主神·任务发布"), voice: Some("vo_baisun_1"),
     text: TextSpec::Static(&[
         "<b>【主线任务·命运清单·第二端】</b>识破连环意外，改写死神给三桩「机关」排下的死亡名单。失败代价：被扣 300 点复活。",
@@ -171,7 +171,7 @@ SceneDef {
 
 /* ================= L1 医院停车场 hub ================= */
 SceneDef {
-    id: "bs_l1_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 医院停车场"),
+    id: "bs_l1_hub", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 医院停车场"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bs_foresee_drop") {
@@ -194,7 +194,7 @@ SceneDef {
 
 /* ---- L1 征兆观测点 ---- */
 SceneDef {
-    id: "bs_01_crane", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 吊机摇臂"),
+    id: "bs_01_crane", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 吊机摇臂"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["吊机的摇臂基座缺了半颗螺栓，风一过就往下沉一格。你在铁锈的缝隙里读出一句无声的警告：这里的「坠物」正要发生。"]),
     choices: &[ChoiceDef { label: "【识破坠物征兆】", sub: "bs_foresee_drop · 改命", cond: None,
@@ -202,7 +202,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_01_slip", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 湿滑警戒带"),
+    id: "bs_01_slip", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 湿滑警戒带"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["警戒带被谁撕开一角，露出的地面汪着一片水。水面上，正好倒映着吊机铁箱的影子——摇臂一动，这儿就是落点。"]),
     choices: &[ChoiceDef { label: "【识破坠物征兆】", sub: "bs_foresee_drop · 改命", cond: None,
@@ -210,7 +210,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_01_car", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 焦黑轿车"),
+    id: "bs_01_car", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 焦黑轿车"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["一辆烧黑的轿车横在车位线外，引擎盖上砸出一个凹坑。钢梁像纸一样皱——这辆车，是上一次「意外」留下的。"]),
     choices: &[ChoiceDef { label: "记下焦黑轿车", sub: "伏笔 · San+1", cond: None,
@@ -218,7 +218,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_01_box", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 悬空铁箱"),
+    id: "bs_01_box", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 悬空铁箱"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["头顶的铁箱只有一根钢缆吊着，绳股断了快一半。你盯着箱底的划痕，认出同一种「坠物」的预兆——它正攒着劲，等你站到正下方。"]),
     choices: &[ChoiceDef { label: "【识破坠物征兆】", sub: "bs_foresee_drop · 改命", cond: None,
@@ -226,7 +226,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_02_guard", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 值班室"),
+    id: "bs_02_guard", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 值班室"),
     mood: "cold", speaker: Some("停车场保安"), voice: None,
     text: TextSpec::Static(&["保安攥着对讲机，声音发干：「那台吊机……我今早就觉着不对，可没人听。别往铁箱底下站，听见没？上回也是这么——它自己就下来了。」"]),
     choices: &[ChoiceDef { label: "「那你替我盯着它。」", sub: "保安点头 · San+2", cond: None,
@@ -236,7 +236,7 @@ SceneDef {
 
 /* ================= L1 环境机关 · 坠物 ================= */
 SceneDef {
-    id: "bs_10_drop", bg: Some("img_zhuyuan_book.png"), loc: Some("L1 · 吊机坠物区"),
+    id: "bs_10_drop", bg: Some("bs_bg_highway.png"), loc: Some("L1 · 吊机坠物区"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["你走到吊机正下方。头顶的钢缆发出一声脆响，铁箱开始往下坠——你只有一次识破它、或逃开它的机会。"]),
     choices: &[ChoiceDef { label: "【逼近落点扫描征兆】", sub: "识破坠物征兆则改写命运，否则San-10 · 意外身故", cond: None,
@@ -246,7 +246,7 @@ SceneDef {
 
 /* ================= L2 室内商场合订结构 hub ================= */
 SceneDef {
-    id: "bs_l2_hub", bg: Some("img_corridor.png"), loc: Some("L2 · 室内商场合订结构"),
+    id: "bs_l2_hub", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 室内商场合订结构"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bs_foresee_elev") {
@@ -269,7 +269,7 @@ SceneDef {
 
 /* ---- L2 征兆观测点 ---- */
 SceneDef {
-    id: "bs_04_handrail", bg: Some("img_corridor.png"), loc: Some("L2 · 扶梯扶手"),
+    id: "bs_04_handrail", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 扶梯扶手"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["扶梯的橡胶扶手被一件东西来回绞过，表面留下两条平行的压痕。你盯着那压痕，读懂了一句：这里的「电梯夹」正要发生。"]),
     choices: &[ChoiceDef { label: "【识破电梯征兆】", sub: "bs_foresee_elev · 改命", cond: None,
@@ -277,7 +277,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_04_cabinet", bg: Some("img_corridor.png"), loc: Some("L2 · 停用电梯轿厢"),
+    id: "bs_04_cabinet", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 停用电梯轿厢"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["货轿的铁门开着一道缝，门缝里露出一截被切断的防坠链。你凑近，听见轿厢深处有极轻的金属摩擦声，像在等一个身体探进来。"]),
     choices: &[ChoiceDef { label: "【识破电梯征兆】", sub: "bs_foresee_elev · 改命", cond: None,
@@ -285,7 +285,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_04_sign", bg: Some("img_corridor.png"), loc: Some("L2 · 超载报警灯"),
+    id: "bs_04_sign", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 超载报警灯"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["货梯的超载报警灯半灭半明，灯罩上积着灰，底下贴着一张「停用」褪色告示。你读出那盏灯的意思：每次快夹到人时，它都会先闪三下。"]),
     choices: &[ChoiceDef { label: "【识破电梯征兆】", sub: "bs_foresee_elev · 改命", cond: None,
@@ -293,7 +293,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_04_duct", bg: Some("img_corridor.png"), loc: Some("L2 · 商场风道"),
+    id: "bs_04_duct", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 商场风道"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["风道出风口积着厚灰，被某次巨响震开一道缝，露出里面锈死的检修门。你把它记下了——也许这是另一条出去的路。"]),
     choices: &[ChoiceDef { label: "记下风道检修门", sub: "伏笔", cond: None,
@@ -301,7 +301,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_05_clerk", bg: Some("img_corridor.png"), loc: Some("L2 · 客服台"),
+    id: "bs_05_clerk", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 客服台"),
     mood: "cold", speaker: Some("商场客服"), voice: None,
     text: TextSpec::Static(&["客服递给你一杯热水，声音压低：「那部货梯早该报废了。昨儿夜里有人听见它自己「咔哒」一声，像合上牙似的。别往门缝里凑，听见没？」"]),
     choices: &[ChoiceDef { label: "「它合上牙那次，夹住谁了？」", sub: "客服一抖 · San+2", cond: None,
@@ -309,7 +309,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_06_gate2", bg: Some("img_corridor.png"), loc: Some("L2 · 货运电梯轿厢门"),
+    id: "bs_06_gate2", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 货运电梯轿厢门"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bs_foresee_elev") {
@@ -328,7 +328,7 @@ SceneDef {
 
 /* ================= L2 环境机关 · 电梯夹 ================= */
 SceneDef {
-    id: "bs_11_elev", bg: Some("img_corridor.png"), loc: Some("L2 · 电梯轿厢夹缝"),
+    id: "bs_11_elev", bg: Some("bs_bg_mall.png"), loc: Some("L2 · 电梯轿厢夹缝"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["你探进货轿的一瞬，铁门「咔哒」一声往前滑。那道门缝正在收拢——你只有一次识破它、或让它咬住你的机会。"]),
     choices: &[ChoiceDef { label: "【探入夹缝扫描征兆】", sub: "识破电梯征兆则改写命运，否则San-10 · 意外身故", cond: None,
@@ -338,7 +338,7 @@ SceneDef {
 
 /* ================= L3 电影院逃生梯 hub ================= */
 SceneDef {
-    id: "bs_l3_hub", bg: Some("img_laser.png"), loc: Some("L3 · 电影院逃生梯"),
+    id: "bs_l3_hub", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 电影院逃生梯"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bs_fate_rewritten") {
@@ -362,7 +362,7 @@ SceneDef {
 
 /* ---- L3 征兆观测点 ---- */
 SceneDef {
-    id: "bs_07_projector", bg: Some("img_laser.png"), loc: Some("L3 · 放映室"),
+    id: "bs_07_projector", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 放映室"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["放映室没人，胶片盘却越转越快，滚轴渗出刺鼻的热味。你认出那股预热——「火灾」正在这里积蓄。"]),
     choices: &[ChoiceDef { label: "【识破火灾征兆】", sub: "bs_foresee_fire · 改命", cond: None,
@@ -370,7 +370,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_07_extinguisher", bg: Some("img_laser.png"), loc: Some("L3 · 灭火器柜"),
+    id: "bs_07_extinguisher", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 灭火器柜"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["灭火器柜是空的，墙上残留一道新擦的划痕，像有人为「逃跑」提前搬空了消火器。柜门内侧贴着手写的四字：火，要来了。"]),
     choices: &[ChoiceDef { label: "【识破火灾征兆】", sub: "bs_foresee_fire · 改命", cond: None,
@@ -378,7 +378,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_07_sprinkler", bg: Some("img_laser.png"), loc: Some("L3 · 洒水喷头"),
+    id: "bs_07_sprinkler", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 洒水喷头"),
     mood: "danger", speaker: None, voice: None,
     text: TextSpec::Static(&["天花板的洒水喷头，玻璃泡被人用手指碾碎，阀门被人拧死——这条无论如何都浇不下来的走廊，正是起火后唯一的出口。"]),
     choices: &[ChoiceDef { label: "【识破火灾征兆】", sub: "bs_foresee_fire · 改命", cond: None,
@@ -386,7 +386,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_07_sign", bg: Some("img_laser.png"), loc: Some("L3 · 逃生指示牌"),
+    id: "bs_07_sign", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 逃生指示牌"),
     mood: "cold", speaker: None, voice: None,
     text: TextSpec::Static(&["逃生指示牌的绿光忽明忽暗。灯罩后塞着一张烧掉一半的影票，你总觉得，这才是这一整层唯一的「真出口」。"]),
     choices: &[ChoiceDef { label: "记下指示牌", sub: "伏笔", cond: None,
@@ -394,7 +394,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_08_janitor", bg: Some("img_laser.png"), loc: Some("L3 · 走廊拐角"),
+    id: "bs_08_janitor", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 走廊拐角"),
     mood: "cold", speaker: Some("电影院清洁工"), voice: None,
     text: TextSpec::Static(&["清洁工手里攥着一卷被火燎黑的胶片，声音发抖：「上边……放映室没人了，可胶卷还在转。这层的灭火器昨晚全被人搬空了，你知道那是谁干的吗？」"]),
     choices: &[ChoiceDef { label: "「你在躲什么？」", sub: "清洁工回头看了一眼楼梯 · San+2", cond: None,
@@ -404,7 +404,7 @@ SceneDef {
 
 /* ================= L3 环境机关 · 火灾逃生 ================= */
 SceneDef {
-    id: "bs_12_fire", bg: Some("img_laser.png"), loc: Some("L3 · 逃生梯失火段"),
+    id: "bs_12_fire", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 逃生梯失火段"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["走廊尽头的逃生梯口，一道火舌翻卷着堵死退路。防烟门在高温里发红，你只有一次识破它、或冲进火里的机会。"]),
     choices: &[ChoiceDef { label: "【逼近火段扫描征兆】", sub: "识破火灾征兆则改写命运，否则San-10 · 意外身故", cond: None,
@@ -414,7 +414,7 @@ SceneDef {
 
 /* ================= L3 · 死神·使者（选择驱动象征战入口） ================= */
 SceneDef {
-    id: "bs_garage", bg: Some("img_laser.png"), loc: Some("L3 · 逃生梯楼梯间"),
+    id: "bs_garage", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 逃生梯楼梯间"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Static(&["楼梯间最下一阶，无面目的人形悬在正中。它指尖悬着三枚「意外」——坠物、电梯夹、火灾。它没动，但整条楼梯的风都朝它倾斜。"]),
     choices: &[
@@ -424,7 +424,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_boss_round", bg: Some("img_laser.png"), loc: Some("L3 · 逃生梯楼梯间 · 决战"), mood: "danger",
+    id: "bs_boss_round", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 逃生梯楼梯间 · 决战"), mood: "danger",
     speaker: Some("死神·使者"), voice: None,
     text: TextSpec::Dyn(|st| format!("使者剩余 {} 血，你 HP {}。它把名单在风里抖开，等你亲手划掉最后一行。", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
     choices: &[
@@ -434,7 +434,7 @@ SceneDef {
     fight_id: None, video: None, cine_label: None, overlay: None,
 },
 SceneDef {
-    id: "bs_boss_win", bg: Some("img_laser.png"), loc: Some("L3 · 逃生梯楼梯间"),
+    id: "bs_boss_win", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 逃生梯楼梯间"),
     mood: "calm", speaker: Some("死神·使者"), voice: None,
     text: TextSpec::Static(&["使者化作一片倒计时数字，散进风里。三枚「意外」依次落回你掌心，被你逐个划掉——它把「名单」还给你，而你不再被任何机关选上。"]),
     choices: &[ChoiceDef { label: "对照命运清单", sub: "结算", cond: None, effects: &NO_EFF, route: Route::To("bs_settle") }],
@@ -443,7 +443,7 @@ SceneDef {
 
 /* ================= L3 · 防火门（G3 软锁提示场景） ================= */
 SceneDef {
-    id: "bs_09_gate3", bg: Some("img_laser.png"), loc: Some("L3 · 逃生梯防火门"),
+    id: "bs_09_gate3", bg: Some("bs_bg_cinema.png"), loc: Some("L3 · 逃生梯防火门"),
     mood: "danger", speaker: Some("旁白"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bs_foresee_fire") {
@@ -462,7 +462,7 @@ SceneDef {
 
 /* ================= 结算 ================= */
 SceneDef {
-    id: "bs_settle", bg: Some("img_laser.png"), loc: Some("命运清单 · 第二端 · 结算"),
+    id: "bs_settle", bg: Some("bs_bg_cinema.png"), loc: Some("命运清单 · 第二端 · 结算"),
     mood: "calm", speaker: Some("主神"), voice: None,
     text: TextSpec::Dyn(|st| {
         if st.flag("bs_fate_rewritten") {

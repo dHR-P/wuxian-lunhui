@@ -51,7 +51,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
 
     /* ================= 幕一 · 开场扩充（钩子 + 氛围） ================= */
     SceneDef {
-        id: "ls_open_1", bg: Some("img_laser.png"), loc: Some("南城墙 · 直面攻城营盘"), mood: "awe",
+        id: "ls_open_1", bg: Some("lanshan_bg.png"), loc: Some("南城墙 · 直面攻城营盘"), mood: "awe",
         speaker: Some("哨兵（嘶哑）"), voice: None,
         text: TextSpec::Static(&[
             "你顺城墙垛口望下去。营地里的攻城槌、冲车、梯子密得像收割前的稻田，巨怪的号角一声接一声，把清晨的空气震得发颤。",
@@ -65,7 +65,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_open_2", bg: Some("img_zhuyuan_book.png"), loc: Some("城内 · 被山抱住的街巷"), mood: "revelation",
+        id: "ls_open_2", bg: Some("lanshan_bg.png"), loc: Some("城内 · 被山抱住的街巷"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你绕进城墙下的街巷。巷子里没人慌张，妇人把仅剩的一缸水舀给了守卒，孩童举着木刀学大人比划，老人坐在门槛上，把一篮栗子一粒粒数给即将上墙的年轻人。",
@@ -80,7 +80,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
 
     /* ================= 幕二 · 世界展示（奇观调查点 + 居民对话） ================= */
     SceneDef {
-        id: "ls_hub", bg: Some("img_redqueen.png"), loc: Some("城中广场 · 誓师与炊烟"), mood: "calm",
+        id: "ls_hub", bg: Some("lanshan_bg.png"), loc: Some("城中广场 · 誓师与炊烟"), mood: "calm",
         speaker: Some("老卒"), voice: None,
         text: TextSpec::Static(&[
             "城中广场中央立着一尊凿进山体半身的石像——『守山者』，一手拄城，一手抬着山，在晨曦里像活着一样倔。石匠们正在它脚下，把每一块能用的条石都码成垛口。",
@@ -97,7 +97,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_pt_fire", bg: Some("img_laser.png"), loc: Some("山腰烽火台 · 蓝山之主峰"), mood: "awe",
+        id: "ls_pt_fire", bg: Some("lanshan_bg.png"), loc: Some("山腰烽火台 · 蓝山之主峰"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你沿石阶爬上山腰烽火台。整座被围的城在你脚下摊开，而烽火台里还堆着一夜未熄的柴，暗红的余烬把石壁烘得温热。",
@@ -111,7 +111,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_pt_mem", bg: Some("img_zhuyuan_book.png"), loc: Some("纪念台 · 名字之墙"), mood: "revelation",
+        id: "ls_pt_mem", bg: Some("lanshan_bg.png"), loc: Some("纪念台 · 名字之墙"), mood: "revelation",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "纪念台的石墙上，一行行名字被凿进山体，新名字叠在旧名字下，从墙面一路凿到墙脚。没有墓，没有碑文，只有名字——和名字旁简短的几笔：守者、妇、孩童。",
@@ -125,7 +125,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_pt_stone", bg: Some("img_redqueen.png"), loc: Some("石匠营 · 凿不断的山脊"), mood: "awe",
+        id: "ls_pt_stone", bg: Some("lanshan_bg.png"), loc: Some("石匠营 · 凿不断的山脊"), mood: "awe",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "石匠营里，满地的条石还带着新凿的齿痕。老石匠蹲在他刚凿好的那块胸石前，用指腹反复抚过每一道纹路，像在安抚一匹受惊的马。",
@@ -139,7 +139,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_n_veteran", bg: Some("img_zhuyuan_book.png"), loc: Some("城中广场 · 与老卒对谈"), mood: "tension",
+        id: "ls_n_veteran", bg: Some("lanshan_bg.png"), loc: Some("城中广场 · 与老卒对谈"), mood: "tension",
         speaker: Some("老卒"), voice: None,
         text: TextSpec::Static(&[
             "老卒在守山者石像下席地而坐，面前摆着半壶茶。他见你坐下，先给你斟满一杯，才开口：",
@@ -155,7 +155,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_n_veteran2", bg: Some("img_zhuyuan_book.png"), loc: Some("守者 · 攻城之前的一句话"), mood: "choice",
+        id: "ls_n_veteran2", bg: Some("lanshan_bg.png"), loc: Some("守者 · 攻城之前的一句话"), mood: "choice",
         speaker: Some("老卒"), voice: None,
         text: TextSpec::Static(&[
             "「值得守？」老卒望着石像笑了，眼角的纹路挤在一起，「你往城底下看——那些小儿拿着木刀，老人把栗子分给上墙的人。这就是一座城。」",
@@ -171,7 +171,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
 
     /* ================= 幕三 · BOSS 战前铺垫 ================= */
     SceneDef {
-        id: "ls_pre_1", bg: Some("img_zhuyuan_book.png"), loc: Some("西门瓮城 · 至死方休的关"), mood: "fear",
+        id: "ls_pre_1", bg: Some("lanshan_bg.png"), loc: Some("西门瓮城 · 至死方休的关"), mood: "fear",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "西门瓮城外，攻城槌的声音已经响了一夜。守城门吏死死抵着门，一条腿陷进泥里，脸上却挂着笑——那是一种『门后有人』才笑得出的笑。",
@@ -186,7 +186,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_pre_2", bg: Some("img_redqueen.png"), loc: Some("瓮城 · 攻城巨魔督军"), mood: "danger",
+        id: "ls_pre_2", bg: Some("lanshan_bg.png"), loc: Some("瓮城 · 攻城巨魔督军"), mood: "danger",
         speaker: Some("攻城巨魔督军"), voice: None,
         text: TextSpec::Static(&[
             "瓮城中央，攻城巨魔督军扛着被血磨亮的战锤，一步步走进来，脚步把石板震得簌簌掉灰。他停在城自身尽头，单手撑墙，俯视你。",
@@ -204,7 +204,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
 
     /* ================= 原场景 ls_01 / ls_round / ls_card / ls_death（保留不动） ================= */
     SceneDef {
-        id: "ls_01", bg: Some("img_zhuyuan_book.png"), loc: Some("瓮城 · 决战处"), mood: "danger",
+        id: "ls_01", bg: Some("lanshan_bg.png"), loc: Some("瓮城 · 决战处"), mood: "danger",
         speaker: Some("攻城巨魔督军"), voice: None,
         text: TextSpec::Static(&["攻城巨魔督军 一步跨来，战锤在地上拖出火星。一个城市，一座山，一场输不起的仗——他偏要在这山前，分出个高下。"]),
         choices: &[
@@ -214,7 +214,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_round", bg: Some("img_laser.png"), loc: Some("决战处"), mood: "danger",
+        id: "ls_round", bg: Some("lanshan_bg.png"), loc: Some("决战处"), mood: "danger",
         speaker: None, voice: None,
         text: TextSpec::Dyn(|st| format!("攻城巨魔督军 剩余 {} 血，你 HP {}", st.fight.as_ref().map(|f| f.hp).unwrap_or(0), st.hp)),
         choices: &[
@@ -252,7 +252,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局三分支（看景 / 带纪念 / 停留，route 到原结算卡 ls_card） ================= */
     SceneDef {
-        id: "ls_end_view", bg: Some("img_laser.png"), loc: Some("烽火台 · 结局 · 望山到天明"), mood: "calm",
+        id: "ls_end_view", bg: Some("lanshan_bg.png"), loc: Some("烽火台 · 结局 · 望山到天明"), mood: "calm",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你没有和督军在瓮城分生死，只是退回山腰烽火台，把这座被围的城与那座不肯倒的山，一起看到天明。",
@@ -266,7 +266,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_end_souv", bg: Some("img_zhuyuan_book.png"), loc: Some("石匠营 · 结局 · 带走守山石"), mood: "choice",
+        id: "ls_end_souv", bg: Some("lanshan_bg.png"), loc: Some("石匠营 · 结局 · 带走守山石"), mood: "choice",
         speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "你在石匠营里，拣起一块被他凿圆了棱角的守山石，握进掌心。石面还带着凿子的齿痕与手掌的余温。",
@@ -280,7 +280,7 @@ pub static LANSHAN_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "ls_end_stay", bg: Some("img_redqueen.png"), loc: Some("瓮城 · 结局 · 留下守一夜"), mood: "fear",
+        id: "ls_end_stay", bg: Some("lanshan_bg.png"), loc: Some("瓮城 · 结局 · 留下守一夜"), mood: "fear",
         speaker: Some("攻城巨魔督军"), voice: None,
         text: TextSpec::Static(&[
             "你在督军面前放下兵器也没有退，而是退回瓮城城垛旁，拿起一支守军的矛，加入了对峙的行列。他站在原地，盯着你看了很久。",

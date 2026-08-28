@@ -208,7 +208,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
 
     /* ---- F1 hub · 倒映平原 ---- */
     SceneDef {
-        id: "hz_01", bg: Some("img_laser.png"), loc: Some("F1 · 倒映平原 · 逆流之河"),
+        id: "hz_01", bg: Some("hezi_bg.png"), loc: Some("F1 · 倒映平原 · 逆流之河"),
         mood: "wonder", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_has_prism(st) {
@@ -228,7 +228,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_01_river", bg: Some("img_laser.png"), loc: Some("F1 · 逆流之河"),
+        id: "hz_01_river", bg: Some("hezi_bg.png"), loc: Some("F1 · 逆流之河"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["你蹲在河岸，把手探进水流——水没有向下流，而是一点点往天上淌去，带走你指尖的温度。你静静看着，很久很久，没有想离开。"]),
         choices: &[ChoiceDef { label: "捞起一点闪亮的水光", sub: "奇观记于册 · 无后续", cond: None,
@@ -236,7 +236,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_02_grass", bg: Some("img_laser.png"), loc: Some("F1 · 倒悬草地"),
+        id: "hz_02_grass", bg: Some("hezi_bg.png"), loc: Some("F1 · 倒悬草地"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["头顶的浮岛上，草叶朝下生长，垂到你伸手可及的地方。你碰了碰一株，它轻轻卷了一下你的指尖，像回应又像自在的摆动。夜里它们会发出细细的荧光，你没等到夜。"]),
         choices: &[ChoiceDef { label: "摘一片叶留作凭记", sub: "奇观记于册", cond: None,
@@ -244,7 +244,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_03_rain", bg: Some("img_laser.png"), loc: Some("F1 · 静止的雨"),
+        id: "hz_03_rain", bg: Some("hezi_bg.png"), loc: Some("F1 · 静止的雨"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["雨点悬在半空，像一根根透明的线，把天空和地面轻轻缝在一起。你伸出手，握住一粒停住的雨，凉凉的；松开，它仍悬在那里，不急落。"]),
         choices: &[ChoiceDef { label: "穿过静止的雨幕", sub: "奇观记于册", cond: None,
@@ -252,7 +252,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_04_pebble", bg: Some("img_laser.png"), loc: Some("F1 · 棱光石滩"),
+        id: "hz_04_pebble", bg: Some("hezi_bg.png"), loc: Some("F1 · 棱光石滩"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["河滩上铺着一片圆润的石子，被水光浸得温润。其中一颗尤其特别——能滤去刺目的光，把强光柔成暖色。你想，带它也许在此后用得着。"]),
         choices: &[ChoiceDef { label: "拾起棱光石", sub: "Item it_yijie_crystal · 可滤光 · 开微光幕", cond: None,
@@ -260,13 +260,13 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_01_fight", bg: Some("img_laser.png"), loc: Some("F1 · 平原 · 擦肩"),
+        id: "hz_01_fight", bg: Some("hezi_bg.png"), loc: Some("F1 · 平原 · 擦肩"),
         mood: "danger", speaker: None, voice: Some("vo_hz_herd"),
         text: TextSpec::Static(&["你穿过兽群，几只发光的兽抬起头看了看你，又低下头。也许是热情的问候，也许只是好奇——你回应地低了低头，继续你的漫游。（擦肩而过）"]),
         choices: &[], fight_id: Some("hz_gentle_herd"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_04_gate", bg: Some("img_laser.png"), loc: Some("F1 · 微光幕（G1 已开）"),
+        id: "hz_04_gate", bg: Some("hezi_bg.png"), loc: Some("F1 · 微光幕（G1 已开）"),
         mood: "wonder", speaker: None, voice: None,
         text: TextSpec::Static(&["棱光石滤开强光，石林在你眼前露出一角——一片发光的森林，像一条会呼吸的水晶河。你踏过光幕，身后的平原被染成回忆。"]),
         choices: &[ChoiceDef { label: "（踏入荧光石林）", sub: "pt_hz_1 单向 · 进 F2", cond: None, effects: &NO_EFF, route: Route::To("hz_10_arrive") }],
@@ -275,7 +275,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
 
     /* ================= F2 · 荧光石林 ================= */
     SceneDef {
-        id: "hz_10_arrive", bg: Some("img_redqueen.png"), loc: Some("F2 · 荧光石林 · 水晶回廊"),
+        id: "hz_10_arrive", bg: Some("hezi_bg.png"), loc: Some("F2 · 荧光石林 · 水晶回廊"),
         mood: "wonder", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["发光的石头在林间轻轻脉动，像大片沉睡的心跳。水晶在风里碰出细碎的音，你不懂那是什么语言，却莫名觉得安心。这里只是深一点的风景，仍没有人要你做什么。"]),
         choices: &[
@@ -289,7 +289,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_11_forest", bg: Some("img_redqueen.png"), loc: Some("F2 · 荧光石林"),
+        id: "hz_11_forest", bg: Some("hezi_bg.png"), loc: Some("F2 · 荧光石林"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["每一块石头都像一团凝固极光的影子，呼吸般明灭。你靠着一块石坐下，它的光把你的轮廓晕成暖色。树的脉络是发光的纹路，安静地通向更深处。"]),
         choices: &[ChoiceDef { label: "跟着石林的光走一圈", sub: "奇观记于册", cond: None,
@@ -297,7 +297,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_12_echo", bg: Some("img_redqueen.png"), loc: Some("F2 · 回音谷"),
+        id: "hz_12_echo", bg: Some("hezi_bg.png"), loc: Some("F2 · 回音谷"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["你站在谷口喊了一声，回声没有学你的话——它换了个更柔软的声音回应你，像另一个人也在同一条山谷里走着。你多喊了几声，回声也陪你玩了一会儿。"]),
         choices: &[ChoiceDef { label: "与回声聊几句", sub: "奇观记于册 · 无意义的小快乐", cond: None,
@@ -305,7 +305,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_13_flowers", bg: Some("img_redqueen.png"), loc: Some("F2 · 结晶花丛"),
+        id: "hz_13_flowers", bg: Some("hezi_bg.png"), loc: Some("F2 · 结晶花丛"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["水晶凝成的花开了一整坡，风吹过时，花瓣相碰发出清脆的颤音。你没有踩进去，只是站在花丛边，听了一整段风的曲子。"]),
         choices: &[ChoiceDef { label: "在花旁站到风停", sub: "奇观记于册", cond: None,
@@ -313,7 +313,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_14_lake", bg: Some("img_redqueen.png"), loc: Some("F2 · 会说话的湖"),
+        id: "hz_14_lake", bg: Some("hezi_bg.png"), loc: Some("F2 · 会说话的湖"),
         mood: "cold", speaker: Some("湖面"), voice: None,
         text: TextSpec::Static(&["湖面静止得如一整块银镜。你俯身，湖水泛起涟漪，慢慢拼出两个字：『你好』。没有威胁，也没有恳求——就好像这湖只是太久没见过人，想打个招呼。"]),
         choices: &[ChoiceDef { label: "对湖也说一声你好", sub: "奇观 · 友好回应", cond: None,
@@ -321,7 +321,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_10_fight", bg: Some("img_redqueen.png"), loc: Some("F2 · 石林 · 共鸣"),
+        id: "hz_10_fight", bg: Some("hezi_bg.png"), loc: Some("F2 · 石林 · 共鸣"),
         mood: "danger", speaker: None, voice: Some("vo_hz_owl"),
         text: TextSpec::Static(&["一只晶亮的枭落到你面前枝头，冲你眨眨眼。你与它静静对视了一瞬，它才振翅飞掠而去，留下一串发光的碎屑。（擦肩）"]),
         choices: &[], fight_id: Some("hz_crystal_owl"), video: None, cine_label: None, overlay: None,
@@ -329,7 +329,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
 
     /* ================= F3 · 倒悬星海 ================= */
     SceneDef {
-        id: "hz_20_arrive", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 倒悬星海 · 界域阙"),
+        id: "hz_20_arrive", bg: Some("hezi_bg.png"), loc: Some("F3 · 倒悬星海 · 界域阙"),
         mood: "wonder", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             if cond_has_specimen(st) {
@@ -349,7 +349,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_21_stars", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 倒悬星海"),
+        id: "hz_21_stars", bg: Some("hezi_bg.png"), loc: Some("F3 · 倒悬星海"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["你在星上走，每踩一步，脚下的星云都像被轻轻踏开又合拢。低头看，是另一片更深的星海；抬头看，也是。你分不清上下，也不再想分。"]),
         choices: &[ChoiceDef { label: "在星海里躺一会儿", sub: "奇观记于册 · 安歇", cond: None,
@@ -357,7 +357,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_22_gate", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 界域阙"),
+        id: "hz_22_gate", bg: Some("hezi_bg.png"), loc: Some("F3 · 界域阙"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["一座没有门的巨拱立在星海尽头，拱内只是一片会流动的光。没有门也没有锁——它不拦人，也没有人真正走出过。你站在拱下，风从两侧掠过，世界在你身后依旧安稳。"]),
         choices: &[ChoiceDef { label: "在阙下站一会", sub: "奇观记于册 · 无答案", cond: None,
@@ -365,7 +365,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_23_giant", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 沉睡的巨人"),
+        id: "hz_23_giant", bg: Some("hezi_bg.png"), loc: Some("F3 · 沉睡的巨人"),
         mood: "cold", speaker: None, voice: None,
         text: TextSpec::Static(&["远处连绵的「山脊」其实是一头熟睡巨兽的脊背，随呼吸缓缓起伏。它庞大到你不确定它有没有「醒来」这个概念。你放轻脚步，没有惊动它。"]),
         choices: &[ChoiceDef { label: "贴着它的呼吸声看了看夜空", sub: "奇观 · 轻触也温柔", cond: None,
@@ -373,7 +373,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_npc_whale", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 巨鲸低鸣"),
+        id: "hz_npc_whale", bg: Some("hezi_bg.png"), loc: Some("F3 · 巨鲸低鸣"),
         mood: "cold", speaker: Some("星鲸"), voice: None,
         text: TextSpec::Static(&["一头以星为鳞的巨鲸靠了过来，用巨大的眼瞳望着你。你听到一声极低的鸣叫，像它对你说的唯一一句话——而后它缓缓游开，游进漫天的星里。你连它叫什么都不知道，却觉得同行过一段路。"]),
         choices: &[ChoiceDef { label: "目送巨鲸游远", sub: "漫游伙伴 · 故人未知", cond: None,
@@ -381,7 +381,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_20_fight", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 星海 · 伴游"),
+        id: "hz_20_fight", bg: Some("hezi_bg.png"), loc: Some("F3 · 星海 · 伴游"),
         mood: "danger", speaker: None, voice: Some("vo_hz_whale"),
         text: TextSpec::Static(&["你与一头幼星鲸并排游了一小段。它绕着你转圈，像在确认你也是个会发光的生物——然后放缓了速度，等你先走。（擦肩）"]),
         choices: &[], fight_id: Some("hz_star_whale"), video: None, cine_label: None, overlay: None,
@@ -389,7 +389,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
 
     /* ================= BOSS · 界域守护兽 · 镜潮兽（可交流或交手） ================= */
     SceneDef {
-        id: "hz_30_guardian", bg: Some("img_laser.png"), loc: Some("F3 · 界域守护兽 · 镜潮兽"),
+        id: "hz_30_guardian", bg: Some("hezi_bg.png"), loc: Some("F3 · 界域守护兽 · 镜潮兽"),
         mood: "wonder", speaker: Some("界域守护兽 · 镜潮兽"), voice: Some("vo_hz_guardian"),
         text: TextSpec::Static(&[
             "倒悬星海的最深处，镜潮兽缓缓从星云中浮起，通体如一面巨大的活镜，映出你这个小小漫游者的倒影。它没有发出声音，只是静静地看你。",
@@ -402,7 +402,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_31_friendly", bg: Some("img_laser.png"), loc: Some("F3 · 镜潮兽 · 握手"),
+        id: "hz_31_friendly", bg: Some("hezi_bg.png"), loc: Some("F3 · 镜潮兽 · 握手"),
         mood: "calm", speaker: None, voice: None,
         text: TextSpec::Static(&["镜潮兽映出一个同样挥手的倒影，误会一触即散。它从镜面深处托出一枚泛着星光的标本，轻轻推到你的面前——像一份慷慨的地主送客礼。"]),
         choices: &[ChoiceDef { label: "收下异界标本", sub: "Item it_yijie_specimen · 守护兽礼赠", cond: None,
@@ -410,14 +410,14 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_31_battle", bg: Some("img_laser.png"), loc: Some("F3 · 直面镜潮兽"),
+        id: "hz_31_battle", bg: Some("hezi_bg.png"), loc: Some("F3 · 直面镜潮兽"),
         mood: "danger", speaker: Some("镜潮兽"), voice: None,
         text: TextSpec::Static(&["你一凝神，镜潮兽便认真起来。镜面泛起涟漪，温和的注视化作一场认真的相搏——它不会伤你性命，但想看看你这个外来者有几分成色。（交手）"]),
         choices: &[ChoiceDef { label: "【切磋一场】", sub: "进入与镜潮兽的短暂交手", cond: None, effects: &NO_EFF, route: Route::Dyn(start_guardian) }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_31_round", bg: Some("img_laser.png"), loc: Some("F3 · 镜潮兽 · 切磋"),
+        id: "hz_31_round", bg: Some("hezi_bg.png"), loc: Some("F3 · 镜潮兽 · 切磋"),
         mood: "danger", speaker: None, voice: None,
         text: TextSpec::Dyn(|st| {
             let f = st.fight.as_ref().map(|f| format!("镜潮兽 HP {} / {}", f.hp.max(0), 200)).unwrap_or_else(|| "HP --".to_string());
@@ -441,14 +441,14 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_32_guardian_peace", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 与镜潮兽和解"),
+        id: "hz_32_guardian_peace", bg: Some("hezi_bg.png"), loc: Some("F3 · 与镜潮兽和解"),
         mood: "calm", speaker: None, voice: Some("vo_hz_guardian_peace"),
         text: TextSpec::Static(&["镜潮兽映出你放松的眉眼，镜面恢复了澄澈。它把一枚星光标本轻轻放进你的掌心——没有阴谋，没有条件，就当作一位老朋友送你的一枚旅途纪念。"]),
         choices: &[ChoiceDef { label: "（转身，继续你的漫游或收尾）", sub: "开放结局抉择", cond: None, effects: &NO_EFF, route: Route::To("hz_40_ending") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_33_guardian_down", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 切磋毕"),
+        id: "hz_33_guardian_down", bg: Some("hezi_bg.png"), loc: Some("F3 · 切磋毕"),
         mood: "calm", speaker: None, voice: Some("vo_hz_guardian_down"),
         text: TextSpec::Static(&["镜潮平息，镜面上的倒影与你相视而笑——这一场认真的相搏，反而让你们像真的认识了。镜潮兽把一枚星光标本推向你的脚边，缓缓沉回星海。"]),
         choices: &[ChoiceDef { label: "拾起异界标本", sub: "Item it_yijie_specimen · 切磋结谊", cond: None,
@@ -458,7 +458,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
 
     /* ================= 开放结局（无对错无真相） ================= */
     SceneDef {
-        id: "hz_40_ending", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 倒悬星海 · 抉择"),
+        id: "hz_40_ending", bg: Some("hezi_bg.png"), loc: Some("F3 · 倒悬星海 · 抉择"),
         mood: "mystery", speaker: Some("旁白"), voice: Some("vo_hz_ending"),
         text: TextSpec::Static(&[
             "星海在脚下漫延，你站在这一程的尽头。这里没有要揭的真相，没有要拆的阴谋——只是到该为自己这段漫游收个尾的时候了。",
@@ -478,7 +478,7 @@ pub static HEZI_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "hz_41_exit", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 · 星海 · 尾声"),
+        id: "hz_41_exit", bg: Some("hezi_bg.png"), loc: Some("F3 · 星海 · 尾声"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Dyn(|st| {
             match (st.flag("hz_end_roam"), st.flag("hz_end_take"), st.flag("hz_end_rest")) {

@@ -304,7 +304,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_obs", bg: Some("img_laser.png"), loc: Some("F1 柱廊北 · 观测室"),
+        id: "yz_d_obs", bg: Some("yize_bg.png"), loc: Some("F1 柱廊北 · 观测室"),
         mood: "mystery", speaker: Some("尊主（全息残影）"), voice: None,
         text: TextSpec::Static(&[
             "观测终端的屏幕骤然亮起，一段自称「尊主」的文明预告影像缓缓浮现——面孔模糊，语带倦意。",
@@ -318,7 +318,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_supply", bg: Some("img_laser.png"), loc: Some("F1 补给舱"),
+        id: "yz_d_supply", bg: Some("yize_bg.png"), loc: Some("F1 补给舱"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "补给舱的柜门被风化锁锈住，撬开后，一枚刻着「文明遗迹·Lv1」的权限卡静静躺在里面。",
@@ -330,14 +330,14 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_n_zhangheng", bg: Some("img_laser.png"), loc: Some("F1 观测室旁"),
+        id: "yz_n_zhangheng", bg: Some("yize_bg.png"), loc: Some("F1 观测室旁"),
         mood: "tension", speaker: Some("张恒 · 预知者"), voice: None,
         text: TextSpec::Static(&["张恒闭眼片刻，眉心紧锁：「它们没骗人——骗人的是我们自己，如果我们贪的话。」"]),
         choices: &[ChoiceDef { label: "（回到走廊）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yz_02_passage") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_trap", bg: Some("img_laser.png"), loc: Some("F1 扫描陷阱回廊"),
+        id: "yz_d_trap", bg: Some("yize_bg.png"), loc: Some("F1 扫描陷阱回廊"),
         mood: "fear", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&[
             "冷蓝的扫描灯在回廊两侧一明一暗，墙面上布满风化的能量槽——踩错一步，就会触发全场警报。",
@@ -352,19 +352,19 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_f1_drone_fight", bg: Some("img_laser.png"), loc: Some("F1 巨门门厅"),
+        id: "yz_f1_drone_fight", bg: Some("yize_bg.png"), loc: Some("F1 巨门门厅"),
         mood: "fear", speaker: Some("维护哨无人机"), voice: None,
         text: TextSpec::Static(&["鹰前出侦察，视野开阔处，一枚维护哨无人机骤然亮起红灯扑来——伏击！"]),
         choices: &NO_CH, fight_id: Some("yz_drone"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_f1_trapfight", bg: Some("img_laser.png"), loc: Some("F1 扫描陷阱回廊"),
+        id: "yz_f1_trapfight", bg: Some("yize_bg.png"), loc: Some("F1 扫描陷阱回廊"),
         mood: "danger", speaker: Some("风化守护者"), voice: None,
         text: TextSpec::Static(&["警报炸响，两尊风化守护者自墙面升起，封锁了你的退路。"]),
         choices: &NO_CH, fight_id: Some("yz_sentinel"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_02_passage", bg: Some("img_laser.png"), loc: Some("F1 主厅 · 巨门前"),
+        id: "yz_02_passage", bg: Some("yize_bg.png"), loc: Some("F1 主厅 · 巨门前"),
         mood: "awe", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["巨门高耸，中央的权限凹槽无声地等待。柱廊尽头的两个裂缝，可作偷渡捷径直落 F2。"]),
         choices: &[
@@ -375,7 +375,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_02_gate1", bg: Some("img_laser.png"), loc: Some("F1 尘封巨门 · G1"),
+        id: "yz_02_gate1", bg: Some("yize_bg.png"), loc: Some("F1 尘封巨门 · G1"),
         mood: "awe", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["你以权限卡扫过凹槽，巨门内部传来齿轮的低吼，尘封千百年的通道缓缓敞开，向下通往 F2 中庭的冷蓝光。"]),
         choices: &[ChoiceDef { label: "沿阶而下 · F2", sub: "进入能量矩阵大厅", cond: None, effects: &NO_EFF, route: Route::To("yz_03_city") }],
@@ -384,7 +384,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
 
     /* ------------------- 幕二 · 矩阵与齿轮（F2/F3） ------------------- */
     SceneDef {
-        id: "yz_03_city", bg: Some("img_redqueen.png"), loc: Some("F2 中庭 · 能量矩阵大厅"),
+        id: "yz_03_city", bg: Some("yize_bg.png"), loc: Some("F2 中庭 · 能量矩阵大厅"),
         mood: "tension", speaker: Some("念夕空"), voice: None,
         text: TextSpec::Static(&["冷蓝网格铺满大厅，四角矩阵核心微微发光。「它们在等一个顺序。」念夕空低语。"]),
         choices: &[
@@ -397,7 +397,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_battery", bg: Some("img_redqueen.png"), loc: Some("F2 西翼 · 能量电池库"),
+        id: "yz_d_battery", bg: Some("yize_bg.png"), loc: Some("F2 西翼 · 能量电池库"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["电池库的货架上，一枚充能饱满的能量电池发出柔和的白光。" ]),
         choices: &[ChoiceDef { label: "取走能量电池", sub: "解锁北闸口（OR）", cond: None,
@@ -405,14 +405,14 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_archive", bg: Some("img_redqueen.png"), loc: Some("F2 东翼 · 记录档案馆"),
+        id: "yz_d_archive", bg: Some("yize_bg.png"), loc: Some("F2 东翼 · 记录档案馆"),
         mood: "mystery", speaker: Some("全息档案台"), voice: None,
         text: TextSpec::Static(&["档案台投影出一串映像序列，画面上四枚核心依次亮起——那是「镜像」的答案：S3 → S1 → S4 → S2。"]),
         choices: &[ChoiceDef { label: "记下序列", sub: "矩阵线索", cond: None, effects: &NO_EFF, route: Route::To("yz_03_city") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_matrix", bg: Some("img_redqueen.png"), loc: Some("F2 中央矩阵大厅"),
+        id: "yz_d_matrix", bg: Some("yize_bg.png"), loc: Some("F2 中央矩阵大厅"),
         mood: "tension", speaker: Some("矩阵核心"), voice: None,
         text: TextSpec::Static(&["四枚矩阵核心亮起，冷蓝符文在你脚下列成阵列。念夕空：「它们在等一个顺序。」"]),
         choices: &[
@@ -428,26 +428,26 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_f2_phantom_fight", bg: Some("img_redqueen.png"), loc: Some("F2 中央矩阵大厅"),
+        id: "yz_f2_phantom_fight", bg: Some("yize_bg.png"), loc: Some("F2 中央矩阵大厅"),
         mood: "fear", speaker: Some("镜像幻影"), voice: None,
         text: TextSpec::Static(&["乱序点灯激起能量乱流，两具镜像幻影自光幕中析出，对你发起增援战。"]),
         choices: &NO_CH, fight_id: Some("yz_phantom"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_f2_ghost_fight", bg: Some("img_redqueen.png"), loc: Some("F2 能量之井"),
+        id: "yz_f2_ghost_fight", bg: Some("yize_bg.png"), loc: Some("F2 能量之井"),
         mood: "fear", speaker: Some("能量幽灵 · 守卫灵"), voice: None,
         text: TextSpec::Static(&["能量之井幽光暴涨，守卫灵铺开幽灵披风拦在井前——这是中庭最强的守卫。"]),
         choices: &NO_CH, fight_id: Some("yz_ghost"), video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_03_gate2", bg: Some("img_redqueen.png"), loc: Some("F2 北闸口 · G2"),
+        id: "yz_03_gate2", bg: Some("yize_bg.png"), loc: Some("F2 北闸口 · G2"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["闸口控制台获得供给，指示灯次第亮起，升降闸门轰然升开，深井内透出更冷的气息。"]),
         choices: &[ChoiceDef { label: "沿升降闸上行 · F3", sub: "进入守卫引擎库", cond: None, effects: &NO_EFF, route: Route::To("yz_04_engine_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_04_engine_hub", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 深廓 · 守卫引擎库"),
+        id: "yz_04_engine_hub", bg: Some("yize_bg.png"), loc: Some("F3 深廓 · 守卫引擎库"),
         mood: "tension", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["引擎库的嗡鸣像一颗缓缓跳动的心脏。兵舍舱一排排待机——等待唤醒指令。三枚扳手分立三处，是断能的关键。"]),
         choices: &[
@@ -461,14 +461,14 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_engine", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 中央引擎主舱"),
+        id: "yz_d_engine", bg: Some("yize_bg.png"), loc: Some("F3 中央引擎主舱"),
         mood: "tension", speaker: Some("全息标牌"), voice: None,
         text: TextSpec::Static(&["引擎操控台全息标牌闪烁：「三处扳手缺失，主供电未断，兵舍同步待唤醒。」每断一步，东面兵舍便惊醒一只重装卫兵。"]),
         choices: &[ChoiceDef { label: "记下流程", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yz_04_engine_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_wrench1", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 中央引擎主舱"),
+        id: "yz_d_wrench1", bg: Some("yize_bg.png"), loc: Some("F3 中央引擎主舱"),
         mood: "tension", speaker: Some("扳手 ⅰ"), voice: None,
         text: TextSpec::Static(&["你扳下第一枚扳手，引擎声一颤，东兵舍一座舱门轰然弹开——重装卫兵苏醒了。"]),
         choices: &[ChoiceDef { label: "继续断电", sub: "", cond: None,
@@ -476,7 +476,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_wrench2", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 中央引擎主舱"),
+        id: "yz_d_wrench2", bg: Some("yize_bg.png"), loc: Some("F3 中央引擎主舱"),
         mood: "tension", speaker: Some("扳手 ⅱ"), voice: None,
         text: TextSpec::Static(&["第二枚扳手被扳下，第二座兵舍舱苏醒，灯光一点点暗下去。"]),
         choices: &[ChoiceDef { label: "继续断电", sub: "", cond: None,
@@ -484,7 +484,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_wrench3", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 中央引擎主舱"),
+        id: "yz_d_wrench3", bg: Some("yize_bg.png"), loc: Some("F3 中央引擎主舱"),
         mood: "tension", speaker: Some("扳手 ⅲ"), voice: None,
         text: TextSpec::Static(&["最后一枚扳手被扳下，主引擎彻底断电，整座兵舍由震动转为死寂——沉睡。"]),
         choices: &[ChoiceDef { label: "完成断电", sub: "", cond: None,
@@ -492,14 +492,14 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_valve", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 排热阀"),
+        id: "yz_d_valve", bg: Some("yize_bg.png"), loc: Some("F3 排热阀"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["阀门被拧松，一股灼热蒸汽泄出，廊道里弥漫起金属尘的味道。「遗泽不是礼物，是检疫。」一声人类语言残响混在嗡鸣里。"]),
         choices: &[ChoiceDef { label: "记下这句残响", sub: "伏笔", cond: None, effects: &NO_EFF, route: Route::To("yz_04_engine_hub") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_04_gate3", bg: Some("img_zhuyuan_book.png"), loc: Some("F3 北升降轨道闸 · G3"),
+        id: "yz_04_gate3", bg: Some("yize_bg.png"), loc: Some("F3 北升降轨道闸 · G3"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["三路断电指令校验通过，轨道闸嗡鸣退开，升降平台在深井尽头亮起一星冷蓝的光。"]),
         choices: &[ChoiceDef { label: "乘平台上行 · F4", sub: "进入遗泽圣所", cond: None, effects: &NO_EFF, route: Route::To("yz_05_sanctum") }],
@@ -508,7 +508,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
 
     /* ------------------- 幕三 · 遗泽真相（F4 全息立壁） ------------------- */
     SceneDef {
-        id: "yz_05_sanctum", bg: Some("img_redqueen.png"), loc: Some("F4 入口大厅 · 遗泽圣所"),
+        id: "yz_05_sanctum", bg: Some("yize_bg.png"), loc: Some("F4 入口大厅 · 遗泽圣所"),
         mood: "revelation", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["圣所的冷蓝光照亮十字大殿，全息立壁立在殿东北端，祭坛在中央沉默地等待。北端隐约可见通关传送门的幽光。"]),
         choices: &[
@@ -519,14 +519,14 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_n_nianxikong", bg: Some("img_redqueen.png"), loc: Some("F4 圣所入口"),
+        id: "yz_n_nianxikong", bg: Some("yize_bg.png"), loc: Some("F4 圣所入口"),
         mood: "revelation", speaker: Some("念夕空 · 传递者"), voice: None,
         text: TextSpec::Static(&["念夕空望着祭坛方向，轻声：「能把火留到今天的文明，自己却没能等到明天。我们走对了路，可路也到尽头了。」"]),
         choices: &[ChoiceDef { label: "（回到圣所前厅）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yz_05_sanctum") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_holo", bg: Some("img_laser.png"), loc: Some("F4 全息立壁 · 遗泽纪录"),
+        id: "yz_d_holo", bg: Some("yize_bg.png"), loc: Some("F4 全息立壁 · 遗泽纪录"),
         mood: "revelation", speaker: Some("尊主（全息残影）"), voice: None,
         text: TextSpec::Static(&[
             "全息立壁亮起，尊主的残影眉眼模糊、语带疲惫：「我们是八级往上的文明。我们以为能走到第九级。然后我们听到了那首歌——银色之物唱的歌。」",
@@ -546,7 +546,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
 
     /* ------------------- 十字殿 · 护盾碎片顺序 + 祭坛 BOSS ------------------- */
     SceneDef {
-        id: "yz_04_hall", bg: Some("img_redqueen.png"), loc: Some("F4 十字殿 · 四维护盾碎片阵"),
+        id: "yz_04_hall", bg: Some("yize_bg.png"), loc: Some("F4 十字殿 · 四维护盾碎片阵"),
         mood: "tension", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["护盾碎片座在殿中浮起，四座菱形碎片安静地等待着「顺序」。依照遗泽纪录，它们必须是：S3 → S1 → S4 → S2。"]),
         choices: &[
@@ -559,49 +559,49 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_sh1", bg: Some("img_redqueen.png"), loc: Some("F4 护盾碎片座 S1"),
+        id: "yz_d_sh1", bg: Some("yize_bg.png"), loc: Some("F4 护盾碎片座 S1"),
         mood: "tension", speaker: Some("碎片座 S1"), voice: None,
         text: TextSpec::Static(&["你伸手触碰 S1 座。若顺序正确，菱形碎片将熄灭；若错误，全场相位冲击。"]),
         choices: &[ChoiceDef { label: "尝试关闭", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(sh1_act) }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_sh2", bg: Some("img_redqueen.png"), loc: Some("F4 护盾碎片座 S2"),
+        id: "yz_d_sh2", bg: Some("yize_bg.png"), loc: Some("F4 护盾碎片座 S2"),
         mood: "tension", speaker: Some("碎片座 S2"), voice: None,
         text: TextSpec::Static(&["S2 座上的菱形碎片正在缓缓自转。"]),
         choices: &[ChoiceDef { label: "尝试关闭", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(sh2_act) }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_sh3", bg: Some("img_redqueen.png"), loc: Some("F4 护盾碎片座 S3"),
+        id: "yz_d_sh3", bg: Some("yize_bg.png"), loc: Some("F4 护盾碎片座 S3"),
         mood: "tension", speaker: Some("碎片座 S3"), voice: None,
         text: TextSpec::Static(&["S3 座是一切顺序的起点——先辈在第一片碎片里埋下了教训。"]),
         choices: &[ChoiceDef { label: "尝试关闭", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(sh3_act) }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_sh4", bg: Some("img_redqueen.png"), loc: Some("F4 护盾碎片座 S4"),
+        id: "yz_d_sh4", bg: Some("yize_bg.png"), loc: Some("F4 护盾碎片座 S4"),
         mood: "tension", speaker: Some("碎片座 S4"), voice: None,
         text: TextSpec::Static(&["S4 座离祭坛最近，碎片里映着仲裁者的冷蓝核心。"]),
         choices: &[ChoiceDef { label: "尝试关闭", sub: "", cond: None, effects: &NO_EFF, route: Route::Dyn(sh4_act) }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_sh_wrong", bg: Some("img_redqueen.png"), loc: Some("F4 十字殿"),
+        id: "yz_sh_wrong", bg: Some("yize_bg.png"), loc: Some("F4 十字殿"),
         mood: "danger", speaker: Some("仲裁者（广播）"), voice: None,
         text: TextSpec::Static(&["「顺序判定——错误。」四块碎片同时迸亮复现，全场相位冲击轰然扫过（6 点伤害），已关碎片尽数复位。" ]),
         choices: &[ChoiceDef { label: "（重整碎片阵）", sub: "重新尝试顺序", cond: None, effects: &NO_EFF, route: Route::To("yz_04_hall") }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_d_altar", bg: Some("img_redqueen.png"), loc: Some("F4 祭坛 · 仲裁者"),
+        id: "yz_d_altar", bg: Some("yize_bg.png"), loc: Some("F4 祭坛 · 仲裁者"),
         mood: "danger", speaker: Some("遗迹仲裁者"), voice: None,
         text: TextSpec::Static(&["你走近祭坛，无面苍白机械像自中央缓缓升起，四块四维护罩碎片在周身悬浮。它空洞的嗓音响起：\n「检测：生命体。评估：掠夺者。仲裁开始。」"]),
         choices: &[ChoiceDef { label: "【迎战仲裁者】", sub: "进入四维护罩战", cond: None, effects: &NO_EFF, route: Route::Dyn(start_arbiter) }],
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_arb_round", bg: Some("img_redqueen.png"), loc: Some("F4 圣所 · 仲裁者"),
+        id: "yz_arb_round", bg: Some("yize_bg.png"), loc: Some("F4 圣所 · 仲裁者"),
         mood: "danger", speaker: Some("遗迹仲裁者"), voice: None,
         text: TextSpec::Dyn(|st| {
             let coeff = shield_coeff(st);
@@ -625,7 +625,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_arb_finisher", bg: Some("img_redqueen.png"), loc: Some("F4 圣所 · 仲裁裁定"),
+        id: "yz_arb_finisher", bg: Some("yize_bg.png"), loc: Some("F4 圣所 · 仲裁裁定"),
         mood: "choice", speaker: Some("遗迹仲裁者"), voice: None,
         text: TextSpec::Static(&[
             "四块护盾碎片同时亮起又熄灭。仲裁者胸口冷蓝核心骤然爆裂，化作一片光雨。它空洞的声音终于带上一丝温度：",
@@ -636,7 +636,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_5_arb_win", bg: Some("img_redqueen.png"), loc: Some("F4 圣所 · 仲裁者已沉默"),
+        id: "yz_5_arb_win", bg: Some("yize_bg.png"), loc: Some("F4 圣所 · 仲裁者已沉默"),
         mood: "choice", speaker: Some("姚源（广播）"), voice: None,
         text: TextSpec::Static(&["祭坛随之开启，遗泽本体显形——一团「种子」拼成的光球，与一方「石碑」的剪影并立。姚源的声音在你脑中响起：\n「我们拿走能拿走的，把警告留给后来者。」"]),
         choices: &[ChoiceDef { label: "（走向祭坛 · 作出抉择）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yz_05_ending_choice") }],
@@ -645,7 +645,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
 
     /* ------------------- 抉择结局三分支（带走 / 留下 / 强夺） ------------------- */
     SceneDef {
-        id: "yz_05_ending_choice", bg: Some("img_redqueen.png"), loc: Some("F4 遗泽圣所 · 祭坛"),
+        id: "yz_05_ending_choice", bg: Some("yize_bg.png"), loc: Some("F4 遗泽圣所 · 祭坛"),
         mood: "choice", speaker: Some("姚源（广播）"), voice: None,
         text: TextSpec::Static(&["种子与石碑静静悬浮。你已经看清真相：这团火，既可以是馈赠，也可以是诅咒。三选无对错——只在于你打算把它交给谁。"]),
         choices: &[
@@ -662,7 +662,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_ga_round", bg: Some("img_redqueen.png"), loc: Some("F4 祭坛 · 仲裁者残骸"),
+        id: "yz_ga_round", bg: Some("yize_bg.png"), loc: Some("F4 祭坛 · 仲裁者残骸"),
         mood: "danger", speaker: Some("仲裁者残骸"), voice: None,
         text: TextSpec::Static(&["那团光在你掌下沸腾，本已静默的残骸骤然再起，链锯臂高悬——它要阻止这一记「饕餮」。「悬浮的绝不都该由你独呑。」"]),
         choices: &[
@@ -672,7 +672,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_ending_take", bg: Some("img_redqueen.png"), loc: Some("F4 圣所 · 结局 · 带走"),
+        id: "yz_ending_take", bg: Some("yize_bg.png"), loc: Some("F4 圣所 · 结局 · 带走"),
         mood: "choice", speaker: Some("张恒（低声）"), voice: None,
         text: TextSpec::Static(&["你捧起那团种子光球。身后石碑和传送门一起,在圣所巨门的长吟中渐渐闭合。张恒你生涩地低语：「你带走的……是一整个战争。」希望号在星海中远去，黑暗中，某物缓缓睁开了眼。（遗泽 · 带走）"]),
         choices: &[ChoiceDef { label: "（驶向主神空间 · 结算）", sub: "能量武器线解锁", cond: None,
@@ -684,7 +684,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_ending_warn", bg: Some("img_redqueen.png"), loc: Some("F4 圣所 · 结局 · 留下警示"),
+        id: "yz_ending_warn", bg: Some("yize_bg.png"), loc: Some("F4 圣所 · 结局 · 留下警示"),
         mood: "choice", speaker: Some("姚源（广播）"), voice: None,
         text: TextSpec::Static(&["你伸手将那方石碑牢牢嵌入祭坛，种子光球缓缓沉入圣所深处，等待下一个后来者。姚源：「我们该让后来者自己决定。」圣所巨门长吟闭合，黑暗中，某物缓缓睁开了眼。（遗泽 · 留下警示）"]),
         choices: &[ChoiceDef { label: "（驶向主神空间 · 结算）", sub: "空间技术线解锁", cond: None,
@@ -696,7 +696,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         fight_id: None, video: None, cine_label: None, overlay: None,
     },
     SceneDef {
-        id: "yz_ending_graverob", bg: Some("img_redqueen.png"), loc: Some("F4 圣所 · 结局 · 强夺"),
+        id: "yz_ending_graverob", bg: Some("yize_bg.png"), loc: Some("F4 圣所 · 结局 · 强夺"),
         mood: "fear", speaker: Some("张恒"), voice: None,
         text: TextSpec::Static(&["你强行撕下种子与碎片，越过倒下的残骸直扑传送门。身后传来姚源沉重的低语：「盗墓者带走了种子，也带走了警告。」（遗泽 · 强夺 · 灰色结局）"]),
         choices: &[ChoiceDef { label: "（仓皇驶向主神空间 · 结算）", sub: "不计结算结局支线", cond: None,
@@ -745,7 +745,7 @@ pub static YIZE_SCENES: &[SceneDef] = &[
         }),
     },
     SceneDef {
-        id: "yz_end_gate", bg: Some("img_redqueen.png"), loc: Some("F4 北端 · 通关传送门"),
+        id: "yz_end_gate", bg: Some("yize_bg.png"), loc: Some("F4 北端 · 通关传送门"),
         mood: "calm", speaker: Some("旁白"), voice: None,
         text: TextSpec::Static(&["通关传送门的幽光在你面前展开——你知道，只要迈过去，便是主神空间。"]),
         choices: &[ChoiceDef { label: "（穿过传送门 · 结算）", sub: "", cond: None, effects: &NO_EFF, route: Route::To("yz_settle_card") }],
